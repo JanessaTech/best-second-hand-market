@@ -26,11 +26,13 @@ contract CoreMarket is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         tokenId++;
     }
 
-    function mintBatch(address to, uint256[] memory amounts) public
+    function mintBatch(address to, uint256[] memory amounts, string[] memory _uris) public
     {
+        require(amounts.length == _uris.length, "the size of amounts must be the same as the size of _uris");
         uint[] memory ids = new uint[](amounts.length);
         for(uint i = 0; i < amounts.length; i++) {
             ids[i] = tokenId;
+            uris[tokenId] = _uris[i];
             tokenId++;
         }
         _mintBatch(to, ids, amounts, "");
