@@ -5,6 +5,20 @@
 /.pnp
 .pnp.js
 
+# Hardhat files
+/cache
+/artifacts
+/contracts/artifacts
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json
+
+
 # testing
 /coverage
 
