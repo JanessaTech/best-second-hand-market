@@ -5,6 +5,8 @@ const svgMapping = new Map([
   ['handshake', 'imgs/handshake.svg'],
   ['search', 'imgs/search.svg'],
   ['emap-line', 'imgs/emap-line.svg'],
+  ['cha', 'imgs/cha.svg'],
+  
   
 
 ])

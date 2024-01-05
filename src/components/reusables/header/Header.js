@@ -1,9 +1,20 @@
 import { Avatar, Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import {headerHeight} from '../../../common/constant'
 import { CheapIcon } from '../../../utils/Svgs'
 
 export default function Header() {
+    const [search, setSearch] = useState('')
+
+    const handleSearchChanges = (e) => {
+        e.preventDefault()
+        setSearch(e.target.value)
+    }
+
+    const resetSearch = (e) => {
+        e.preventDefault()
+        setSearch('')
+    }
   return (
     <Box sx={{
         width: 1, height: headerHeight, 
@@ -23,7 +34,13 @@ export default function Header() {
                 <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em'}}>Mint your own NFT</Button>
             </Box>
             <Box sx={{width:0.3}}>
-                <TextField sx={{backgroundColor:'white', borderRadius:3}}
+                <TextField sx={{backgroundColor:'white', borderRadius:2,
+                    '& .MuiOutlinedInput-root':{
+                        '&.Mui-focused fieldset': {borderColor:'black', border:0},
+                      }
+                    }}
+                    id="cheap-search-input" 
+                    value={search}
                     variant="outlined" 
                     placeholder='Search'
                     fullWidth
@@ -35,19 +52,26 @@ export default function Header() {
                         ),
                         endAdornment:(
                             <InputAdornment position="end">
-                                <IconButton sx={{ 
-                                    '&.MuiButtonBase-root':{
-                                        p:0.5, borderRadius:2, backgroundColor:'action.hover'}
-                                    }} disableRipple>
-                                    <CheapIcon name={'emap-line'} size={20}/>
-                                </IconButton>
+                                {
+                                    search && search.length > 0 ?  
+                                         <IconButton onClick={resetSearch}>
+                                            <CheapIcon name={'cha'} size={30}/>
+                                         </IconButton> :  <IconButton sx={{ '&.MuiButtonBase-root':{p:0.5, borderRadius:2, 
+                                                                                                    backgroundColor:'action.hover'}
+                                                                          }} disableRipple>
+                                                                <CheapIcon name={'emap-line'} size={30}/>
+                                                          </IconButton>
+                                }
                             </InputAdornment>
                         )
                     }}
+                    onChange={handleSearchChanges}
                 >
                 </TextField>
             </Box>
-            <Box sx={{ width:300, height:76, backgroundColor:'yellow'}}></Box>
+            <Box sx={{ width:300, height:76, backgroundColor:'yellow'}}>
+
+            </Box>
         </Box>     
     </Box>
   )
