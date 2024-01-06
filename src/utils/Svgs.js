@@ -6,10 +6,11 @@ const svgMapping = new Map([
   ['profile', 'imgs/profile.svg'],
   ['handshake', 'imgs/handshake.svg'],
   ['search', 'imgs/search.svg'],
-  ['emap-line', 'imgs/emap-line.svg'],
+  ['forward-slash', 'imgs/forward-slash.svg'],
   ['cha', 'imgs/cha.svg'],
   ['cart', 'imgs/cart.svg'],
-  ['notification', 'imgs/notification.svg']
+  ['notification', 'imgs/notification.svg'],
+
 ])
 
 function generateIcon(src, size) {

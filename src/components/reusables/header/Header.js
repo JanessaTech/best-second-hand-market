@@ -9,6 +9,7 @@ export default function Header() {
     const theme = useTheme()
     const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const isMiddleScreen = useMediaQuery(theme.breakpoints.down("md"));
     const [search, setSearch] = useState('')
     const [isLogin, setIsLogin]  = useState(true)
 
@@ -34,12 +35,12 @@ export default function Header() {
                 <IconButton href='#' sx={{pl:0}}>
                     <Avatar alt='Cheap' src='/imgs/handshake.svg' sx={{ width:60, height:60}}/>
                 </IconButton>
-                <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('sm')]:{display:'none'}}}>Cheap</Typography>
+                <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Cheap</Typography>
             </Box>
             <Box>
-                <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em'}}>{isLargeScreen ? 'Mint your own NFT' : 'Mint'}</Button>
+                <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em', [theme.breakpoints.down('sm')]:{display:'none'}}}>Mint your NFT</Button>
             </Box>
-            <Box sx={{width:0.3}}>
+            <Box sx={{width: isSmallScreen? 0.7:0.4, display: 'flex', alignItems: 'center'}}>
                 <TextField sx={{backgroundColor:'white', borderRadius:2,
                     '& .MuiOutlinedInput-root':{
                         '&.Mui-focused fieldset': {borderColor:'black', border:0},
@@ -52,7 +53,7 @@ export default function Header() {
                     fullWidth
                     InputProps={{
                         startAdornment: (
-                            <InputAdornment position="start" sx={{[theme.breakpoints.down('sm')]:{display:'none'},}}>
+                            <InputAdornment position="start" sx={{[theme.breakpoints.down('sm')]:{display:'none'}}}>
                                 <CheapIcon name={'search'}/>
                             </InputAdornment>
                         ),
@@ -67,7 +68,7 @@ export default function Header() {
                                                                         '&.MuiButtonBase-root':{p:0.5, borderRadius:2, 
                                                                                                     backgroundColor:'action.hover'}
                                                                           }} disableRipple>
-                                                                <CheapIcon name={'emap-line'} size={30}/>
+                                                                <CheapIcon name={'forward-slash'} size={25}/>
                                                           </IconButton>
                                 }
                             </InputAdornment>
@@ -76,6 +77,7 @@ export default function Header() {
                     onChange={handleSearchChanges}
                 >
                 </TextField>
+                <Button sx={{textTransform:'none', fontSize:'1.1em', ml:1, height:56, '&.MuiButtonBase-root':{px:1}}} variant='contained'>Go</Button>
             </Box>
             <Box sx={{display:'flex', alignItems: 'center'}}>
                 {
