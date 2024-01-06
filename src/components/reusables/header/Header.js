@@ -1,10 +1,16 @@
-import { Avatar, Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
+import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
+import { useTheme } from '@mui/material/styles';
 import {headerHeight} from '../../../common/constant'
 import { CheapIcon } from '../../../utils/Svgs'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 export default function Header() {
+    const theme = useTheme()
+    const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const [search, setSearch] = useState('')
+    const [isLogin, setIsLogin]  = useState(true)
 
     const handleSearchChanges = (e) => {
         e.preventDefault()
@@ -20,7 +26,7 @@ export default function Header() {
         width: 1, height: headerHeight, 
         backgroundColor: 'black', 
         position: 'fixed', top: 0, left: 0, 
-        px:3,
+        px: isSmallScreen ? 2: 3,
         boxSizing:'border-box',
         zIndex: (theme) => theme.zIndex.drawer + 1}}> 
         <Box sx={{display: 'flex', alignItems: 'center', justifyContent:'space-between'}}>
@@ -28,10 +34,10 @@ export default function Header() {
                 <IconButton href='#' sx={{pl:0}}>
                     <Avatar alt='Cheap' src='/imgs/handshake.svg' sx={{ width:60, height:60}}/>
                 </IconButton>
-                <Typography variant='h4' color='white'>Cheap</Typography>
+                <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('sm')]:{display:'none'}}}>Cheap</Typography>
             </Box>
             <Box>
-                <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em'}}>Mint your own NFT</Button>
+                <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em'}}>{isLargeScreen ? 'Mint your own NFT' : 'Mint'}</Button>
             </Box>
             <Box sx={{width:0.3}}>
                 <TextField sx={{backgroundColor:'white', borderRadius:2,
@@ -46,7 +52,7 @@ export default function Header() {
                     fullWidth
                     InputProps={{
                         startAdornment: (
-                            <InputAdornment position="start">
+                            <InputAdornment position="start" sx={{[theme.breakpoints.down('sm')]:{display:'none'},}}>
                                 <CheapIcon name={'search'}/>
                             </InputAdornment>
                         ),
@@ -54,9 +60,11 @@ export default function Header() {
                             <InputAdornment position="end">
                                 {
                                     search && search.length > 0 ?  
-                                         <IconButton onClick={resetSearch}>
+                                         <IconButton onClick={resetSearch} sx={{[theme.breakpoints.down('sm')]:{display:'none'},}}>
                                             <CheapIcon name={'cha'} size={30}/>
-                                         </IconButton> :  <IconButton sx={{ '&.MuiButtonBase-root':{p:0.5, borderRadius:2, 
+                                         </IconButton> :  <IconButton sx={{ 
+                                                                         [theme.breakpoints.down('sm')]:{display:'none'},
+                                                                        '&.MuiButtonBase-root':{p:0.5, borderRadius:2, 
                                                                                                     backgroundColor:'action.hover'}
                                                                           }} disableRipple>
                                                                 <CheapIcon name={'emap-line'} size={30}/>
@@ -69,8 +77,21 @@ export default function Header() {
                 >
                 </TextField>
             </Box>
-            <Box>
-                <Button sx={{textTransform:'none', fontSize:'1.2em'}} variant='contained' color='unworkable'>Connect Wallet</Button>
+            <Box sx={{display:'flex', alignItems: 'center'}}>
+                {
+                    isLogin ? <Box sx={{display:'flex', alignItems: 'center'}}>
+                    <Typography color={'white'} variant='subtitle1' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Connected</Typography>
+                    <IconButton>
+                        <CheapIcon name={'profile'}/>
+                    </IconButton>
+                    <IconButton sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>
+                        <CheapIcon name={'cart'}/>
+                    </IconButton>
+                    <Badge badgeContent={4} color="primary" sx={{[theme.breakpoints.down('lg')]:{display:'none'}}}>
+                        <CheapIcon name={'notification'}/>
+                    </Badge>
+                </Box>  : <Button sx={{textTransform:'none', fontSize:'1.1em'}} variant='contained' color='unworkable'>Connect Wallet</Button>
+                }
             </Box>
         </Box>     
     </Box>
