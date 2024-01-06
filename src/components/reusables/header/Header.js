@@ -69,8 +69,8 @@ export default function Header() {
                 >
                 </TextField>
             </Box>
-            <Box sx={{ width:300, height:76, backgroundColor:'yellow'}}>
-
+            <Box>
+                <Button sx={{textTransform:'none', fontSize:'1.2em'}} variant='contained' color='unworkable'>Connect Wallet</Button>
             </Box>
         </Box>     
     </Box>

@@ -11,7 +11,7 @@ import Cart from '../reusables/cart/Cart'
 export default function Home() {
     const [menuWidth, setMenuWidth] = useState(drawerWidth)
     const [menuOpen, setMenuOpen] = useState(true)
-    const [cartOpen, setCartOpen] = useState(true)
+    const [cartOpen, setCartOpen] = useState(false)
 
     const closeMenu = () => {
         setMenuOpen(false)
