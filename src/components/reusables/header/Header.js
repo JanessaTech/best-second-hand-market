@@ -1,15 +1,13 @@
-import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
+import { Avatar, Badge, Box, Button, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import {headerHeight} from '../../../common/constant'
 import { CheapIcon } from '../../../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-export default function Header() {
+export default function Header({openCart}) {
     const theme = useTheme()
-    const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-    const isMiddleScreen = useMediaQuery(theme.breakpoints.down("md"));
     const [search, setSearch] = useState('')
     const [isLogin, setIsLogin]  = useState(true)
 
@@ -21,6 +19,11 @@ export default function Header() {
     const resetSearch = (e) => {
         e.preventDefault()
         setSearch('')
+    }
+
+    const handleCart = (e) => {
+        e.preventDefault()
+        openCart()
     }
   return (
     <Box sx={{
@@ -82,16 +85,26 @@ export default function Header() {
             <Box sx={{display:'flex', alignItems: 'center'}}>
                 {
                     isLogin ? <Box sx={{display:'flex', alignItems: 'center'}}>
-                    <Typography color={'white'} variant='subtitle1' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Connected</Typography>
-                    <IconButton>
+                    <Box sx={{[theme.breakpoints.down('md')]:{display:'none'}, cursor: 'pointer', mr:1}}>
+                        <Typography color={'white'} variant='subtitle1'>Connected</Typography>
+                    </Box>
+                    <IconButton sx={{'&:hover':{backgroundColor:'grey'}}}>
                         <CheapIcon name={'profile'}/>
                     </IconButton>
-                    <IconButton sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>
+                    <IconButton sx={{
+                        [theme.breakpoints.down('md')]:{display:'none'},
+                        '&:hover':{backgroundColor:'grey'}
+                        }} onClick={handleCart}>
                         <CheapIcon name={'cart'}/>
                     </IconButton>
-                    <Badge badgeContent={4} color="primary" sx={{[theme.breakpoints.down('lg')]:{display:'none'}}}>
-                        <CheapIcon name={'notification'}/>
-                    </Badge>
+                    <IconButton sx={{
+                        [theme.breakpoints.down('lg')]:{display:'none'},
+                        '&:hover':{backgroundColor:'grey'}
+                        }}>
+                        <Badge badgeContent={4} color="primary">
+                            <CheapIcon name={'notification'}/>
+                        </Badge>
+                    </IconButton>     
                 </Box>  : <Button sx={{textTransform:'none', fontSize:'1.1em'}} variant='contained' color='unworkable'>Connect Wallet</Button>
                 }
             </Box>

@@ -26,10 +26,13 @@ export default function Home() {
     const toggleCart = () => {
         setCartOpen(!cartOpen)
     }
+    const openCart = () => {
+        setCartOpen(true)
+    }
   return (
     <Container maxWidth='false'>
         <Box sx={{ display: 'flex' }}>
-            <Header/>
+            <Header openCart={openCart}/>
             <FilterMenu width={menuWidth} menuOpen={menuOpen}/>
             <NFTGallery closeMenu={closeMenu} openMenu={openMenu} menuOpen={menuOpen} toggleCart={toggleCart}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
