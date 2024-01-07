@@ -4,12 +4,15 @@ import { useTheme } from '@mui/material/styles';
 import {headerHeight} from '../../../common/constant'
 import { CheapIcon } from '../../../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import ProfileMenu from '../../profile/ProfileMenu';
 
 export default function Header({openCart}) {
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const [search, setSearch] = useState('')
     const [isLogin, setIsLogin]  = useState(true)
+    const [isProfileOpen, setIsProfileOpen] = useState(false)
+    const [anchorEl, setAnchorEl] =  React.useState(null)
 
     const handleSearchChanges = (e) => {
         e.preventDefault()
@@ -24,6 +27,13 @@ export default function Header({openCart}) {
     const handleCart = (e) => {
         e.preventDefault()
         openCart()
+    }
+
+    const handleProfileMenuOpen = (e) => {
+        setAnchorEl(e.currentTarget);
+    }
+    const handleProfileMenuClose = () => {
+        setAnchorEl(null);
     }
   return (
     <Box sx={{
@@ -88,9 +98,18 @@ export default function Header({openCart}) {
                     <Box sx={{[theme.breakpoints.down('md')]:{display:'none'}, cursor: 'pointer', mr:1}}>
                         <Typography color={'white'} variant='subtitle1'>Connected</Typography>
                     </Box>
-                    <IconButton sx={{'&:hover':{backgroundColor:'grey'}}}>
+                    <IconButton 
+                        sx={{'&:hover':{backgroundColor:'grey'}}}
+                        id='profile-positioned-button'
+                        aria-controls={isProfileOpen ? 'profile-positioned-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={isProfileOpen ? 'true' : undefined}
+                        // onClick={handleProfileMenuOpen}
+                        onMouseOver={handleProfileMenuOpen}
+                        >
                         <CheapIcon name={'profile'}/>
                     </IconButton>
+                    <ProfileMenu anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose}/>
                     <IconButton sx={{
                         [theme.breakpoints.down('md')]:{display:'none'},
                         '&:hover':{backgroundColor:'grey'}

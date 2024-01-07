@@ -17,6 +17,7 @@ export default function Cart({toggleCart, open}) {
         anchor='right'
         open={open}
         onClose={toggleCart}
+        disableScrollLock={true}
     >
         <Box >
             xxxxx
