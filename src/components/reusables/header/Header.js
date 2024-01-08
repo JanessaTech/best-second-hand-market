@@ -30,11 +30,15 @@ export default function Header({openCart}) {
     }
 
     const handleProfileMenuOpen = (e) => {
-        setAnchorEl(e.currentTarget);
+        if (anchorEl !== e.currentTarget) {
+            setAnchorEl(e.currentTarget);
+        } 
     }
     const handleProfileMenuClose = () => {
         setAnchorEl(null);
     }
+
+
   return (
     <Box sx={{
         width: 1, height: headerHeight, 
@@ -104,11 +108,12 @@ export default function Header({openCart}) {
                         aria-controls={isProfileOpen ? 'profile-positioned-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={isProfileOpen ? 'true' : undefined}
-                        // onClick={handleProfileMenuOpen}
                         onMouseOver={handleProfileMenuOpen}
+                        onClick={handleProfileMenuOpen}
                         >
-                        <CheapIcon name={'profile'}/>
+                            <CheapIcon name={'profile'}/>
                     </IconButton>
+                    
                     <ProfileMenu anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose}/>
                     <IconButton sx={{
                         [theme.breakpoints.down('md')]:{display:'none'},

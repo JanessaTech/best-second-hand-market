@@ -10,7 +10,12 @@ const svgMapping = new Map([
   ['cha', 'imgs/cha.svg'],
   ['cart', 'imgs/cart.svg'],
   ['notification', 'imgs/notification.svg'],
-
+  ['my-nft', 'imgs/profile/my-nft.svg'],
+  ['my-order', 'imgs/profile/my-order.svg'],
+  ['my-favorite', 'imgs/profile/my-favorite.svg'],
+  ['my-notification', 'imgs/profile/my-notification.svg'],
+  ['my-setting', 'imgs/profile/my-setting.svg'],
+  ['my-balance', 'imgs/profile/my-balance.svg'],
 ])
 
 function generateIcon(src, size) {
