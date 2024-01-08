@@ -1,12 +1,12 @@
 import { Box } from '@mui/material'
 import { Container } from '@mui/system'
 import React, { useState } from 'react'
-
 import Header from '../reusables/header/Header'
 import FilterMenu from '../reusables/menu/FilterMenu'
 import NFTGallery from './NFTGallery'
 import {drawerWidth} from '../../common/constant'
 import Cart from '../reusables/cart/Cart'
+import CheapBottomNavigation from '../footer/BottomNavigation'
 
 export default function Home() {
     const [menuWidth, setMenuWidth] = useState(drawerWidth)
@@ -23,6 +23,16 @@ export default function Home() {
         setMenuWidth(drawerWidth)
     }
 
+    const toggleMenu = () => {
+        if (menuOpen) {
+            setMenuOpen(false)
+            setMenuWidth(0)
+        } else {
+            setMenuOpen(true)
+            setMenuWidth(drawerWidth)
+        }
+    }
+
     const toggleCart = () => {
         setCartOpen(!cartOpen)
     }
@@ -34,9 +44,10 @@ export default function Home() {
         <Box sx={{ display: 'flex' }}>
             <Header openCart={openCart}/>
             <FilterMenu width={menuWidth} menuOpen={menuOpen}/>
-            <NFTGallery closeMenu={closeMenu} openMenu={openMenu} menuOpen={menuOpen} toggleCart={toggleCart}/>
+            <NFTGallery closeMenu={closeMenu} openMenu={openMenu} menuOpen={menuOpen} toggleCart={toggleCart} toggleMenu={toggleMenu}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
-        </Box>      
+        </Box>
+        <CheapBottomNavigation/>      
     </Container>
   )
 }
