@@ -47,7 +47,7 @@ export default function Home() {
             <NFTGallery closeMenu={closeMenu} openMenu={openMenu} menuOpen={menuOpen} toggleCart={toggleCart} toggleMenu={toggleMenu}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
         </Box>
-        <CheapBottomNavigation/>      
+        <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu}/>      
     </Container>
   )
 }
