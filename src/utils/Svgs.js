@@ -16,6 +16,9 @@ const svgMapping = new Map([
   ['my-notification', 'imgs/profile/my-notification.svg'],
   ['my-setting', 'imgs/profile/my-setting.svg'],
   ['my-balance', 'imgs/profile/my-balance.svg'],
+  ['left-arrow', 'imgs/left-arrow.svg'],
+  ['update', 'imgs/update.svg'],
+  
 ])
 
 function generateIcon(src, size) {
