@@ -24,7 +24,7 @@ function getStyles(sortName, sortBy, theme) {
     };
   }
 
-export default function NetworkType() {
+export default function NetworkFilter() {
     const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
     const theme = useTheme()
   

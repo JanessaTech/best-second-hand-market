@@ -3,7 +3,7 @@ import React from 'react'
 import {headerHeight, drawerWidth} from '../../../common/constant'
 import { CheapIcon } from '../../../utils/Svgs';
 import CategoryFilter from './CategoryFilter';
-import NetworkType from './NetworkType';
+import NetworkFilter from './NetworkFilter';
 
 export default function FilterMenu({width, menuOpen, closeMenu}) {
 
@@ -15,8 +15,7 @@ export default function FilterMenu({width, menuOpen, closeMenu}) {
           [`& .MuiDrawer-paper`]: { 
                 width: drawerWidth, 
                 boxSizing: 'border-box',
-                borderRight:0,
-                backgroundColor:'pink'
+                borderRight:0
             },
         }}
         anchor="left"
@@ -29,9 +28,10 @@ export default function FilterMenu({width, menuOpen, closeMenu}) {
               </IconButton>
             </Box>
             <Box sx={{mx:3}}>
-                <NetworkType/>
+                <NetworkFilter/>
                 <Divider />
                 <CategoryFilter/>
+                <Divider />
             </Box>
             
             

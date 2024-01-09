@@ -33,7 +33,7 @@ export default function FilterBar({menuOpen, toggleMenu}) {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const margin = isSmallScreen ? 32 : 48
     const width = menuOpen ? `calc(100% - ${drawerWidth + margin}px)` :`calc(100% - ${margin}px)`
-    const sortOptions = ['Recent activity', 'aa','bb','Recent activity', 'aa','bb','Recent activity', 'aa','bb']
+    const sortOptions = ['Recent activity', 'aa','bb','ccc', 'ddddd','eeee','ffff', 'gggg','hhhhh']
     const [sortBy, setSortBy] = useState('Recent activity')
 
     const handleSortChange = (e) => {
@@ -90,7 +90,7 @@ export default function FilterBar({menuOpen, toggleMenu}) {
                     >
                         {
                             sortOptions.map((sortName) => (
-                                <MenuItem disableScrollLock={true}
+                                <MenuItem
                                     key={sortName}
                                     value={sortName}
                                     style={getStyles(sortName, sortBy, theme)}
