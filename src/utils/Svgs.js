@@ -20,7 +20,12 @@ const svgMapping = new Map([
   ['left-arrow', 'imgs/left-arrow.svg'],
   ['right-arrow', 'imgs/right-arrow.svg'],
   ['update', 'imgs/update.svg'],
-  ['filter', 'imgs/filter.svg']
+  ['filter', 'imgs/filter.svg'],
+  ['ethereum', 'imgs/ethereum.svg'],
+  ['avalanche', 'imgs/avalanche.svg'],
+  ['polygon', 'imgs/polygon.svg'],
+  ['solana', 'imgs/solana.svg'],
+  ['close', 'imgs/close.svg']
 ])
 
 function generateIcon(src, size) {

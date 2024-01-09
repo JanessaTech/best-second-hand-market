@@ -61,7 +61,7 @@ export default function FilterBar({menuOpen, toggleMenu}) {
                                 variant='outlined' 
                                 startIcon={<CheapIcon name={menuOpen ? 'left-arrow': 'right-arrow'} size={20}/>}
                                 onClick={toggleMenu}
-                                >Hide</Button>
+                                >{menuOpen ? 'Hide' : 'Filter'}</Button>
                     <Button sx={{textTransform:'none', mr:1, height:40,color:'black',
                                 '&.MuiButton-root': {p:'5px', minWidth:50},
                                 '&.MuiButton-root span': {m:0}

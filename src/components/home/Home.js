@@ -18,11 +18,6 @@ export default function Home() {
         setMenuWidth(0)
     }
 
-    const openMenu = () => {
-        setMenuOpen(true)
-        setMenuWidth(drawerWidth)
-    }
-
     const toggleMenu = () => {
         if (menuOpen) {
             setMenuOpen(false)
@@ -43,8 +38,8 @@ export default function Home() {
     <Container maxWidth='false'>
         <Box sx={{ display: 'flex' }}>
             <Header openCart={openCart}/>
-            <FilterMenu width={menuWidth} menuOpen={menuOpen}/>
-            <NFTGallery closeMenu={closeMenu} openMenu={openMenu} menuOpen={menuOpen} toggleCart={toggleCart} toggleMenu={toggleMenu}/>
+            <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu}/>
+            <NFTGallery menuOpen={menuOpen} toggleMenu={toggleMenu}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
         </Box>
         <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu}/>      

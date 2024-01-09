@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Paper, styled } from '@mui/material'
+import { Box, Grid, Paper, styled } from '@mui/material'
 import React from 'react'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
@@ -11,7 +11,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function NFTGallery({closeMenu, openMenu, menuOpen, toggleCart, toggleMenu}) {
+export default function NFTGallery({menuOpen, toggleMenu}) {
   return (
     <Box component="main" 
         sx={{ width: menuOpen ? `calc(100% - ${drawerWidth}px)` : 1, height: 1300, 
