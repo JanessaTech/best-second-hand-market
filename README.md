@@ -17,6 +17,7 @@ npm install @fontsource/roboto
 npm install @mui/icons-material
 npm install react-router-dom
 npm install axios
+npm install react-hook-form @hookform/resolvers yup
 ```
 
 ## The list of features used in React

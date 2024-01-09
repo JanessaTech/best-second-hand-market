@@ -4,6 +4,7 @@ import {headerHeight, drawerWidth} from '../../../common/constant'
 import { CheapIcon } from '../../../utils/Svgs';
 import CategoryFilter from './CategoryFilter';
 import NetworkFilter from './NetworkFilter';
+import PriceFilter from './PriceFilter';
 
 export default function FilterMenu({width, menuOpen, closeMenu}) {
 
@@ -32,6 +33,7 @@ export default function FilterMenu({width, menuOpen, closeMenu}) {
                 <Divider />
                 <CategoryFilter/>
                 <Divider />
+                <PriceFilter/>
             </Box>
             
             

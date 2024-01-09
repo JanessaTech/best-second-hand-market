@@ -46,9 +46,6 @@ export default function NetworkFilter() {
             input={
             <OutlinedInput 
                 size="small" 
-                sx={{
-                '&.MuiOutlinedInput-root.Mui-focused fieldset': {borderColor:'#9e9e9e'}
-                }}
                 startAdornment={
                 <InputAdornment position="start">
                     <CheapIcon name={network.toLowerCase()}/>

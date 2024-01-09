@@ -54,10 +54,9 @@ export default function FilterBar({menuOpen, toggleMenu}) {
                 <Box sx={{display:'flex', [theme.breakpoints.down('sm')]: {display: 'none'}}}>
                     <Button sx={{textTransform:'none', mr:1, height:40,
                                 '&.MuiButton-root span': {m:0}, 
-                                '&.MuiButton-root': {p:'5px', minWidth:50},
-                                color:'black'
+                                '&.MuiButton-root': {p:'5px', minWidth:50}
                                 }} 
-                                color='normalButton'
+                                color='customBlack'
                                 variant='outlined' 
                                 startIcon={<CheapIcon name={menuOpen ? 'left-arrow': 'right-arrow'} size={20}/>}
                                 onClick={toggleMenu}
@@ -66,7 +65,7 @@ export default function FilterBar({menuOpen, toggleMenu}) {
                                 '&.MuiButton-root': {p:'5px', minWidth:50},
                                 '&.MuiButton-root span': {m:0}
                                 }} 
-                                color='normalButton'
+                                color='customBlack'
                                 variant='outlined' 
                                 startIcon={<CheapIcon name={'update'} size={20}/>}>
                     </Button>
@@ -83,9 +82,7 @@ export default function FilterBar({menuOpen, toggleMenu}) {
                         label="sort-by-name-option"
                         value={sortBy}
                         onChange={handleSortChange}
-                        input={<OutlinedInput size="small" sx={{
-                            '&.MuiOutlinedInput-root.Mui-focused fieldset': {borderColor:'#9e9e9e'}
-                        }}/>}
+                        input={<OutlinedInput size="small"/>}
                         MenuProps={MenuProps}
                     >
                         {

@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
+import { grey,black } from '@mui/material/colors';
 
 const CheapTheme = createTheme({
     palette: {
@@ -7,8 +7,13 @@ const CheapTheme = createTheme({
             main: grey[500],
             contrastText: '#fff'
         },
-        normalButton: {
-            main: grey[500]
+        customGrey: {
+            main: grey[500],
+            contrastText: '#fff'
+        },
+        customBlack: {
+            main: '#000',
+            contrastText: '#fff'
         }
     },
     components:{
@@ -17,6 +22,13 @@ const CheapTheme = createTheme({
                 disableRipple: false
             }
         },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {borderColor:'#9e9e9e'}
+                }
+            }
+        }
     }
 })
 
