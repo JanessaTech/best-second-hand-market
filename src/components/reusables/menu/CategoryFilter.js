@@ -21,9 +21,9 @@ export default function CategoryFilter() {
     }
 
     const toggleCategory = () => {
-        console.log('toggleCategory')
         setExpand(!expand)
     }
+    
   return (
     <Box sx={{my:2}}>
         <List sx={{width: 1}}

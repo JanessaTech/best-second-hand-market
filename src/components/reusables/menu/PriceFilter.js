@@ -1,4 +1,4 @@
-import {Box, Button, FormHelperText, OutlinedInput, Snackbar, Typography } from '@mui/material'
+import {Box, Button, Fade, IconButton, OutlinedInput, Paper, Slide, Snackbar, Stack, Tooltip, Typography } from '@mui/material'
 import MuiAlert from '@mui/material/Alert';
 import React, { useEffect, useRef, useState } from 'react'
 import { styled } from '@mui/material/styles';
@@ -6,21 +6,66 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import {capitalize} from '../../../utils/StringUtils'
 import {PriceFilterSchema} from '../../../common/schemas/home'
+import DeleteIcon from '@mui/icons-material/Delete';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const CustomSnackBar = (props) => {
+    const {duration, timeout, alerts, clearAlters, ...others} = props
+    const [fadeIn, setFadeIn] = useState(alerts && alerts.length > 0 ? true : false)
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            console.log('This will run after ', duration)
+            handleClearAlters()
+        }, duration)
+        return () => clearTimeout(timer)
+    })
+    useEffect(() => {
+        console.log('alerts.length > 0 :', alerts.length > 0)
+        setFadeIn(alerts && alerts.length > 0 ? true : false)
+    }, [alerts])
+
+    const handleClearAlters = () => {
+        setFadeIn(false)
+        clearAlters()
+    }
+
+    return (
+        <Fade in={fadeIn} timeout={timeout}>
+                <Box sx={{position:'fixed', bottom:10}}>
+                    {alerts && alerts.length > 0 && 
+                        <Box sx={{display:'flex', justifyContent:'end'}}>
+                            <Tooltip title="Clear all" placement="right">
+                                <IconButton onClick={handleClearAlters}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    } 
+                    <Stack spacing={0.5}>
+                        {
+                            alerts.map((a) => (
+                                <Alert key={a.id} severity={a.severity}>{a.message}</Alert>
+                            ))
+                        }
+                    </Stack>
+                </Box>
+                
+        </Fade>
+    )
+}
 
 const NumberInput = styled((props) => {
-    const {placeholder, name, value, changeValueFun, register, errors, handleErrorMsg, ...others} = props
+    const {placeholder, name, value, changeValueFun, register, errors, ...others} = props
     const handleChange = (e) => {
         changeValueFun(e.target.value)
     }
-    const cntRef = useRef(0)
-    useEffect(() => {
-        cntRef.current = cntRef.current + 1
-        console.log('cntRef.current:', cntRef.current)
-    })
     
     return (
         <Box>
-            {console.log('NumberInput rendering ....')}
             <Typography>{capitalize(placeholder)}:</Typography>
             <OutlinedInput 
                 id={`id-price-filter-${name}`}
@@ -34,17 +79,11 @@ const NumberInput = styled((props) => {
                 onChange={handleChange}
                 placeholder={placeholder}
                 {...others}/> 
-                {
-                    errors[name] && handleErrorMsg(errors[name].message) 
-                }
-            <FormHelperText id={`id-price-filter-${name}-helper-text`}>{errors[name] ? errors[name].message : " "}</FormHelperText>
         </Box>
         )
 })({})
 
-const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
+
 
 export default function PriceFilter() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
@@ -52,15 +91,12 @@ export default function PriceFilter() {
     })
     const [minValue, setMinValue] = useState(0)
     const [maxValue, setMaxValue] = useState(100)
-    const [hasError, setHasError] = useState(false)
-    const [errorMsg, setErrorMsg] = useState('')
+    const [alerts, setAlerts] = useState([])
 
     const changeMinValue = (value) => {
-        console.log('min value = ', value)
         setMinValue(value)
     }
     const changeMaxValue = (value) => {
-        console.log('max value = ', value)
         setMaxValue(value)
     }
 
@@ -73,22 +109,29 @@ export default function PriceFilter() {
         console.log('data:', data)
     }
 
-    const closeSnackBar = () => {
-        console.log('closeSnackBar')
-        setHasError(false)
-        setErrorMsg('')
-    }
-    const handleErrorMsg = (msg) => {
-        console.log('handleErrorMsg')
-        setErrorMsg(msg)
-        setHasError(true)
-    }
+    useEffect(() => {
+        console.log('inspect errors')
+        console.log(errors)
+        let newAlerts = []
+        if (errors?.max) {
+            newAlerts.push({id: 'max', severity: 'error', message: errors?.max?.message})
+        }
+        if(errors?.min) {
+            newAlerts.push({id: 'min', severity: 'error', message: errors?.min?.message})
+        }
+        setAlerts(newAlerts)
+    }, [errors])
 
+    const clearAlters = () => {
+        console.log('clearAlters ...')
+        setAlerts([])
+    }
+   
   return (
     <Box component='form'
         onSubmit={handleSubmit(handleApply)}
         noValidate autoComplete='off'>
-        <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center', mt:2}}  
+        <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center', my:2}}  
         >
             <NumberInput 
                 placeholder={'min'} 
@@ -96,9 +139,7 @@ export default function PriceFilter() {
                 value={minValue} 
                 changeValueFun={changeMinValue} 
                 register={register} 
-                handleSubmit={handleSubmit}
                 errors={errors}
-                handleErrorMsg={handleErrorMsg}
                 />
             <Typography>to</Typography>
             <NumberInput 
@@ -107,22 +148,16 @@ export default function PriceFilter() {
                 value={maxValue} 
                 changeValueFun={changeMaxValue}
                 register={register} 
-                handleSubmit={handleSubmit}
                 errors={errors}
-                handleErrorMsg={handleErrorMsg}
                 />
         </Box>
         <Box sx={{display:'flex', justifyContent:'space-around'}}>
             <Button variant='outlined' color='customBlack' onClick={handleClear}>Clear</Button>
             <Button variant='contained' color='customBlack' type="submit">Apply</Button>
         </Box>
-        <Snackbar
-            open={hasError} onClose={closeSnackBar}
-        >
-            <Alert onClose={closeSnackBar} severity="error">{errorMsg}</Alert>
-        </Snackbar>
-    </Box>
-    
+  
+        <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlters={clearAlters}/>       
+    </Box> 
   )
 }
 

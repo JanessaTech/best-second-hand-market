@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { grey,black } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
 
 const CheapTheme = createTheme({
     palette: {
