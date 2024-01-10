@@ -1,62 +1,11 @@
-import {Box, Button, Fade, IconButton, OutlinedInput, Paper, Slide, Snackbar, Stack, Tooltip, Typography } from '@mui/material'
-import MuiAlert from '@mui/material/Alert';
-import React, { useEffect, useRef, useState } from 'react'
+import {Box, Button, OutlinedInput,  Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import {capitalize} from '../../../utils/StringUtils'
 import {PriceFilterSchema} from '../../../common/schemas/home'
-import DeleteIcon from '@mui/icons-material/Delete';
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-const CustomSnackBar = (props) => {
-    const {duration, timeout, alerts, clearAlters, ...others} = props
-    const [fadeIn, setFadeIn] = useState(alerts && alerts.length > 0 ? true : false)
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            console.log('This will run after ', duration)
-            handleClearAlters()
-        }, duration)
-        return () => clearTimeout(timer)
-    })
-    useEffect(() => {
-        console.log('alerts.length > 0 :', alerts.length > 0)
-        setFadeIn(alerts && alerts.length > 0 ? true : false)
-    }, [alerts])
-
-    const handleClearAlters = () => {
-        setFadeIn(false)
-        clearAlters()
-    }
-
-    return (
-        <Fade in={fadeIn} timeout={timeout}>
-                <Box sx={{position:'fixed', bottom:10}}>
-                    {alerts && alerts.length > 0 && 
-                        <Box sx={{display:'flex', justifyContent:'end'}}>
-                            <Tooltip title="Clear all" placement="right">
-                                <IconButton onClick={handleClearAlters}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
-                    } 
-                    <Stack spacing={0.5}>
-                        {
-                            alerts.map((a) => (
-                                <Alert key={a.id} severity={a.severity}>{a.message}</Alert>
-                            ))
-                        }
-                    </Stack>
-                </Box>
-                
-        </Fade>
-    )
-}
+import CustomSnackBar from '../../../common/CustomSnackBar';
 
 const NumberInput = styled((props) => {
     const {placeholder, name, value, changeValueFun, register, errors, ...others} = props
@@ -84,7 +33,6 @@ const NumberInput = styled((props) => {
 })({})
 
 
-
 export default function PriceFilter() {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(PriceFilterSchema)
@@ -101,6 +49,7 @@ export default function PriceFilter() {
     }
 
     const handleClear = () => {
+        reset()
         setMinValue(0)
         setMaxValue(100)
     }
@@ -110,8 +59,6 @@ export default function PriceFilter() {
     }
 
     useEffect(() => {
-        console.log('inspect errors')
-        console.log(errors)
         let newAlerts = []
         if (errors?.max) {
             newAlerts.push({id: 'max', severity: 'error', message: errors?.max?.message})
@@ -122,8 +69,7 @@ export default function PriceFilter() {
         setAlerts(newAlerts)
     }, [errors])
 
-    const clearAlters = () => {
-        console.log('clearAlters ...')
+    const clearAlerts = () => {
         setAlerts([])
     }
    
@@ -155,8 +101,9 @@ export default function PriceFilter() {
             <Button variant='outlined' color='customBlack' onClick={handleClear}>Clear</Button>
             <Button variant='contained' color='customBlack' type="submit">Apply</Button>
         </Box>
-  
-        <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlters={clearAlters}/>       
+        {
+            alerts && alerts.length > 0 && <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlerts={clearAlerts}/>       
+        }  
     </Box> 
   )
 }
