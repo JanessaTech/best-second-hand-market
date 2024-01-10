@@ -55,7 +55,7 @@ export default function Header({openCart}) {
                 <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Cheap</Typography>
             </Box>
             <Box>
-                <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em', [theme.breakpoints.down('sm')]:{display:'none'}}}>Mint your NFT</Button>
+                <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em', [theme.breakpoints.down('md')]:{display:'none'}}}>Mint your NFT</Button>
             </Box>
             <Box sx={{width: isSmallScreen? 0.7:0.4, display: 'flex', alignItems: 'center'}}>
                 <TextField sx={{backgroundColor:'white', borderRadius:2,
