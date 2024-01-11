@@ -1,16 +1,17 @@
-import { Avatar, Badge, Box, Button, IconButton, InputAdornment, Link, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
+import React, { memo, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import {headerHeight} from '../../../common/constant'
 import { CheapIcon } from '../../../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../../profile/ProfileMenu';
 
-export default function Header({openCart}) {
+const Header = ({openCart}) => {
+    console.log('rending Header... ')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const [search, setSearch] = useState('')
-    const [isLogin, setIsLogin]  = useState(false)
+    const [isLogin, setIsLogin]  = useState(true)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [anchorEl, setAnchorEl] =  React.useState(null)
 
@@ -136,4 +137,6 @@ export default function Header({openCart}) {
     </Box>
   )
 }
+
+export default memo(Header)
 

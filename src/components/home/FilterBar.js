@@ -98,9 +98,7 @@ export default function FilterBar({menuOpen, toggleMenu}) {
                         }                        
                     </Select>
                 </FormControl>
-            </Box>
-            
-            
+            </Box>     
     </Box>
   )
 }

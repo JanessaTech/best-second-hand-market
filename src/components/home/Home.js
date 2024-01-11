@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import { Container } from '@mui/system'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Header from '../reusables/header/Header'
 import FilterMenu from '../reusables/menu/FilterMenu'
 import NFTGallery from './NFTGallery'
@@ -13,12 +13,12 @@ export default function Home() {
     const [menuOpen, setMenuOpen] = useState(true)
     const [cartOpen, setCartOpen] = useState(false)
 
-    const closeMenu = () => {
+    const closeMenu = useCallback(() => {
         setMenuOpen(false)
         setMenuWidth(0)
-    }
+    }, [])
 
-    const toggleMenu = () => {
+    const toggleMenu = useCallback(() => {
         if (menuOpen) {
             setMenuOpen(false)
             setMenuWidth(0)
@@ -26,14 +26,15 @@ export default function Home() {
             setMenuOpen(true)
             setMenuWidth(drawerWidth)
         }
-    }
+    }, [menuOpen])
 
-    const toggleCart = () => {
+    const toggleCart = useCallback(() => {
         setCartOpen(!cartOpen)
-    }
-    const openCart = () => {
+    }, [cartOpen])
+
+    const openCart = useCallback(() => {
         setCartOpen(true)
-    }
+    }, [])
   return (
     <Container maxWidth='false'>
         <Box sx={{ display: 'flex' }}>

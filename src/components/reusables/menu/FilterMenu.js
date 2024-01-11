@@ -1,12 +1,13 @@
 import { Box, Divider, Drawer, IconButton} from '@mui/material'
-import React from 'react'
+import React, { memo } from 'react'
 import {headerHeight, drawerWidth} from '../../../common/constant'
 import { CheapIcon } from '../../../utils/Svgs';
 import CategoryFilter from './CategoryFilter';
 import NetworkFilter from './NetworkFilter';
 import PriceFilter from './PriceFilter';
 
-export default function FilterMenu({width, menuOpen, closeMenu}) {
+const FilterMenu = ({width, menuOpen, closeMenu}) => {
+  console.log('rending FilterMenu ...')
 
   return (
     <Drawer variant="persistent"
@@ -40,4 +41,8 @@ export default function FilterMenu({width, menuOpen, closeMenu}) {
     </Drawer>
   )
 }
+
+export default memo(FilterMenu)
+
+
 

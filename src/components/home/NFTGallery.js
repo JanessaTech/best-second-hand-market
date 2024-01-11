@@ -1,5 +1,5 @@
 import { Box, Grid, Paper, styled } from '@mui/material'
-import React from 'react'
+import React, { memo } from 'react'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
 
@@ -11,7 +11,8 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function NFTGallery({menuOpen, toggleMenu}) {
+const NFTGallery = ({menuOpen, toggleMenu}) => {
+  console.log('rending NFTGallery ...')
   return (
     <Box component="main" 
         sx={{ width: menuOpen ? `calc(100% - ${drawerWidth}px)` : 1, height: 1300, 
@@ -44,4 +45,6 @@ export default function NFTGallery({menuOpen, toggleMenu}) {
     
   )
 }
+
+export default memo(NFTGallery)
 

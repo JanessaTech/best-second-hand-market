@@ -19,6 +19,7 @@ export default function CustomSnackBar(props) {
         }, duration)
         return () => clearTimeout(timer)
     })
+
     useEffect(() => {
         console.log('alerts.length > 0 :', alerts.length > 0)
         setFadeIn(alerts && alerts.length > 0 ? true : false)
@@ -48,8 +49,7 @@ export default function CustomSnackBar(props) {
                             ))
                         }
                     </Stack>
-                </Box>
-                
+                </Box>               
         </Fade>
     )
 }

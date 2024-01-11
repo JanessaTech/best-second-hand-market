@@ -1,8 +1,9 @@
 import { Box, Drawer } from '@mui/material'
-import React from 'react'
+import React, { memo } from 'react'
 import {cartWidth, headerHeight} from '../../../common/constant'
 
-export default function Cart({toggleCart, open}) {
+const Cart = ({toggleCart, open}) => {
+  console.log('rending Cart ...')
   return (
     <Drawer
         sx={{'& .MuiDrawer-paper': {
@@ -26,4 +27,6 @@ export default function Cart({toggleCart, open}) {
     </Drawer>
   )
 }
+
+export default memo(Cart)
 

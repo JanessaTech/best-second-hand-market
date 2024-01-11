@@ -1,11 +1,12 @@
 import { Box, Paper } from '@mui/material'
-import React from 'react'
+import React, { memo } from 'react'
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { CheapIcon } from '../../utils/Svgs';
 import { useTheme } from '@mui/material/styles';
 
-export default function CheapBottomNavigation({openCart, toggleMenu}) {
+const CheapBottomNavigation = ({openCart, toggleMenu}) => {
+    console.log('rending CheapBottomNavigation ...')
     const theme = useTheme()
     const [value, setValue] = React.useState(0);
   return (
@@ -27,4 +28,6 @@ export default function CheapBottomNavigation({openCart, toggleMenu}) {
     </Box>
   )
 }
+
+export default memo(CheapBottomNavigation)
 
