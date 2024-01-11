@@ -1,17 +1,18 @@
-import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Typography } from '@mui/material'
+import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material'
 import React, { memo, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
-import {headerHeight} from '../../../common/constant'
-import { CheapIcon } from '../../../utils/Svgs'
+import {headerHeight} from './constant'
+import { CheapIcon } from '../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import ProfileMenu from '../../profile/ProfileMenu';
+import ProfileMenu from '../components/profile/ProfileMenu';
 
 const Header = ({openCart}) => {
     console.log('rending Header... ')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
     const [search, setSearch] = useState('')
-    const [isLogin, setIsLogin]  = useState(true)
+    const [isLogin, setIsLogin]  = useState(false)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [anchorEl, setAnchorEl] =  React.useState(null)
 
@@ -35,10 +36,10 @@ const Header = ({openCart}) => {
             setAnchorEl(e.currentTarget);
         } 
     }
+
     const handleProfileMenuClose = () => {
         setAnchorEl(null);
     }
-
 
   return (
     <Box sx={{
@@ -56,9 +57,9 @@ const Header = ({openCart}) => {
                 <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Cheap</Typography>
             </Box>
             <Box>
-                <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em', [theme.breakpoints.down('md')]:{display:'none'}}}>Mint your NFT</Button>
+                <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em', [theme.breakpoints.down('md')]:{display:'none'}}}>Mint a NFT</Button>
             </Box>
-            <Box sx={{width: isSmallScreen? 0.7:0.4, display: 'flex', alignItems: 'center'}}>
+            <Box sx={{width: isMediumScreen? 0.6:0.4, display: 'flex', alignItems: 'center'}}>
                 <TextField sx={{backgroundColor:'white', borderRadius:2,
                     '& .MuiOutlinedInput-root':{
                         '&.Mui-focused fieldset': {borderColor:'black', border:0},
@@ -95,7 +96,13 @@ const Header = ({openCart}) => {
                     onChange={handleSearchChanges}
                 >
                 </TextField>
-                <Button sx={{textTransform:'none', fontSize:'1.1em', ml:1, height:56, '&.MuiButtonBase-root':{px:1}}} variant='contained'>Go</Button>
+                <Tooltip title='Search'>
+                    <Button sx={{textTransform:'none', fontSize:'1.1em', 
+                                ml:1, height:56, '&.MuiButtonBase-root':{px:1}
+                                }} 
+                            variant='contained'>Go</Button>
+                </Tooltip>
+                
             </Box>
             <Box sx={{display:'flex', alignItems: 'center'}}>
                 {
@@ -130,7 +137,13 @@ const Header = ({openCart}) => {
                             <CheapIcon name={'notification'}/>
                         </Badge>
                     </IconButton>     
-                </Box>  : <Button sx={{textTransform:'none', fontSize:'1.1em'}} variant='contained' color='unworkable'>Connect Wallet</Button>
+                </Box>  : 
+                    isMediumScreen ? <Tooltip title="Connect to wallet">
+                                        <IconButton>
+                                            <CheapIcon name={'connect-wallet'}/>
+                                        </IconButton>
+                                    </Tooltip> : 
+                                    <Button sx={{textTransform:'none', fontSize:'1.1em'}} variant='contained' color='unworkable'>Connect Wallet</Button>
                 }
             </Box>
         </Box>     

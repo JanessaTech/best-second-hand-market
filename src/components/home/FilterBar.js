@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, OutlinedInput, Select, Typography, useMediaQuery } from '@mui/material'
+import { Box, Button, FormControl, OutlinedInput, Select, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import React, { useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
@@ -46,34 +46,39 @@ export default function FilterBar({menuOpen, toggleMenu}) {
               opacity:1,
               backgroundColor:'white',
               display:'flex', justifyContent:'space-between', alignItems: 'end',
-              px:3,
+              px:isSmallScreen ? 1 : 3,
               pb:1,
               boxSizing:'border-box'
         }}>
             <Box sx={{display:'flex'}}>
                 <Box sx={{display:'flex', [theme.breakpoints.down('sm')]: {display: 'none'}}}>
-                    <Button sx={{textTransform:'none', mr:1, height:40,
-                                '&.MuiButton-root span': {m:0}, 
-                                '&.MuiButton-root': {p:'5px', minWidth:50}
-                                }} 
-                                color='customBlack'
-                                variant='outlined' 
-                                startIcon={<CheapIcon name={menuOpen ? 'left-arrow': 'right-arrow'} size={20}/>}
-                                onClick={toggleMenu}
-                                >{menuOpen ? 'Hide' : 'Filter'}</Button>
-                    <Button sx={{textTransform:'none', mr:1, height:40,color:'black',
-                                '&.MuiButton-root': {p:'5px', minWidth:50},
-                                '&.MuiButton-root span': {m:0}
-                                }} 
-                                color='customBlack'
-                                variant='outlined' 
-                                startIcon={<CheapIcon name={'update'} size={20}/>}>
-                    </Button>
+                    <Tooltip title='Show/hide filter'>
+                        <Button sx={{textTransform:'none', mr:1, height:40,
+                                    '&.MuiButton-root span': {m:0}, 
+                                    '&.MuiButton-root': {p:'5px', minWidth:50}
+                                    }} 
+                                    color='customBlack'
+                                    variant='outlined' 
+                                    startIcon={<CheapIcon name={menuOpen ? 'left-arrow': 'right-arrow'} size={20}/>}
+                                    onClick={toggleMenu}
+                                    >{menuOpen ? 'Hide' : 'Filter'}</Button>
+                    </Tooltip>
+                    <Tooltip title='Update page'>
+                        <Button sx={{textTransform:'none', mr:1, height:40,color:'black',
+                                    '&.MuiButton-root': {p:'5px', minWidth:50},
+                                    '&.MuiButton-root span': {m:0}
+                                    }} 
+                                    color='customBlack'
+                                    variant='outlined' 
+                                    startIcon={<CheapIcon name={'update'} size={20}/>}>
+                        </Button>
+                    </Tooltip>
+                    
                 </Box>
                 
                 <Box>
                     <Typography variant='body2'>22,334,111 items</Typography>
-                    <Typography variant='body2' color={'grey'}>2 minutes ago</Typography>
+                    <Typography variant='body2' color={'grey'}>2 mins ago</Typography>
                 </Box>
             </Box>
             <Box>

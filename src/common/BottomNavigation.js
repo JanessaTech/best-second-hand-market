@@ -1,8 +1,8 @@
-import { Box, Paper } from '@mui/material'
+import { Box, Paper, Tooltip } from '@mui/material'
 import React, { memo } from 'react'
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { CheapIcon } from '../../utils/Svgs';
+import { CheapIcon } from '../utils/Svgs';
 import { useTheme } from '@mui/material/styles';
 
 const CheapBottomNavigation = ({openCart, toggleMenu}) => {
@@ -19,9 +19,15 @@ const CheapBottomNavigation = ({openCart, toggleMenu}) => {
                     setValue(newValue);
                 }}
             >
-                <BottomNavigationAction label="Filter" icon={<CheapIcon name={'filter'}/>} onClick={toggleMenu}/>
-                <BottomNavigationAction label="Favorites" icon={<CheapIcon name={'my-favorite'}/>} />
-                <BottomNavigationAction label="Cart" icon={<CheapIcon name={'cart-s'}/>} onClick={openCart}/>
+                <Tooltip title='Filter'>
+                  <BottomNavigationAction label="Filter" icon={<CheapIcon name={'filter'}/>} onClick={toggleMenu}/>
+                </Tooltip>
+                <Tooltip title='Mint your NFT'>
+                  <BottomNavigationAction label="Mint" icon={<CheapIcon name={'mint-nft'}/>} />
+                </Tooltip>
+                <Tooltip title='Open cart'>
+                  <BottomNavigationAction label="Cart" icon={<CheapIcon name={'cart-s'}/>} onClick={openCart}/>
+                </Tooltip>
             </BottomNavigation>
          </Paper>
         

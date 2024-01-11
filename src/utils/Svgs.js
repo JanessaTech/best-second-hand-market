@@ -14,6 +14,7 @@ const svgMapping = new Map([
   ['my-nft', 'imgs/profile/my-nft.svg'],
   ['my-order', 'imgs/profile/my-order.svg'],
   ['my-favorite', 'imgs/profile/my-favorite.svg'],
+  ['mint-nft', 'imgs/profile/mint-nft.svg'],
   ['my-notification', 'imgs/profile/my-notification.svg'],
   ['my-setting', 'imgs/profile/my-setting.svg'],
   ['my-balance', 'imgs/profile/my-balance.svg'],
@@ -25,7 +26,8 @@ const svgMapping = new Map([
   ['avalanche', 'imgs/avalanche.svg'],
   ['polygon', 'imgs/polygon.svg'],
   ['solana', 'imgs/solana.svg'],
-  ['close', 'imgs/close.svg']
+  ['close', 'imgs/close.svg'],
+  ['connect-wallet', 'imgs/connect-wallet.svg'],
 ])
 
 function generateIcon(src, size) {

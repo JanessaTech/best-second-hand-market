@@ -1,7 +1,7 @@
 import { Box, Divider, Drawer, IconButton} from '@mui/material'
 import React, { memo } from 'react'
-import {headerHeight, drawerWidth} from '../../../common/constant'
-import { CheapIcon } from '../../../utils/Svgs';
+import {headerHeight, drawerWidth} from '../constant'
+import { CheapIcon } from '../../utils/Svgs';
 import CategoryFilter from './CategoryFilter';
 import NetworkFilter from './NetworkFilter';
 import PriceFilter from './PriceFilter';

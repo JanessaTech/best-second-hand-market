@@ -1,12 +1,12 @@
 import { Box } from '@mui/material'
 import { Container } from '@mui/system'
 import React, { useCallback, useState } from 'react'
-import Header from '../reusables/header/Header'
-import FilterMenu from '../reusables/menu/FilterMenu'
+import Header from '../../common/Header'
+import FilterMenu from '../../common/menu/FilterMenu'
 import NFTGallery from './NFTGallery'
 import {drawerWidth} from '../../common/constant'
-import Cart from '../reusables/cart/Cart'
-import CheapBottomNavigation from '../footer/BottomNavigation'
+import Cart from '../../common/Cart'
+import CheapBottomNavigation from '../../common/BottomNavigation'
 
 export default function Home() {
     const [menuWidth, setMenuWidth] = useState(drawerWidth)

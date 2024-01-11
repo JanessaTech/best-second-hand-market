@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
-import {capitalize} from '../../../utils/StringUtils'
-import {PriceFilterSchema} from '../../../common/schemas/home'
-import CustomSnackBar from '../../../common/CustomSnackBar';
+import {capitalize} from '../../utils/StringUtils'
+import {PriceFilterSchema} from '../Schemas'
+import CustomSnackBar from '../CustomSnackBar';
 
 const NumberInput = styled((props) => {
     const {placeholder, name, value, changeValueFun, register, errors, ...others} = props

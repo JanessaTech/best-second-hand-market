@@ -44,9 +44,9 @@ export default function ProfileMenu({anchorEl, open, handleProfileMenuClose}) {
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-              <CheapIcon name={'my-nft'} size={25}/>
+              <CheapIcon name={'mint-nft'} size={25}/>
           </ListItemIcon>
-          <ListItemText>Setting</ListItemText>
+          <ListItemText>Mint your NFT</ListItemText>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>

@@ -28,7 +28,16 @@ const CheapTheme = createTheme({
                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {borderColor:'#9e9e9e'}
                 }
             }
-        }
+        },
+        MuiTooltip: {
+            styleOverrides: {
+                tooltip: {
+                    fontSize: '1em',
+                    fontWeight:'normal',
+                    padding:'10px'
+                }
+            }
+        },
     }
 })
 

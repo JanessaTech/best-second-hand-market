@@ -1,6 +1,6 @@
 import { Box, FormControl, InputAdornment, ListItemIcon, ListItemText, MenuItem, OutlinedInput, Select, useTheme } from '@mui/material'
 import React, { useState } from 'react'
-import { CheapIcon } from '../../../utils/Svgs'
+import { CheapIcon } from '../../utils/Svgs'
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

@@ -1,6 +1,6 @@
 import { Box, Drawer } from '@mui/material'
 import React, { memo } from 'react'
-import {cartWidth, headerHeight} from '../../../common/constant'
+import {cartWidth, headerHeight} from './constant'
 
 const Cart = ({toggleCart, open}) => {
   console.log('rending Cart ...')
