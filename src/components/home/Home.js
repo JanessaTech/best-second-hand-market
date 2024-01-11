@@ -12,6 +12,11 @@ export default function Home() {
     const [menuWidth, setMenuWidth] = useState(drawerWidth)
     const [menuOpen, setMenuOpen] = useState(true)
     const [cartOpen, setCartOpen] = useState(false)
+    const [filters, setFilters] = useState({'network': 'Ethereum'})
+    
+    const handleFilters = (key, value) => {
+        setFilters({...filters, [key]: value})
+    }
 
     const closeMenu = useCallback(() => {
         setMenuOpen(false)
@@ -35,12 +40,13 @@ export default function Home() {
     const openCart = useCallback(() => {
         setCartOpen(true)
     }, [])
+
   return (
     <Container maxWidth='false'>
         <Box sx={{ display: 'flex' }}>
             <Header openCart={openCart}/>
-            <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu}/>
-            <NFTGallery menuOpen={menuOpen} toggleMenu={toggleMenu}/>
+            <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} handleFilters={handleFilters}/>
+            <NFTGallery menuOpen={menuOpen} toggleMenu={toggleMenu} filters={filters}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
         </Box>
         <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu}/>      

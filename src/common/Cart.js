@@ -3,7 +3,6 @@ import React, { memo } from 'react'
 import {cartWidth, headerHeight} from './constant'
 
 const Cart = ({toggleCart, open}) => {
-  console.log('rending Cart ...')
   return (
     <Drawer
         sx={{'& .MuiDrawer-paper': {

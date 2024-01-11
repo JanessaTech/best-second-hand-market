@@ -1,6 +1,5 @@
 import {Box, Button, OutlinedInput,  Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { styled } from '@mui/material/styles';
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import {capitalize} from '../../utils/StringUtils'
@@ -9,6 +8,7 @@ import CustomSnackBar from '../CustomSnackBar';
 
 const NumberInput = (props) => {
     const {placeholder, name, value, changeValueFun, register, errors, ...others} = props
+
     const handleChange = (e) => {
         changeValueFun(e.target.value)
     }
@@ -38,8 +38,7 @@ const NumberInput = (props) => {
         )
 }
 
-
-export default function PriceFilter() {
+const PriceFilter = ({updateFilters}) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(PriceFilterSchema)
     })
@@ -62,6 +61,7 @@ export default function PriceFilter() {
 
     const handleApply = (data) => {
         console.log('data:', data)
+        updateFilters('prices', {min: data.min, max: data.max})
     }
 
     useEffect(() => {
@@ -114,3 +114,4 @@ export default function PriceFilter() {
   )
 }
 
+export default PriceFilter

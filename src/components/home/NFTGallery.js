@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles';
 import { Box, Grid, Paper, styled, useMediaQuery } from '@mui/material'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
@@ -12,12 +12,15 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const NFTGallery = ({menuOpen, toggleMenu}) => {
+const NFTGallery = ({menuOpen, toggleMenu, filters}) => {
   const theme = useTheme()
-  console.log('rending NFTGallery ...')
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
-  
+
+  useEffect(() => {
+    console.log('fetch data based on the latest filters:', filters)
+  }, [filters])
+
   return (
     <Box component="main" 
         sx={{ width: menuOpen && !isMediumScreen ? `calc(100% - ${drawerWidth}px)` : 1, height: 1300, 

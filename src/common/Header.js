@@ -7,7 +7,6 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu';
 
 const Header = ({openCart}) => {
-    console.log('rending Header... ')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));

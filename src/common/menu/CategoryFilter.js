@@ -3,7 +3,8 @@ import { Box, Collapse, List, ListItem, ListItemButton, ListItemText, ListSubhea
 import React, { useState } from 'react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
-export default function CategoryFilter() {
+const CategoryFilter = ({updateFilters}) => {
+    console.log('CategoryFilter rendering ...')
     const categories = ['Pets', 'Clothes', 'Cosmetics', 'Outfits', 'Car', 'Devices', 'Books']
     const [checked, setChecked] = useState([])
     const [expand, setExpand] = useState(true)
@@ -16,8 +17,8 @@ export default function CategoryFilter() {
         }else {
             newChecked.splice(index, 1)
         }
-        console.log('new checked:', newChecked)
         setChecked(newChecked)
+        updateFilters('categories', newChecked)
     }
 
     const toggleCategory = () => {
@@ -69,3 +70,4 @@ export default function CategoryFilter() {
   )
 }
 
+export default CategoryFilter

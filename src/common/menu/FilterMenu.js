@@ -1,5 +1,5 @@
 import { Box, Divider, Drawer, IconButton, Tooltip, useMediaQuery} from '@mui/material'
-import React, { memo } from 'react'
+import React, { memo, useCallback} from 'react'
 import { useTheme } from '@mui/material/styles'
 import {headerHeight, drawerWidth} from '../constant'
 import { CheapIcon } from '../../utils/Svgs'
@@ -7,14 +7,16 @@ import CategoryFilter from './CategoryFilter'
 import NetworkFilter from './NetworkFilter'
 import PriceFilter from './PriceFilter'
 
-const FilterMenu = ({width, menuOpen, closeMenu}) => {
-  console.log('rending FilterMenu ...')
+const FilterMenu = ({width, menuOpen, closeMenu, handleFilters}) => {
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
+  const updateFilters = useCallback((key, value) => {
+    handleFilters([key], value)
+  },[])
+
   return (
-    <Drawer variant={isMediumScreen ? 'temporary': 'persistent'}
-         sx={{
+    <Drawer variant={isMediumScreen ? 'temporary': 'persistent'} sx={{
           width: {width},
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: { 
@@ -26,6 +28,7 @@ const FilterMenu = ({width, menuOpen, closeMenu}) => {
         anchor="left"
         open={menuOpen}
         disableScrollLock={true}
+        onClose={closeMenu}
         >
             <Box sx={{width:1, height: headerHeight}}></Box>
             <Box sx={{display:'flex', justifyContent:'end'}}>
@@ -37,14 +40,12 @@ const FilterMenu = ({width, menuOpen, closeMenu}) => {
               
             </Box>
             <Box sx={{mx:3}}>
-                <NetworkFilter/>
+                <NetworkFilter updateFilters={updateFilters}/>
                 <Divider />
-                <CategoryFilter/>
+                <CategoryFilter updateFilters={updateFilters}/>
                 <Divider />
-                <PriceFilter/>
-            </Box>
-            
-            
+                <PriceFilter updateFilters={updateFilters}/>
+            </Box>    
     </Drawer>
   )
 }

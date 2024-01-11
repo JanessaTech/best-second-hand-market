@@ -24,15 +24,17 @@ function getStyles(networkName, network, theme) {
     };
   }
 
-export default function NetworkFilter() {
+const NetworkFilter = ({updateFilters}) => {
+    console.log('NetworkFilter rendering ...')
     const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
     const theme = useTheme()
-  
     const [network, setNetwork] = useState('Ethereum')
     
   
     const handleNetworkChange = (e) => {
+      console.log('handleNetworkChange:', e.target.value)
       setNetwork(e.target.value)
+      updateFilters('network', e.target.value)
     }
 
   return (
@@ -74,4 +76,6 @@ export default function NetworkFilter() {
     </Box>
   )
 }
+
+export default NetworkFilter
 

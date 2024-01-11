@@ -26,7 +26,18 @@ function getStyles(sortName, sortBy, theme) {
           ? theme.typography.fontWeightRegular
           : theme.typography.fontWeightMedium,
     };
-  }
+}
+
+function getMins() {
+      const beforeDate = localStorage.getItem('now') ? parseInt(localStorage.getItem('now')) : undefined
+      const nowDate = Math.round(Date.now() / 1000)
+      const secs = beforeDate ? nowDate - beforeDate : 0
+      const mins = Math.round(secs / 60)
+      localStorage.setItem('now', `${nowDate}`)
+      console.log(`${secs} secs ago`)
+      console.log(`${mins} mins ago`)
+      return mins
+}
 
 export default function FilterBar({menuOpen, toggleMenu}) {
     const theme = useTheme()
@@ -36,9 +47,17 @@ export default function FilterBar({menuOpen, toggleMenu}) {
     const width = menuOpen && !isMediumScreen? `calc(100% - ${drawerWidth + margin}px)` :`calc(100% - ${margin}px)`
     const sortOptions = ['Recent activity', 'aa','bb','ccc', 'ddddd','eeee','ffff', 'gggg','hhhhh']
     const [sortBy, setSortBy] = useState('Recent activity')
+    const [ago, setAgo] = useState(getMins())
 
     const handleSortChange = (e) => {
         setSortBy(e.target.value)
+    }
+
+    const handleUpdate = (e) => {
+      e.preventDefault()
+      console.log('handleUpdate ...')
+      const newAgo = getMins()
+      setAgo(newAgo)
     }
     
   return (
@@ -71,7 +90,9 @@ export default function FilterBar({menuOpen, toggleMenu}) {
                                     }} 
                                     color='customBlack'
                                     variant='outlined' 
-                                    startIcon={<CheapIcon name={'update'} size={20}/>}>
+                                    startIcon={<CheapIcon name={'update'} size={20}/>}
+                                    onClick={handleUpdate}
+                                    >
                         </Button>
                     </Tooltip>
                     
@@ -79,7 +100,7 @@ export default function FilterBar({menuOpen, toggleMenu}) {
                 
                 <Box>
                     <Typography variant='body2'>22,334,111 items</Typography>
-                    <Typography variant='body2' color={'grey'}>2 mins ago</Typography>
+                    <Typography variant='body2' color={'grey'}>{ago} mins ago</Typography>
                 </Box>
             </Box>
             <Box>
