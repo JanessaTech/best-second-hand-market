@@ -30,9 +30,10 @@ function getStyles(sortName, sortBy, theme) {
 
 export default function FilterBar({menuOpen, toggleMenu}) {
     const theme = useTheme()
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+    const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
     const margin = isSmallScreen ? 32 : 48
-    const width = menuOpen ? `calc(100% - ${drawerWidth + margin}px)` :`calc(100% - ${margin}px)`
+    const width = menuOpen && !isMediumScreen? `calc(100% - ${drawerWidth + margin}px)` :`calc(100% - ${margin}px)`
     const sortOptions = ['Recent activity', 'aa','bb','ccc', 'ddddd','eeee','ffff', 'gggg','hhhhh']
     const [sortBy, setSortBy] = useState('Recent activity')
 

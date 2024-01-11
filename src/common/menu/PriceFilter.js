@@ -7,7 +7,7 @@ import {capitalize} from '../../utils/StringUtils'
 import {PriceFilterSchema} from '../Schemas'
 import CustomSnackBar from '../CustomSnackBar';
 
-const NumberInput = styled((props) => {
+const NumberInput = (props) => {
     const {placeholder, name, value, changeValueFun, register, errors, ...others} = props
     const handleChange = (e) => {
         changeValueFun(e.target.value)
@@ -23,14 +23,20 @@ const NumberInput = styled((props) => {
                 size='small' 
                 sx={{width:85}} 
                 type="number"
+                inputProps={{min: 0}}
                 value={value}
                 error={errors[name]? true: false}
                 onChange={handleChange}
+                onKeyPress={(event) => {
+                    if (event?.key === '-' || event?.key === '+') {
+                      event.preventDefault();
+                    }
+                }}
                 placeholder={placeholder}
                 {...others}/> 
         </Box>
         )
-})({})
+}
 
 
 export default function PriceFilter() {

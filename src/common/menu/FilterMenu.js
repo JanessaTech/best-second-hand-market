@@ -1,16 +1,19 @@
-import { Box, Divider, Drawer, IconButton} from '@mui/material'
+import { Box, Divider, Drawer, IconButton, useMediaQuery} from '@mui/material'
 import React, { memo } from 'react'
+import { useTheme } from '@mui/material/styles'
 import {headerHeight, drawerWidth} from '../constant'
-import { CheapIcon } from '../../utils/Svgs';
-import CategoryFilter from './CategoryFilter';
-import NetworkFilter from './NetworkFilter';
-import PriceFilter from './PriceFilter';
+import { CheapIcon } from '../../utils/Svgs'
+import CategoryFilter from './CategoryFilter'
+import NetworkFilter from './NetworkFilter'
+import PriceFilter from './PriceFilter'
 
 const FilterMenu = ({width, menuOpen, closeMenu}) => {
   console.log('rending FilterMenu ...')
+  const theme = useTheme()
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <Drawer variant="persistent"
+    <Drawer variant={isMediumScreen ? 'temporary': 'persistent'}
          sx={{
           width: {width},
           flexShrink: 0,
@@ -22,6 +25,7 @@ const FilterMenu = ({width, menuOpen, closeMenu}) => {
         }}
         anchor="left"
         open={menuOpen}
+        disableScrollLock={true}
         >
             <Box sx={{width:1, height: headerHeight}}></Box>
             <Box sx={{display:'flex', justifyContent:'end'}}>

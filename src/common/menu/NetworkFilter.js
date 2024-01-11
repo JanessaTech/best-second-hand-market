@@ -15,10 +15,10 @@ const MenuProps = {
   disableScrollLock: true,
 };
 
-function getStyles(sortName, sortBy, theme) {
+function getStyles(networkName, network, theme) {
     return {
       fontWeight:
-        sortBy.indexOf(sortName) === -1
+        network.indexOf(networkName) === -1
           ? theme.typography.fontWeightRegular
           : theme.typography.fontWeightMedium,
     };
