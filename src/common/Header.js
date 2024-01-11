@@ -1,5 +1,5 @@
 import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material'
-import React, { memo, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import {headerHeight} from './constant'
 import { CheapIcon } from '../utils/Svgs'
@@ -12,7 +12,7 @@ const Header = ({openCart}) => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
     const [search, setSearch] = useState('')
-    const [isLogin, setIsLogin]  = useState(false)
+    const [isLogin, setIsLogin]  = useState(true)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [anchorEl, setAnchorEl] =  React.useState(null)
 
@@ -37,9 +37,9 @@ const Header = ({openCart}) => {
         } 
     }
 
-    const handleProfileMenuClose = () => {
+    const handleProfileMenuClose = useCallback(() => {
         setAnchorEl(null);
-    }
+    },[anchorEl])
 
   return (
     <Box sx={{

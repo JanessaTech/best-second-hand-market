@@ -1,8 +1,8 @@
 import { ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
-import React from 'react'
+import React, { memo } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 
-export default function ProfileMenu({anchorEl, open, handleProfileMenuClose}) {
+const ProfileMenu = ({anchorEl, open, handleProfileMenuClose}) => {
     const handleClose = (e) => {
         handleProfileMenuClose()
     }
@@ -71,4 +71,6 @@ export default function ProfileMenu({anchorEl, open, handleProfileMenuClose}) {
     </Menu>
   )
 }
+
+export default memo(ProfileMenu)
 
