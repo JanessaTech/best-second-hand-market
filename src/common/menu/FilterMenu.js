@@ -1,4 +1,4 @@
-import { Box, Divider, Drawer, IconButton, useMediaQuery} from '@mui/material'
+import { Box, Divider, Drawer, IconButton, Tooltip, useMediaQuery} from '@mui/material'
 import React, { memo } from 'react'
 import { useTheme } from '@mui/material/styles'
 import {headerHeight, drawerWidth} from '../constant'
@@ -29,9 +29,12 @@ const FilterMenu = ({width, menuOpen, closeMenu}) => {
         >
             <Box sx={{width:1, height: headerHeight}}></Box>
             <Box sx={{display:'flex', justifyContent:'end'}}>
-              <IconButton onClick={closeMenu}>
-                <CheapIcon name={'close'}/>
-              </IconButton>
+              <Tooltip title='Hide filter'>
+                  <IconButton onClick={closeMenu}>
+                    <CheapIcon name={'close'}/>
+                  </IconButton>
+              </Tooltip>
+              
             </Box>
             <Box sx={{mx:3}}>
                 <NetworkFilter/>
