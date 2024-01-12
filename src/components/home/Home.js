@@ -14,12 +14,6 @@ export default function Home() {
     const [cartOpen, setCartOpen] = useState(false)
     const [trigger, setTrigger] = useState(0)
 
-    useEffect(() => {
-        console.log('setting init filter at home page[we should get this form backend]')
-        const filter = {'network': 'Ethereum'}
-        localStorage.setItem('filter', JSON.stringify(filter))
-    }, [])
-
     const notifyFilterChanges = (newTrigger) => {
         setTrigger(newTrigger)
     }

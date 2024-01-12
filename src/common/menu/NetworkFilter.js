@@ -28,9 +28,15 @@ function getNeworkFromLocalStorage() {
   let filter = localStorage.getItem('filter')
   if (filter) {
     filter = JSON.parse(filter)
-    if (filter.network) return filter.network
+    if (!filter.network){
+      filter.network = 'Ethereum'
+    }
+  } else {
+    filter = {network: 'Ethereum'}
   }
-  return 'Ethereum'
+  localStorage.setItem('filter', JSON.stringify(filter))
+
+  return filter.network
 }
 
 const NetworkFilter = ({notify}) => {

@@ -81,20 +81,7 @@ export default function FilterBar({menuOpen, toggleMenu, notifyFilterChanges}) {
       console.log('handleUpdate ...')
       const newAgo = getMins()
       setAgo(newAgo)
-      /*
-      const filter = {categories : ['Pets', 'Clothes'],
-                      network : 'Polygon',
-                      prices : {min:2},
-                      sortBy : 'bb'
-                     }
-       filter.aa = 'xxxx'
-       filter.sortBy = 'vxvxvxv'
-       localStorage.setItem('filter', JSON.stringify(filter))
-       const filterStr = localStorage.getItem('filter')
-       console.log('filterBk :', filterStr)
-       const filterBk = JSON.parse(filterStr)
-       console.log(filterBk)*/
-
+      localStorage.removeItem('filter')
     }
     
   return (
