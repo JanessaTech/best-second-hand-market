@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, OutlinedInput, Select, Tooltip, Typography, useMediaQuery } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs';
@@ -38,19 +38,42 @@ function getMins() {
       console.log(`${mins} mins ago`)
       return mins
 }
+function getSortByFromLocalStorage() {
+    let filter = localStorage.getItem('filter')
+    if (filter) {
+      filter = JSON.parse(filter)
+      if (filter.sortBy) return filter.sortBy
+    }
+    return 'Recent activity'
+  }
 
-export default function FilterBar({menuOpen, toggleMenu}) {
+export default function FilterBar({menuOpen, toggleMenu, notifyFilterChanges}) {
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
     const margin = isSmallScreen ? 32 : 48
     const width = menuOpen && !isMediumScreen? `calc(100% - ${drawerWidth + margin}px)` :`calc(100% - ${margin}px)`
     const sortOptions = ['Recent activity', 'aa','bb','ccc', 'ddddd','eeee','ffff', 'gggg','hhhhh']
-    const [sortBy, setSortBy] = useState('Recent activity')
-    const [ago, setAgo] = useState(getMins())
+    const [sortBy, setSortBy] = useState(getSortByFromLocalStorage())
+    const [ago, setAgo] = useState(0)
+
+    useEffect(() => {
+        setAgo(getMins())
+    }, [])
 
     const handleSortChange = (e) => {
         setSortBy(e.target.value)
+
+        let filter = localStorage.getItem('filter')
+        if (filter) {
+            filter = JSON.parse(filter)
+            filter.sortBy = e.target.value
+        } else {
+            filter = {sortBy: e.target.value}
+        }
+        localStorage.setItem('filter', JSON.stringify(filter))
+        console.log('[FilterBar] store filter:', filter)
+        notifyFilterChanges(Math.random())
     }
 
     const handleUpdate = (e) => {
@@ -58,6 +81,20 @@ export default function FilterBar({menuOpen, toggleMenu}) {
       console.log('handleUpdate ...')
       const newAgo = getMins()
       setAgo(newAgo)
+      /*
+      const filter = {categories : ['Pets', 'Clothes'],
+                      network : 'Polygon',
+                      prices : {min:2},
+                      sortBy : 'bb'
+                     }
+       filter.aa = 'xxxx'
+       filter.sortBy = 'vxvxvxv'
+       localStorage.setItem('filter', JSON.stringify(filter))
+       const filterStr = localStorage.getItem('filter')
+       console.log('filterBk :', filterStr)
+       const filterBk = JSON.parse(filterStr)
+       console.log(filterBk)*/
+
     }
     
   return (

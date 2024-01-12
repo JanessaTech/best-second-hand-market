@@ -38,12 +38,29 @@ const NumberInput = (props) => {
         )
 }
 
-const PriceFilter = ({updateFilters}) => {
+function getPricesFromLocalStorage() {
+    let filter = localStorage.getItem('filter')
+    if (filter) {
+      filter = JSON.parse(filter)
+      if (filter.prices) {
+        if (!filter.prices.min) {
+            filter.prices.min = 0
+        }
+        if (!filter.prices.max) {
+            filter.prices.max = 100
+        }
+        return filter.prices
+      }
+    }
+    return {min: 0, max: 100}
+  }
+
+const PriceFilter = ({notify}) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(PriceFilterSchema)
     })
-    const [minValue, setMinValue] = useState(0)
-    const [maxValue, setMaxValue] = useState(100)
+    const [minValue, setMinValue] = useState(getPricesFromLocalStorage().min)
+    const [maxValue, setMaxValue] = useState(getPricesFromLocalStorage().max)
     const [alerts, setAlerts] = useState([])
 
     const changeMinValue = (value) => {
@@ -60,8 +77,16 @@ const PriceFilter = ({updateFilters}) => {
     }
 
     const handleApply = (data) => {
-        console.log('data:', data)
-        updateFilters('prices', {min: data.min, max: data.max})
+        let filter = localStorage.getItem('filter')
+        if (filter) {
+            filter = JSON.parse(filter)
+            filter.prices = {min: data.min, max: data.max}
+        } else {
+            filter = {prices: {min: data.min, max: data.max}}
+        }
+        localStorage.setItem('filter', JSON.stringify(filter))
+        console.log('[PriceFilter] store filter:', filter)
+        notify(Math.random())
     }
 
     useEffect(() => {

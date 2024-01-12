@@ -24,17 +24,33 @@ function getStyles(networkName, network, theme) {
     };
   }
 
-const NetworkFilter = ({updateFilters}) => {
-    console.log('NetworkFilter rendering ...')
+function getNeworkFromLocalStorage() {
+  let filter = localStorage.getItem('filter')
+  if (filter) {
+    filter = JSON.parse(filter)
+    if (filter.network) return filter.network
+  }
+  return 'Ethereum'
+}
+
+const NetworkFilter = ({notify}) => {
     const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
     const theme = useTheme()
-    const [network, setNetwork] = useState('Ethereum')
+    const [network, setNetwork] = useState(getNeworkFromLocalStorage())
     
-  
     const handleNetworkChange = (e) => {
-      console.log('handleNetworkChange:', e.target.value)
       setNetwork(e.target.value)
-      updateFilters('network', e.target.value)
+      let filter = localStorage.getItem('filter')
+      if (filter) {
+        filter = JSON.parse(filter)
+        filter.network = e.target.value
+      } else {
+        filter = {network: e.target.value}
+      }
+      localStorage.setItem('filter', JSON.stringify(filter))
+      console.log('[NetworkFilter] store filter:', filter)
+      const trigger = Math.random()
+      notify(trigger)
     }
 
   return (

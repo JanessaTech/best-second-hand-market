@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import { Container } from '@mui/system'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Header from '../../common/Header'
 import FilterMenu from '../../common/menu/FilterMenu'
 import NFTGallery from './NFTGallery'
@@ -12,12 +12,18 @@ export default function Home() {
     const [menuWidth, setMenuWidth] = useState(drawerWidth)
     const [menuOpen, setMenuOpen] = useState(true)
     const [cartOpen, setCartOpen] = useState(false)
-    const [filters, setFilters] = useState({'network': 'Ethereum'})
-    
-    const handleFilters = (key, value) => {
-        setFilters({...filters, [key]: value})
-    }
+    const [trigger, setTrigger] = useState(0)
 
+    useEffect(() => {
+        console.log('setting init filter at home page[we should get this form backend]')
+        const filter = {'network': 'Ethereum'}
+        localStorage.setItem('filter', JSON.stringify(filter))
+    }, [])
+
+    const notifyFilterChanges = (newTrigger) => {
+        setTrigger(newTrigger)
+    }
+    
     const closeMenu = useCallback(() => {
         setMenuOpen(false)
         setMenuWidth(0)
@@ -45,8 +51,8 @@ export default function Home() {
     <Container maxWidth='false'>
         <Box sx={{ display: 'flex' }}>
             <Header openCart={openCart}/>
-            <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} handleFilters={handleFilters}/>
-            <NFTGallery menuOpen={menuOpen} toggleMenu={toggleMenu} filters={filters}/>
+            <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} notifyFilterChanges={notifyFilterChanges}/>
+            <NFTGallery menuOpen={menuOpen} toggleMenu={toggleMenu} trigger={trigger} notifyFilterChanges={notifyFilterChanges}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
         </Box>
         <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu}/>      

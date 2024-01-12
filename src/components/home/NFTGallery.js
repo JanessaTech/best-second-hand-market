@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import { Box, Grid, Paper, styled, useMediaQuery } from '@mui/material'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
@@ -12,21 +12,31 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const NFTGallery = ({menuOpen, toggleMenu, filters}) => {
+function getFilter() {
+  let filter = localStorage.getItem('filter')
+  if (filter) {
+    return JSON.parse(filter)
+  }
+  return {}
+}
+
+const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges}) => {
+  console.log('NFTGallery rendering ...')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
 
   useEffect(() => {
-    console.log('fetch data based on the latest filters:', filters)
-  }, [filters])
+    const latestFilter = getFilter()
+    console.log('[NFTGallery.trigger] fetch data based on latestFilter:', latestFilter)
+  }, [trigger])
 
   return (
     <Box component="main" 
         sx={{ width: menuOpen && !isMediumScreen ? `calc(100% - ${drawerWidth}px)` : 1, height: 1300, 
             }}>
         <Box sx={{width:1, height: headerHeight + filterBarHeight}}></Box>
-        <FilterBar menuOpen={menuOpen} toggleMenu={toggleMenu}/>
+        <FilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterChanges={notifyFilterChanges}/>
         <Box sx={{backgroundColor:'pink', mt:1, mx: isSmallScreen ? 1: 3}}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>

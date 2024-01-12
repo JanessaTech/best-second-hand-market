@@ -3,10 +3,18 @@ import { Box, Collapse, List, ListItem, ListItemButton, ListItemText, ListSubhea
 import React, { useState } from 'react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
-const CategoryFilter = ({updateFilters}) => {
-    console.log('CategoryFilter rendering ...')
+function getCategoriesFromLocalStorage() {
+    let filter = localStorage.getItem('filter')
+    if (filter) {
+      filter = JSON.parse(filter)
+      if (filter.categories) return filter.categories
+    }
+    return []
+  }
+
+const CategoryFilter = ({notify}) => {
     const categories = ['Pets', 'Clothes', 'Cosmetics', 'Outfits', 'Car', 'Devices', 'Books']
-    const [checked, setChecked] = useState([])
+    const [checked, setChecked] = useState(getCategoriesFromLocalStorage())
     const [expand, setExpand] = useState(true)
 
     const handleCategoryChanges = (value) => () => {
@@ -18,7 +26,17 @@ const CategoryFilter = ({updateFilters}) => {
             newChecked.splice(index, 1)
         }
         setChecked(newChecked)
-        updateFilters('categories', newChecked)
+       
+        let filter = localStorage.getItem('filter')
+        if (filter) {
+            filter = JSON.parse(filter)
+            filter.categories = newChecked
+        } else {
+            filter = {categories: newChecked}
+        }
+        localStorage.setItem('filter', JSON.stringify(filter))
+        console.log('[NetworkFilter] store filter:', filter)
+        notify(Math.random())
     }
 
     const toggleCategory = () => {

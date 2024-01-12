@@ -7,13 +7,13 @@ import CategoryFilter from './CategoryFilter'
 import NetworkFilter from './NetworkFilter'
 import PriceFilter from './PriceFilter'
 
-const FilterMenu = ({width, menuOpen, closeMenu, handleFilters}) => {
+const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges}) => {
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const updateFilters = useCallback((key, value) => {
-    handleFilters([key], value)
-  },[])
+  const notify = (trigger) => {
+    notifyFilterChanges(trigger)
+  }
 
   return (
     <Drawer variant={isMediumScreen ? 'temporary': 'persistent'} sx={{
@@ -40,11 +40,11 @@ const FilterMenu = ({width, menuOpen, closeMenu, handleFilters}) => {
               
             </Box>
             <Box sx={{mx:3}}>
-                <NetworkFilter updateFilters={updateFilters}/>
+                <NetworkFilter notify={notify}/>
                 <Divider />
-                <CategoryFilter updateFilters={updateFilters}/>
+                <CategoryFilter notify={notify}/>
                 <Divider />
-                <PriceFilter updateFilters={updateFilters}/>
+                <PriceFilter notify={notify}/>
             </Box>    
     </Drawer>
   )
