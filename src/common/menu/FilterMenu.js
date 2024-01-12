@@ -13,6 +13,7 @@ const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges}) => {
   const [drawerType, setDrawerType] = useState(isMediumScreen ? 'temporary': 'persistent')
 
   useEffect(() => {
+    console.log(`width = ${width}, drawerType= ${isMediumScreen ? 'temporary': 'persistent'}`)
     setDrawerType(isMediumScreen ? 'temporary': 'persistent')
   }, [isMediumScreen])
 
