@@ -1,5 +1,5 @@
 import { Box, Divider, Drawer, IconButton, Tooltip, useMediaQuery} from '@mui/material'
-import React, { memo, useCallback} from 'react'
+import React, { memo} from 'react'
 import { useTheme } from '@mui/material/styles'
 import {headerHeight, drawerWidth} from '../constant'
 import { CheapIcon } from '../../utils/Svgs'

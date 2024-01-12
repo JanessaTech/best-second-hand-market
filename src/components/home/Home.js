@@ -10,7 +10,7 @@ import CheapBottomNavigation from '../../common/BottomNavigation'
 
 export default function Home() {
     const [menuWidth, setMenuWidth] = useState(drawerWidth)
-    const [menuOpen, setMenuOpen] = useState(true)
+    const [menuOpen, setMenuOpen] = useState(false)
     const [cartOpen, setCartOpen] = useState(false)
     const [trigger, setTrigger] = useState(0)
 
