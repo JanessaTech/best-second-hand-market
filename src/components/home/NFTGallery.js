@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useState } from 'react'
-import { useTheme } from '@mui/material/styles';
+import React, { memo, useEffect } from 'react'
+import { useTheme } from '@mui/material/styles'
 import { Box, Grid, Paper, styled, useMediaQuery } from '@mui/material'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
+import Overview from '../item/Overview'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -40,22 +41,22 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges}) => {
         <Box sx={{backgroundColor:'pink', mt:1, mx: isSmallScreen ? 1: 3}}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <Item>xs=4</Item>
+                <Overview/>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <Item>xs=4</Item>
+                <Overview/>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <Item>xs=4</Item>
+                <Overview/>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-              <Item>xs=4</Item>
+                <Overview/>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                <Item>xs=4</Item>
+                <Overview/>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
-                <Item>xs=4</Item>
+                <Overview/>
             </Grid>
           </Grid>
         </Box>        

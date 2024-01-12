@@ -1,5 +1,5 @@
 import { Box, Divider, Drawer, IconButton, Tooltip, useMediaQuery} from '@mui/material'
-import React, { memo} from 'react'
+import React, { memo, useEffect, useState} from 'react'
 import { useTheme } from '@mui/material/styles'
 import {headerHeight, drawerWidth} from '../constant'
 import { CheapIcon } from '../../utils/Svgs'
@@ -9,14 +9,19 @@ import PriceFilter from './PriceFilter'
 
 const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges}) => {
   const theme = useTheme()
-  const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
+  const [drawerType, setDrawerType] = useState(isMediumScreen ? 'temporary': 'persistent')
+
+  useEffect(() => {
+    setDrawerType(isMediumScreen ? 'temporary': 'persistent')
+  }, [isMediumScreen])
 
   const notify = (trigger) => {
     notifyFilterChanges(trigger)
   }
 
   return (
-    <Drawer variant={isMediumScreen ? 'temporary': 'persistent'} sx={{
+    <Drawer variant={drawerType} sx={{
           width: {width},
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: { 
