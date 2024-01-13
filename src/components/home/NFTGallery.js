@@ -1,17 +1,9 @@
 import React, { memo, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles'
-import { Box, Grid, Paper, styled, useMediaQuery } from '@mui/material'
+import { Box, Grid, useMediaQuery } from '@mui/material'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
 import Overview from '../item/Overview'
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
 
 function getFilter() {
   let filter = localStorage.getItem('filter')
@@ -40,25 +32,38 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges}) => {
         <FilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterChanges={notifyFilterChanges}/>
         <Box sx={{mt:1, mb:7, mx: isSmallScreen ? 1: 3}}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
                 <Overview/>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
                 <Overview/>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
                 <Overview/>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
                 <Overview/>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
                 <Overview/>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
+                <Overview/>
+            </Grid>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
+                <Overview/>
+            </Grid>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
+                <Overview/>
+            </Grid>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
+                <Overview/>
+            </Grid>
+            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
                 <Overview/>
             </Grid>
           </Grid>
+          
         </Box>        
     </Box>  
   )

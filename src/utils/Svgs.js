@@ -28,6 +28,9 @@ const svgMapping = new Map([
   ['solana', 'imgs/solana.svg'],
   ['close', 'imgs/close.svg'],
   ['connect-wallet', 'imgs/connect-wallet.svg'],
+  ['view', 'imgs/view.svg'],
+  ['my-favorite-red', 'imgs/my-favorite-red.svg'],
+  
 ])
 
 function generateIcon(src, size) {
