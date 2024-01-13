@@ -5,6 +5,7 @@ import {headerHeight} from './constant'
 import { CheapIcon } from '../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu';
+import { Link } from 'react-router-dom';
 
 const Header = ({openCart}) => {
     const theme = useTheme()
@@ -50,7 +51,7 @@ const Header = ({openCart}) => {
         zIndex: (theme) => theme.zIndex.drawer + 1}}> 
         <Box sx={{display: 'flex', alignItems: 'center', justifyContent:'space-between'}}>
             <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <IconButton href='#' sx={{pl:0}}>
+                <IconButton sx={{pl:0}} component={Link} to='/'>
                     <Avatar alt='Cheap' src='/imgs/handshake.svg' sx={{ width:60, height:60}}/>
                 </IconButton>
                 <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Cheap</Typography>

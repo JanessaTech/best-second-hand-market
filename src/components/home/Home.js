@@ -8,8 +8,10 @@ import NFTGallery from './NFTGallery'
 import {drawerWidth} from '../../common/constant'
 import Cart from '../../common/Cart'
 import CheapBottomNavigation from '../../common/BottomNavigation'
+import { useLocation } from 'react-router-dom'
 
 export default function Home() {
+    const location = useLocation()
     const theme = useTheme()
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
 
@@ -63,7 +65,7 @@ export default function Home() {
             <NFTGallery menuOpen={menuOpen} toggleMenu={toggleMenu} trigger={trigger} notifyFilterChanges={notifyFilterChanges}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
         </Box>
-        <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu}/>      
+        <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu} isHome={location.pathname === '/'}/>      
     </Container>
   )
 }
