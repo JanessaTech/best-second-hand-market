@@ -26,6 +26,9 @@ export default function Home() {
         if (!isMediumScreen) {
             setMenuOpen(true)
             setMenuWidth(drawerWidth)
+        }else{
+            setMenuOpen(false)
+            setMenuWidth(0)
         }
     }, [isMediumScreen])
     

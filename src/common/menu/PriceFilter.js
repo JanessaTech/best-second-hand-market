@@ -108,7 +108,7 @@ const PriceFilter = ({notify}) => {
     <Box component='form'
         onSubmit={handleSubmit(handleApply)}
         noValidate autoComplete='off'>
-        <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center', my:2}}  
+        <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'end', my:2}}  
         >
             <NumberInput 
                 placeholder={'min'} 

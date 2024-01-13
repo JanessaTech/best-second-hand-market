@@ -34,11 +34,11 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges}) => {
 
   return (
     <Box component="main" 
-        sx={{ width: menuOpen && !isMediumScreen ? `calc(100% - ${drawerWidth}px)` : 1, height: 1300, 
+        sx={{ width: menuOpen && !isMediumScreen ? `calc(100% - ${drawerWidth}px)` : 1, 
             }}>
         <Box sx={{width:1, height: headerHeight + filterBarHeight}}></Box>
         <FilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterChanges={notifyFilterChanges}/>
-        <Box sx={{backgroundColor:'pink', mt:1, mx: isSmallScreen ? 1: 3}}>
+        <Box sx={{mt:1, mb:7, mx: isSmallScreen ? 1: 3}}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4} lg={3} xl={3}>
                 <Overview/>

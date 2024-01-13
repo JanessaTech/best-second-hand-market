@@ -22,6 +22,14 @@ const CheapTheme = createTheme({
                 disableRipple: false
             }
         },
+        MuiLink: {
+            styleOverrides: {
+                root: {
+                    color: 'inherit', 
+                    textDecoration: 'inherit'
+                }               
+            }
+        },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
