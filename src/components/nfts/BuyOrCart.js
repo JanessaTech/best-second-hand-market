@@ -3,7 +3,12 @@ import React, { memo } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import ByLikeView from './ByLikeView'
 
-const BuyOrCart = () => {
+const BuyOrCart = ({toggleCart}) => {
+
+  const handleCart = () =>{
+    toggleCart()
+  }
+
   return (
     <Box>
         <Box 
@@ -18,9 +23,9 @@ const BuyOrCart = () => {
           <Button sx={{textTransform:'none', borderRadius:4, width:150, py:0,mr:4}} 
                   color='customBlack' 
                   variant='contained'>
-                    <Typography variant='h6'>Buy</Typography>
+                    <Typography variant='h6'>Buy now</Typography>
           </Button>
-          <IconButton sx={{p:0}}>
+          <IconButton sx={{p:0}} onClick={handleCart}>
              <CheapIcon name='cart-black' size={50}/>
           </IconButton>
         </Box>

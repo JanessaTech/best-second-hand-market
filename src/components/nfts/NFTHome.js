@@ -15,12 +15,12 @@ const Item = styled(Paper)(({ theme }) => ({
   }));
 
 
-export default function NFTHome() {
+export default function NFTHome({toggleCart}) {
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
-    <Box sx={{mb: 8, mx: isSmallScreen ? 0 : 2, backgroundColor:'pink', width:1}}>
+    <Box sx={{mb: 8, mx: isSmallScreen ? 0 : 2, width:1}}>
         <Box sx={{width:1, height: headerHeight}}></Box>
         <Box sx={{mt : 3}}>
             <Grid container spacing={2}>
@@ -29,7 +29,7 @@ export default function NFTHome() {
                     <Comments/>
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <BuyOrCart/>
+                    <BuyOrCart toggleCart={toggleCart}/>
                 </Grid>
             </Grid>
         </Box>      
