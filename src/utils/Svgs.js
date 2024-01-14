@@ -9,7 +9,7 @@ const svgMapping = new Map([
   ['forward-slash', 'imgs/forward-slash.svg'],
   ['cha', 'imgs/cha.svg'],
   ['cart', 'imgs/cart.svg'],
-  ['cart-s', 'imgs/cart-s.svg'],
+  ['cart-black', 'imgs/cart-black.svg'],
   ['notification', 'imgs/notification.svg'],
   ['my-nft', 'imgs/profile/my-nft.svg'],
   ['my-order', 'imgs/profile/my-order.svg'],

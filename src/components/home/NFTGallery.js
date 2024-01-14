@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles'
 import { Box, Grid, useMediaQuery } from '@mui/material'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
-import Overview from '../item/Overview'
+import Overview from '../nfts/Overview'
 
 function getFilter() {
   let filter = localStorage.getItem('filter')

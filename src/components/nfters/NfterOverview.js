@@ -15,7 +15,7 @@ export default function NfterOverview() {
             <Typography>Hi, I'm JanessaTech a big fan of NFT. Weclome to my lab to check more NFTs on sale</Typography>
         </Box>
         <Box>
-            <Typography variant='subtitle2'>About NFTer:</Typography>
+            <Typography variant='subtitle2'>About the NFTer:</Typography>
             <Typography variant='body2'>10 NFTs on sale</Typography>
             <Typography variant='body2'>21 NFTs were bought</Typography>
         </Box>

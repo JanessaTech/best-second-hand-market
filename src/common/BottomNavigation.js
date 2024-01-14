@@ -31,7 +31,7 @@ const CheapBottomNavigation = ({openCart, toggleMenu, isHome}) => {
                   <BottomNavigationAction label="Mint" icon={<CheapIcon name={'mint-nft'}/>} />
                 </Tooltip>
                 <Tooltip title='Open cart'>
-                  <BottomNavigationAction label="Cart" icon={<CheapIcon name={'cart-s'}/>} onClick={openCart}/>
+                  <BottomNavigationAction label="Cart" icon={<CheapIcon name={'cart-black'}/>} onClick={openCart}/>
                 </Tooltip>
             </BottomNavigation>
          </Paper>

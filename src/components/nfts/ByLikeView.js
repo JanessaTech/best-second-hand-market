@@ -30,7 +30,7 @@ const ByLikeView = ({nftId}) => {
     
   return (
     <Box sx={{display: 'flex', justifyContent:'space-between', alignItems:'center'}}>
-        <Box sx={{display:'flex', alignItems:'center', flex:'1 1 100px', minWidth:100}}>
+        <Box sx={{display:'flex', alignItems:'center', flex:'1 1 50px', minWidth:50}}>
             <Typography sx={{mr:1}} variant='body2'>By</Typography>
             <Typography variant='body2' color='text.secondary' 
                 sx={{textOverflow: 'ellipsis', 
@@ -53,13 +53,13 @@ const ByLikeView = ({nftId}) => {
         </Box>
         <Box sx={{display:'flex'}}>
             <Box sx={{display:'flex', alignItems:'center', mr:2}}>
-                <IconButton onClick={toggleLike}>
-                    <CheapIcon name={isLike ? 'my-favorite-red':'my-favorite'}/>
+                <IconButton onClick={toggleLike} sx={{p:0}}>
+                    <CheapIcon name={isLike ? 'my-favorite-red':'my-favorite'} size={25}/>
                 </IconButton>
                 <Typography variant='body2'>321</Typography>
             </Box>
             <Box sx={{display:'flex', alignItems:'center'}}>
-                <CheapIcon name='view'/>
+                <CheapIcon name='view' size={25}/>
                 <Typography variant='body2' sx={{ml:1}}>11K</Typography>
             </Box>
         </Box>
