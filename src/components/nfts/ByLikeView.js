@@ -41,8 +41,8 @@ const ByLikeView = ({nftId}) => {
                 onMouseLeave={toggleOverView}
                 >JanessaTech lab
             </Typography>
-            <Popper id={id} open={open} anchorEl={anchorEl} placement='right-end'>
-                <Box sx={{ border: '1px solid #f5f5f5', p: 2, ml:1,bgcolor: 'background.paper', borderRadius:2}}>
+            <Popper id={id} open={open} anchorEl={anchorEl} placement={isSmallScreen ? 'bottom' : 'right-end'}>
+                <Box sx={{ border: '1px solid #f5f5f5', p: 2,ml:2,bgcolor: 'background.paper', borderRadius:2}}>
                     <Typography>The content of the Popper.</Typography>
                     <Typography>The content of the Popper.</Typography>
                     <Typography>The content of the Popper.</Typography>

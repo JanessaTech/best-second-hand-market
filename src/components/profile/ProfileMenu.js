@@ -16,7 +16,7 @@ const ProfileMenu = ({anchorEl, open, handleProfileMenuClose}) => {
         disableScrollLock={true}
         MenuListProps={{ onMouseLeave: handleClose }}
         anchorOrigin={{
-            vertical: 'bottom',
+            vertical: 65,
             horizontal: 100,
           }}
         transformOrigin={{

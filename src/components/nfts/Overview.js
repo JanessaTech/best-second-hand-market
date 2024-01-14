@@ -1,7 +1,10 @@
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Link, Typography, useMediaQuery } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import React from 'react'
 
 export default function Overview() {
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   return (
     <Link href='nft?id=123'>
         <Box sx={{border:'1px solid #f5f5f5', borderRadius:4, '&:hover':{border:'2px solid #f5f5f5', cursor:'pointer'}}}>
@@ -10,9 +13,9 @@ export default function Overview() {
                   component='img'
                   sx={{width: 1, borderRadius:'16px 16px 0 0'}}
                   alt='A baby money'
-                  src='imgs/items/mk.png'
+                  src='imgs/nfts/mk.png'
                 />
-                <Box sx={{mx:2, mb:1}}>
+                <Box sx={{mx: isSmallScreen ? 1 : 2, mb:1}}>
                     <Typography variant='h6'>A baby monkey</Typography>
                     <Typography color='text.secondary' variant='subtitle2'>JanessaTech lab</Typography>
                     <Box sx={{display: 'flex', mt:1}}>

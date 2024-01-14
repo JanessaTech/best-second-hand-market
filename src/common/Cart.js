@@ -11,7 +11,7 @@ const Cart = ({toggleCart, open}) => {
             backgroundColor:'green',
             top: headerHeight + 10,
             height:'80%',
-            borderRadius:4
+            borderRadius:2
 
 
         }}}

@@ -21,7 +21,7 @@ export default function Details() {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
-    <Box sx={{mb: 7, mx: isSmallScreen ? 0 : 2, backgroundColor:'pink', width:1, height:1000}}>
+    <Box sx={{mb: 8, mx: isSmallScreen ? 0 : 2, backgroundColor:'pink', width:1, height:1000}}>
         <Box sx={{width:1, height: headerHeight}}></Box>
         <Box sx={{mt : 3}}>
             <Grid container spacing={2}>
