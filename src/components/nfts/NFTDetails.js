@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import React, { memo } from 'react'
 
-const NFTInfo = () => {
+const NFTDetails = () => {
   return (
     <Box>
         NFT details info
@@ -9,5 +9,5 @@ const NFTInfo = () => {
   )
 }
 
-export default memo(NFTInfo)
+export default memo(NFTDetails)
 

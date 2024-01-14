@@ -4,7 +4,7 @@ import { useLocation, useSearchParams } from "react-router-dom"
 import Cart from '../../common/Cart'
 import Header from '../../common/Header'
 import CheapBottomNavigation from '../../common/BottomNavigation'
-import Details from './Details'
+import NFTHome from './NFTHome'
 
 export default function NFT() {
     const location = useLocation()
@@ -27,7 +27,7 @@ export default function NFT() {
         <Box sx={{ display: 'flex' }}>
             <Header openCart={openCart}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
-            <Details/>
+            <NFTHome/>
         </Box>
         <CheapBottomNavigation openCart={openCart} isHome={location.pathname === '/'}/> 
     </Container>

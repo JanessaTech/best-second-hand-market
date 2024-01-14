@@ -8,7 +8,8 @@ import Home from './components/home/Home';
 import NoPage from './components/NoPage';
 import { ThemeProvider } from "@mui/material";
 import CheapTheme from './common/GlobalTheme';
-import NFT from './components/item/NFT';
+import NFT from './components/nfts/NFT';
+import NFTer from './components/nfters/NFTer';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="nft" element={<NFT/>}/>
+                <Route path="nfters" element={<NFTer/>}/>
                 <Route path="*" element={<NoPage/>}/>
             </Routes>
         </Router>

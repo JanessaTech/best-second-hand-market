@@ -1,7 +1,8 @@
 import React, { memo, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
-import { Box, IconButton, Typography, useMediaQuery, Popper } from '@mui/material'
+import { Box, IconButton, Typography, useMediaQuery, Popper, Link } from '@mui/material'
 import { CheapIcon } from '../../utils/Svgs'
+import NfterOverview from '../nfters/NfterOverview'
 
 const ByLikeView = ({nftId}) => {
     const theme = useTheme()
@@ -19,36 +20,35 @@ const ByLikeView = ({nftId}) => {
 
     const closeOverview = () => {
         console.log('closeOverview')
+        setAnchorEl(null);
     }
 
-    const toggleOverView = (event) => {
-        console.log('toggleOverView')
-        setAnchorEl(anchorEl ? null : event.currentTarget);
+    const openOverview = (e) => {
+        console.log('openOverview')
+        setAnchorEl(e.currentTarget);
     }
     
   return (
     <Box sx={{display: 'flex', justifyContent:'space-between', alignItems:'center'}}>
-        <Box sx={{display:'flex', alignItems:'center'}}>
+        <Box sx={{display:'flex', alignItems:'center', flex:'1 1 100px', minWidth:100}}>
             <Typography sx={{mr:1}} variant='body2'>By</Typography>
             <Typography variant='body2' color='text.secondary' 
                 sx={{textOverflow: 'ellipsis', 
                     whiteSpace: 'nowrap', 
                     overflow: 'hidden', 
-                    width: isSmallScreen ? 100: undefined,
                     '&:hover':{cursor: 'pointer'}
                 }}
-                onMouseOver={toggleOverView}
-                onMouseLeave={toggleOverView}
-                >JanessaTech lab
+                onMouseOver={openOverview}
+                onMouseLeave={closeOverview}
+                >
+                    <Link href='/nfters?id=111' 
+                        sx={{
+                            '&:hover':{color:'primary.main'},
+                            '&:active':{color:'primary.dark'}
+                           }}>JanessaTech lab</Link>
             </Typography>
             <Popper id={id} open={open} anchorEl={anchorEl} placement={isSmallScreen ? 'bottom' : 'right-end'}>
-                <Box sx={{ border: '1px solid #f5f5f5', p: 2,ml:2,bgcolor: 'background.paper', borderRadius:2}}>
-                    <Typography>The content of the Popper.</Typography>
-                    <Typography>The content of the Popper.</Typography>
-                    <Typography>The content of the Popper.</Typography>
-                    <Typography>The content of the Popper.</Typography>
-                    <Typography>The content of the Popper.</Typography>
-                </Box>
+                <NfterOverview />
             </Popper>
         </Box>
         <Box sx={{display:'flex'}}>
