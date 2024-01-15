@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, IconButton, Typography } from '@mui/material'
 import React, { memo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import AddComment from './AddComment'
 
 const OneComment = ({deep, comment}) => {
@@ -18,12 +19,12 @@ const OneComment = ({deep, comment}) => {
   if (deep <= 2) {
         return (
           <Box sx={{mt:2, display:'flex'}}>
-              <IconButton sx={{p:0, height:profileSize}}>
+              <IconButton sx={{p:0, height:profileSize}} component={Link} to={`/nfters?id=${comment.commenterId}`}>
                   <Avatar alt='' src={`imgs/nfters/${comment?.img}`} sx={{width: profileSize, height: profileSize}}/>
               </IconButton>
               <Box sx={{ml:2, width: `calc(100% - ${profileSize + 16}px)`}}>
                   <Box sx={{display:'flex', alignItems:'center'}}>
-                    <Typography sx={{mr:2}}>@{comment?.byName}</Typography>
+                    <Typography sx={{mr:2}}>@{comment?.commenterName}</Typography>
                     <Typography color='text.secondary' variant='body2'>{comment?.createdTime}</Typography>
                   </Box>
                   <Box sx={{mt:1}}>

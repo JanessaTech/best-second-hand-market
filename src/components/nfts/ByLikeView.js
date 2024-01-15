@@ -19,12 +19,10 @@ const ByLikeView = ({nftId}) => {
     }
 
     const closeOverview = () => {
-        console.log('closeOverview')
         setAnchorEl(null);
     }
 
     const openOverview = (e) => {
-        console.log('openOverview')
         setAnchorEl(e.currentTarget);
     }
     

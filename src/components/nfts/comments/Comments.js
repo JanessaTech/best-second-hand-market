@@ -5,32 +5,36 @@ import OneComment from './OneComment'
 
 const data = [
   {
-    id : 1111, 
+    id : 1, 
     img: 'p1.png', 
-    byName: 'Lesfiya', 
+    commenterId:1111, 
+    commenterName: 'Lesfiya', 
     createdTime: '1 day ago', 
     content: 'Hi, Janessa, are you availble? it looks nice, could you make it cheaper?Hi, Janessa, are you availble? it looks nice, could you make it cheaper?',
     repliedComments: [
       {
-        id : 2222, 
-        img: 'p2.png', 
+        id : 2, 
+        img: 'p2.png',
+        commenterId:2222, 
         byName: 'Tony', 
         createdTime: '1 day ago', 
         content: 'god'
       },
       {
-        id : 3333, 
+        id : 3, 
         img: 'p3.png', 
-        byName: 'Jonha', 
+        commenterId:3333, 
+        commenterName: 'Jonha', 
         createdTime: '1 day ago', 
         content: 'nice'
       }
     ],
   },
   {
-    id : 4444, 
+    id : 4, 
     img: 'p4.png', 
-    byName: 'Tooxxx', 
+    commenterId:4444, 
+    commenterName: 'Tooxxx', 
     createdTime: '4 days ago', 
     content: 'Hi, JanessaTech lab'
   }
