@@ -16,7 +16,7 @@ const data = [
         id : 2, 
         img: 'p2.png',
         commenterId:2222, 
-        byName: 'Tony', 
+        commenterName: 'Tony', 
         createdTime: '1 day ago', 
         content: 'god'
       },
