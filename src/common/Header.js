@@ -111,15 +111,14 @@ const Header = ({openCart}) => {
                         <Typography color={'white'} variant='subtitle1'>Connected</Typography>
                     </Box>
                     <IconButton 
-                        sx={{'&:hover':{backgroundColor:'grey'}}}
-                        id='profile-positioned-button'
-                        aria-controls={isProfileOpen ? 'profile-positioned-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={isProfileOpen ? 'true' : undefined}
-                        onMouseOver={handleProfileMenuOpen}
-                        onClick={handleProfileMenuOpen}
-                        >
-                            <CheapIcon name={'profile'}/>
+                            sx={{'&:hover':{backgroundColor:'grey'}, p:0}}
+                            id='profile-positioned-button'
+                            aria-controls={isProfileOpen ? 'profile-positioned-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={isProfileOpen ? 'true' : undefined}
+                            onClick={handleProfileMenuOpen}
+                            >
+                                <Avatar alt='JanessaTech lab' src='imgs/nfters/me.png'/>
                     </IconButton>
                     
                     <ProfileMenu anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose}/>

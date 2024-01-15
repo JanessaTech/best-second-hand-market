@@ -7,15 +7,16 @@ const DetailRow = ({name, value}) => {
   return (
     <Box sx={{display:'flex', mt:1}}>
             <Typography sx={{width:130}} color='text.secondary'>{name}</Typography>
-            <Typography sx={{mx:0.5}}>:</Typography>
+            <Typography sx={{mx:1}}>:</Typography>
             <Typography sx={{flex:'1 1 100px', wordBreak:'break-word',minWidth: 100}}>
               {value}</Typography>
     </Box>
   )
 }
 const data = [
+  {name: 'CID', value: 'bafybeifvpojdj4ar5wiawksem3lifksiituu4jdwsr53uopuy7dmish6va'},
   {name: 'Chain', value: 'Ethereum'},
-  {name: 'Contract address:', value: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'},
+  {name: 'Contract address', value: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'},
   {name: 'Token ID', value: '702'},
   {name: 'Token standard', value: '721'},
   {name: 'Category', value: 'Pets'},
@@ -24,7 +25,7 @@ const data = [
 ]
 const NFTDetails = () => {
   return (
-    <Box sx={{mr:5}}>
+    <Box>
         <Typography variant='h6'>A baby monkey</Typography>
         <Space/>
         <Divider/>
@@ -38,7 +39,7 @@ const NFTDetails = () => {
         <Space/>
         <Typography>Details:</Typography>
         {
-          data.map((d) => (<DetailRow name={d.name} value={d.value}/>))
+          data.map((d) => (<DetailRow key={d.name} name={d.name} value={d.value}/>))
         }
         <Space/>
         <Divider/>

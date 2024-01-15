@@ -1,4 +1,4 @@
-import { ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
+import { Avatar, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
 import React, { memo } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 
@@ -26,7 +26,7 @@ const ProfileMenu = ({anchorEl, open, handleProfileMenuClose}) => {
     >
         <MenuItem>
           <ListItemIcon>
-            <CheapIcon name={'my-nft'} size={25}/>
+            <Avatar alt='JanessaTech lab' src='imgs/nfters/me.png' sx={{ width: 25, height: 25 }}/>
           </ListItemIcon>
           <ListItemText>My NFTs</ListItemText>
         </MenuItem>

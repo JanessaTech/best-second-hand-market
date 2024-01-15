@@ -2,9 +2,9 @@ import React from 'react'
 import { Box, Grid, useMediaQuery, Paper, styled} from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import {headerHeight} from '../../common/constant'
-import Comments from './Comments';
 import BuyOrCart from './BuyOrCart';
 import NFTDetails from './NFTDetails';
+import Comments from './comments/Comments';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -25,8 +25,10 @@ export default function NFTHome({toggleCart}) {
         <Box sx={{mt : 3}}>
             <Grid container spacing={2}>
                 <Grid item xs={isSmallScreen ? 12 : 7}>
-                    <NFTDetails/>
-                    <Comments/>
+                    <Box sx={{mr:5}}>
+                        <NFTDetails/>
+                        <Comments/>
+                    </Box>
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
                     <BuyOrCart toggleCart={toggleCart}/>

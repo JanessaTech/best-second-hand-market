@@ -20,7 +20,7 @@ const BuyOrCart = ({toggleCart}) => {
         </Box>
         <ByLikeView/>
         <Box sx={{mt:1, display: 'flex', justifyContent:'center'}}>
-          <Button sx={{textTransform:'none', borderRadius:4, width:150, py:0,mr:4}} 
+          <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0,mr:4}} 
                   color='customBlack' 
                   variant='contained'>
                     <Typography variant='h6'>Buy now</Typography>
