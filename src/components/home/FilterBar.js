@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs';
 import MenuItem from '@mui/material/MenuItem';
+import zIndex from '@mui/material/styles/zIndex';
 
 
 const ITEM_HEIGHT = 48;
@@ -92,7 +93,8 @@ export default function FilterBar({menuOpen, toggleMenu, notifyFilterChanges}) {
               display:'flex', justifyContent:'space-between', alignItems: 'end',
               px:isSmallScreen ? 1 : 3,
               pb:1,
-              boxSizing:'border-box'
+              boxSizing:'border-box',
+              zIndex:1
         }}>
             <Box sx={{display:'flex'}}>
                 <Box sx={{display:'flex', [theme.breakpoints.down('sm')]: {display: 'none'}}}>
