@@ -1,7 +1,7 @@
 import { Box, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { Container } from '@mui/system'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Header from '../../common/Header'
 import FilterMenu from '../../common/menu/FilterMenu'
 import NFTGallery from './NFTGallery'
@@ -9,16 +9,31 @@ import {drawerWidth} from '../../common/constant'
 import Cart from '../../common/Cart'
 import CheapBottomNavigation from '../../common/BottomNavigation'
 import { useLocation } from 'react-router-dom'
+import CustomSnackBar from '../../common/CustomSnackBar'
 
 export default function Home() {
     const location = useLocation()
     const theme = useTheme()
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
+    const alertCnt = useRef(0)
 
     const [menuWidth, setMenuWidth] = useState(drawerWidth)
     const [menuOpen, setMenuOpen] = useState(isMediumScreen ? false: true)
     const [cartOpen, setCartOpen] = useState(false)
     const [trigger, setTrigger] = useState(0)
+
+    const [state, setState] = useState({alerts: []})
+    
+    const handleAlert = (severity, message) => {
+        const newAlert = []
+        newAlert.push({id: alertCnt.current, severity: severity, message: message})
+        alertCnt.current = alertCnt.current + 1
+        setState({...state, alerts: [...state.alerts, ...newAlert]})
+    }
+
+    const clearAlerts = () => {
+        setState({...state, alerts:[]})
+    }
 
     const notifyFilterChanges = (newTrigger) => {
         setTrigger(newTrigger)
@@ -61,9 +76,14 @@ export default function Home() {
     <Container maxWidth='false'>
         <Box sx={{ display: 'flex' }}>
             <Header openCart={openCart}/>
-            <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} notifyFilterChanges={notifyFilterChanges}/>
-            <NFTGallery menuOpen={menuOpen} toggleMenu={toggleMenu} trigger={trigger} notifyFilterChanges={notifyFilterChanges}/>
+            <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} notifyFilterChanges={notifyFilterChanges} handleAlert={handleAlert}/>
+            <NFTGallery menuOpen={menuOpen} toggleMenu={toggleMenu} trigger={trigger} notifyFilterChanges={notifyFilterChanges} handleAlert={handleAlert}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
+        </Box>
+        <Box>
+        {
+             state.alerts && state.alerts.length > 0 && <CustomSnackBar duration={6000} timeout={1000} alerts={state.alerts} clearAlerts={clearAlerts}/>       
+        }
         </Box>
         <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu} isHome={location.pathname === '/'}/>      
     </Container>

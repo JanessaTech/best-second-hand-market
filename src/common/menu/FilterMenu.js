@@ -7,7 +7,7 @@ import CategoryFilter from './CategoryFilter'
 import NetworkFilter from './NetworkFilter'
 import PriceFilter from './PriceFilter'
 
-const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges}) => {
+const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges, handleAlert}) => {
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
   const [drawerType, setDrawerType] = useState(isMediumScreen ? 'temporary': 'persistent')
@@ -49,7 +49,7 @@ const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges}) => {
                 <Divider />
                 <CategoryFilter notify={notify}/>
                 <Divider />
-                <PriceFilter notify={notify}/>
+                <PriceFilter notify={notify} handleAlert={handleAlert}/>
             </Box>    
     </Drawer>
   )

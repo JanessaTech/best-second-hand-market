@@ -1,17 +1,13 @@
 import { Box, Link, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import React, { useEffect, useRef, useState } from 'react'
-import CustomSnackBar from '../../common/CustomSnackBar'
+import React, { useEffect, useState } from 'react'
 
-export default function Overview() {
+export default function Overview({handleAlert}) {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-
-  const alertCnt = useRef(0)
   
   const [state, setState] = useState({
-    inCart: false,
-    alerts:[]
+    inCart: false
   })
 
   useEffect(() => {
@@ -24,15 +20,12 @@ export default function Overview() {
 
   const toggleCart = (e) => {
     e.preventDefault()
-    const newAlert = []
     if(!state.inCart){
-      newAlert.push({id: alertCnt.current, severity: 'success', message: 'Added to shopping cart'})
-      alertCnt.current = alertCnt.current + 1
+      handleAlert('success', 'Added to shopping cart')
     } else{
-      newAlert.push({id: alertCnt.current, severity: 'success', message: 'Removed from shopping cart'})
-      alertCnt.current = alertCnt.current + 1
+      handleAlert('success', 'Removed from shopping cart')
     }
-    setState({...state, inCart: !state.inCart, alerts: [...state.alerts, ...newAlert]})
+    setState({...state, inCart: !state.inCart})
   }
 
   const handleBuyNow = (e) => {
@@ -40,13 +33,8 @@ export default function Overview() {
     console.log('handleBuyNow...')
   }
 
-  const clearAlerts = () => {
-    setState({...state, alerts:[]})
-  }
-
   return (
-    <Box>
-        <Link href='nft?id=123'>
+    <Link href='nft?id=123'>
             <Box sx={{border:'1px solid #f5f5f5', 
                       borderRadius:4, 
                       '&:hover':{border:'2px solid #f5f5f5', cursor:'pointer'}, 
@@ -100,11 +88,7 @@ export default function Overview() {
                 </Box>
                 
             </Box> 
-        </Link>
-        {
-                      state.alerts && state.alerts.length > 0 && <CustomSnackBar duration={6000} timeout={1000} alerts={state.alerts} clearAlerts={clearAlerts}/>       
-        }
-    </Box>
+      </Link>
   )
 }
 

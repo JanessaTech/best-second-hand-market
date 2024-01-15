@@ -55,13 +55,12 @@ function getPricesFromLocalStorage() {
     return {min: 0, max: 100}
   }
 
-const PriceFilter = ({notify}) => {
+const PriceFilter = ({notify, handleAlert}) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(PriceFilterSchema)
     })
     const [minValue, setMinValue] = useState(getPricesFromLocalStorage().min)
     const [maxValue, setMaxValue] = useState(getPricesFromLocalStorage().max)
-    const [alerts, setAlerts] = useState([])
 
     const changeMinValue = (value) => {
         setMinValue(value)
@@ -90,20 +89,14 @@ const PriceFilter = ({notify}) => {
     }
 
     useEffect(() => {
-        let newAlerts = []
         if (errors?.max) {
-            newAlerts.push({id: 'max', severity: 'error', message: errors?.max?.message})
+            handleAlert('error', errors?.max?.message)
         }
         if(errors?.min) {
-            newAlerts.push({id: 'min', severity: 'error', message: errors?.min?.message})
+            handleAlert('error', errors?.min?.message)
         }
-        setAlerts(newAlerts)
     }, [errors])
 
-    const clearAlerts = () => {
-        setAlerts([])
-    }
-   
   return (
     <Box component='form'
         onSubmit={handleSubmit(handleApply)}
@@ -132,9 +125,6 @@ const PriceFilter = ({notify}) => {
             <Button variant='outlined' color='customBlack' onClick={handleClear}>Clear</Button>
             <Button variant='contained' color='customBlack' type="submit">Apply</Button>
         </Box>
-        {
-            alerts && alerts.length > 0 && <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlerts={clearAlerts}/>       
-        }  
     </Box> 
   )
 }
