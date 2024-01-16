@@ -19,25 +19,25 @@ export default function Home() {
 
     const [menuWidth, setMenuWidth] = useState(drawerWidth)
     const [menuOpen, setMenuOpen] = useState(isMediumScreen ? false: true)
-    const [cartOpen, setCartOpen] = useState(false)
+    const [cartOpen, setCartOpen] = useState(true)
     const [trigger, setTrigger] = useState(0)
 
     const [state, setState] = useState({alerts: []})
     
-    const handleAlert = (severity, message) => {
+    const handleAlert = useCallback((severity, message) => {
         const newAlert = []
         newAlert.push({id: alertCnt.current, severity: severity, message: message})
         alertCnt.current = alertCnt.current + 1
         setState({...state, alerts: [...state.alerts, ...newAlert]})
-    }
+    }, [state.alerts])
 
     const clearAlerts = () => {
         setState({...state, alerts:[]})
     }
 
-    const notifyFilterChanges = (newTrigger) => {
+    const notifyFilterChanges = useCallback((newTrigger) => {
         setTrigger(newTrigger)
-    }
+    },[trigger])
 
     useEffect(() => {
         if (!isMediumScreen) {
