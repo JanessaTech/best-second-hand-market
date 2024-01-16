@@ -3,10 +3,11 @@ import React, { memo } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import ByLikeView from './ByLikeView'
 
-const BuyOrCart = ({toggleCart}) => {
+const BuyOrCart = ({openCart}) => {
 
-  const handleCart = () =>{
-    toggleCart()
+  const handleCart = () => {
+    console.log('[BuyOrCart]call restful to add to cart then open the cart')
+    openCart()
   }
 
   return (
@@ -20,7 +21,7 @@ const BuyOrCart = ({toggleCart}) => {
         </Box>
         <ByLikeView/>
         <Box sx={{mt:1, display: 'flex', justifyContent:'center'}}>
-          <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0,mr:4}} 
+          <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0, mr:4}} 
                   color='customBlack' 
                   variant='contained'>
                     <Typography variant='h6'>Buy now</Typography>

@@ -15,7 +15,7 @@ const Item = styled(Paper)(({ theme }) => ({
   }));
 
 
-export default function NFTHome({toggleCart}) {
+export default function NFTHome({openCart}) {
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
@@ -31,7 +31,7 @@ export default function NFTHome({toggleCart}) {
                     </Box>
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <BuyOrCart toggleCart={toggleCart}/>
+                    <BuyOrCart openCart={openCart}/>
                 </Grid>
             </Grid>
         </Box>      

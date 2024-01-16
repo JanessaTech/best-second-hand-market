@@ -27,7 +27,7 @@ export default function NFT() {
         <Box sx={{ display: 'flex' }}>
             <Header openCart={openCart}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
-            <NFTHome toggleCart={toggleCart}/>
+            <NFTHome openCart={openCart}/>
         </Box>
         <CheapBottomNavigation openCart={openCart} isHome={location.pathname === '/'}/> 
     </Container>
