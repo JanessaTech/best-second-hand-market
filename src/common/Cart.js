@@ -122,15 +122,17 @@ const CartItem = (props) => {
 const Cart = ({toggleCart, open, nfterId}) => {
   console.log('Cart rendering ...')
 
+  const fetchItems = () => {
+    if(open) {
+      console.log('call restful api to get latest items in cart by nfterId')
+    }
+    return data
+  }
+  
   const [state, setState] = useState({
-    nfts: [],
+    nfts: fetchItems(),
     price: 0.000
   })
-  
-  useEffect(() => {
-    console.log('call restful apis to get nfts in cart by nfterId')
-    setState({nfts: data, price: calcPrice(data)})
-  }, [])
 
   const closeCart = () => {
     toggleCart()

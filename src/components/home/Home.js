@@ -19,7 +19,7 @@ export default function Home() {
 
     const [menuWidth, setMenuWidth] = useState(drawerWidth)
     const [menuOpen, setMenuOpen] = useState(isMediumScreen ? false: true)
-    const [cartOpen, setCartOpen] = useState(true)
+    const [cartOpen, setCartOpen] = useState(false)
     const [trigger, setTrigger] = useState(0)
 
     const [state, setState] = useState({alerts: []})

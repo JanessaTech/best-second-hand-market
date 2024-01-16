@@ -12,9 +12,9 @@ export default function Overview({handleAlert}) {
 
   useEffect(() => {
     if (state.inCart) {
-      console.log('calling put to cart api ...')
+      console.log('call restful api to put to cart..')
     } else {
-      console.log('calling remove from cart api ...')
+      console.log('call restful api to remove from cart ...')
     }
   }, [state.inCart])
 
