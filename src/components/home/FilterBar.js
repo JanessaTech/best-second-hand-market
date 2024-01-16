@@ -4,8 +4,6 @@ import { useTheme } from '@mui/material/styles';
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs';
 import MenuItem from '@mui/material/MenuItem';
-import zIndex from '@mui/material/styles/zIndex';
-
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

@@ -1,9 +1,9 @@
-import { Avatar, Box, Link, Typography } from '@mui/material'
-import React from 'react'
+import { Avatar, Box, Typography } from '@mui/material'
+import React, { memo } from 'react'
 
-export default function NfterOverview() {
+const NfterOverview = () => {
   return (
-    <Box sx={{ width: 250, border: '1px solid #f5f5f5', p: 2,ml:2,bgcolor: 'background.paper', borderRadius:2}}>
+    <Box>
         <Box sx={{display:'flex', alignItems:'center'}}>
             <Avatar alt='JanessaTech lab' src='imgs/nfters/me.png'/>
             <Box sx={{ml:1}}>
@@ -22,4 +22,6 @@ export default function NfterOverview() {
     </Box>
   )
 }
+
+export default memo(NfterOverview)
 

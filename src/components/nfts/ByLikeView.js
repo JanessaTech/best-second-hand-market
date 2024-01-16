@@ -3,17 +3,14 @@ import { useTheme } from '@mui/material/styles'
 import { Box, IconButton, Typography, useMediaQuery, Popper, Link } from '@mui/material'
 import { CheapIcon } from '../../utils/Svgs'
 import NfterOverview from '../nfters/NfterOverview'
+import CustomPopper from '../../common/CustomPopper'
 
 const ByLikeView = ({nftId}) => {
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const [isLike, setIsLike] = useState(false)
     const [anchorEl, setAnchorEl] = React.useState(null)
-
-    const open = Boolean(anchorEl)
-    const id = open ? 'simple-popper' : undefined
     
-
     const toggleLike = () => {
         setIsLike(!isLike)
     }
@@ -45,9 +42,7 @@ const ByLikeView = ({nftId}) => {
                             '&:active':{color:'primary.dark'}
                            }}>JanessaTech lab</Link>
             </Typography>
-            <Popper id={id} open={open} anchorEl={anchorEl} placement={isSmallScreen ? 'bottom' : 'right-end'}>
-                <NfterOverview />
-            </Popper>
+            <CustomPopper idPrefix='nfter-intro-popper' anchorEl={anchorEl} width={250} placement={isSmallScreen ? 'bottom' : 'right-end'} content={<NfterOverview />} />
         </Box>
         <Box sx={{display:'flex'}}>
             <Box sx={{display:'flex', alignItems:'center', mr:2}}>

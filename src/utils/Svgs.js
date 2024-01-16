@@ -30,12 +30,13 @@ const svgMapping = new Map([
   ['connect-wallet', 'imgs/connect-wallet.svg'],
   ['view', 'imgs/view.svg'],
   ['my-favorite-red', 'imgs/my-favorite-red.svg'],
+  ['help', 'imgs/help.svg'],
   
 ])
 
 function generateIcon(src, size) {
   return (
-    <Icon sx={{width:size, height:size}}>
+    <Icon sx={{width:size, height:size, display:'flex'}}>
       <img src={src} height={size} width={size}/>
     </Icon>
   )
