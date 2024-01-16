@@ -87,16 +87,22 @@ const CartItem = (props) => {
                           overflow: 'hidden',
                           fontWeight:'bold'
                         }}>{title}</Typography>
-                    <Box sx={{display:'flex',mt:1}}>
+                    <Box sx={{mt:1}}>
                         {
-                          available ? <Box>
+                          available ? <Box sx={{display:'flex', alignItems:'center'}}>
                                         <Typography variant='body2' sx={{mr:1}}>By</Typography>
-                                        <Typography variant='body2' color='primary.main'>{nfter}</Typography>
+                                        <Typography variant='body2' color='primary.main' 
+                                              sx={{textOverflow: 'ellipsis', 
+                                                   whiteSpace: 'nowrap', 
+                                                   overflow: 'hidden'}}
+                                        >{nfter}</Typography>
                                       </Box> : <Box sx={{display:'flex', alignItems:'center'}}>
-                                                  <Typography variant='body2'>Not available</Typography>
-                                                  <Box onMouseOver={openHelp} onMouseLeave={closeHelp}><CheapIcon name='help' size={16}/></Box>
-                                                  <CustomPopper idPrefix='nft-unavailable' anchorEl={anchorEl} width={250} placement={'top'} content={<HelpContent/>} />
-                                               </Box>
+                                                    <Typography variant='body2'>Not available</Typography>
+                                                    <Box onMouseOver={openHelp} onMouseLeave={closeHelp}>
+                                                        <CheapIcon name='help' size={16}/>
+                                                    </Box>
+                                                    <CustomPopper idPrefix='nft-unavailable' anchorEl={anchorEl} width={250} placement={'top'} content={<HelpContent/>} />
+                                                </Box>
                         }
                         
                     </Box>
@@ -182,7 +188,7 @@ const Cart = ({toggleCart, open, nfterId}) => {
               <Typography variant='h6'>Total price</Typography>
               <Typography variant='h6'>{state.price} CH</Typography>
             </Box>
-            <Button color='customBlack' variant='contained' 
+            <Button color='customBlack' variant='contained' disabled={state.nfts.filter((nft) => nft.available).length === 0}
                 sx={{textTransform:'none', borderRadius:'50vh', my:3, width:1}}>
                 <Typography variant='h6'>Buy now</Typography>
             </Button>
