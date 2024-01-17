@@ -1,9 +1,11 @@
-import React, { memo, useEffect} from 'react'
+import React, { memo, useEffect, useState} from 'react'
 import { useTheme } from '@mui/material/styles'
 import { Box, Grid, useMediaQuery } from '@mui/material'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
 import Overview from '../nfts/Overview'
+import ConnectWallet from '../wallet/ConnectWallet'
+import Signup from '../wallet/Signup'
 
 function getFilter() {
   let filter = localStorage.getItem('filter')
@@ -19,6 +21,26 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleA
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
 
+  const [walletOpen, setWalletOpen] = useState(false)
+  const [signupOpen, setSignupOpen] = useState(false)
+
+  const onCloseWallet = () => {
+    setWalletOpen(false)
+  }
+
+  const openWallet = () => {
+    setWalletOpen(true)
+  }
+
+  const onCloseSignUp = () => {
+    setSignupOpen(false)
+  }
+
+  const openSignup = () => {
+    console.log('setSignupOpen(true)')
+    setSignupOpen(true)
+  }
+
   useEffect(() => {
     const latestFilter = getFilter()
     console.log('[NFTGallery.trigger] fetch data based on latestFilter:', latestFilter)
@@ -33,37 +55,39 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleA
         <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
           <Grid container spacing={2}>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert}/>
+                <Overview handleAlert={handleAlert} openWallet={openWallet}/>
             </Grid>
           </Grid>
-        </Box>     
+        </Box>
+        <ConnectWallet onClose={onCloseWallet} open={walletOpen} openSignup={openSignup}/>   
+        <Signup onClose={onCloseSignUp} open={signupOpen}/>
     </Box>  
   )
 }
