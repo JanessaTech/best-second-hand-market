@@ -21,7 +21,6 @@ export default function CustomSnackBar(props) {
     })
 
     useEffect(() => {
-        console.log('alerts.length > 0 :', alerts.length > 0)
         setFadeIn(alerts && alerts.length > 0 ? true : false)
     }, [alerts])
 
