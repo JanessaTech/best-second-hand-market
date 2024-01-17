@@ -1,13 +1,15 @@
 import { Box, Link, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import React, { useEffect, useState } from 'react'
+import ConnectWallet from '../wallet/ConnectWallet'
 
 export default function Overview({handleAlert}) {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   
   const [state, setState] = useState({
-    inCart: false
+    inCart: false,
+    open: false
   })
 
   useEffect(() => {
@@ -18,6 +20,11 @@ export default function Overview({handleAlert}) {
     }
   }, [state.inCart])
 
+  const onClose = () => {
+    setState({...state, open: false})
+  }
+
+
   const toggleCart = (e) => {
     e.preventDefault()
     if(!state.inCart){
@@ -25,7 +32,7 @@ export default function Overview({handleAlert}) {
     } else{
       handleAlert('success', 'Removed from shopping cart')
     }
-    setState({...state, inCart: !state.inCart})
+    setState({...state, inCart: !state.inCart, open: true})
   }
 
   const handleBuyNow = (e) => {
@@ -86,6 +93,7 @@ export default function Overview({handleAlert}) {
                                         <Typography color='white' variant='body2'>{state.inCart ? 'Remove from cart': 'Add to cart'}</Typography>
                             </Box>
                 </Box>
+                <ConnectWallet onClose={onClose} open={state.open}/>
                 
             </Box> 
       </Link>

@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Drawer, IconButton, Tab, Tabs, Tooltip, Typography } from '@mui/material'
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CheapIcon } from '../utils/Svgs'
 import {cartWidth, headerHeight} from './constant'
@@ -113,7 +113,6 @@ const CartItem = (props) => {
   const closeHelp = () => {
     setAnchorEl(null)
   }
-
 
   return (
     <Box sx={{

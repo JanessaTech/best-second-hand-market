@@ -1,10 +1,9 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { memo, useEffect} from 'react'
 import { useTheme } from '@mui/material/styles'
 import { Box, Grid, useMediaQuery } from '@mui/material'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
 import Overview from '../nfts/Overview'
-import CustomSnackBar from '../../common/CustomSnackBar'
 
 function getFilter() {
   let filter = localStorage.getItem('filter')
@@ -64,7 +63,6 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleA
                 <Overview handleAlert={handleAlert}/>
             </Grid>
           </Grid>
-          
         </Box>     
     </Box>  
   )
