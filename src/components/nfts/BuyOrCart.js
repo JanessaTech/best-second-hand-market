@@ -1,12 +1,14 @@
-import { Box, Button, IconButton, Typography } from '@mui/material'
-import React, { memo } from 'react'
+import { Box, Button, IconButton, Tooltip, Typography } from '@mui/material'
+import React, { memo, useState } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import ByLikeView from './ByLikeView'
 
 const BuyOrCart = ({openCart}) => {
+  const [inCart, setInCart] = useState(false)
 
   const handleCart = () => {
     console.log('[BuyOrCart]call restful to add to cart then open the cart')
+    setInCart(!inCart)
     openCart()
   }
 
@@ -26,8 +28,11 @@ const BuyOrCart = ({openCart}) => {
                   variant='contained'>
                     <Typography variant='h6'>Buy now</Typography>
           </Button>
-          <IconButton sx={{p:0}} onClick={handleCart}>
-             <CheapIcon name='cart-black' size={50}/>
+          <IconButton sx={{p:0, position:'relative'}} onClick={handleCart}>
+              <Tooltip title={inCart ? 'Remove from cart' : 'Add to cart'}>
+                <Box><CheapIcon name='cart-black' size={50}/></Box>
+              </Tooltip>
+              {inCart && <CheapIcon name='minus' size={20} sx={{position:'absolute', top:0, right:0}}/>}
           </IconButton>
         </Box>
     </Box>

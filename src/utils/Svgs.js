@@ -31,15 +31,16 @@ const svgMapping = new Map([
   ['view', 'imgs/view.svg'],
   ['my-favorite-red', 'imgs/my-favorite-red.svg'],
   ['help', 'imgs/help.svg'],
+  ['minus', 'imgs/minus.svg'],
   
 ])
 
-function generateIcon(src, size) {
+function generateIcon(src, size, sx) {
   return (
-    <Icon sx={{width:size, height:size, display:'flex'}}>
+    <Icon sx={{width:size, height:size, display:'flex', ...sx}}>
       <img src={src} height={size} width={size}/>
     </Icon>
   )
 }
 
-export function CheapIcon({name,size}) {return (generateIcon(svgMapping.get(name) || 'imgs/defaut.svg', size || iconSize))}
+export function CheapIcon({name,size, sx}) {return (generateIcon(svgMapping.get(name) || 'imgs/defaut.svg', size || iconSize, sx || {}))}

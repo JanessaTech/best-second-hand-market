@@ -6,15 +6,6 @@ import BuyOrCart from './BuyOrCart';
 import NFTDetails from './NFTDetails';
 import Comments from './comments/Comments';
 
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
-
-
 export default function NFTHome({openCart}) {
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
