@@ -1,5 +1,5 @@
 
-import { Box, Dialog, DialogTitle, Grid, IconButton, Tooltip, Typography, useMediaQuery } from '@mui/material'
+import { Box, Dialog, Grid, IconButton, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import React, { memo } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { CheapIcon } from '../../utils/Svgs'
@@ -59,7 +59,7 @@ const ConnectWallet = (props) => {
   return (
     <Dialog
         sx={{'& .MuiPaper-root.MuiDialog-paper':{width:isSmallScreen ? 0.9: 0.5, height: 'fit-content', borderRadius:5}}} open={open}>
-        <DialogTitle sx={{position:'relative'}}>
+        <Box sx={{position:'relative', p:3}}>
             <Typography variant='h4'>Connect wallet</Typography>
             <Typography color='text.secondary' variant='body2'>Securely connect your wallet to start your Web3 journey</Typography>
             <Tooltip title='Close'>
@@ -67,8 +67,8 @@ const ConnectWallet = (props) => {
                     <CheapIcon name={'close'}/>
                   </IconButton>
             </Tooltip>
-        </DialogTitle>
-        <Box sx={{p:3}}>
+        </Box>
+        <Box sx={{p:3,pt:0}}>
             <Grid container spacing={2} >
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
                     <WalletItem name='MetaMask' img='metamask.png' support={true} handleWallet={handleWallet}/>
@@ -77,13 +77,13 @@ const ConnectWallet = (props) => {
                     <WalletItem name='WalletConnect' img='walletcollect.png' support={false}/>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                    <WalletItem name='WalletConnect' img='walletcollect.png' support={false}/>
+                    <WalletItem name='Enjin' img='enjin.png' support={false}/>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                    <WalletItem name='WalletConnect' img='walletcollect.png' support={false}/>
+                    <WalletItem name='ZenGo' img='zengo.png' support={false}/>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                    <WalletItem name='WalletConnect' img='walletcollect.png' support={false}/>
+                    <WalletItem name='Trust Wallet' img='trustwallet.png' support={false}/>
                 </Grid>
             </Grid>
         </Box>

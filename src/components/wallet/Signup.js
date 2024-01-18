@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogTitle, IconButton, TextField, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Dialog, FormControlLabel, IconButton, Link, TextField, Tooltip, Typography } from '@mui/material'
 import React, { memo, useEffect, useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -27,7 +27,8 @@ const Signup = (props) => {
 
     const [state, setState] = useState({
         name: '',
-        introduction: ''
+        introduction: '',
+        checked: false
     })
 
     useEffect(() => {
@@ -40,7 +41,7 @@ const Signup = (props) => {
 
     const handleClear = () => {
         reset()
-        setState({...state, 'name': '', introduction: ''} )
+        setState({...state, 'name': '', introduction:'', checked: false} )
     }
 
     const handleSignup = (data) => {
@@ -54,76 +55,89 @@ const Signup = (props) => {
         setState({...state, [e.target.name]: e.target.value})
     }
 
+    const handleCheckBoxChange = (e) => {
+        setState({...state, 'checked': !state.checked})
+    }
+
+    console.log('Signup state:', state)
+
     return (
         <Dialog  
             sx={{'& .MuiPaper-root.MuiDialog-paper':{width:0.3, height: 'fit-content', borderRadius:5, minWidth:320}}} open={open}>
-            <DialogTitle sx={{position:'relative', mt:3}}>
-                <Typography variant='h5' sx={{textAlign:'center'}}>Create an account for your wallet</Typography>
-                <Typography variant='body2' color='text.secondary' sx={{textAlign:'center'}}>Provide your personal information which will be shown when you sell your NFTs</Typography>
-                <Tooltip title='Close'>
-                    <IconButton onClick={handleClose} sx={{position:'absolute', top:-20, right:10}}>
-                        <CheapIcon name={'close'}/>
-                    </IconButton>
-                </Tooltip>
-            </DialogTitle>
-            <Box 
+            <Box sx={{position:'relative', mx:3, my:6}}>
+                <Box sx={{mb:2}}>
+                    <Typography variant='h5' sx={{textAlign:'center'}}>Create an account for your wallet</Typography>
+                    <Typography variant='body2' color='text.secondary' sx={{textAlign:'center'}}>Provide your personal information which will be shown when you sell your NFTs</Typography>
+                    <Tooltip title='Close'>
+                        <IconButton onClick={handleClose} sx={{position:'absolute', top:-40, right:-20}}>
+                            <CheapIcon name={'close'}/>
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+                <Box 
                     component="form"
                     onSubmit={handleSubmit(handleSignup)}
                     sx={{
-                        p:3,
                         '& .MuiTextField-root': { m: 1},
                         '& .MuiButtonBase-root': { m: 1},
+                        '& .MuiFormControlLabel-root':{m:1},
+                        '& .MuiFormControlLabel-root > span':{m:0,p:0,pr:2}
                     }}
                     noValidate
                     autoComplete="off">
-                <TextField
-                    sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}
-                        }}
-                    id='name' 
-                    aria-label='name'
-                    name='name'
-                    label='Name'
-                    value={state.name}
-                    placeholder='Display name' 
-                    {...register('name')}
-                    variant='outlined'
-                    fullWidth
-                    size="small"
-                    onChange={handleInputChanges}
+                    <TextField
+                        sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width:`calc(100% - 16px)`
+                            }}
+                        id='name' 
+                        aria-label='name'
+                        name='name'
+                        label='Name'
+                        value={state.name}
+                        placeholder='Display name' 
+                        {...register('name')}
+                        variant='outlined'
+                        size="small"
+                        onChange={handleInputChanges}
+                        />
+                    <Button sx={{textTransform: 'none'}}
+                            component="label" 
+                            variant="contained" 
+                            startIcon={<CloudUploadIcon />} 
+                            color='customBlack'>
+                        Upload your profile image file
+                        <VisuallyHiddenInput type="file" />
+                    </Button>
+                    <TextField
+                        sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1},width:`calc(100% - 16px)`
+                        }} 
+                        id='introduction' 
+                        aria-label='introduction'
+                        name='introduction'
+                        label='Introduction'
+                        value={state.introduction}
+                        placeholder='Your brief introduction' 
+                        {...register('introduction')}
+                        variant='outlined'
+                        size="small"
+                        multiline
+                        rows={4}
+                        onChange={handleInputChanges}
+                        />
+                    <FormControlLabel
+                        value={state.checked}
+                        control={<Checkbox />}
+                        label={<Typography color='text.secondary' variant='body2'>I have read and accept the <Link href="#" sx={{color:'primary.main'}}>Term of Service</Link> and the <Link href="#" sx={{color:'primary.main'}}>Term of Creator</Link> and confirm that I am at least 13 years old</Typography>}
+                        name='checked'
+                        onChange={handleCheckBoxChange}
                     />
-                <Button sx={{textTransform: 'none'}}
-                        component="label" 
-                        variant="contained" 
-                        startIcon={<CloudUploadIcon />} 
-                        color='customBlack'>
-                    Upload your profile image file
-                    <VisuallyHiddenInput type="file" />
-                </Button>
-                <TextField
-                    sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1},
-                         '& input':{pl:4}
-                       }} 
-                    id='introduction' 
-                    aria-label='introduction'
-                    name='introduction'
-                    label='Introduction'
-                    value={state.introduction}
-                    placeholder='Your brief introduction' 
-                    {...register('introduction')}
-                    variant='outlined'
-                    fullWidth
-                    size="small"
-                    multiline
-                    rows={4}
-                    onChange={handleInputChanges}
-                    />
-                <Box sx={{display:'flex', justifyContent:'space-around'}}>
-                    <Button variant='outlined' color='customBlack' onClick={handleClear}>Clear</Button>
-                    <Button variant='contained' color='customBlack' type="submit">Signup</Button>
-                </Box>
-                
-            </Box>
+                    
+                    <Box sx={{display:'flex', flexDirection:'column'}}>
+                        <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none'}}>Signup</Button>
+                        <Button variant='outlined' color='customBlack' sx={{textTransform:'none'}} onClick={handleClear}>Disconnect wallet</Button>
+                    </Box>
 
+                </Box>
+            </Box>
         </Dialog>
     )
 }
