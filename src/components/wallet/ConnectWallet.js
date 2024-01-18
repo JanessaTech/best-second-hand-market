@@ -3,6 +3,7 @@ import { Box, Dialog, Grid, IconButton, Tooltip, Typography, useMediaQuery } fro
 import React, { memo } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { CheapIcon } from '../../utils/Svgs'
+import { useNavigate } from 'react-router-dom'
 
 const WalletItem = (props) => {
     const {img, name, support, handleWallet} = props
@@ -41,10 +42,10 @@ const WalletItem = (props) => {
 
 }
 
-const ConnectWallet = (props) => {
+const ConnectWallet = ({onClose, open, openSignup, cbUrl, notifyConnectionStatus}) => {
     const theme = useTheme()
+    const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-    const {onClose, open, openSignup, ...others} = props
 
     const handleClose = () => {
         onClose()
@@ -52,15 +53,25 @@ const ConnectWallet = (props) => {
 
     const handleWallet = () => {
         console.log('handleWallet')
+        console.log('process wallet connecting ... in chrome extension')
         onClose()
-        openSignup()
+        console.log('call restful api to check if there is an account associated with the current wallet')
+        const isRegistered = false
+        if (!isRegistered) {
+            openSignup()
+        } else {
+            localStorage.setItem('isConnected', 'true')
+            console.log('isConnected is set as true, notify header')
+            notifyConnectionStatus()
+            navigate(cbUrl)
+        }
     }
 
   return (
     <Dialog
         sx={{'& .MuiPaper-root.MuiDialog-paper':{width:isSmallScreen ? 0.9: 0.5, height: 'fit-content', borderRadius:5}}} open={open}>
         <Box sx={{position:'relative', p:3}}>
-            <Typography variant='h4'>Connect wallet</Typography>
+            <Typography variant='h4'>Connect to wallet</Typography>
             <Typography color='text.secondary' variant='body2'>Securely connect your wallet to start your Web3 journey</Typography>
             <Tooltip title='Close'>
                   <IconButton onClick={handleClose} sx={{position:'absolute', top:10, right:10}}>

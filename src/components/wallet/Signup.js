@@ -6,6 +6,7 @@ import {SignupSchema} from '../../common/Schemas'
 import { useForm } from "react-hook-form"
 import { CheapIcon } from '../../utils/Svgs'
 import { styled } from '@mui/material/styles'
+import { useNavigate } from 'react-router-dom'
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -19,8 +20,8 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
-const Signup = (props) => {
-    const {onClose, open, handleAlert,...others} = props
+const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => {
+    const navigate = useNavigate()
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
     })
@@ -33,39 +34,49 @@ const Signup = (props) => {
 
     useEffect(() => {
         console.log('[Signup.errors]:', errors)
+        let alerts = []
         if (errors?.name) {
-            handleAlert('error', errors?.max?.message)
+            console.log('errors?.name')
+            alerts.push({severity: 'error', message: errors?.name?.message})
         }
         if(errors?.checked) {
-            handleAlert('error', errors?.checked?.message)
+            console.log('errors?.checked')
+            alerts.push({severity: 'error', message: errors?.checked?.message})
         }
         if(errors?.introduction) {
-            handleAlert('error', errors?.introduction?.message)
+            alerts.push({severity: 'error', message: errors?.introduction?.message})
         }
+        handleAlert(alerts)
     }, [errors])
 
     const handleClose = () => {
         onClose()
     }
 
-    const handleClear = () => {
+    const handleDisConnected = () => {
         reset()
         setState({...state, 'name': '', introduction:'', checked: false} )
+        localStorage.removeItem('isConnected')
+        onClose()
+        notifyConnectionStatus()
+        navigate(cbUrl)
     }
 
     const handleSignup = (data) => {
         console.log('data:', data)
-
+        console.log('call restful api to signup ...')
+        onClose()
+        localStorage.setItem('isConnected', 'true')
+        notifyConnectionStatus()
+        navigate(cbUrl)
     }
 
     const handleInputChanges = (e) => {
         e.preventDefault()
-        console.log(e.target.value)
         setState({...state, [e.target.name]: e.target.value})
     }
 
     const handleCheckBoxChange = (e) => {
-        console.log('handleCheckBoxChange')
         setState({...state, 'checked': !state.checked})
     }
 
@@ -138,7 +149,7 @@ const Signup = (props) => {
                     
                     <Box sx={{display:'flex', flexDirection:'column'}}>
                         <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none'}}>Signup</Button>
-                        <Button variant='outlined' color='customBlack' sx={{textTransform:'none'}} onClick={handleClear}>Disconnect wallet</Button>
+                        <Button variant='outlined' color='customBlack' sx={{textTransform:'none'}} onClick={handleDisConnected}>Disconnect wallet</Button>
                     </Box>
 
                 </Box>

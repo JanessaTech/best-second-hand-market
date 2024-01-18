@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState} from 'react'
+import React, { memo, useCallback, useEffect, useState} from 'react'
 import { useTheme } from '@mui/material/styles'
 import { Box, Grid, useMediaQuery } from '@mui/material'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
@@ -6,6 +6,7 @@ import FilterBar from './FilterBar'
 import Overview from '../nfts/Overview'
 import ConnectWallet from '../wallet/ConnectWallet'
 import Signup from '../wallet/Signup'
+import { useLocation } from 'react-router-dom'
 
 function getFilter() {
   let filter = localStorage.getItem('filter')
@@ -15,31 +16,31 @@ function getFilter() {
   return {}
 }
 
-const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleAlert}) => {
+const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleAlert, notifyConnectionStatus}) => {
   console.log('NFTGallery rendering ...')
   const theme = useTheme()
+  const location = useLocation()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
 
   const [walletOpen, setWalletOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
 
-  const onCloseWallet = () => {
+  const onCloseWallet = useCallback(() => {
     setWalletOpen(false)
-  }
+  }, [walletOpen])
 
-  const openWallet = () => {
+  const openWallet = useCallback(() => {
     setWalletOpen(true)
-  }
+  }, [walletOpen])
 
-  const onCloseSignUp = () => {
+  const onCloseSignUp = useCallback(() => {
     setSignupOpen(false)
-  }
+  }, [signupOpen])
 
-  const openSignup = () => {
-    console.log('setSignupOpen(true)')
+  const openSignup = useCallback(() => {
     setSignupOpen(true)
-  }
+  }, [signupOpen])
 
   useEffect(() => {
     const latestFilter = getFilter()
@@ -86,8 +87,20 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleA
             </Grid>
           </Grid>
         </Box>
-        <ConnectWallet onClose={onCloseWallet} open={walletOpen} openSignup={openSignup}/>   
-        <Signup onClose={onCloseSignUp} open={signupOpen} handleAlert={handleAlert}/>
+        <ConnectWallet 
+          onClose={onCloseWallet} 
+          open={walletOpen} 
+          openSignup={openSignup} 
+          cbUrl={location.pathname}
+          notifyConnectionStatus={notifyConnectionStatus}
+          />   
+        <Signup 
+          onClose={onCloseSignUp} 
+          open={signupOpen} 
+          handleAlert={handleAlert} 
+          cbUrl={location.pathname}
+          notifyConnectionStatus={notifyConnectionStatus}
+          />
     </Box>  
   )
 }

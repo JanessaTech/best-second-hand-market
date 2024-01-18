@@ -3,13 +3,19 @@ import React, { memo, useState } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import ByLikeView from './ByLikeView'
 
-const BuyOrCart = ({openCart}) => {
+const BuyOrCart = ({openCart, notifyConnectionStatus, openWallet}) => {
   const [inCart, setInCart] = useState(false)
 
   const handleCart = () => {
-    console.log('[BuyOrCart]call restful to add to cart then open the cart')
-    setInCart(!inCart)
-    openCart()
+    const isConnected = localStorage.getItem('isConnected')
+    if (isConnected) {
+      console.log('[BuyOrCart]call restful to add to cart then open the cart')
+      setInCart(!inCart)
+      openCart()
+    } else {
+      openWallet()
+    }
+    
   }
 
   return (

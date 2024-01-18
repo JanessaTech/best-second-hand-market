@@ -1,14 +1,37 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { Box, Grid, useMediaQuery, Paper, styled} from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import {headerHeight} from '../../common/constant'
 import BuyOrCart from './BuyOrCart';
 import NFTDetails from './NFTDetails';
 import Comments from './comments/Comments';
+import { useLocation } from 'react-router-dom';
+import ConnectWallet from '../wallet/ConnectWallet';
+import Signup from '../wallet/Signup';
 
-export default function NFTHome({openCart}) {
+export default function NFTHome({openCart, notifyConnectionStatus, handleAlert}) {
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+    const location = useLocation()
+
+    const [walletOpen, setWalletOpen] = useState(false)
+    const [signupOpen, setSignupOpen] = useState(false)
+    const onCloseWallet = useCallback(() => {
+      setWalletOpen(false)
+    }, [walletOpen])
+  
+    const openWallet = useCallback(() => {
+      setWalletOpen(true)
+    }, [walletOpen])
+  
+    const onCloseSignUp = useCallback(() => {
+      setSignupOpen(false)
+    }, [signupOpen])
+  
+    const openSignup = useCallback(() => {
+      setSignupOpen(true)
+    }, [signupOpen])
+    
 
   return (
     <Box sx={{mb: 8, mx: isSmallScreen ? 0 : 2, width:1}}>
@@ -22,9 +45,23 @@ export default function NFTHome({openCart}) {
                     </Box>
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <BuyOrCart openCart={openCart}/>
+                    <BuyOrCart openCart={openCart} notifyConnectionStatus={notifyConnectionStatus} openWallet={openWallet}/>
                 </Grid>
             </Grid>
+            <ConnectWallet 
+            onClose={onCloseWallet} 
+            open={walletOpen} 
+            openSignup={openSignup} 
+            cbUrl={location.pathname}
+            notifyConnectionStatus={notifyConnectionStatus}
+            />
+            <Signup 
+            onClose={onCloseSignUp} 
+            open={signupOpen} 
+            handleAlert={handleAlert} 
+            cbUrl={location.pathname}
+            notifyConnectionStatus={notifyConnectionStatus}
+            /> 
         </Box>      
     </Box>
   )

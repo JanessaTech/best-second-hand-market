@@ -1,5 +1,5 @@
 import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material'
-import React, { memo, useCallback, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import {headerHeight} from './constant'
 import { CheapIcon } from '../utils/Svgs'
@@ -7,14 +7,20 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu';
 import { Link } from 'react-router-dom';
 
-const Header = ({openCart}) => {
+const Header = ({openCart, isConnected}) => {
+    console.log('rendering Header ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
     const [search, setSearch] = useState('')
-    const [isLogin, setIsLogin]  = useState(false)
+    const [isLogin, setIsLogin]  = useState(isConnected)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [anchorEl, setAnchorEl] =  React.useState(null)
+
+    useEffect(() => {
+        console.log('header is updated, isConnected = ', isConnected)
+        setIsLogin(isConnected)
+    }, [isConnected])
 
     const handleSearchChanges = (e) => {
         e.preventDefault()

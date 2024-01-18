@@ -21,23 +21,8 @@ export default function Home() {
     const [menuOpen, setMenuOpen] = useState(isMediumScreen ? false: true)
     const [cartOpen, setCartOpen] = useState(false)
     const [trigger, setTrigger] = useState(0)
-
+    const [isConnected, setIsConnected] = useState(localStorage.getItem('isConnected') ? true : false)
     const [state, setState] = useState({alerts: []})
-    
-    const handleAlert = useCallback((severity, message) => {
-        const newAlert = []
-        newAlert.push({id: alertCnt.current, severity: severity, message: message})
-        alertCnt.current = alertCnt.current + 1
-        setState({...state, alerts: [...state.alerts, ...newAlert]})
-    }, [state.alerts])
-
-    const clearAlerts = () => {
-        setState({...state, alerts:[]})
-    }
-
-    const notifyFilterChanges = useCallback((newTrigger) => {
-        setTrigger(newTrigger)
-    },[trigger])
 
     useEffect(() => {
         if (!isMediumScreen) {
@@ -48,6 +33,29 @@ export default function Home() {
             setMenuWidth(0)
         }
     }, [isMediumScreen])
+
+    const notifyConnectionStatus = () => {
+        setIsConnected(localStorage.getItem('isConnected') ? true : false)
+    }
+    
+    const handleAlert = useCallback((alerts) => {
+        const newAlerts = []
+        for (var i = 0; i < alerts.length; i++) {
+            newAlerts.push({id: alertCnt.current, severity: alerts[i].severity, message: alerts[i].message})
+            alertCnt.current = alertCnt.current + 1
+        }
+        setState({...state, alerts: [...state.alerts, ...newAlerts]})
+    }, [state.alerts])
+
+    const clearAlerts = () => {
+        setState({...state, alerts:[]})
+    }
+
+    const notifyFilterChanges = useCallback((newTrigger) => {
+        setTrigger(newTrigger)
+    },[trigger])
+
+    
     
     const closeMenu = useCallback(() => {
         setMenuOpen(false)
@@ -75,9 +83,16 @@ export default function Home() {
   return (
     <Container maxWidth='false'>
         <Box sx={{ display: 'flex' }}>
-            <Header openCart={openCart}/>
+            <Header openCart={openCart} isConnected={isConnected}/>
             <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} notifyFilterChanges={notifyFilterChanges} handleAlert={handleAlert}/>
-            <NFTGallery menuOpen={menuOpen} toggleMenu={toggleMenu} trigger={trigger} notifyFilterChanges={notifyFilterChanges} handleAlert={handleAlert}/>
+            <NFTGallery 
+                menuOpen={menuOpen} 
+                toggleMenu={toggleMenu} 
+                trigger={trigger} 
+                notifyFilterChanges={notifyFilterChanges} 
+                handleAlert={handleAlert}
+                notifyConnectionStatus={notifyConnectionStatus}
+                />
             <Cart toggleCart={toggleCart} open={cartOpen}/>
         </Box>
         <Box>

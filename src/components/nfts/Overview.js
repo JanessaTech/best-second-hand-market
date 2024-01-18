@@ -21,13 +21,17 @@ export default function Overview({handleAlert, openWallet}) {
 
   const toggleCart = (e) => {
     e.preventDefault()
-    if(!state.inCart){
-      handleAlert('success', 'Added to shopping cart')
-    } else{
-      handleAlert('success', 'Removed from shopping cart')
-    }
-    setState({...state, inCart: !state.inCart})
-    openWallet()
+    const isConnected = localStorage.getItem('isConnected')
+    if (!isConnected) {
+      openWallet()
+    } else {
+      if(!state.inCart){
+        handleAlert([{severity: 'success', message: 'Added to shopping cart'}])
+      } else{
+        handleAlert([{severity: 'success', message: 'Removed from shopping cart'}])
+      }
+      setState({...state, inCart: !state.inCart})
+    } 
   }
 
   const handleBuyNow = (e) => {
