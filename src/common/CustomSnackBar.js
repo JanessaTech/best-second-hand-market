@@ -31,7 +31,7 @@ export default function CustomSnackBar(props) {
 
     return (
         <Fade in={fadeIn} timeout={timeout}>
-                <Box sx={{position:'fixed', zIndex:1, top:80, right:0}}>
+                <Box sx={{position:'fixed', zIndex:1301, top:80, right:0}}>
                     {alerts && alerts.length > 0 && 
                         <Box sx={{display:'flex', justifyContent:'end'}}>
                             <Tooltip title="Clear all" placement="right">

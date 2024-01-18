@@ -87,7 +87,7 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleA
           </Grid>
         </Box>
         <ConnectWallet onClose={onCloseWallet} open={walletOpen} openSignup={openSignup}/>   
-        <Signup onClose={onCloseSignUp} open={signupOpen}/>
+        <Signup onClose={onCloseSignUp} open={signupOpen} handleAlert={handleAlert}/>
     </Box>  
   )
 }

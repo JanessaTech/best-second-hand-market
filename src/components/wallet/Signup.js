@@ -20,8 +20,8 @@ const VisuallyHiddenInput = styled('input')({
   });
 
 const Signup = (props) => {
-    const {onClose, open, ...others} = props
-    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    const {onClose, open, handleAlert,...others} = props
+    const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
     })
 
@@ -32,7 +32,16 @@ const Signup = (props) => {
     })
 
     useEffect(() => {
-
+        console.log('[Signup.errors]:', errors)
+        if (errors?.name) {
+            handleAlert('error', errors?.max?.message)
+        }
+        if(errors?.checked) {
+            handleAlert('error', errors?.checked?.message)
+        }
+        if(errors?.introduction) {
+            handleAlert('error', errors?.introduction?.message)
+        }
     }, [errors])
 
     const handleClose = () => {
@@ -45,7 +54,7 @@ const Signup = (props) => {
     }
 
     const handleSignup = (data) => {
-        console.log(data)
+        console.log('data:', data)
 
     }
 
@@ -56,10 +65,9 @@ const Signup = (props) => {
     }
 
     const handleCheckBoxChange = (e) => {
+        console.log('handleCheckBoxChange')
         setState({...state, 'checked': !state.checked})
     }
-
-    console.log('Signup state:', state)
 
     return (
         <Dialog  
@@ -124,11 +132,8 @@ const Signup = (props) => {
                         onChange={handleInputChanges}
                         />
                     <FormControlLabel
-                        value={state.checked}
-                        control={<Checkbox />}
+                        control={<Checkbox {...register('checked')} checked={state.checked} name='checked' onChange={handleCheckBoxChange}/>}
                         label={<Typography color='text.secondary' variant='body2'>I have read and accept the <Link href="#" sx={{color:'primary.main'}}>Term of Service</Link> and the <Link href="#" sx={{color:'primary.main'}}>Term of Creator</Link> and confirm that I am at least 13 years old</Typography>}
-                        name='checked'
-                        onChange={handleCheckBoxChange}
                     />
                     
                     <Box sx={{display:'flex', flexDirection:'column'}}>
