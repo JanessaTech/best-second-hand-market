@@ -39,7 +39,7 @@ const Comments = ({user})=> {
   return (
     <Box>
         <Typography>3 comments</Typography>
-        <AddComment user={user}/>
+        { user && <AddComment user={user}/>}
         {
           data.map((c) => (
           <OneComment key={c.id} deep={1} comment={c} user={user}/>

@@ -125,7 +125,7 @@ const Header = ({openCart, isConnected, user}) => {
                             aria-expanded={isProfileOpen ? 'true' : undefined}
                             onClick={handleProfileMenuOpen}
                             >
-                                <Avatar alt={user?.name} src={`imgs/nfters/${user?.id}/me.png`}/>
+                                <Avatar alt={user?.name} src={`/imgs/nfters/${user?.id}/me.png`}/>
                     </IconButton>
                     
                     <ProfileMenu user={user} anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose}/>

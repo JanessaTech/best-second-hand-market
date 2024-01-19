@@ -7,6 +7,7 @@ import Overview from '../nfts/Overview'
 import ConnectWallet from '../wallet/ConnectWallet'
 import Signup from '../wallet/Signup'
 import { useLocation } from 'react-router-dom'
+import { GlobalVariables } from '../MainLayout'
 
 function getFilter() {
   let filter = localStorage.getItem('filter')
@@ -17,11 +18,15 @@ function getFilter() {
 }
 
 const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleAlert, notifyConnectionStatus}) => {
+  //const NFTGallery = () => {
   console.log('NFTGallery rendering ...')
+
+  //const {menuOpen, toggleMenu, trigger, notifyFilterChanges, handleAlert, notifyConnectionStatus} = React.useContext(GlobalVariables)
+
   const theme = useTheme()
   const location = useLocation()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-  const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
+  //const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
 
   const [walletOpen, setWalletOpen] = useState(false)
   const [signupOpen, setSignupOpen] = useState(false)
@@ -48,9 +53,7 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleA
   }, [trigger])
 
   return (
-    <Box component="main" 
-        sx={{ width: menuOpen && !isMediumScreen ? `calc(100% - ${drawerWidth}px)` : 1, 
-            }}>
+    <Box component="main">
         <Box sx={{width:1, height: headerHeight + filterBarHeight}}></Box>
         <FilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterChanges={notifyFilterChanges}/>
         <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>

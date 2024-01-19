@@ -29,7 +29,7 @@ const OneComment = ({deep, comment, user}) => {
                   </Box>
                   <Box sx={{mt:1}}>
                     <Typography>{comment?.content}
-                      {deep === 1 && <Button sx={{ml:2, borderRadius:'50vh', textTransform:'none'}} 
+                      {deep === 1 && user && <Button sx={{ml:2, borderRadius:'50vh', textTransform:'none'}} 
                                              color='customBlack' variant='contained'
                                              onClick={toggleReply}>
                                         <Typography variant='body2'>{state.cancelReply ? 'Reply' : 'Cancel reply'}</Typography>

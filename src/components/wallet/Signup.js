@@ -46,7 +46,10 @@ const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => 
         if(errors?.introduction) {
             alerts.push({severity: 'error', message: errors?.introduction?.message})
         }
-        handleAlert(alerts)
+        if(alerts.length > 0) {
+            console.log('sending alerts = ', alerts)
+            handleAlert(alerts)
+        }    
     }, [errors])
 
     const handleClose = () => {

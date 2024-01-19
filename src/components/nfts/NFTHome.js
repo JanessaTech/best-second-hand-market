@@ -9,11 +9,11 @@ import { useLocation } from 'react-router-dom';
 import ConnectWallet from '../wallet/ConnectWallet';
 import Signup from '../wallet/Signup';
 
-export default function NFTHome({openCart, notifyConnectionStatus, handleAlert}) {
+export default function NFTHome({user, openCart, notifyConnectionStatus, handleAlert}) {
+    console.log("NFTHome rendering ...")
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const location = useLocation()
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
 
     const [walletOpen, setWalletOpen] = useState(false)
     const [signupOpen, setSignupOpen] = useState(false)
@@ -32,8 +32,6 @@ export default function NFTHome({openCart, notifyConnectionStatus, handleAlert})
     const openSignup = useCallback(() => {
       setSignupOpen(true)
     }, [signupOpen])
-    
-
   return (
     <Box sx={{mb: 8, mx: isSmallScreen ? 0 : 2, width:1}}>
         <Box sx={{width:1, height: headerHeight}}></Box>
@@ -53,14 +51,14 @@ export default function NFTHome({openCart, notifyConnectionStatus, handleAlert})
             onClose={onCloseWallet} 
             open={walletOpen} 
             openSignup={openSignup} 
-            cbUrl={location.pathname}
+            cbUrl={`${location.pathname}${location.search}`}
             notifyConnectionStatus={notifyConnectionStatus}
             />
             <Signup 
             onClose={onCloseSignUp} 
             open={signupOpen} 
             handleAlert={handleAlert} 
-            cbUrl={location.pathname}
+            cbUrl={`${location.pathname}${location.search}`}
             notifyConnectionStatus={notifyConnectionStatus}
             /> 
         </Box>      

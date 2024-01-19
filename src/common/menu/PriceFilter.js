@@ -89,7 +89,7 @@ const PriceFilter = ({notify, handleAlert}) => {
     }
 
     useEffect(() => {
-        let alerts = {}
+        let alerts = []
 
         if (errors?.max) {
             alerts.push({severity: 'error', message: errors?.max?.message})
@@ -97,7 +97,9 @@ const PriceFilter = ({notify, handleAlert}) => {
         if(errors?.min) {
             alerts.push({severity: 'error', message: errors?.min?.message})
         }
-        handleAlert(alerts)
+        if (alerts.length > 0) {
+            handleAlert(alerts)
+        } 
     }, [errors])
 
   return (
