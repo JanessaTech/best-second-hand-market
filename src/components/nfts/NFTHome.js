@@ -13,6 +13,7 @@ export default function NFTHome({openCart, notifyConnectionStatus, handleAlert})
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const location = useLocation()
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
 
     const [walletOpen, setWalletOpen] = useState(false)
     const [signupOpen, setSignupOpen] = useState(false)
@@ -41,11 +42,11 @@ export default function NFTHome({openCart, notifyConnectionStatus, handleAlert})
                 <Grid item xs={isSmallScreen ? 12 : 7}>
                     <Box sx={{mr:5}}>
                         <NFTDetails/>
-                        <Comments/>
+                        <Comments user={user}/>
                     </Box>
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <BuyOrCart openCart={openCart} notifyConnectionStatus={notifyConnectionStatus} openWallet={openWallet}/>
+                    <BuyOrCart user={user} openCart={openCart} openWallet={openWallet}/>
                 </Grid>
             </Grid>
             <ConnectWallet 

@@ -57,6 +57,7 @@ const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => 
         reset()
         setState({...state, 'name': '', introduction:'', checked: false} )
         localStorage.removeItem('isConnected')
+        localStorage.removeItem('user')
         onClose()
         notifyConnectionStatus()
         navigate(cbUrl)
@@ -66,7 +67,10 @@ const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => 
         console.log('data:', data)
         console.log('call restful api to signup ...')
         onClose()
+
+        const user = {id: 111, name: 'JanessaTech lab'}
         localStorage.setItem('isConnected', 'true')
+        localStorage.setItem('user', JSON.stringify(user))
         notifyConnectionStatus()
         navigate(cbUrl)
     }

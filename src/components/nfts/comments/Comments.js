@@ -5,25 +5,22 @@ import OneComment from './OneComment'
 
 const data = [
   {
-    id : 1, 
-    img: 'p1.png', 
-    commenterId:1111, 
+    id : 2, 
+    commenterId:222, 
     commenterName: 'Lesfiya', 
     createdTime: '1 day ago', 
     content: 'Hi, Janessa, are you availble? it looks nice, could you make it cheaper?Hi, Janessa, are you availble? it looks nice, could you make it cheaper?',
     repliedComments: [
       {
-        id : 2, 
-        img: 'p2.png',
-        commenterId:2222, 
+        id : 3, 
+        commenterId:333, 
         commenterName: 'Tony', 
         createdTime: '1 day ago', 
         content: 'god'
       },
       {
-        id : 3, 
-        img: 'p3.png', 
-        commenterId:3333, 
+        id : 4, 
+        commenterId:444, 
         commenterName: 'Jonha', 
         createdTime: '1 day ago', 
         content: 'nice'
@@ -31,22 +28,21 @@ const data = [
     ],
   },
   {
-    id : 4, 
-    img: 'p4.png', 
-    commenterId:4444, 
+    id : 5, 
+    commenterId:555, 
     commenterName: 'Tooxxx', 
     createdTime: '4 days ago', 
     content: 'Hi, JanessaTech lab'
   }
 ]
-const Comments = ()=> {
+const Comments = ({user})=> {
   return (
     <Box>
         <Typography>3 comments</Typography>
-        <AddComment/>
+        <AddComment user={user}/>
         {
           data.map((c) => (
-          <OneComment key={c.id} deep={1} comment={c}/>
+          <OneComment key={c.id} deep={1} comment={c} user={user}/>
           ))
         }
     </Box>

@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, TextField } from '@mui/material'
 import React, { memo, useState } from 'react'
 
-const AddComment = ({nfterId, isReply, handleCancelReply}) => {
+const AddComment = ({user, isReply, handleCancelReply}) => {
     const [state, setState] = useState({
         comment: '',
         cancled: false,
@@ -32,7 +32,7 @@ const AddComment = ({nfterId, isReply, handleCancelReply}) => {
 
   return (
     <Box sx={{display:'flex', mt:1}}>
-        <Avatar alt="Remy Sharp" src="imgs/nfters/me.png" sx={{width: profileSize, height: profileSize}}/>
+        <Avatar alt="Remy Sharp" src={`/imgs/nfters/${user?.id}/me.png`} sx={{width: profileSize, height: profileSize}}/>
         <Box sx={{width: 1, ml:2}}>
             <TextField 
                 id="cheap-addcomment-input" 

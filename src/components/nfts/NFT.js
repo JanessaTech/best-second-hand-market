@@ -13,6 +13,7 @@ export default function NFT() {
     const [id, setId] = useState(parseInt(searchParams.get('id')))
     const [cartOpen, setCartOpen] = useState(false)
     const [isConnected, setIsConnected] = useState(localStorage.getItem('isConnected') ? true : false)
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
 
     const alertCnt = useRef(0)
     const [state, setState] = useState({alerts: []})
@@ -30,7 +31,12 @@ export default function NFT() {
     }
 
     const notifyConnectionStatus = () => {
-        setIsConnected(localStorage.getItem('isConnected') ? true : false)
+        const isConnected = localStorage.getItem('isConnected') ? true : false
+        setIsConnected(isConnected)
+        if (isConnected) {
+            const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : undefined
+            setUser(user)
+        }
     }
 
     const openCart = useCallback(() => {
@@ -46,7 +52,7 @@ export default function NFT() {
   return (
     <Container maxWidth='false'>
         <Box sx={{ display: 'flex' }}>
-            <Header openCart={openCart} isConnected={isConnected}/>
+            <Header openCart={openCart} isConnected={isConnected} user={user}/>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
             <NFTHome openCart={openCart} notifyConnectionStatus={notifyConnectionStatus} handleAlert={handleAlert}/>
         </Box>

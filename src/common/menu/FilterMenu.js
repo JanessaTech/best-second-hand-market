@@ -39,10 +39,9 @@ const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges, handleAler
             <Box sx={{display:'flex', justifyContent:'end'}}>
               <Tooltip title='Hide filter'>
                   <IconButton onClick={closeMenu}>
-                    <CheapIcon name={'close'}/>
+                      <CheapIcon name={'close'}/>
                   </IconButton>
-              </Tooltip>
-              
+              </Tooltip>             
             </Box>
             <Box sx={{mx:3}}>
                 <NetworkFilter notify={notify}/>

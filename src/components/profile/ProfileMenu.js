@@ -1,8 +1,9 @@
 import { Avatar, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
 import React, { memo } from 'react'
+import { Link } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 
-const ProfileMenu = ({anchorEl, open, handleProfileMenuClose}) => {
+const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose}) => {
     const handleClose = (e) => {
         handleProfileMenuClose()
     }
@@ -26,7 +27,7 @@ const ProfileMenu = ({anchorEl, open, handleProfileMenuClose}) => {
     >
         <MenuItem>
           <ListItemIcon>
-            <Avatar alt='JanessaTech lab' src='imgs/nfters/me.png' sx={{ width: 25, height: 25 }}/>
+            <Avatar alt='JanessaTech lab' src={`imgs/nfters/${user?.id}/me.png`} sx={{ width: 25, height: 25 }}/>
           </ListItemIcon>
           <ListItemText>My NFTs</ListItemText>
         </MenuItem>
@@ -54,7 +55,7 @@ const ProfileMenu = ({anchorEl, open, handleProfileMenuClose}) => {
           </ListItemIcon>
           <ListItemText>Notifications</ListItemText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={Link} to="/profile/setting">
           <ListItemIcon>
               <CheapIcon name={'my-setting'} size={25}/>
           </ListItemIcon>

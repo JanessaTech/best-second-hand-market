@@ -60,7 +60,9 @@ const ConnectWallet = ({onClose, open, openSignup, cbUrl, notifyConnectionStatus
         if (!isRegistered) {
             openSignup()
         } else {
+            const user = {id: 111, name: 'JanessaTech lab'}
             localStorage.setItem('isConnected', 'true')
+            localStorage.setItem('user', JSON.stringify(user))
             console.log('isConnected is set as true, notify header')
             notifyConnectionStatus()
             navigate(cbUrl)

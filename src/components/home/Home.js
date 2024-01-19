@@ -22,6 +22,7 @@ export default function Home() {
     const [cartOpen, setCartOpen] = useState(false)
     const [trigger, setTrigger] = useState(0)
     const [isConnected, setIsConnected] = useState(localStorage.getItem('isConnected') ? true : false)
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
     const [state, setState] = useState({alerts: []})
 
     useEffect(() => {
@@ -35,7 +36,12 @@ export default function Home() {
     }, [isMediumScreen])
 
     const notifyConnectionStatus = () => {
-        setIsConnected(localStorage.getItem('isConnected') ? true : false)
+        const isConnected = localStorage.getItem('isConnected') ? true : false
+        setIsConnected(isConnected)
+        if (isConnected) {
+            const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : undefined
+            setUser(user)
+        }
     }
     
     const handleAlert = useCallback((alerts) => {
@@ -83,7 +89,7 @@ export default function Home() {
   return (
     <Container maxWidth='false'>
         <Box sx={{ display: 'flex' }}>
-            <Header openCart={openCart} isConnected={isConnected}/>
+            <Header openCart={openCart} isConnected={isConnected} user={user}/>
             <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} notifyFilterChanges={notifyFilterChanges} handleAlert={handleAlert}/>
             <NFTGallery 
                 menuOpen={menuOpen} 

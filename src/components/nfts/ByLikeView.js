@@ -1,11 +1,11 @@
 import React, { memo, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
-import { Box, IconButton, Typography, useMediaQuery, Popper, Link } from '@mui/material'
+import { Box, IconButton, Typography, useMediaQuery, Link } from '@mui/material'
 import { CheapIcon } from '../../utils/Svgs'
 import NfterOverview from '../nfters/NfterOverview'
 import CustomPopper from '../../common/CustomPopper'
 
-const ByLikeView = ({nftId}) => {
+const ByLikeView = ({user}) => {
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const [isLike, setIsLike] = useState(false)
@@ -36,7 +36,7 @@ const ByLikeView = ({nftId}) => {
                 onMouseOver={openOverview}
                 onMouseLeave={closeOverview}
                 >
-                    <Link href='/nfters?id=111' 
+                    <Link href={`/nfters?id=3333`} 
                         sx={{
                             '&:hover':{color:'primary.main'},
                             '&:active':{color:'primary.dark'}

@@ -7,8 +7,9 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu';
 import { Link } from 'react-router-dom';
 
-const Header = ({openCart, isConnected}) => {
+const Header = ({openCart, isConnected, user}) => {
     console.log('rendering Header ...')
+    console.log('user:', user)
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -58,7 +59,7 @@ const Header = ({openCart, isConnected}) => {
         <Box sx={{display: 'flex', alignItems: 'center', justifyContent:'space-between'}}>
             <Box sx={{display: 'flex', alignItems: 'center'}}>
                 <IconButton sx={{pl:0}} component={Link} to='/'>
-                    <Avatar alt='Cheap' src='/imgs/handshake.svg' sx={{ width:60, height:60}}/>
+                    <Avatar alt='Cheap' src='/imgs/header/handshake.svg' sx={{ width:60, height:60}}/>
                 </IconButton>
                 <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Cheap</Typography>
             </Box>
@@ -124,10 +125,10 @@ const Header = ({openCart, isConnected}) => {
                             aria-expanded={isProfileOpen ? 'true' : undefined}
                             onClick={handleProfileMenuOpen}
                             >
-                                <Avatar alt='JanessaTech lab' src='imgs/nfters/me.png'/>
+                                <Avatar alt={user?.name} src={`imgs/nfters/${user?.id}/me.png`}/>
                     </IconButton>
                     
-                    <ProfileMenu anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose}/>
+                    <ProfileMenu user={user} anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose}/>
                     <IconButton sx={{
                         [theme.breakpoints.down('md')]:{display:'none'},
                         '&:hover':{backgroundColor:'grey'}

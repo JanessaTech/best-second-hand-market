@@ -3,7 +3,7 @@ import React, { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AddComment from './AddComment'
 
-const OneComment = ({deep, comment}) => {
+const OneComment = ({deep, comment, user}) => {
   const profileSize = deep === 1 ?  40 : 30
   const [state, setState] = useState({
     cancelReply: true
@@ -20,7 +20,7 @@ const OneComment = ({deep, comment}) => {
         return (
           <Box sx={{mt:2, display:'flex'}}>
               <IconButton sx={{p:0, height:profileSize}} component={Link} to={`/nfters?id=${comment.commenterId}`}>
-                  <Avatar alt='' src={`imgs/nfters/${comment?.img}`} sx={{width: profileSize, height: profileSize}}/>
+                  <Avatar alt='' src={`imgs/nfters/${comment?.commenterId}/me.png`} sx={{width: profileSize, height: profileSize}}/>
               </IconButton>
               <Box sx={{ml:2, width: `calc(100% - ${profileSize + 16}px)`}}>
                   <Box sx={{display:'flex', alignItems:'center'}}>
@@ -36,7 +36,7 @@ const OneComment = ({deep, comment}) => {
                                      </Button>
                       }
                     </Typography>
-                    {!state.cancelReply && <AddComment isReply={true} handleCancelReply={handleCancelReply}/>}
+                    {!state.cancelReply && <AddComment isReply={true} handleCancelReply={handleCancelReply} user={user}/>}
                     { comment?.repliedComments && 
                       <Box>
                         {

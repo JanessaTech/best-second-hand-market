@@ -82,6 +82,7 @@ export default function FilterBar({menuOpen, toggleMenu, notifyFilterChanges}) {
       setAgo(newAgo)
       localStorage.removeItem('filter')
       localStorage.removeItem('isConnected')
+      localStorage.removeItem('user')
     }
     
   return (

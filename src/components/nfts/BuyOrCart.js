@@ -3,7 +3,7 @@ import React, { memo, useState } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import ByLikeView from './ByLikeView'
 
-const BuyOrCart = ({openCart, notifyConnectionStatus, openWallet}) => {
+const BuyOrCart = ({user, openCart, openWallet}) => {
   const [inCart, setInCart] = useState(false)
 
   const handleCart = () => {
@@ -15,7 +15,6 @@ const BuyOrCart = ({openCart, notifyConnectionStatus, openWallet}) => {
     } else {
       openWallet()
     }
-    
   }
 
   return (
@@ -27,7 +26,7 @@ const BuyOrCart = ({openCart, notifyConnectionStatus, openWallet}) => {
           src='imgs/nfts/mk.png'
         >
         </Box>
-        <ByLikeView/>
+        <ByLikeView user={user}/>
         <Box sx={{mt:1, display: 'flex', justifyContent:'center'}}>
           <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0, mr:4}} 
                   color='customBlack' 
