@@ -36,6 +36,7 @@ const data = [
   }
 ]
 const Comments = ({user})=> {
+  console.log('Comments rendering')
   return (
     <Box>
         <Typography>3 comments</Typography>

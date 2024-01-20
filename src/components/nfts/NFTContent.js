@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom'
 
 export default function NFTContent() {
     console.log('NFTContent rendering ....')
-    const {user, openCart, handleAlert, notifyConnectionStatus} = React.useContext(GlobalVariables)
+    const {user, openCart, handleAlert, notifyConnectionStatus, openWallet} = React.useContext(GlobalVariables)
     const [searchParams, setSearchParams] = useSearchParams();
     const [id, setId] = useState(parseInt(searchParams.get('id')))
 
@@ -14,7 +14,7 @@ export default function NFTContent() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-            <NFTHome user={user} openCart={openCart} notifyConnectionStatus={notifyConnectionStatus} handleAlert={handleAlert}/>
+            <NFTHome user={user} openCart={openCart} openWallet={openWallet}/>
     </Box>
   )
 }

@@ -43,6 +43,7 @@ const WalletItem = (props) => {
 }
 
 const ConnectWallet = ({onClose, open, openSignup, cbUrl, notifyConnectionStatus}) => {
+    console.log('ConnectWallet rendering ')
     const theme = useTheme()
     const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))

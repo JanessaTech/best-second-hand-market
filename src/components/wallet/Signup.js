@@ -21,6 +21,7 @@ const VisuallyHiddenInput = styled('input')({
   });
 
 const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => {
+    console.log('Signup rendering ')
     const navigate = useNavigate()
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
@@ -47,7 +48,7 @@ const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => 
             alerts.push({severity: 'error', message: errors?.introduction?.message})
         }
         if(alerts.length > 0) {
-            console.log('sending alerts = ', alerts)
+            console.log('[Signup]sending alerts = ', alerts)
             handleAlert(alerts)
         }    
     }, [errors])

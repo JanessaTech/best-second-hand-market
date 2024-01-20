@@ -4,10 +4,6 @@ import { Box, Grid, useMediaQuery } from '@mui/material'
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
 import Overview from '../nfts/Overview'
-import ConnectWallet from '../wallet/ConnectWallet'
-import Signup from '../wallet/Signup'
-import { useLocation } from 'react-router-dom'
-import { GlobalVariables } from '../MainLayout'
 
 function getFilter() {
   let filter = localStorage.getItem('filter')
@@ -17,36 +13,11 @@ function getFilter() {
   return {}
 }
 
-const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleAlert, notifyConnectionStatus}) => {
-  //const NFTGallery = () => {
+const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleAlert, openWallet}) => {
   console.log('NFTGallery rendering ...')
-
-  //const {menuOpen, toggleMenu, trigger, notifyFilterChanges, handleAlert, notifyConnectionStatus} = React.useContext(GlobalVariables)
-
   const theme = useTheme()
-  const location = useLocation()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-  //const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
-
-  const [walletOpen, setWalletOpen] = useState(false)
-  const [signupOpen, setSignupOpen] = useState(false)
-
-  const onCloseWallet = useCallback(() => {
-    setWalletOpen(false)
-  }, [walletOpen])
-
-  const openWallet = useCallback(() => {
-    setWalletOpen(true)
-  }, [walletOpen])
-
-  const onCloseSignUp = useCallback(() => {
-    setSignupOpen(false)
-  }, [signupOpen])
-
-  const openSignup = useCallback(() => {
-    setSignupOpen(true)
-  }, [signupOpen])
-
+  
   useEffect(() => {
     const latestFilter = getFilter()
     console.log('[NFTGallery.trigger] fetch data based on latestFilter:', latestFilter)
@@ -90,7 +61,7 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleA
             </Grid>
           </Grid>
         </Box>
-        <ConnectWallet 
+        {/* <ConnectWallet 
           onClose={onCloseWallet} 
           open={walletOpen} 
           openSignup={openSignup} 
@@ -103,7 +74,7 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleA
           handleAlert={handleAlert} 
           cbUrl={location.pathname}
           notifyConnectionStatus={notifyConnectionStatus}
-          />
+          /> */}
     </Box>  
   )
 }

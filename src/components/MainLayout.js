@@ -9,6 +9,8 @@ import Cart from '../common/Cart'
 import CustomSnackBar from '../common/CustomSnackBar'
 import {drawerWidth} from '../common/constant'
 import CheapBottomNavigation from '../common/BottomNavigation'
+import ConnectWallet from './wallet/ConnectWallet'
+import Signup from './wallet/Signup'
 
 const GlobalVariables = React.createContext({})
 export {GlobalVariables}
@@ -20,14 +22,17 @@ export default function MainLayout() {
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
     const alertCnt = useRef(0)
 
+    const [cartOpen, setCartOpen] = useState(false)
+    const [walletOpen, setWalletOpen] = useState(false)
+    const [signupOpen, setSignupOpen] = useState(false)
+
     const [state, setState] = useState({
         isConnected: localStorage.getItem('isConnected') ? true : false,
         user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined,
         menuOpen: isMediumScreen ? false: true,
         menuWidth: drawerWidth,
-        cartOpen: false,
         alerts: [],
-        trigger: 0 // to notify the changes of filter options
+        trigger: 0, // to notify the changes of filter options
     })
 
     const notifyConnectionStatus = () => {    
@@ -56,7 +61,7 @@ export default function MainLayout() {
     },[state.trigger, state.isConnected])
 
     const closeMenu = useCallback(() => {
-        setState({...state, menuOpen: false, menuWidth: 0})}, [])
+        setState({...state, menuOpen: false, menuWidth: 0})}, [state.menuOpen, state.isConnected])
 
     const toggleMenu = useCallback(() => {
         console.log('toggleMenu is clicked')
@@ -68,16 +73,32 @@ export default function MainLayout() {
     }, [state.menuOpen, state.isConnected])
 
     const toggleCart = useCallback(() => {
-        setState({...state, cartOpen: !state.cartOpen})
-    }, [state.cartOpen, state.isConnected])
+        setCartOpen(!cartOpen)
+    }, [cartOpen])
 
-    const openCart = () => {
-        setState({...state, cartOpen: true})
-    }
+    const openCart = useCallback(() => {
+        setCartOpen(true)
+    }, [cartOpen])
 
     const clearAlerts = () => {
         setState({...state, alerts:[]})
     }
+
+    const onCloseWallet = useCallback(() => {
+        setWalletOpen(false)
+    }, [walletOpen])
+
+    const openWallet = useCallback(() => {
+        setWalletOpen(true)
+    }, [walletOpen])
+
+    const onCloseSignUp = useCallback(() => {
+        setSignupOpen(false)
+    }, [signupOpen])
+
+    const openSignup = useCallback(() => {
+        setSignupOpen(true)
+    }, [signupOpen])
 
     return (
         <Container maxWidth='false'>
@@ -93,17 +114,32 @@ export default function MainLayout() {
                     openCart: openCart,
                     notifyFilterChanges: notifyFilterChanges,
                     handleAlert: handleAlert,
-                    notifyConnectionStatus: notifyConnectionStatus
+                    notifyConnectionStatus: notifyConnectionStatus,
+                    openWallet: openWallet
                     }}>
                 {outlet}
             </GlobalVariables.Provider>
-            <Cart toggleCart={toggleCart} open={state.cartOpen}/>
+            <Cart toggleCart={toggleCart} open={cartOpen}/>
             <Box>
                 {
                     state.alerts && state.alerts.length > 0 && 
                         <CustomSnackBar duration={6000} timeout={1000} alerts={state.alerts} clearAlerts={clearAlerts}/>       
                 }
             </Box>
+            <ConnectWallet
+                onClose={onCloseWallet} 
+                open={walletOpen} 
+                openSignup={openSignup} 
+                cbUrl={`${location.pathname}${location.search}`}
+                notifyConnectionStatus={notifyConnectionStatus}
+            />   
+            <Signup
+                onClose={onCloseSignUp} 
+                open={signupOpen} 
+                handleAlert={handleAlert} 
+                cbUrl={`${location.pathname}${location.search}`}
+                notifyConnectionStatus={notifyConnectionStatus}
+            />
             <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu} isHome={location.pathname === '/'}/>
         </Container>
     )

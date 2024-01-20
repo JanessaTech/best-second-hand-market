@@ -24,6 +24,7 @@ const data = [
   {name: 'Description', value: 'NFTs can really be anything digital (such as drawings, music, your brain downloaded and turned into an AI), but a lot of the current excitement'}
 ]
 const NFTDetails = () => {
+  console.log('NFTDetails rendering')
   return (
     <Box>
         <Typography variant='h6'>A baby monkey</Typography>

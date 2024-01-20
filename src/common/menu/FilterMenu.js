@@ -8,6 +8,7 @@ import NetworkFilter from './NetworkFilter'
 import PriceFilter from './PriceFilter'
 
 const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges, handleAlert}) => {
+  console.log('FilterMenu rendering')
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
   const [drawerType, setDrawerType] = useState(isMediumScreen ? 'temporary': 'persistent')
