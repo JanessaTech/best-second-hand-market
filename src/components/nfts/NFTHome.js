@@ -6,7 +6,7 @@ import BuyOrCart from './BuyOrCart';
 import NFTDetails from './NFTDetails';
 import Comments from './comments/Comments';
 
-export default function NFTHome({user, openCart, openWallet}) {
+export default function NFTHome({user, openCart, notifyWalletOpen}) {
     console.log("NFTHome rendering ...")
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -22,7 +22,7 @@ export default function NFTHome({user, openCart, openWallet}) {
                     </Box>
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <BuyOrCart user={user} openCart={openCart} openWallet={openWallet}/>
+                    <BuyOrCart user={user} openCart={openCart} notifyWalletOpen={notifyWalletOpen}/>
                 </Grid>
             </Grid>
         </Box>      

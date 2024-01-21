@@ -8,6 +8,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export default function CustomSnackBar(props) {
+    console.log('CustomSnackBar rendering ...')
     
     const {duration, timeout, alerts, clearAlerts, ...others} = props
     const [fadeIn, setFadeIn] = useState(alerts && alerts.length > 0 ? true : false)

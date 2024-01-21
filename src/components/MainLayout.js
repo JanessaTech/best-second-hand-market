@@ -25,27 +25,29 @@ export default function MainLayout() {
     const [cartOpen, setCartOpen] = useState(false)
     const [walletOpen, setWalletOpen] = useState(false)
     const [signupOpen, setSignupOpen] = useState(false)
+    const [alerts, setAlerts] = useState([])
+    const [login, setLogin] = useState({
+        isConnected: localStorage.getItem('isConnected') ? true : false, 
+        user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined})
 
     const [state, setState] = useState({
-        isConnected: localStorage.getItem('isConnected') ? true : false,
-        user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined,
         menuOpen: isMediumScreen ? false: true,
         menuWidth: drawerWidth,
-        alerts: [],
         trigger: 0, // to notify the changes of filter options
     })
 
-    const notifyConnectionStatus = () => {    
+    const notifyConnectionStatus = useCallback(() => {    
         const isConnected = localStorage.getItem('isConnected') ? true : false
         console.log('notifyConnectionStatus. isConnected=', isConnected)
         if (isConnected) {
             const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : undefined
-            setState({...state, user: user, isConnected: isConnected})
+            setLogin({isConnected: true, user: user })
         } else {
-            setState({...state, isConnected: isConnected, user: undefined})
+            setLogin({isConnected: false, user: undefined})
         }
-    }
+    }, [login])
     
+    // for alerts
     const handleAlert = useCallback((alerts) => {
         console.log('home layout handleAlert, alerts=', alerts)
         const newAlerts = []
@@ -53,15 +55,19 @@ export default function MainLayout() {
             newAlerts.push({id: alertCnt.current, severity: alerts[i].severity, message: alerts[i].message})
             alertCnt.current = alertCnt.current + 1
         }
-        setState({...state, alerts: [...state.alerts, ...newAlerts]})
-    }, [state.alerts, state.isConnected])
+        setAlerts(newAlerts)
+    }, [alerts])
+
+    const clearAlerts = () => {
+        setAlerts([])
+    }
 
     const notifyFilterChanges = useCallback((newTrigger) => {
         setState({...state, trigger: newTrigger})
-    },[state.trigger, state.isConnected])
+    },[state.trigger])
 
     const closeMenu = useCallback(() => {
-        setState({...state, menuOpen: false, menuWidth: 0})}, [state.menuOpen, state.isConnected])
+        setState({...state, menuOpen: false, menuWidth: 0})}, [state.menuOpen])
 
     const toggleMenu = useCallback(() => {
         console.log('toggleMenu is clicked')
@@ -70,7 +76,7 @@ export default function MainLayout() {
         } else {
             setState({...state, menuOpen: true, menuWidth: drawerWidth})
         }
-    }, [state.menuOpen, state.isConnected])
+    }, [state.menuOpen])
 
     const toggleCart = useCallback(() => {
         setCartOpen(!cartOpen)
@@ -80,18 +86,16 @@ export default function MainLayout() {
         setCartOpen(true)
     }, [cartOpen])
 
-    const clearAlerts = () => {
-        setState({...state, alerts:[]})
-    }
-
+    // for wallet
     const onCloseWallet = useCallback(() => {
         setWalletOpen(false)
-    }, [walletOpen])
+    }, [])
 
-    const openWallet = useCallback(() => {
+    const notifyWalletOpen = useCallback(() => {
         setWalletOpen(true)
-    }, [walletOpen])
+    }, [])
 
+    // for signup
     const onCloseSignUp = useCallback(() => {
         setSignupOpen(false)
     }, [signupOpen])
@@ -102,10 +106,10 @@ export default function MainLayout() {
 
     return (
         <Container maxWidth='false'>
-            <Header openCart={openCart} isConnected={state.isConnected} user={state.user}/>
+            <Header openCart={openCart} isConnected={login.isConnected} user={login.user}/>
             <GlobalVariables.Provider 
                 value={{
-                    user: state.user,
+                    user: login.user,
                     menuWidth: state.menuWidth, 
                     menuOpen: state.menuOpen, 
                     trigger: state.trigger,
@@ -115,15 +119,15 @@ export default function MainLayout() {
                     notifyFilterChanges: notifyFilterChanges,
                     handleAlert: handleAlert,
                     notifyConnectionStatus: notifyConnectionStatus,
-                    openWallet: openWallet
+                    notifyWalletOpen: notifyWalletOpen
                     }}>
                 {outlet}
             </GlobalVariables.Provider>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
             <Box>
                 {
-                    state.alerts && state.alerts.length > 0 && 
-                        <CustomSnackBar duration={6000} timeout={1000} alerts={state.alerts} clearAlerts={clearAlerts}/>       
+                    alerts && alerts.length > 0 && 
+                        <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlerts={clearAlerts}/>       
                 }
             </Box>
             <ConnectWallet

@@ -6,7 +6,7 @@ import { GlobalVariables } from '../MainLayout'
 
 export default function HomeContent() {
     console.log('HomeContent rendering ....')
-    const {menuWidth, menuOpen, trigger, closeMenu, toggleMenu, notifyFilterChanges, handleAlert, notifyConnectionStatus, openWallet} = React.useContext(GlobalVariables)
+    const {menuWidth, menuOpen, trigger, closeMenu, toggleMenu, notifyFilterChanges, handleAlert, notifyWalletOpen} = React.useContext(GlobalVariables)
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -17,7 +17,7 @@ export default function HomeContent() {
                     trigger={trigger} 
                     notifyFilterChanges={notifyFilterChanges} 
                     handleAlert={handleAlert}
-                    openWallet={openWallet}
+                    notifyWalletOpen={notifyWalletOpen}
                 />
         </Box>
     )

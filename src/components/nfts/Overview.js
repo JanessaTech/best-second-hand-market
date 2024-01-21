@@ -2,7 +2,8 @@ import { Box, Link, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import React, { useEffect, useState } from 'react'
 
-export default function Overview({handleAlert, openWallet}) {
+export default function Overview({handleAlert, notifyWalletOpen}) {
+  console.log('Overview rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   
@@ -23,7 +24,7 @@ export default function Overview({handleAlert, openWallet}) {
     e.preventDefault()
     const isConnected = localStorage.getItem('isConnected')
     if (!isConnected) {
-      openWallet()
+      notifyWalletOpen()
     } else {
       if(!state.inCart){
         handleAlert([{severity: 'success', message: 'Added to shopping cart'}])

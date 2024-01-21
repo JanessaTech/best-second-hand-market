@@ -3,7 +3,8 @@ import React, { memo, useState } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import ByLikeView from './ByLikeView'
 
-const BuyOrCart = ({user, openCart, openWallet}) => {
+const BuyOrCart = ({user, openCart, notifyWalletOpen}) => {
+  console.log('BuyOrCart rendering')
   const [inCart, setInCart] = useState(false)
 
   const handleCart = () => {
@@ -13,7 +14,7 @@ const BuyOrCart = ({user, openCart, openWallet}) => {
       setInCart(!inCart)
       openCart()
     } else {
-      openWallet()
+      notifyWalletOpen()
     }
   }
 

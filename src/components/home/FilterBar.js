@@ -47,6 +47,7 @@ function getSortByFromLocalStorage() {
   }
 
 export default function FilterBar({menuOpen, toggleMenu, notifyFilterChanges}) {
+    console.log('FilterBar rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
