@@ -10,7 +10,12 @@ export default function HomeContent() {
 
     return (
         <Box sx={{display: 'flex'}}>
-                <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} notifyFilterUpdate={notifyFilterUpdate} notifyAlertUpdate={notifyAlertUpdate}/>
+                <FilterMenu 
+                    width={menuWidth} 
+                    menuOpen={menuOpen} 
+                    closeMenu={closeMenu} 
+                    notifyFilterUpdate={notifyFilterUpdate} 
+                    notifyAlertUpdate={notifyAlertUpdate}/>
                 <NFTGallery 
                     menuOpen={menuOpen} 
                     toggleMenu={toggleMenu} 

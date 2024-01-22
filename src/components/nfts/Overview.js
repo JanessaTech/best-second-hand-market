@@ -6,19 +6,16 @@ const Overview = ({notifyAlertUpdate, notifyWalletOpen}) => {
   console.log('Overview rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-  
-  const [state, setState] = useState({
-    inCart: false,
-    open: false
-  })
+
+  const [inCart, setInCart] = useState(false)
 
   useEffect(() => {
-    if (state.inCart) {
+    if (inCart) {
       console.log('call restful api to put to cart..')
     } else {
       console.log('call restful api to remove from cart ...')
     }
-  }, [state.inCart])
+  }, [inCart])
 
   const toggleCart = (e) => {
     e.preventDefault()
@@ -26,12 +23,12 @@ const Overview = ({notifyAlertUpdate, notifyWalletOpen}) => {
     if (!isConnected) {
       notifyWalletOpen()
     } else {
-      if(!state.inCart){
+      if(!inCart){
         notifyAlertUpdate([{severity: 'success', message: 'Added to shopping cart'}])
       } else{
         notifyAlertUpdate([{severity: 'success', message: 'Removed from shopping cart'}])
       }
-      setState({...state, inCart: !state.inCart})
+      setInCart(!inCart)
     } 
   }
 
@@ -90,7 +87,7 @@ const Overview = ({notifyAlertUpdate, notifyWalletOpen}) => {
                                       justifyContent:'center',
                                       alignItems:'center',
                                       backgroundColor:'rgba(0, 0, 0, 1)'}} onClick={toggleCart}>
-                                        <Typography color='white' variant='body2'>{state.inCart ? 'Remove from cart': 'Add to cart'}</Typography>
+                                        <Typography color='white' variant='body2'>{inCart ? 'Remove from cart': 'Add to cart'}</Typography>
                             </Box>
                 </Box>
             </Box> 

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { memo, useCallback, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useOutlet } from 'react-router-dom'
 import { Container } from '@mui/system'
@@ -15,7 +15,7 @@ import Signup from './wallet/Signup'
 const GlobalVariables = React.createContext({})
 export {GlobalVariables}
 
-export default function MainLayout() {
+const MainLayout = () => {
     const outlet = useOutlet()
     const location = useLocation()
     const theme = useTheme()
@@ -57,9 +57,9 @@ export default function MainLayout() {
         setAlerts(newAlerts)
     }, [])
 
-    const clearAlerts = () => {
+    const clearAlerts = useCallback(() => {
         setAlerts([])
-    }
+    }, [])
 
     const notifyFilterUpdate = useCallback((newTrigger) => {
         setTrigger(newTrigger)
@@ -144,4 +144,6 @@ export default function MainLayout() {
         </Container>
     )
 }
+
+export default memo(MainLayout)
 

@@ -46,7 +46,7 @@ function getSortByFromLocalStorage() {
     return 'Recent activity'
   }
 
-const FilterBar = ({menuOpen, toggleMenu, notifyFilterChanges}) => {
+const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate}) => {
     console.log('FilterBar rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -73,7 +73,7 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterChanges}) => {
         }
         localStorage.setItem('filter', JSON.stringify(filter))
         console.log('[FilterBar] store filter:', filter)
-        notifyFilterChanges(Math.random())
+        notifyFilterUpdate(Math.random())
     }
 
     const handleUpdate = (e) => {

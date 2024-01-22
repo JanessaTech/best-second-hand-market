@@ -13,8 +13,9 @@ function getFilter() {
   return {}
 }
 
-const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, notifyAlertUpdate, notifyWalletOpen}) => {
+const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen}) => {
   console.log('NFTGallery rendering ...')
+
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   
@@ -26,7 +27,7 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, notifyA
   return (
     <Box component="main">
         <Box sx={{width:1, height: headerHeight + filterBarHeight}}></Box>
-        <FilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterChanges={notifyFilterChanges}/>
+        <FilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterUpdate={notifyFilterUpdate}/>
         <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
           <Grid container spacing={2}>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>

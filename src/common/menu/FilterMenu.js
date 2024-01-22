@@ -6,9 +6,11 @@ import { CheapIcon } from '../../utils/Svgs'
 import CategoryFilter from './CategoryFilter'
 import NetworkFilter from './NetworkFilter'
 import PriceFilter from './PriceFilter'
+import {GlobalVariables} from '../../components/MainLayout'
 
 const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterUpdate, notifyAlertUpdate}) => {
   console.log('FilterMenu rendering')
+  //const {closeMenu, notifyFilterUpdate, notifyAlertUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
   const [drawerType, setDrawerType] = useState(isMediumScreen ? 'temporary': 'persistent')

@@ -212,6 +212,7 @@ const getFilteredNfts = (nfts, network) => {
 
 const Cart = ({toggleCart, open}) => {
   console.log('Cart rendering ...')
+  console.log('Cart open=', open)
   
   const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']  // don't change the order. The order the network should be aligned with the order in tabs
 

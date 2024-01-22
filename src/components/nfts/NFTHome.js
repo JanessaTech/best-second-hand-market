@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Box, Grid, useMediaQuery} from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import {headerHeight} from '../../common/constant'
@@ -6,7 +6,7 @@ import BuyOrCart from './BuyOrCart';
 import NFTDetails from './NFTDetails';
 import Comments from './comments/Comments';
 
-export default function NFTHome({user, openCart, notifyWalletOpen}) {
+const NFTHome = ({user, openCart, notifyWalletOpen}) => {
     console.log("NFTHome rendering ...")
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -29,4 +29,8 @@ export default function NFTHome({user, openCart, notifyWalletOpen}) {
     </Box>
   )
 }
+
+export default memo(NFTHome)
+
+
 

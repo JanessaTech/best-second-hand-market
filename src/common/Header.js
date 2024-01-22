@@ -18,6 +18,7 @@ const Header = ({openCart, isConnected, user}) => {
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [anchorEl, setAnchorEl] =  React.useState(null)
 
+    
     useEffect(() => {
         console.log('header is updated, isConnected = ', isConnected)
         setIsLogin(isConnected)
