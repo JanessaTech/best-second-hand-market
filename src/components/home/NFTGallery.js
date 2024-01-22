@@ -1,7 +1,7 @@
 import React, { memo, useEffect} from 'react'
 import { useTheme } from '@mui/material/styles'
 import { Box, Grid, useMediaQuery } from '@mui/material'
-import {headerHeight, filterBarHeight} from '../../common/constant'
+import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
 import Overview from '../nfts/Overview'
 
@@ -26,7 +26,7 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyAl
 
   return (
     <Box component="main">
-        <Box sx={{width:1, height: headerHeight + filterBarHeight}}></Box>
+        <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
         <FilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterUpdate={notifyFilterUpdate}/>
         <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
           <Grid container spacing={2}>

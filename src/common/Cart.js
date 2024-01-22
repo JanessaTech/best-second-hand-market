@@ -2,7 +2,7 @@ import { Box, Button, Divider, Drawer, IconButton, Tab, Tabs, Tooltip, Typograph
 import React, { memo, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CheapIcon } from '../utils/Svgs'
-import {cartWidth, headerHeight} from './constant'
+import {CartWidth, HeaderHeight} from './constant'
 import CustomPopper from './CustomPopper';
 
 
@@ -212,7 +212,6 @@ const getFilteredNfts = (nfts, network) => {
 
 const Cart = ({toggleCart, open}) => {
   console.log('Cart rendering ...')
-  console.log('Cart open=', open)
   
   const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']  // don't change the order. The order the network should be aligned with the order in tabs
 
@@ -256,8 +255,8 @@ const Cart = ({toggleCart, open}) => {
   return (
     <Drawer
         sx={{'& .MuiDrawer-paper': {
-            width: cartWidth,
-            top: headerHeight + 10,
+            width: CartWidth,
+            top: HeaderHeight + 10,
             height:'80%',
             borderRadius:2
         }}}

@@ -13,9 +13,7 @@ export default function NFTContent() {
     console.log('[NFTContent]nft id = ', id)
 
   return (
-    <Box sx={{ display: 'flex' }}>
-            <NFTHome user={user} openCart={openCart} notifyWalletOpen={notifyWalletOpen}/>
-    </Box>
+    <NFTHome user={user} openCart={openCart} notifyWalletOpen={notifyWalletOpen}/>
   )
 }
 

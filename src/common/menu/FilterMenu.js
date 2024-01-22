@@ -1,16 +1,14 @@
 import { Box, Divider, Drawer, IconButton, Tooltip, useMediaQuery} from '@mui/material'
 import React, { memo, useCallback, useEffect, useState} from 'react'
 import { useTheme } from '@mui/material/styles'
-import {headerHeight, drawerWidth} from '../constant'
+import {HeaderHeight, DrawerWidth} from '../constant'
 import { CheapIcon } from '../../utils/Svgs'
 import CategoryFilter from './CategoryFilter'
 import NetworkFilter from './NetworkFilter'
 import PriceFilter from './PriceFilter'
-import {GlobalVariables} from '../../components/MainLayout'
 
 const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterUpdate, notifyAlertUpdate}) => {
   console.log('FilterMenu rendering')
-  //const {closeMenu, notifyFilterUpdate, notifyAlertUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
   const [drawerType, setDrawerType] = useState(isMediumScreen ? 'temporary': 'persistent')
@@ -28,7 +26,7 @@ const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterUpdate, notifyAlert
           width: {width},
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: { 
-                width: drawerWidth, 
+                width: DrawerWidth, 
                 boxSizing: 'border-box',
                 borderRight:0
             },
@@ -38,7 +36,7 @@ const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterUpdate, notifyAlert
         disableScrollLock={true}
         onClose={closeMenu}
         >
-            <Box sx={{width:1, height: headerHeight}}></Box>
+            <Box sx={{width:1, height: HeaderHeight}}></Box>
             <Box sx={{display:'flex', justifyContent:'end'}}>
               <Tooltip title='Hide filter'>
                   <IconButton onClick={closeMenu}>

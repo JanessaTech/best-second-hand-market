@@ -1,7 +1,7 @@
 import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material'
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
-import {headerHeight} from './constant'
+import {HeaderHeight} from './constant'
 import { CheapIcon } from '../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu';
@@ -51,7 +51,7 @@ const Header = ({openCart, isConnected, user}) => {
 
   return (
     <Box sx={{
-        width: 1, height: headerHeight, 
+        width: 1, height: HeaderHeight, 
         backgroundColor: 'black', 
         position: 'fixed', top: 0, left: 0, 
         px: isSmallScreen ? 2: 3,

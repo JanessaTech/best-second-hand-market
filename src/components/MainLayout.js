@@ -3,17 +3,26 @@ import { useLocation } from 'react-router-dom'
 import { useOutlet } from 'react-router-dom'
 import { Container } from '@mui/system'
 import { useTheme } from '@mui/material/styles'
-import { useMediaQuery } from '@mui/material'
+import { Box, useMediaQuery } from '@mui/material'
 import Header from '../common/Header'
 import Cart from '../common/Cart'
 import CustomSnackBar from '../common/CustomSnackBar'
-import {drawerWidth} from '../common/constant'
+import {DrawerWidth} from '../common/constant'
 import CheapBottomNavigation from '../common/BottomNavigation'
 import ConnectWallet from './wallet/ConnectWallet'
 import Signup from './wallet/Signup'
+import FilterMenu from '../common/menu/FilterMenu'
 
 const GlobalVariables = React.createContext({})
 export {GlobalVariables}
+
+function isShowMenu(location) {
+    const menuURLs = ['/']
+    for (var i = 0; i < menuURLs.length; i++) {
+        if (menuURLs[i] === location) return true
+    }
+    return false
+}
 
 const MainLayout = () => {
     const outlet = useOutlet()
@@ -31,7 +40,7 @@ const MainLayout = () => {
         user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined})
     const [menu, setMenu] = useState({
         open: isMediumScreen ? false: true,
-        width: drawerWidth
+        width: DrawerWidth
     })
     const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
 
@@ -75,7 +84,7 @@ const MainLayout = () => {
         if (menu.open) {
             setMenu({open: false, width: 0})
         } else {
-            setMenu({open: true, width: drawerWidth})
+            setMenu({open: true, width: DrawerWidth})
         }
     }, [menu.open])
 
@@ -105,23 +114,34 @@ const MainLayout = () => {
         setSignupOpen(true)
     }, [])
 
+    console.log('location: ', location.pathname)
     return (
         <Container maxWidth='false'>
             <Header openCart={openCart} isConnected={login.isConnected} user={login.user}/>
             <GlobalVariables.Provider 
                 value={{
                     user: login.user,
-                    menuWidth: menu.width, 
                     menuOpen: menu.open, 
                     trigger: trigger,
-                    closeMenu: closeMenu,
                     toggleMenu: toggleMenu,
                     openCart: openCart,
                     notifyFilterUpdate: notifyFilterUpdate,
                     notifyAlertUpdate: notifyAlertUpdate,
                     notifyWalletOpen: notifyWalletOpen
                     }}>
-                {outlet}
+                <Box sx={{display: 'flex'}}>
+                    {
+                    isShowMenu(location.pathname) && 
+                        <FilterMenu 
+                            width={menu.width} 
+                            menuOpen={menu.open} 
+                            closeMenu={closeMenu} 
+                            notifyFilterUpdate={notifyFilterUpdate} 
+                            notifyAlertUpdate={notifyAlertUpdate}/>
+                    }
+                    {outlet}
+                </Box>
+                
             </GlobalVariables.Provider>
             <Cart toggleCart={toggleCart} open={cartOpen}/>
             {
@@ -140,7 +160,7 @@ const MainLayout = () => {
                 notifyAlertUpdate={notifyAlertUpdate} 
                 notifyLoginUpdate={notifyLoginUpdate}
             />
-            <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu} isHome={location.pathname === '/'}/>
+            <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu} isHome={location.pathname === '/'} isConnected={login.isConnected}/>
         </Container>
     )
 }

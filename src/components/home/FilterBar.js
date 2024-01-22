@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, OutlinedInput, Select, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import React, { memo, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
-import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
+import {HeaderHeight, DrawerWidth, FilterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -52,7 +52,7 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate}) => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
     const margin = isSmallScreen ? 32 : 48
-    const width = menuOpen && !isMediumScreen? `calc(100% - ${drawerWidth + margin}px)` :`calc(100% - ${margin}px)`
+    const width = menuOpen && !isMediumScreen? `calc(100% - ${DrawerWidth + margin}px)` :`calc(100% - ${margin}px)`
     const sortOptions = ['Recent activity', 'aa','bb','ccc', 'ddddd','eeee','ffff', 'gggg','hhhhh']
     const [sortBy, setSortBy] = useState(getSortByFromLocalStorage())
     const [ago, setAgo] = useState(0)
@@ -87,8 +87,8 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate}) => {
     }
     
   return (
-    <Box sx={{position:'fixed', top: headerHeight,
-              width: width, height: filterBarHeight,
+    <Box sx={{position:'fixed', top: HeaderHeight,
+              width: width, height: FilterBarHeight,
               opacity:1,
               backgroundColor:'white',
               display:'flex', justifyContent:'space-between', alignItems: 'end',

@@ -4,11 +4,18 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { CheapIcon } from '../utils/Svgs';
 import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
-const CheapBottomNavigation = ({openCart, toggleMenu, isHome}) => {
+const CheapBottomNavigation = ({openCart, toggleMenu, isHome, isConnected}) => {
     console.log('rending CheapBottomNavigation ...')
     const theme = useTheme()
+    const navigate = useNavigate()
     const [value, setValue] = React.useState(0)
+
+    const goHome = () => {
+      console.log('goHome ...')
+      navigate('/')
+    }
     
   return (
     <Box sx={{[theme.breakpoints.up('md')]:{display:'none'}}}>
@@ -23,15 +30,15 @@ const CheapBottomNavigation = ({openCart, toggleMenu, isHome}) => {
                {
                 isHome ? <Tooltip title='Filter'>
                             <BottomNavigationAction label="Filter" icon={<CheapIcon name={'filter'}/>} onClick={toggleMenu}/>
-                         </Tooltip> : <Tooltip title='My balance'>
-                                         <BottomNavigationAction label="Balance" icon={<CheapIcon name={'my-balance'}/>}/>
+                         </Tooltip> : <Tooltip title='Home'>
+                                         <BottomNavigationAction label="Home" icon={<CheapIcon name={'home'}/>} onClick={goHome}/>
                                       </Tooltip>
                }
                 <Tooltip title='Mint your NFT'>
                   <BottomNavigationAction label="Mint" icon={<CheapIcon name={'mint-nft'}/>} />
                 </Tooltip>
-                <Tooltip title='Open cart'>
-                  <BottomNavigationAction label="Cart" icon={<CheapIcon name={'cart-black'}/>} onClick={openCart}/>
+                <Tooltip title={isConnected ? 'Open cart' : 'Connect to wallet'}>
+                  <BottomNavigationAction label={isConnected ? 'Cart' : 'Wallet'} icon={<CheapIcon name={isConnected ? 'cart-black': 'my-balance'}/>} onClick={openCart}/>
                 </Tooltip>
             </BottomNavigation>
          </Paper>
