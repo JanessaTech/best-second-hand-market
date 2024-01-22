@@ -1,5 +1,5 @@
 import { Box, Divider, Drawer, IconButton, Tooltip, useMediaQuery} from '@mui/material'
-import React, { memo, useEffect, useState} from 'react'
+import React, { memo, useCallback, useEffect, useState} from 'react'
 import { useTheme } from '@mui/material/styles'
 import {headerHeight, drawerWidth} from '../constant'
 import { CheapIcon } from '../../utils/Svgs'
@@ -7,7 +7,7 @@ import CategoryFilter from './CategoryFilter'
 import NetworkFilter from './NetworkFilter'
 import PriceFilter from './PriceFilter'
 
-const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges, handleAlert}) => {
+const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterUpdate, notifyAlertUpdate}) => {
   console.log('FilterMenu rendering')
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
@@ -17,10 +17,10 @@ const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges, handleAler
     setDrawerType(isMediumScreen ? 'temporary': 'persistent')
   }, [isMediumScreen])
 
-  const notify = (trigger) => {
-    notifyFilterChanges(trigger)
-  }
-
+  const notify = useCallback((trigger) => {
+    notifyFilterUpdate(trigger)
+  }, [])
+  
   return (
     <Drawer variant={drawerType} sx={{
           width: {width},
@@ -49,7 +49,7 @@ const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterChanges, handleAler
                 <Divider />
                 <CategoryFilter notify={notify}/>
                 <Divider />
-                <PriceFilter notify={notify} handleAlert={handleAlert}/>
+                <PriceFilter notify={notify} notifyAlertUpdate={notifyAlertUpdate}/>
             </Box>    
     </Drawer>
   )

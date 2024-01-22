@@ -13,7 +13,7 @@ function getFilter() {
   return {}
 }
 
-const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleAlert, notifyWalletOpen}) => {
+const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, notifyAlertUpdate, notifyWalletOpen}) => {
   console.log('NFTGallery rendering ...')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -30,34 +30,34 @@ const NFTGallery = ({menuOpen, toggleMenu, trigger, notifyFilterChanges, handleA
         <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
           <Grid container spacing={2}>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
             <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview handleAlert={handleAlert} notifyWalletOpen={notifyWalletOpen}/>
+                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
             </Grid>
           </Grid>
         </Box>

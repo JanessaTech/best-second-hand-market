@@ -6,17 +6,17 @@ import { GlobalVariables } from '../MainLayout'
 
 export default function HomeContent() {
     console.log('HomeContent rendering ....')
-    const {menuWidth, menuOpen, trigger, closeMenu, toggleMenu, notifyFilterChanges, handleAlert, notifyWalletOpen} = React.useContext(GlobalVariables)
+    const {menuWidth, menuOpen, trigger, closeMenu, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen} = React.useContext(GlobalVariables)
 
     return (
         <Box sx={{display: 'flex'}}>
-                <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} notifyFilterChanges={notifyFilterChanges} handleAlert={handleAlert}/>
+                <FilterMenu width={menuWidth} menuOpen={menuOpen} closeMenu={closeMenu} notifyFilterUpdate={notifyFilterUpdate} notifyAlertUpdate={notifyAlertUpdate}/>
                 <NFTGallery 
                     menuOpen={menuOpen} 
                     toggleMenu={toggleMenu} 
                     trigger={trigger} 
-                    notifyFilterChanges={notifyFilterChanges} 
-                    handleAlert={handleAlert}
+                    notifyFilterUpdate={notifyFilterUpdate} 
+                    notifyAlertUpdate={notifyAlertUpdate}
                     notifyWalletOpen={notifyWalletOpen}
                 />
         </Box>

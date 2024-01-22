@@ -3,7 +3,6 @@ import { Box, Dialog, Grid, IconButton, Tooltip, Typography, useMediaQuery } fro
 import React, { memo } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { CheapIcon } from '../../utils/Svgs'
-import { useNavigate } from 'react-router-dom'
 
 const WalletItem = (props) => {
     const {img, name, support, handleWallet} = props
@@ -42,10 +41,9 @@ const WalletItem = (props) => {
 
 }
 
-const ConnectWallet = ({onClose, open, openSignup, cbUrl, notifyConnectionStatus}) => {
+const ConnectWallet = ({onClose, open, openSignup, notifyLoginUpdate}) => {
     console.log('ConnectWallet rendering ')
     const theme = useTheme()
-    const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
     const handleClose = () => {
@@ -65,8 +63,7 @@ const ConnectWallet = ({onClose, open, openSignup, cbUrl, notifyConnectionStatus
             localStorage.setItem('isConnected', 'true')
             localStorage.setItem('user', JSON.stringify(user))
             console.log('isConnected is set as true, notify header')
-            notifyConnectionStatus()
-            navigate(cbUrl)
+            notifyLoginUpdate()
         }
     }
 

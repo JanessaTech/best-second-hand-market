@@ -6,7 +6,6 @@ import {SignupSchema} from '../../common/Schemas'
 import { useForm } from "react-hook-form"
 import { CheapIcon } from '../../utils/Svgs'
 import { styled } from '@mui/material/styles'
-import { useNavigate } from 'react-router-dom'
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -20,9 +19,8 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
-const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => {
+const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
     console.log('Signup rendering ')
-    const navigate = useNavigate()
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
     })
@@ -34,14 +32,11 @@ const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => 
     })
 
     useEffect(() => {
-        console.log('[Signup.errors]:', errors)
         let alerts = []
         if (errors?.name) {
-            console.log('errors?.name')
             alerts.push({severity: 'error', message: errors?.name?.message})
         }
         if(errors?.checked) {
-            console.log('errors?.checked')
             alerts.push({severity: 'error', message: errors?.checked?.message})
         }
         if(errors?.introduction) {
@@ -49,7 +44,7 @@ const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => 
         }
         if(alerts.length > 0) {
             console.log('[Signup]sending alerts = ', alerts)
-            handleAlert(alerts)
+            notifyAlertUpdate(alerts)
         }    
     }, [errors])
 
@@ -63,8 +58,7 @@ const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => 
         localStorage.removeItem('isConnected')
         localStorage.removeItem('user')
         onClose()
-        notifyConnectionStatus()
-        navigate(cbUrl)
+        notifyLoginUpdate()
     }
 
     const handleSignup = (data) => {
@@ -75,8 +69,7 @@ const Signup = ({onClose, open, handleAlert, cbUrl, notifyConnectionStatus}) => 
         const user = {id: 111, name: 'JanessaTech lab'}
         localStorage.setItem('isConnected', 'true')
         localStorage.setItem('user', JSON.stringify(user))
-        notifyConnectionStatus()
-        navigate(cbUrl)
+        notifyLoginUpdate()
     }
 
     const handleInputChanges = (e) => {

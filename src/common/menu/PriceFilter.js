@@ -55,7 +55,7 @@ function getPricesFromLocalStorage() {
     return {min: 0, max: 100}
   }
 
-const PriceFilter = ({notify, handleAlert}) => {
+const PriceFilter = ({notify, notifyAlertUpdate}) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(PriceFilterSchema)
     })
@@ -98,7 +98,7 @@ const PriceFilter = ({notify, handleAlert}) => {
             alerts.push({severity: 'error', message: errors?.min?.message})
         }
         if (alerts.length > 0) {
-            handleAlert(alerts)
+            notifyAlertUpdate(alerts)
         } 
     }, [errors])
 

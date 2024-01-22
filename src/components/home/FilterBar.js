@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, OutlinedInput, Select, Tooltip, Typography, useMediaQuery } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import {headerHeight, drawerWidth, filterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs';
@@ -46,7 +46,7 @@ function getSortByFromLocalStorage() {
     return 'Recent activity'
   }
 
-export default function FilterBar({menuOpen, toggleMenu, notifyFilterChanges}) {
+const FilterBar = ({menuOpen, toggleMenu, notifyFilterChanges}) => {
     console.log('FilterBar rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -156,4 +156,8 @@ export default function FilterBar({menuOpen, toggleMenu, notifyFilterChanges}) {
     </Box>
   )
 }
+
+export default memo(FilterBar)
+
+
 

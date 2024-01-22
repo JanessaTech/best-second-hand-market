@@ -1,5 +1,6 @@
-import { Box, Fade, IconButton, Stack, Tooltip } from '@mui/material';
+import { Box, Fade, IconButton, Stack, Tooltip, useMediaQuery } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useTheme } from '@mui/material/styles'
 import MuiAlert from '@mui/material/Alert';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -9,8 +10,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 export default function CustomSnackBar(props) {
     console.log('CustomSnackBar rendering ...')
-    
-    const {duration, timeout, alerts, clearAlerts, ...others} = props
+    const theme = useTheme()
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+    const {duration, timeout, alerts, clearAlerts} = props
     const [fadeIn, setFadeIn] = useState(alerts && alerts.length > 0 ? true : false)
 
     useEffect(() => {
@@ -32,7 +34,7 @@ export default function CustomSnackBar(props) {
 
     return (
         <Fade in={fadeIn} timeout={timeout}>
-                <Box sx={{position:'fixed', zIndex:1301, top:80, right:0}}>
+                <Box sx={{position:'fixed', zIndex:1301, top:80, right: isSmallScreen ? 16: 24}}>
                     {alerts && alerts.length > 0 && 
                         <Box sx={{display:'flex', justifyContent:'end'}}>
                             <Tooltip title="Clear all" placement="right">
