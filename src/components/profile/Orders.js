@@ -1,10 +1,11 @@
+import { Box } from '@mui/material'
 import React from 'react'
 
 export default function Orders() {
   return (
-    <div>
-      
-    </div>
+    <Box>
+      my Orders
+    </Box>
   )
 }
 

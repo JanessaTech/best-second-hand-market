@@ -25,13 +25,13 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose}) => {
             horizontal: 'right',
         }}
     >
-        <MenuItem>
+        <MenuItem component={Link} to="/profile/nfts">
           <ListItemIcon>
-            <Avatar alt='JanessaTech lab' src={`imgs/nfters/${user?.id}/me.png`} sx={{ width: 25, height: 25 }}/>
+            <Avatar alt='JanessaTech lab' src={`/imgs/nfters/${user?.id}/me.png`} sx={{ width: 25, height: 25 }}/>
           </ListItemIcon>
           <ListItemText>My NFTs</ListItemText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={Link} to="/profile/orders">
           <ListItemIcon>
               <CheapIcon name={'my-order'} size={25}/>
           </ListItemIcon>

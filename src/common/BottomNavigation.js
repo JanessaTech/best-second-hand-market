@@ -6,7 +6,7 @@ import { CheapIcon } from '../utils/Svgs';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 
-const CheapBottomNavigation = ({openCart, toggleMenu, isHome, isConnected}) => {
+const CheapBottomNavigation = ({openCart, toggleMenu, isShowMenu, isConnected}) => {
     console.log('rending CheapBottomNavigation ...')
     const theme = useTheme()
     const navigate = useNavigate()
@@ -28,7 +28,7 @@ const CheapBottomNavigation = ({openCart, toggleMenu, isHome, isConnected}) => {
                 }}
             >
                {
-                isHome ? <Tooltip title='Filter'>
+                isShowMenu ? <Tooltip title='Filter'>
                             <BottomNavigationAction label="Filter" icon={<CheapIcon name={'filter'}/>} onClick={toggleMenu}/>
                          </Tooltip> : <Tooltip title='Home'>
                                          <BottomNavigationAction label="Home" icon={<CheapIcon name={'home'}/>} onClick={goHome}/>

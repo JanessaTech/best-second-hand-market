@@ -12,6 +12,8 @@ import Setting from './components/profile/Setting';
 import MainLayout from './components/MainLayout';
 import HomeContent from './components/home/HomeContent';
 import NFTContent from './components/nfts/NFTContent';
+import MyNFTList from './components/profile/MyNFTList';
+import Orders from './components/profile/Orders';
 
 function App() {
 
@@ -23,9 +25,13 @@ function App() {
                   <Route index element={<HomeContent/>} />
                   <Route path='nft' element={<NFTContent/>} />
                   <Route path="*" element={<NoPage/>}/>
+                  <Route path="profile/nfts" element={<MyNFTList/>}/>
+                  <Route path="profile/setting" element={<Setting/>}/>
+                  <Route path="profile/orders" element={<Orders/>}/>
                 </Route>
                 <Route path="/nfters" element={<NFTer/>}/>
-                <Route path="/profile/setting" element={<Setting/>}/>
+                
+                
                 <Route path="*" element={<NoPage/>}/>
             </Routes>
         </Router>

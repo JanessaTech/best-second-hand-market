@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useOutlet } from 'react-router-dom'
 import { Container } from '@mui/system'
@@ -7,7 +7,7 @@ import { Box, useMediaQuery } from '@mui/material'
 import Header from '../common/Header'
 import Cart from '../common/Cart'
 import CustomSnackBar from '../common/CustomSnackBar'
-import {DrawerWidth} from '../common/constant'
+import {DrawerWidth, MenuUrls} from '../common/constant'
 import CheapBottomNavigation from '../common/BottomNavigation'
 import ConnectWallet from './wallet/ConnectWallet'
 import Signup from './wallet/Signup'
@@ -17,9 +17,8 @@ const GlobalVariables = React.createContext({})
 export {GlobalVariables}
 
 function isShowMenu(location) {
-    const menuURLs = ['/']
-    for (var i = 0; i < menuURLs.length; i++) {
-        if (menuURLs[i] === location) return true
+    for (var i = 0; i < MenuUrls.length; i++) {
+        if (MenuUrls[i] === location) return true
     }
     return false
 }
@@ -39,9 +38,16 @@ const MainLayout = () => {
         isConnected: localStorage.getItem('isConnected') ? true : false, 
         user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined})
     const [menu, setMenu] = useState({
-        open: isMediumScreen ? false: true,
-        width: DrawerWidth
+        open: isMediumScreen ? false : true,
+        width: isMediumScreen ? 0 : DrawerWidth
     })
+
+    useEffect(() => {
+        if(!isMediumScreen) {
+            setMenu({open: true, width: DrawerWidth})
+        }
+    }, [isMediumScreen])
+
     const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
 
     const notifyLoginUpdate = useCallback(() => {    
@@ -56,11 +62,11 @@ const MainLayout = () => {
     }, [])
     
     // for alerts
-    const notifyAlertUpdate = useCallback((alerts) => {
-        console.log('[MainLayout] notifyAlertUpdate, alerts=', alerts)
+    const notifyAlertUpdate = useCallback((_alerts) => {
+        console.log('[MainLayout] notifyAlertUpdate, alerts=', _alerts)
         const newAlerts = []
-        for (var i = 0; i < alerts.length; i++) {
-            newAlerts.push({id: alertCnt.current, severity: alerts[i].severity, message: alerts[i].message})
+        for (var i = 0; i < _alerts.length; i++) {
+            newAlerts.push({id: alertCnt.current, severity: _alerts[i].severity, message: _alerts[i].message})
             alertCnt.current = alertCnt.current + 1
         }
         setAlerts(newAlerts)
@@ -160,7 +166,7 @@ const MainLayout = () => {
                 notifyAlertUpdate={notifyAlertUpdate} 
                 notifyLoginUpdate={notifyLoginUpdate}
             />
-            <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu} isHome={location.pathname === '/'} isConnected={login.isConnected}/>
+            <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu} isShowMenu={isShowMenu(location.pathname)} isConnected={login.isConnected}/>
         </Container>
     )
 }
