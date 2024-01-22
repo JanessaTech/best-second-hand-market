@@ -117,7 +117,7 @@ const MainLayout = () => {
     console.log('location: ', location.pathname)
     return (
         <Container maxWidth='false'>
-            <Header openCart={openCart} isConnected={login.isConnected} user={login.user}/>
+            <Header openCart={openCart} isConnected={login.isConnected} user={login.user} notifyWalletOpen={notifyWalletOpen} />
             <GlobalVariables.Provider 
                 value={{
                     user: login.user,

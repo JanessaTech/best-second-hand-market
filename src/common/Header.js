@@ -7,7 +7,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu';
 import { Link } from 'react-router-dom';
 
-const Header = ({openCart, isConnected, user}) => {
+const Header = ({openCart, isConnected, user, notifyWalletOpen}) => {
     console.log('rendering Header ...')
     console.log('user:', user)
     const theme = useTheme()
@@ -150,7 +150,7 @@ const Header = ({openCart, isConnected, user}) => {
                                             <CheapIcon name={'connect-wallet'}/>
                                         </IconButton>
                                     </Tooltip> : 
-                                    <Button sx={{textTransform:'none', fontSize:'1.1em'}} variant='contained' color='unworkable'>Connect Wallet</Button>
+                                    <Button sx={{textTransform:'none', fontSize:'1.1em'}} variant='contained' color='unworkable' onClick={()=> notifyWalletOpen()}>Connect Wallet</Button>
                 }
             </Box>
         </Box>     
