@@ -12,7 +12,7 @@ const svgMapping = new Map([
   ['filter', '/imgs/common/filter.svg'],
   ['left-arrow', '/imgs/common/left-arrow.svg'],
   ['right-arrow', '/imgs/common/right-arrow.svg'],
-  ['home', 'imgs/common/home.svg'],
+  ['home', '/imgs/common/home.svg'],
   
   // for header
   ['handshake', '/imgs/header/handshake.svg'],

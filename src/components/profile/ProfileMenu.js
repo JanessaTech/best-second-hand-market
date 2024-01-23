@@ -1,12 +1,24 @@
 import { Avatar, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
 import React, { memo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 
-const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose}) => {
+const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyLoginUpdate}) => {
+  const navigate = useNavigate()
+
     const handleClose = (e) => {
         handleProfileMenuClose()
     }
+
+    const handleDisconnect = () => {
+      console.log('[ProfileMenu] handleDisconnect')
+      localStorage.removeItem('isConnected')
+      localStorage.removeItem('user')
+      handleProfileMenuClose()
+      notifyLoginUpdate()
+      navigate('/')
+    }
+
   return (
     <Menu
         id='profile-positioned-menu'
@@ -37,19 +49,19 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose}) => {
           </ListItemIcon>
           <ListItemText>My orders</ListItemText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={Link} to="/profile/favorites">
           <ListItemIcon>
               <CheapIcon name={'my-favorite'} size={25}/>
           </ListItemIcon>
           <ListItemText>My favorites</ListItemText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={Link} to="profile/mint">
           <ListItemIcon>
               <CheapIcon name={'mint-nft'} size={25}/>
           </ListItemIcon>
           <ListItemText>Mint your NFT</ListItemText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={Link} to="/profile/notifications"> 
           <ListItemIcon>
               <CheapIcon name={'my-notification'} size={25}/>
           </ListItemIcon>
@@ -61,12 +73,12 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose}) => {
           </ListItemIcon>
           <ListItemText>Setting</ListItemText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={Link} to="/profile/balance">
           <ListItemIcon>
               <CheapIcon name={'my-balance'} size={25}/>
           </ListItemIcon>
           <ListItemText>My balance</ListItemText></MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleDisconnect}>
           <Typography variant='h6' color={'primary'}>Disconnect</Typography>
         </MenuItem>
     </Menu>

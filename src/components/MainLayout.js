@@ -45,6 +45,8 @@ const MainLayout = () => {
     useEffect(() => {
         if(!isMediumScreen) {
             setMenu({open: true, width: DrawerWidth})
+        } else {
+            setMenu({open: false, width: 0})
         }
     }, [isMediumScreen])
 
@@ -123,7 +125,12 @@ const MainLayout = () => {
     console.log('location: ', location.pathname)
     return (
         <Container maxWidth='false'>
-            <Header openCart={openCart} isConnected={login.isConnected} user={login.user} notifyWalletOpen={notifyWalletOpen} />
+            <Header 
+                openCart={openCart} 
+                isConnected={login.isConnected} 
+                user={login.user} 
+                notifyWalletOpen={notifyWalletOpen} 
+                notifyLoginUpdate={notifyLoginUpdate}/>
             <GlobalVariables.Provider 
                 value={{
                     user: login.user,

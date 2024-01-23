@@ -129,7 +129,7 @@ const CartItem = (props) => {
                       sx={{width:60, height:60, borderRadius:3}}
                       component='img'
                       alt={title}
-                      src={`imgs/nfts/${img}`}
+                      src={`/imgs/nfts/${img}`}
                   />
                   <Box sx={{ml:1, width:130}}>
                     <Typography 

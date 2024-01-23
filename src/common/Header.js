@@ -5,12 +5,13 @@ import {HeaderHeight} from './constant'
 import { CheapIcon } from '../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Header = ({openCart, isConnected, user, notifyWalletOpen}) => {
+const Header = ({openCart, isConnected, user, notifyWalletOpen, notifyLoginUpdate}) => {
     console.log('rendering Header ...')
     console.log('user:', user)
     const theme = useTheme()
+    const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
     const [search, setSearch] = useState('')
@@ -49,6 +50,16 @@ const Header = ({openCart, isConnected, user, notifyWalletOpen}) => {
         setAnchorEl(null);
     },[anchorEl])
 
+    const handleMintBut = () => {
+        const isConnected = localStorage.getItem('isConnected')
+        if (isConnected) {
+        console.log('[Header] go to to /profile/mint')
+        navigate('/profile/mint')
+        } else {
+            notifyWalletOpen()
+        }
+    }
+
   return (
     <Box sx={{
         width: 1, height: HeaderHeight, 
@@ -65,7 +76,12 @@ const Header = ({openCart, isConnected, user, notifyWalletOpen}) => {
                 <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Cheap</Typography>
             </Box>
             <Box>
-                <Button variant='contained' sx={{textTransform:'none', fontSize:'1.2em', [theme.breakpoints.down('md')]:{display:'none'}}}>Mint a NFT</Button>
+                <Button 
+                    variant='contained' 
+                    sx={{textTransform:'none', fontSize:'1.2em',
+                     [theme.breakpoints.down('md')]:{display:'none'}}}
+                    onClick={handleMintBut}
+                     >Mint a NFT</Button>
             </Box>
             <Box sx={{width: isMediumScreen? 0.6:0.4, display: 'flex', alignItems: 'center'}}>
                 <TextField sx={{backgroundColor:'white', borderRadius:2,
@@ -129,7 +145,7 @@ const Header = ({openCart, isConnected, user, notifyWalletOpen}) => {
                                 <Avatar alt={user?.name} src={`/imgs/nfters/${user?.id}/me.png`}/>
                     </IconButton>
                     
-                    <ProfileMenu user={user} anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose}/>
+                    <ProfileMenu user={user} anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose} notifyLoginUpdate={notifyLoginUpdate}/>
                     <IconButton sx={{
                         [theme.breakpoints.down('md')]:{display:'none'},
                         '&:hover':{backgroundColor:'grey'}
