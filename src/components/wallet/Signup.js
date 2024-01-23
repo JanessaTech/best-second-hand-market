@@ -98,15 +98,15 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
                     component="form"
                     onSubmit={handleSubmit(handleSignup)}
                     sx={{
-                        '& .MuiTextField-root': { m: 1},
-                        '& .MuiButtonBase-root': { m: 1},
-                        '& .MuiFormControlLabel-root':{m:1},
-                        '& .MuiFormControlLabel-root > span':{m:0,p:0,pr:2}
+                        '& .MuiTextField-root': { my: 1},
+                        '& .MuiButtonBase-root': { my: 1},
+                        '& .MuiFormControlLabel-root':{my:1},
+                        '& .MuiFormControlLabel-root > span':{ pr:2}
                     }}
                     noValidate
                     autoComplete="off">
                     <TextField
-                        sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width:`calc(100% - 16px)`
+                        sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}
                             }}
                         id='name' 
                         aria-label='name'
@@ -117,6 +117,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
                         {...register('name')}
                         variant='outlined'
                         size="small"
+                        fullWidth
                         onChange={handleInputChanges}
                         />
                     <Button sx={{textTransform: 'none'}}
@@ -128,7 +129,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
                         <VisuallyHiddenInput type="file" />
                     </Button>
                     <TextField
-                        sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1},width:`calc(100% - 16px)`
+                        sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}
                         }} 
                         id='introduction' 
                         aria-label='introduction'
@@ -139,6 +140,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
                         {...register('introduction')}
                         variant='outlined'
                         size="small"
+                        fullWidth
                         multiline
                         rows={4}
                         onChange={handleInputChanges}
