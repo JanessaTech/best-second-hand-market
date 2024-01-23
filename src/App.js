@@ -28,8 +28,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<MainLayout/>}>
                   <Route index element={<HomeContent/>} />
+                  <Route path='nft' element={<NFTContent/>} />
                   <Route element={<ProtectedRoutes/>}>
-                    <Route path='nft' element={<NFTContent/>} />
                     <Route path="profile/nfts" element={<MyNFTList/>}/>
                     <Route path="profile/setting" element={<Setting/>}/>
                     <Route path="profile/orders" element={<Orders/>}/>

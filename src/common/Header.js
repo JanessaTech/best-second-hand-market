@@ -162,11 +162,11 @@ const Header = ({openCart, isConnected, user, notifyWalletOpen, notifyLoginUpdat
                     </IconButton>     
                 </Box>  : 
                     isMediumScreen ? <Tooltip title="Connect to wallet">
-                                        <IconButton>
+                                        <IconButton onClick={notifyWalletOpen}>
                                             <CheapIcon name={'connect-wallet'}/>
                                         </IconButton>
                                     </Tooltip> : 
-                                    <Button sx={{textTransform:'none', fontSize:'1.1em'}} variant='contained' color='unworkable' onClick={()=> notifyWalletOpen()}>Connect Wallet</Button>
+                                    <Button sx={{textTransform:'none', fontSize:'1.1em'}} variant='contained' color='unworkable' onClick={notifyWalletOpen}>Connect Wallet</Button>
                 }
             </Box>
         </Box>     

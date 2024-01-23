@@ -6,16 +6,27 @@ import { CheapIcon } from '../utils/Svgs';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 
-const CheapBottomNavigation = ({openCart, toggleMenu, isShowMenu, isConnected}) => {
+const CheapBottomNavigation = ({openCart, toggleMenu, isShowMenu, isConnected, notifyWalletOpen}) => {
     console.log('rending CheapBottomNavigation ...')
     const theme = useTheme()
     const navigate = useNavigate()
     const [value, setValue] = React.useState(0)
 
     const goHome = () => {
-      console.log('goHome ...')
+      console.log('[CheapBottomNavigation] goHome ...')
       navigate('/')
     }
+
+    const handleMintBut = () => {
+      console.log('[CheapBottomNavigation] handleMintBut')
+      const isConnected = localStorage.getItem('isConnected')
+      if (isConnected) {
+      console.log('[CheapBottomNavigation] go to to /profile/mint')
+      navigate('/profile/mint')
+      } else {
+          notifyWalletOpen()
+      }
+  }
     
   return (
     <Box sx={{[theme.breakpoints.up('md')]:{display:'none'}}}>
@@ -35,10 +46,10 @@ const CheapBottomNavigation = ({openCart, toggleMenu, isShowMenu, isConnected}) 
                                       </Tooltip>
                }
                 <Tooltip title='Mint your NFT'>
-                  <BottomNavigationAction label="Mint" icon={<CheapIcon name={'mint-nft'}/>} />
+                  <BottomNavigationAction label="Mint" icon={<CheapIcon name={'mint-nft'}/>} onClick={handleMintBut} />
                 </Tooltip>
                 <Tooltip title={isConnected ? 'Open cart' : 'Connect to wallet'}>
-                  <BottomNavigationAction label={isConnected ? 'Cart' : 'Wallet'} icon={<CheapIcon name={isConnected ? 'cart-black': 'my-balance'}/>} onClick={openCart}/>
+                  <BottomNavigationAction label={isConnected ? 'Cart' : 'Wallet'} icon={<CheapIcon name={isConnected ? 'cart-black': 'my-balance'}/>} onClick={isConnected ? openCart: notifyWalletOpen}/>
                 </Tooltip>
             </BottomNavigation>
          </Paper>

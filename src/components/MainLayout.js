@@ -173,7 +173,13 @@ const MainLayout = () => {
                 notifyAlertUpdate={notifyAlertUpdate} 
                 notifyLoginUpdate={notifyLoginUpdate}
             />
-            <CheapBottomNavigation openCart={openCart} toggleMenu={toggleMenu} isShowMenu={isShowMenu(location.pathname)} isConnected={login.isConnected}/>
+            <CheapBottomNavigation 
+                openCart={openCart} 
+                toggleMenu={toggleMenu} 
+                isShowMenu={isShowMenu(location.pathname)} 
+                isConnected={login.isConnected}
+                notifyWalletOpen={notifyWalletOpen}
+                />
         </Container>
     )
 }
