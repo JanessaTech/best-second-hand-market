@@ -69,7 +69,7 @@ const ConnectWallet = ({onClose, open, openSignup, notifyLoginUpdate}) => {
 
   return (
     <Dialog
-        sx={{'& .MuiPaper-root.MuiDialog-paper':{width:isSmallScreen ? 0.9: 0.5, height: 'fit-content', borderRadius:5}}} open={open}>
+        sx={{'& .MuiPaper-root.MuiDialog-paper':{width:isSmallScreen ? 0.9: 0.5, height: 'fit-content', borderRadius:5}}} open={open} disableScrollLock={true}>
         <Box sx={{position:'relative', p:3}}>
             <Typography variant='h4'>Connect to wallet</Typography>
             <Typography color='text.secondary' variant='body2'>Securely connect your wallet to start your Web3 journey</Typography>
