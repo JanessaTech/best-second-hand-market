@@ -91,8 +91,7 @@ export default function Setting() {
         <Box component='form'
           sx={{
             '& .MuiButtonBase-root': { my: 2},
-            '& .MuiFormControlLabel-root':{my:2},
-            '& .MuiFormControl-root':{my:2}
+            '& .MuiFormControl-root':{ my: 2}
           }}
           onSubmit={handleSubmit(handleUpdate)}
           noValidate

@@ -19,6 +19,11 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyLoginU
       navigate('/')
     }
 
+    const handleClick = (url) => {
+      handleProfileMenuClose()
+      navigate(url)
+    }
+
   return (
     <Menu
         id='profile-positioned-menu'
@@ -37,43 +42,43 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyLoginU
             horizontal: 'right',
         }}
     >
-        <MenuItem component={Link} to="/profile/nfts">
+        <MenuItem onClick={() => handleClick("/profile/nfts")}>
           <ListItemIcon>
             <Avatar alt='JanessaTech lab' src={`/imgs/nfters/${user?.id}/me.png`} sx={{ width: 25, height: 25 }}/>
           </ListItemIcon>
           <ListItemText>My NFTs</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to="/profile/orders">
+        <MenuItem onClick={() => handleClick("/profile/orders")}>
           <ListItemIcon>
               <CheapIcon name={'my-order'} size={25}/>
           </ListItemIcon>
           <ListItemText>My orders</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to="/profile/favorites">
+        <MenuItem onClick={() => handleClick("/profile/favorites")}>
           <ListItemIcon>
               <CheapIcon name={'my-favorite'} size={25}/>
           </ListItemIcon>
           <ListItemText>My favorites</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to="profile/mint">
+        <MenuItem onClick={() => handleClick("/profile/mint")}>
           <ListItemIcon>
               <CheapIcon name={'mint-nft'} size={25}/>
           </ListItemIcon>
           <ListItemText>Mint your NFT</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to="/profile/notifications"> 
+        <MenuItem onClick={() => handleClick("/profile/notifications")}> 
           <ListItemIcon>
               <CheapIcon name={'my-notification'} size={25}/>
           </ListItemIcon>
           <ListItemText>Notifications</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to="/profile/setting">
+        <MenuItem onClick={() => handleClick("/profile/setting")}>
           <ListItemIcon>
               <CheapIcon name={'my-setting'} size={25}/>
           </ListItemIcon>
           <ListItemText>Setting</ListItemText>
         </MenuItem>
-        <MenuItem component={Link} to="/profile/balance">
+        <MenuItem onClick={() => handleClick("/profile/balance")}>
           <ListItemIcon>
               <CheapIcon name={'my-balance'} size={25}/>
           </ListItemIcon>
