@@ -61,7 +61,7 @@ export default function Setting() {
       alerts.push({severity: 'error', message: errors?.name?.message})
     }
     if(alerts.length > 0) {
-      console.log('[Signup]sending alerts = ', alerts)
+      console.log('[Setting]sending alerts = ', alerts)
       notifyAlertUpdate(alerts)
     }  
   }, [errors])
@@ -156,7 +156,7 @@ export default function Setting() {
                             ))
                         }                        
                     </Select>
-                </FormControl>
+            </FormControl>
 
           <Box sx={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Button variant='outlined' color='customBlack' sx={{textTransform:'none'}} onClick={handleReset}>Reset</Button>

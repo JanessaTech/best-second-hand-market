@@ -1,8 +1,8 @@
 import * as yup from "yup";
 
 export const PriceFilterSchema = yup.object().shape({
-    min: yup.number().required('ERROR: The number is required!').min(0),
-    max: yup.number().moreThan(yup.ref('min'), "Max should be > Min")
+    min: yup.number().typeError('ERROR: A positve number is required for Min field!').required().min(0),
+    max: yup.number().typeError('ERROR: A positve number is required for Max field!').moreThan(yup.ref('min'), "Max should be > Min")
 })
 export const SignupSchema = yup.object().shape({
     name: yup.string().required('Display name is required').max(20, 'Display name is less than 20 characters'),
@@ -12,4 +12,8 @@ export const SignupSchema = yup.object().shape({
 
 export const SettingSchema = yup.object().shape({
     name: yup.string().required('Display name is required').max(20, 'name is less than 20 characters')
+})
+
+export const DepoistSchema = yup.object().shape({
+    deposit: yup.number().typeError('A number is required for deposit field').required().moreThan(0, 'deposit should be greater than 0')
 })

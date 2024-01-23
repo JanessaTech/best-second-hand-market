@@ -76,7 +76,7 @@ const ConnectWallet = ({onClose, open, openSignup, notifyLoginUpdate}) => {
             <Typography variant='h4'>Connect to wallet</Typography>
             <Typography color='text.secondary' variant='body2'>Securely connect your wallet to start your Web3 journey</Typography>
             <Tooltip title='Close'>
-                  <IconButton onClick={handleClose} sx={{position:'absolute', top:10, right:10}}>
+                  <IconButton onClick={handleClose} sx={{position:'absolute', top:2, right:5}}>
                     <CheapIcon name={'close'}/>
                   </IconButton>
             </Tooltip>
