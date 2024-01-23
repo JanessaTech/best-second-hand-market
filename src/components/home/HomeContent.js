@@ -1,6 +1,4 @@
-import { Box } from '@mui/material'
 import React from 'react'
-import FilterMenu from '../../common/menu/FilterMenu'
 import NFTGallery from './NFTGallery'
 import { GlobalVariables } from '../MainLayout'
 

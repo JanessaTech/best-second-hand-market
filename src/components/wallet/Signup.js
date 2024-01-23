@@ -111,7 +111,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
                         id='name' 
                         aria-label='name'
                         name='name'
-                        label='Name'
+                        label='Display name'
                         value={state.name}
                         placeholder='Display name' 
                         {...register('name')}
