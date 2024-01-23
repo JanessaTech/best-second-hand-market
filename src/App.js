@@ -40,9 +40,7 @@ function App() {
                     <Route path="/nfters" element={<NFTer/>}/>
                     <Route path="*" element={<NoPage/>}/>
                   </Route>
-                  <Route path="*" element={<NoPage/>}/>
                 </Route>
-                <Route path="*" element={<NoPage/>}/>
             </Routes>
         </Router>
     </ThemeProvider>
