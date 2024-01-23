@@ -21,7 +21,7 @@ const WalletItem = (props) => {
                         component='img'
                         sx={{width:70, height:70}}
                         alt={name}
-                        src={`imgs/wallets/${img}`}
+                        src={`/imgs/wallets/${img}`}
                     />
                     <Typography sx={{fontWeight:'bold'}}>{name}</Typography>
                     {!support && <Box>
@@ -69,7 +69,9 @@ const ConnectWallet = ({onClose, open, openSignup, notifyLoginUpdate}) => {
 
   return (
     <Dialog
-        sx={{'& .MuiPaper-root.MuiDialog-paper':{width:isSmallScreen ? 0.9: 0.5, height: 'fit-content', borderRadius:5}}} open={open} disableScrollLock={true}>
+        sx={{'& .MuiPaper-root.MuiDialog-paper':{width:isSmallScreen ? 0.9: 0.5, height: 'fit-content', borderRadius:5}}} 
+        open={open} 
+        disableScrollLock={true}>
         <Box sx={{position:'relative', p:3}}>
             <Typography variant='h4'>Connect to wallet</Typography>
             <Typography color='text.secondary' variant='body2'>Securely connect your wallet to start your Web3 journey</Typography>
