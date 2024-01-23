@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Dialog, FormControlLabel, IconButton, Link, TextField, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Dialog, FormControl, FormControlLabel, FormHelperText, IconButton, Link, TextField, Tooltip, Typography } from '@mui/material'
 import React, { memo, useEffect, useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -33,6 +33,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
 
     useEffect(() => {
         let alerts = []
+        console.log(errors)
         if (errors?.name) {
             alerts.push({severity: 'error', message: errors?.name?.message})
         }
@@ -113,6 +114,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
                         name='name'
                         label='Display name'
                         value={state.name}
+                        error={errors?.name? true: false}
                         placeholder='Display name' 
                         {...register('name')}
                         variant='outlined'
@@ -145,10 +147,24 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
                         rows={4}
                         onChange={handleInputChanges}
                         />
-                    <FormControlLabel
-                        control={<Checkbox {...register('checked')} checked={state.checked} name='checked' onChange={handleCheckBoxChange}/>}
-                        label={<Typography color='text.secondary' variant='body2'>I have read and accept the <Link href="#" sx={{color:'primary.main'}}>Term of Service</Link> and the <Link href="#" sx={{color:'primary.main'}}>Term of Creator</Link> and confirm that I am at least 13 years old</Typography>}
-                    />
+                    <FormControl
+                        error={errors?.checked? true: false}
+                    >
+                        <FormControlLabel
+                            
+                            control={<Checkbox 
+                                        {...register('checked')} 
+                                        checked={state.checked} 
+                                        name='checked' 
+                                        onChange={handleCheckBoxChange} 
+                                        />
+                                    }
+                            label={<Typography color='text.secondary' variant='body2'>I have read and accept the <Link href="#" sx={{color:'primary.main'}}>Term of Service</Link> and the <Link href="#" sx={{color:'primary.main'}}>Term of Creator</Link> and confirm that I am at least 13 years old</Typography>}
+                        />
+                        <FormHelperText sx={{height:20, width:1, m:0}}>{ errors?.checked && 'Please tick the checkbox'} </FormHelperText>
+
+                    </FormControl>
+                    
                     
                     <Box sx={{display:'flex', flexDirection:'column'}}>
                         <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none'}}>Signup</Button>

@@ -17,3 +17,7 @@ export const SettingSchema = yup.object().shape({
 export const DepoistSchema = yup.object().shape({
     deposit: yup.number().typeError('A number is required for deposit field').required().moreThan(0, 'deposit should be greater than 0')
 })
+
+export const MintSchema = yup.object().shape({
+    
+})

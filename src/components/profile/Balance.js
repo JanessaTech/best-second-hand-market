@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, TextField } from '@mui/material'
+import { Box, Button, Container, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, TextField, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight} from '../../common/constant'
 import {GlobalVariables} from '../../components/MainLayout'
@@ -159,7 +159,9 @@ export default function Balance() {
                 size="small"
                 InputProps={{
                   readOnly: true,
-                  startAdornment: <InputAdornment position="start">{state.chainSymbol}</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">
+                                    <Typography sx={{fontWeight:'bold', color:'black'}}>{state.chainSymbol}</Typography>
+                                  </InputAdornment>,
                 }}
                 />
               <TextField
@@ -173,7 +175,9 @@ export default function Balance() {
                 size="small"
                 InputProps={{
                   readOnly: true,
-                  startAdornment: <InputAdornment position="start">{state.cheapSymbol}</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">
+                                    <Typography sx={{fontWeight:'bold', color:'black'}}>{state.cheapSymbol}</Typography>
+                                  </InputAdornment>,
                 }}
                 />
 

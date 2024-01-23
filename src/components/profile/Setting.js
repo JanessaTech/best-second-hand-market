@@ -104,6 +104,7 @@ export default function Setting() {
                 name='name'
                 label='Display name'
                 value={state.name}
+                error={errors?.name? true: false}
                 placeholder='Display name' 
                 {...register('name')}
                 variant='outlined'
