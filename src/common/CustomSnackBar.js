@@ -15,7 +15,7 @@ export default function CustomSnackBar(props) {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const {duration, timeout, alerts, clearAlerts} = props
     const [fadeIn, setFadeIn] = useState(alerts && alerts.length > 0 ? true : false)
-    const [allAlerts, setAllAlerts] = useState([])
+    const [accAlerts, setAccAlerts] = useState([])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -26,8 +26,8 @@ export default function CustomSnackBar(props) {
     })
 
     useEffect(() => {
-        setAllAlerts([...allAlerts, ...alerts])
-        console.log('[...allAlerts, ...alerts]', [...allAlerts, ...alerts])
+        setAccAlerts([...accAlerts, ...alerts])
+        console.log('[...accAlerts, ...alerts]', [...accAlerts, ...alerts])
     }, [alerts])
 
     useEffect(() => {
@@ -36,14 +36,14 @@ export default function CustomSnackBar(props) {
 
     const handleClearAlerts = () => {
         setFadeIn(false)
-        setAllAlerts([])
+        setAccAlerts([])
         clearAlerts()
     }
 
     return (
         <Fade in={fadeIn} timeout={timeout}>
                 <Box sx={{position:'fixed', zIndex:1301, top:80, right: isSmallScreen ? 16: 24}}>
-                    {allAlerts && allAlerts.length > 0 && 
+                    {accAlerts && accAlerts.length > 0 && 
                         <Box sx={{display:'flex', justifyContent:'end'}}>
                             <Tooltip title="Clear all" placement="right">
                                 <IconButton onClick={handleClearAlerts}>
@@ -54,7 +54,7 @@ export default function CustomSnackBar(props) {
                     } 
                     <Stack spacing={0.5}>
                         {
-                            allAlerts.map((a) => (
+                            accAlerts.map((a) => (
                                 <Alert key={a.id} severity={a.severity}>{a.message}</Alert>
                             ))
                         }

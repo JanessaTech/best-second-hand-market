@@ -25,36 +25,46 @@ function getStyles(sortName, sortBy, theme) {
 }
 
 export default function CustomSelect(props) {
-    const theme = useTheme()
-    const {label, showInputLabel, value, handleChange, options, width} = props
+  const theme = useTheme()
+  // you need to set register, name, errors and validate with true  when you want to use useForm to validate the Select 
+  // check Mint.js to see how to use Select with useForm
+  const {label, showInputLabel, value, handleChange, options, width, register, name, errors, validate} = props
 
-    const handleSelectChange = (e) => {
-        handleChange(e.target.value)
-    }
+  const handleSelectChange = (e) => {
+      handleChange(e.target.value)
+  }
 
-    return (
-        <FormControl sx={{width: width}}>
-                      {showInputLabel && <InputLabel id={`${label}-options-label`}>{label}</InputLabel>}
-                      <Select
-                          label={label}
-                          value={value}
-                          onChange={handleSelectChange}
-                          input={<OutlinedInput size="small" label={showInputLabel? label : ''}/>}
-                          MenuProps={MenuProps}
-                      >
-                          {
-                              options.map((option) => (
-                                  <MenuItem
-                                      key={option}
-                                      value={option}
-                                      style={getStyles(option, value, theme)}
-                                  >
-                                      {option}
-                                  </MenuItem>
-                              ))
-                          }                        
-                      </Select>
-        </FormControl>
-    )
+  return (
+      <FormControl sx={{width: width}}>
+                    {showInputLabel && <InputLabel id={`${label}-options-label`}>{label}</InputLabel>}
+                    <Select
+                        label={label}
+                        value={value}
+                        onChange={handleSelectChange}
+                        input={validate ? <OutlinedInput 
+                                            size="small" 
+                                            label={showInputLabel? label : ''} 
+                                            name={name} {...register(name)}
+                                            error={errors[name]? true: false}
+                                            /> : <OutlinedInput 
+                                                  size="small" 
+                                                  label={showInputLabel? label : ''} />
+                              }
+                        MenuProps={MenuProps}
+                    >
+                        {
+                            options.map((option) => (
+                                <MenuItem
+                                    key={option}
+                                    value={option}
+                                    style={getStyles(option, value, theme)}
+                                >
+                                    {option}
+                                </MenuItem>
+                            ))
+                        }                        
+                    </Select>
+      </FormControl>
+  )
 }
 

@@ -29,7 +29,8 @@ const MainLayout = () => {
     const theme = useTheme()
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
     const alertCnt = useRef(0)
-
+    
+    // state variables
     const [cartOpen, setCartOpen] = useState(false)
     const [walletOpen, setWalletOpen] = useState(false)
     const [signupOpen, setSignupOpen] = useState(false)

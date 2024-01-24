@@ -148,8 +148,7 @@ const Signup = ({onClose, open, notifyAlertUpdate}) => {
                     <FormControl
                         error={errors?.checked? true: false}
                     >
-                        <FormControlLabel
-                            
+                        <FormControlLabel                         
                             control={<Checkbox 
                                         {...register('checked')} 
                                         checked={state.checked} 
@@ -162,8 +161,6 @@ const Signup = ({onClose, open, notifyAlertUpdate}) => {
                         <FormHelperText sx={{height:20, width:1, m:0}}>{ errors?.checked && 'Please tick the checkbox'} </FormHelperText>
 
                     </FormControl>
-                    
-                    
                     <Box sx={{display:'flex', flexDirection:'column'}}>
                         <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none'}}>Signup</Button>
                         <Button variant='outlined' color='customBlack' sx={{textTransform:'none'}} onClick={handleDisConnected}>Disconnect wallet</Button>

@@ -19,5 +19,9 @@ export const DepoistSchema = yup.object().shape({
 })
 
 export const MintSchema = yup.object().shape({
-    
+    title: yup.string().required('Title is required').max(20, 'Title is less than 20 characters'),
+    category: yup.string().required('Category is required'),
+    chain: yup.string().required('Chain is required'),
+    address: yup.string().required('Contract address is required'),
+    description: yup.string().required('NFT description is required').max(200, 'NFT description is less than 200 characters')
 })

@@ -60,8 +60,6 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate}) => {
       const newAgo = getMins()
       setAgo(newAgo)
       localStorage.removeItem('filter')
-      localStorage.removeItem('isConnected')
-      localStorage.removeItem('user')
     }
     
   return (
