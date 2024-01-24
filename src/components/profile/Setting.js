@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, FormControl, InputLabel, MenuItem, OutlinedInput, Select, TextField } from '@mui/material'
+import { Box, Button, Container, TextField } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import { useTheme } from '@mui/material/styles'
 import { styled } from '@mui/material/styles'
 import {HeaderHeight} from '../../common/constant'
 import { useForm } from 'react-hook-form'
 import {SettingSchema} from '../../common/Schemas'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {GlobalVariables} from '../MainLayout'
+import CustomSelect from '../../common/CustomSelect'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -21,38 +21,14 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 3.5 + ITEM_PADDING_TOP,
-      width: 200,
-    },
-    
-  },
-  disableScrollLock: true,
-};
-
-function getStyles(sortName, sortBy, theme) {
-  return {
-    fontWeight:
-      sortBy.indexOf(sortName) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
-
 export default function Setting() {
   const {notifyAlertUpdate} = React.useContext(GlobalVariables)
-  const theme = useTheme()
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(SettingSchema)})
   const gatewayOptions = ['aaa', 'bbb','ccc','ddd']
   const [state, setState] = useState({
     name: '',
     walletAddress: '0xb129c8aD40e31bC421F37b5B418CF1Bfe1175536',
-    sortBy: 'aaa'
+    gateway: 'aaa'
   })
 
   useEffect(() => {
@@ -80,8 +56,8 @@ export default function Setting() {
     reset()
   }
 
-  const handleSortChange = (e) => {
-    setState({...state, sortBy: e.target.value})
+  const handleGatewayChange = (gateway) => {
+    setState({...state, gateway: gateway})
   }
 
   return (
@@ -136,32 +112,16 @@ export default function Setting() {
                         Upload your profile image file
                         <VisuallyHiddenInput type="file" />
           </Button>
-          <FormControl sx={{width: 0.6}}>
-                    <InputLabel id="gateway-options-label">Gateway</InputLabel>
-                    <Select
-                        label="Gateway"
-                        value={state.sortBy}
-                        onChange={handleSortChange}
-                        input={<OutlinedInput size="small" label='Gateway'/>}
-                        MenuProps={MenuProps}
-                    >
-                        {
-                            gatewayOptions.map((gateway) => (
-                                <MenuItem
-                                    key={gateway}
-                                    value={gateway}
-                                    style={getStyles(gateway, state.sortBy, theme)}
-                                >
-                                    {gateway}
-                                </MenuItem>
-                            ))
-                        }                        
-                    </Select>
-            </FormControl>
-
+          <CustomSelect 
+                label={'Gateway'} 
+                showInputLabel={true} 
+                value={state.gateway} 
+                handleChange={handleGatewayChange} 
+                options={gatewayOptions} 
+                width={0.6}/>
           <Box sx={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Button variant='outlined' color='customBlack' sx={{textTransform:'none'}} onClick={handleReset}>Reset</Button>
-                  <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none', ml:2}}>Signup</Button>
+                  <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none', ml:2}}>Save</Button>
           </Box>
         </Box>
 

@@ -1,31 +1,9 @@
-import { Box, Button, FormControl, OutlinedInput, Select, Tooltip, Typography, useMediaQuery } from '@mui/material'
+import { Box, Button, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import React, { memo, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import {HeaderHeight, DrawerWidth, FilterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs';
-import MenuItem from '@mui/material/MenuItem';
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 3.5 + ITEM_PADDING_TOP,
-      width: 200,
-    },
-    
-  },
-  disableScrollLock: true,
-};
-
-function getStyles(sortName, sortBy, theme) {
-    return {
-      fontWeight:
-        sortBy.indexOf(sortName) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-}
+import CustomSelect from '../../common/CustomSelect';
 
 function getMins() {
       const beforeDate = localStorage.getItem('now') ? parseInt(localStorage.getItem('now')) : undefined
@@ -61,15 +39,15 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate}) => {
         setAgo(getMins())
     }, [])
 
-    const handleSortChange = (e) => {
-        setSortBy(e.target.value)
+    const handleSortChange = (sort) => {
+        setSortBy(sort)
 
         let filter = localStorage.getItem('filter')
         if (filter) {
             filter = JSON.parse(filter)
-            filter.sortBy = e.target.value
+            filter.sortBy = sort
         } else {
-            filter = {sortBy: e.target.value}
+            filter = {sortBy: sort}
         }
         localStorage.setItem('filter', JSON.stringify(filter))
         console.log('[FilterBar] store filter:', filter)
@@ -131,27 +109,13 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate}) => {
                 </Box>
             </Box>
             <Box>
-                <FormControl sx={{width: 200 }}>
-                    <Select
-                        label="sort-by-name-option"
-                        value={sortBy}
-                        onChange={handleSortChange}
-                        input={<OutlinedInput size="small"/>}
-                        MenuProps={MenuProps}
-                    >
-                        {
-                            sortOptions.map((sortName) => (
-                                <MenuItem
-                                    key={sortName}
-                                    value={sortName}
-                                    style={getStyles(sortName, sortBy, theme)}
-                                >
-                                    {sortName}
-                                </MenuItem>
-                            ))
-                        }                        
-                    </Select>
-                </FormControl>
+                <CustomSelect 
+                    label={'Sort'} 
+                    showInputLabel={false} 
+                    value={sortBy} 
+                    handleChange={handleSortChange} 
+                    options={sortOptions} 
+                    width={200}/>
             </Box>     
     </Box>
   )

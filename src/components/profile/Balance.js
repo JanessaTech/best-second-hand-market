@@ -1,33 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, FormControl, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, TextField, Typography } from '@mui/material'
-import { useTheme } from '@mui/material/styles'
+import { Box, Button, Container, InputAdornment,TextField, Typography } from '@mui/material'
 import {HeaderHeight} from '../../common/constant'
 import {GlobalVariables} from '../../components/MainLayout'
 import {DepoistSchema} from '../../common/Schemas'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 3.5 + ITEM_PADDING_TOP,
-      width: 200,
-    },
-    
-  },
-  disableScrollLock: true,
-};
-
-function getStyles(sortName, sortBy, theme) {
-  return {
-    fontWeight:
-      sortBy.indexOf(sortName) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
+import CustomSelect from '../../common/CustomSelect'
 
 const balances = [
   {
@@ -67,7 +45,6 @@ function getBalanceBy(chain) {
 
 export default function Balance() {
   const chainOptions = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
-  const theme = useTheme()
   const {notifyAlertUpdate} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(DepoistSchema)})
   const [state, setState] = useState({
@@ -104,8 +81,7 @@ export default function Balance() {
     reset()
   }
 
-  const handleChainChange = (e) => {
-    const chain = e.target.value
+  const handleChainChange = (chain) => {
     const balance = getBalanceBy(chain)
     console.log('balance:', balance)
     setState({...state, remainingInChain: balance.remaining, chainSymbol: balance.chainSymbol, chainBy: balance.chain})
@@ -126,28 +102,13 @@ export default function Balance() {
             onSubmit={handleSubmit(handleDeposit)}
             noValidate
             autoComplete="off">
-              <FormControl sx={{width: 1}}>
-                      <InputLabel id="Chain-options-label">Chain</InputLabel>
-                      <Select
-                          label="Chain"
-                          value={state.chainBy}
-                          onChange={handleChainChange}
-                          input={<OutlinedInput size="small" label='Chain'/>}
-                          MenuProps={MenuProps}
-                      >
-                          {
-                              chainOptions.map((chain) => (
-                                  <MenuItem
-                                      key={chain}
-                                      value={chain}
-                                      style={getStyles(chain, state.chainBy, theme)}
-                                  >
-                                      {chain}
-                                  </MenuItem>
-                              ))
-                          }                        
-                      </Select>
-              </FormControl>
+              <CustomSelect 
+                label={'Chain'} 
+                showInputLabel={true} 
+                value={state.chainBy} 
+                handleChange={handleChainChange} 
+                options={chainOptions} 
+                width={1}/>
               <TextField
                 sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width: 1}}
                 id='remainingInChain' 
@@ -180,7 +141,6 @@ export default function Balance() {
                                   </InputAdornment>,
                 }}
                 />
-
               <TextField
                 sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width: 1}}
                 id='deposit' 
@@ -206,9 +166,6 @@ export default function Balance() {
                   <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none', ml:2}}>Deposit</Button>
             </Box>
         </Box>
-
-
-
       </Container>
     </Box>
   )

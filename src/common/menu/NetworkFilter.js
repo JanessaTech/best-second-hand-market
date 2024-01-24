@@ -38,7 +38,7 @@ function getNeworkFromLocalStorage() {
 
   return filter.network
 }
-
+// codes below should be refactored into CustomSelect.js later on
 const NetworkFilter = ({notify}) => {
     const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
     const theme = useTheme()
