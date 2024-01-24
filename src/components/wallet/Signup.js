@@ -19,7 +19,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
-const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
+const Signup = ({onClose, open, notifyAlertUpdate}) => {
     console.log('Signup rendering ')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
@@ -33,7 +33,6 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
 
     useEffect(() => {
         let alerts = []
-        console.log(errors)
         if (errors?.name) {
             alerts.push({severity: 'error', message: errors?.name?.message})
         }
@@ -59,7 +58,6 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
         localStorage.removeItem('isConnected')
         localStorage.removeItem('user')
         onClose()
-        notifyLoginUpdate()
     }
 
     const handleSignup = (data) => {
@@ -70,7 +68,6 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
         const user = {id: 111, name: 'JanessaTech lab'}
         localStorage.setItem('isConnected', 'true')
         localStorage.setItem('user', JSON.stringify(user))
-        notifyLoginUpdate()
     }
 
     const handleInputChanges = (e) => {
@@ -138,6 +135,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyLoginUpdate}) => {
                         name='introduction'
                         label='Introduction'
                         value={state.introduction}
+                        error={errors?.introduction? true: false}
                         placeholder='Your brief introduction' 
                         {...register('introduction')}
                         variant='outlined'

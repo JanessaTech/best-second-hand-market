@@ -41,7 +41,7 @@ const WalletItem = (props) => {
 
 }
 
-const ConnectWallet = ({onClose, open, openSignup, notifyLoginUpdate}) => {
+const ConnectWallet = ({onClose, open, openSignup}) => {
     console.log('ConnectWallet rendering ')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -63,7 +63,6 @@ const ConnectWallet = ({onClose, open, openSignup, notifyLoginUpdate}) => {
             localStorage.setItem('isConnected', 'true')
             localStorage.setItem('user', JSON.stringify(user))
             console.log('isConnected is set as true, notify header')
-            notifyLoginUpdate()
         }
     }
 

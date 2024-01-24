@@ -7,23 +7,16 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Header = ({openCart, isConnected, user, notifyWalletOpen, notifyLoginUpdate}) => {
+const Header = ({openCart, login, notifyWalletOpen}) => {
     console.log('rendering Header ...')
-    console.log('user:', user)
+    console.log('login:', login)
     const theme = useTheme()
     const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
     const [search, setSearch] = useState('')
-    const [isLogin, setIsLogin]  = useState(isConnected)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [anchorEl, setAnchorEl] =  React.useState(null)
-
-    
-    useEffect(() => {
-        console.log('header is updated, isConnected = ', isConnected)
-        setIsLogin(isConnected)
-    }, [isConnected])
 
     const handleSearchChanges = (e) => {
         e.preventDefault()
@@ -51,8 +44,7 @@ const Header = ({openCart, isConnected, user, notifyWalletOpen, notifyLoginUpdat
     },[anchorEl])
 
     const handleMintBut = () => {
-        const isConnected = localStorage.getItem('isConnected')
-        if (isConnected) {
+        if (login?.isConnected) {
         console.log('[Header] go to to /profile/mint')
         navigate('/profile/mint')
         } else {
@@ -130,7 +122,7 @@ const Header = ({openCart, isConnected, user, notifyWalletOpen, notifyLoginUpdat
             </Box>
             <Box sx={{display:'flex', alignItems: 'center'}}>
                 {
-                    isLogin ? <Box sx={{display:'flex', alignItems: 'center'}}>
+                    login?.isConnected ? <Box sx={{display:'flex', alignItems: 'center'}}>
                     <Box sx={{[theme.breakpoints.down('md')]:{display:'none'}, cursor: 'pointer', mr:1}}>
                         <Typography color={'white'} variant='subtitle1'>Connected</Typography>
                     </Box>
@@ -142,10 +134,10 @@ const Header = ({openCart, isConnected, user, notifyWalletOpen, notifyLoginUpdat
                             aria-expanded={isProfileOpen ? 'true' : undefined}
                             onClick={handleProfileMenuOpen}
                             >
-                                <Avatar alt={user?.name} src={`/imgs/nfters/${user?.id}/me.png`}/>
+                                <Avatar alt={login?.user?.name} src={`/imgs/nfters/${login?.user?.id}/me.png`}/>
                     </IconButton>
                     
-                    <ProfileMenu user={user} anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose} notifyLoginUpdate={notifyLoginUpdate}/>
+                    <ProfileMenu user={login?.user} anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose}/>
                     <IconButton sx={{
                         [theme.breakpoints.down('md')]:{display:'none'},
                         '&:hover':{backgroundColor:'grey'}

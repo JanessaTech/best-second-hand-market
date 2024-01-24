@@ -41,6 +41,7 @@ const MainLayout = () => {
         open: isMediumScreen ? false : true,
         width: isMediumScreen ? 0 : DrawerWidth
     })
+    const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
 
     useEffect(() => {
         if(!isMediumScreen) {
@@ -50,9 +51,20 @@ const MainLayout = () => {
         }
     }, [isMediumScreen])
 
-    const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
+    useEffect(() => {
+        console.log('[MainLayout], localStorage.getItem(\'isConnected\') = ', localStorage.getItem('isConnected'))
+        const isConnected = localStorage.getItem('isConnected') ? true : false
+        if (isConnected) {
+            const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : undefined
+            setLogin({isConnected: true, user: user })
+        } else {
+            setLogin({isConnected: false, user: undefined})
+        }
 
-    const notifyLoginUpdate = useCallback(() => {    
+    }, [localStorage.getItem('isConnected')])
+
+    const notifyLoginUpdate = useCallback(() => {  
+        /*  
         const isConnected = localStorage.getItem('isConnected') ? true : false
         console.log('[MainLayout] notifyLoginUpdate. isConnected=', isConnected)
         if (isConnected) {
@@ -60,8 +72,9 @@ const MainLayout = () => {
             setLogin({isConnected: true, user: user })
         } else {
             setLogin({isConnected: false, user: undefined})
-        }
+        }*/
     }, [])
+
     
     // for alerts
     const notifyAlertUpdate = useCallback((_alerts) => {
@@ -74,19 +87,18 @@ const MainLayout = () => {
         setAlerts(newAlerts)
     }, [])
 
-    const clearAlerts = useCallback(() => {
-        setAlerts([])
-    }, [])
-
     const notifyFilterUpdate = useCallback((newTrigger) => {
         setTrigger(newTrigger)
     },[])
+
+    const clearAlerts = useCallback(() => {
+        setAlerts([])
+    }, [])
 
     const closeMenu = useCallback(() => {
         setMenu({open: false, width: 0})
     }, [])
         
-
     const toggleMenu = useCallback(() => {
         console.log('[MainLayout] toggleMenu is clicked')
         if (menu.open) {
@@ -127,10 +139,8 @@ const MainLayout = () => {
         <Container maxWidth='false'>
             <Header 
                 openCart={openCart} 
-                isConnected={login.isConnected} 
-                user={login.user} 
-                notifyWalletOpen={notifyWalletOpen} 
-                notifyLoginUpdate={notifyLoginUpdate}/>
+                login={login}
+                notifyWalletOpen={notifyWalletOpen}/>
             <GlobalVariables.Provider 
                 value={{
                     user: login.user,
@@ -165,13 +175,11 @@ const MainLayout = () => {
                 onClose={onCloseWallet} 
                 open={walletOpen} 
                 openSignup={openSignup} 
-                notifyLoginUpdate={notifyLoginUpdate}
             />   
             <Signup
                 onClose={onCloseSignUp} 
                 open={signupOpen} 
                 notifyAlertUpdate={notifyAlertUpdate} 
-                notifyLoginUpdate={notifyLoginUpdate}
             />
             <CheapBottomNavigation 
                 openCart={openCart} 

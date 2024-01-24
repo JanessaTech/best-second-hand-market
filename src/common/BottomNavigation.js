@@ -19,7 +19,6 @@ const CheapBottomNavigation = ({openCart, toggleMenu, isShowMenu, isConnected, n
 
     const handleMintBut = () => {
       console.log('[CheapBottomNavigation] handleMintBut')
-      const isConnected = localStorage.getItem('isConnected')
       if (isConnected) {
       console.log('[CheapBottomNavigation] go to to /profile/mint')
       navigate('/profile/mint')

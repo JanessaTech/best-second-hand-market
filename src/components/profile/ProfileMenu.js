@@ -1,9 +1,9 @@
 import { Avatar, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
 import React, { memo } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 
-const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyLoginUpdate}) => {
+const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose}) => {
   const navigate = useNavigate()
 
     const handleClose = (e) => {
@@ -15,7 +15,6 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyLoginU
       localStorage.removeItem('isConnected')
       localStorage.removeItem('user')
       handleProfileMenuClose()
-      notifyLoginUpdate()
       navigate('/')
     }
 
