@@ -52,7 +52,7 @@ export default function ProfileFilterBar({menuOpen, toggleMenu, notifyFilterUpda
                 
                 <Box sx={{display:'flex'}}>
                     <Typography ><strong>{stat.total}</strong> items: </Typography>
-                    <Typography><strong>{stat.sold}</strong> sold, <strong>{stat.unsold}</strong> unsold</Typography>
+                    <Typography><strong>{stat.sold}</strong> on sales</Typography>
                 </Box>
             </Box>
             <Box>
