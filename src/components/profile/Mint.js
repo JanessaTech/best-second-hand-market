@@ -166,12 +166,12 @@ export default function Mint() {
     console.log('addresses =', addresses)
     console.log('standards =', standards)
 
-    setState({...state, chain: value, addressOptions: addresses, standardOptions: standards})
+    setState({...state, chain: value, addressOptions: addresses, standardOptions: standards, address: '', standard: ''})
+    reset()
   }
 
   const handleAddressChange = (value) => {
     const index = state.addressOptions.indexOf(value)
-    //setState({...state, standard: state.standardOptions[index]})
     console.log()
     setState({...state, address: value, standard: state.standardOptions[index]})
   }
@@ -179,6 +179,8 @@ export default function Mint() {
   const handleStandardChange = (value) => {
     setState({...state, standard: value})
   }
+
+  console.log('state: ', state)
 
   return (
     <Box component="main" sx={{width:1}}>
