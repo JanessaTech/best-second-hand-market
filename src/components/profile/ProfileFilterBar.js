@@ -5,7 +5,7 @@ import {DrawerWidth, HeaderHeight, FilterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs'
 import CustomSelect from '../../common/CustomSelect'
 
-export default function ProfileFilterBar({menuOpen, toggleMenu, notifyFilterUpdate}) {
+export default function ProfileFilterBar({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary}) {
     console.log('FilterBar rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -50,10 +50,7 @@ export default function ProfileFilterBar({menuOpen, toggleMenu, notifyFilterUpda
                     </Tooltip>                  
                 </Box>
                 
-                <Box sx={{display:'flex'}}>
-                    <Typography ><strong>{stat.total}</strong> items: </Typography>
-                    <Typography><strong>{stat.sold}</strong> on sales</Typography>
-                </Box>
+                {handleSummary()}
             </Box>
 
     </Box>

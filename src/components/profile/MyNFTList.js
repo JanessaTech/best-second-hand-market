@@ -285,12 +285,24 @@ export default function MyNFTList() {
     setRowSates(newRowStates)
   }
 
+  const handleSummary = () => {
+    const total = rowStates.length
+    const sales = rowStates.filter((row) => row.sstatus.value === 'On').length
+    return (
+      <Box sx={{display:'flex'}}>
+              <Typography ><strong>{total}</strong> items: </Typography>
+              <Typography><strong>{sales}</strong> on sales</Typography>
+      </Box>
+    )
+
+  }
+
   //console.log('rowStates :', rowStates)
 
   return (
     <Box component="main" sx={{width:1}}>
       <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
-      <ProfileFilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterUpdate={notifyFilterUpdate}/>
+      <ProfileFilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterUpdate={notifyFilterUpdate} handleSummary={handleSummary}/>
       <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
         
         <Paper sx={{ width: '100%', mb: 2 }}>
