@@ -1,4 +1,4 @@
-import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, TableRow, useMediaQuery, TableSortLabel, TablePagination, Button, TextField, Typography } from '@mui/material'
+import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, TableRow, useMediaQuery, TableSortLabel, TablePagination, Button, TextField, Typography, Link } from '@mui/material'
 import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
@@ -7,10 +7,12 @@ import ProfileFilterBar from './ProfileFilterBar'
 import PropTypes from 'prop-types'
 import CustomSelect from '../../common/CustomSelect'
 
-function createData(id, name, category, sstatus, price, createdTime, views, favorites) {
+function createData(id, title, img, from, category, sstatus, price, createdTime, views, favorites) {
   return {
     id,
-    name,
+    title,
+    img, 
+    from, 
     category,
     sstatus,
     price,
@@ -21,21 +23,21 @@ function createData(id, name, category, sstatus, price, createdTime, views, favo
 }
 
 const rows = [
-  createData(1, 'green monkey', 'Pets', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 221),
-  createData(2, 'Cute dress', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 222),
-  createData(3, 'green monkey', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 223),
-  createData(4, 'Frozen yoghurt', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 224),
-  createData(5, 'Gingerbread', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 225),
-  createData(6, 'Honeycomb', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 226),
-  createData(7, 'Ice cream sandwich', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 227),
-  createData(8, 'Jelly Bean', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 228),
-  createData(9, 'KitKat', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 229),
-  createData(10, 'Lollipop', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 230),
-  createData(11, 'Marshmallow', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 231),
-  createData(12, 'Nougat', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 232),
-  createData(13, 'Oreo', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
-  createData(14, 'Oreo', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
-  createData(15, 'Oreo', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'JanessaTech lab', 'Pets', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 221),
+  createData(2, 'Cute dress', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 222),
+  createData(3, 'green monkey', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 223),
+  createData(4, 'Frozen yoghurt', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 224),
+  createData(5, 'Gingerbread', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 225),
+  createData(6, 'Honeycomb', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 226),
+  createData(7, 'Ice cream sandwich', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 227),
+  createData(8, 'Jelly Bean', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 228),
+  createData(9, 'KitKat', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 229),
+  createData(10, 'Lollipop', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 230),
+  createData(11, 'Marshmallow', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 231),
+  createData(12, 'Nougat', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 232),
+  createData(13, 'Oreo', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(14, 'Oreo', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(15, 'Oreo', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
 ];
 
 const headCells = [
@@ -46,26 +48,26 @@ const headCells = [
     label: 'ID',
   },
   {
-    id: 'name',
+    id: 'title',
     position: 'center',
     disablePadding: false,
     label: 'NFT',
   },
   {
     id: 'category',
-    position: 'center',
+    position: 'left',
     disablePadding: false,
     label: 'Category',
   },
   {
     id: 'sstatus',
-    position: 'center',
+    position: 'left',
     disablePadding: false,
     label: 'Status',
   },
   {
     id: 'price',
-    position: 'center',
+    position: 'left',
     disablePadding: false,
     label: 'Price(CH)',
   },
@@ -164,7 +166,6 @@ export default function MyNFTList() {
   const [orderBy, setOrderBy] = React.useState('calories')
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
-
   const [rowStates, setRowSates] = React.useState(rows)
 
   const handleRequestSort = (event, property) => {
@@ -198,7 +199,9 @@ export default function MyNFTList() {
       if (rowStates[i].id === id) {
         newRowStates.push({
           id: rowStates[i].id,
-          name: rowStates[i].name,
+          title: rowStates[i].title,
+          img:  rowStates[i].img,
+          from:  rowStates[i].from,
           category: rowStates[i].category,
           sstatus: {
                 value: status, 
@@ -224,7 +227,9 @@ export default function MyNFTList() {
       if (rowStates[i].id === id) {
         newRowStates.push({
           id: rowStates[i].id,
-          name: rowStates[i].name,
+          title: rowStates[i].title,
+          img:  rowStates[i].img,
+          from:  rowStates[i].from,
           category: rowStates[i].category,
           sstatus: rowStates[i].sstatus,
           price: {
@@ -255,7 +260,9 @@ export default function MyNFTList() {
       if (rowStates[i].id === id) {
         newRowStates.push({
           id: rowStates[i].id,
-          name: rowStates[i].name,
+          title: rowStates[i].title,
+          img:  rowStates[i].img,
+          from:  rowStates[i].from,
           category: rowStates[i].category,
           sstatus: {
               value: rowStates[i].sstatus.isChanged ? rowStates[i].sstatus.backUpValue : rowStates[i].sstatus.value, 
@@ -278,7 +285,7 @@ export default function MyNFTList() {
     setRowSates(newRowStates)
   }
 
-  console.log('rowStates :', rowStates)
+  //console.log('rowStates :', rowStates)
 
   return (
     <Box component="main" sx={{width:1}}>
@@ -315,9 +322,27 @@ export default function MyNFTList() {
                           >
                             {row.id}
                           </TableCell>
-                          <TableCell align="center">{row.name}</TableCell>
-                          <TableCell align="center">{row.category}</TableCell>
                           <TableCell align="center">
+                            <Link href={`/nft?id=${row.id}`}>
+                                <Box sx={{display:'flex'}}>
+                                    <Box
+                                      component='img'
+                                      sx={{width: 50, borderRadius:2, height:50, mr:1}}
+                                      alt={row.title}
+                                      src={`/imgs/nfts/${row.img}`}
+                                    >
+                                    </Box>
+                                    <Box sx={{width:150}}>
+                                        <Typography variant='body1' 
+                                          sx={{fontWeight:'bold', whiteSpace: 'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.title}</Typography>
+                                        <Typography variant='body2' color='text.secondary' 
+                                          sx={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.from}</Typography>
+                                    </Box>
+                                </Box>
+                            </Link>
+                          </TableCell>
+                          <TableCell align="left">{row.category}</TableCell>
+                          <TableCell align="left">
                             <CustomSelect 
                               label={'status'} 
                               showInputLabel={false} 

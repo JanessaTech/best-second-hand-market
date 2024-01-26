@@ -49,7 +49,7 @@ const Overview = ({notifyAlertUpdate, notifyWalletOpen}) => {
                       component='img'
                       sx={{width: 1, borderRadius:'16px 16px 0 0'}}
                       alt='A baby money'
-                      src='imgs/nfts/mk.png'
+                      src='/imgs/nfts/mk.png'
                     />
                     <Box sx={{mx: isSmallScreen ? 1 : 2, mb:1, }}>
                         <Typography variant='h6'>A baby monkey</Typography>
