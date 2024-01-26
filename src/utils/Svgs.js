@@ -7,8 +7,8 @@ const svgMapping = new Map([
   ['notification', '/imgs/common/notification.svg'],
   ['defaut', '/imgs/common/defaut.svg'],
   ['close', '/imgs/common/close.svg'],
-  ['update', 'imgs/common/update.svg'],
-  ['help', 'imgs/common/help.svg'],
+  ['update', '/imgs/common/update.svg'],
+  ['help', '/imgs/common/help.svg'],
   ['filter', '/imgs/common/filter.svg'],
   ['left-arrow', '/imgs/common/left-arrow.svg'],
   ['right-arrow', '/imgs/common/right-arrow.svg'],
@@ -19,7 +19,7 @@ const svgMapping = new Map([
   ['search', '/imgs/header/search.svg'],
   ['forward-slash', '/imgs/header/forward-slash.svg'],
   ['cha', '/imgs/header/cha.svg'],
-  ['connect-wallet', 'imgs/header/connect-wallet.svg'],
+  ['connect-wallet', '/imgs/header/connect-wallet.svg'],
 
 
   // for network options

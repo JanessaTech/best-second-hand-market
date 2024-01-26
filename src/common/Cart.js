@@ -3,8 +3,7 @@ import React, { memo, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CheapIcon } from '../utils/Svgs'
 import {CartWidth, HeaderHeight} from './constant'
-import CustomPopper from './CustomPopper';
-
+import { UnavailableHelpTip } from './TipHelpers';
 
 const data = [
   {
@@ -93,26 +92,8 @@ function calcPrice(data) {
   return price.toFixed(3)  // maybe a bug
 }
 
-const HelpContent = () => {
-  return (
-    <Box>
-      <Typography variant='body2'>The item is unavailable because it has been purchased by someone else, the seller has removed the listing or the order has expired </Typography>
-    </Box>
-  )
-}
-
 const CartItem = (props) => {
   const {nftId, title, img, nfter, available, price, deleteFromCart, ...others} = props
-
-  const [anchorEl, setAnchorEl] = React.useState(null)
-
-  const openHelp = (e) => {
-    setAnchorEl(e.currentTarget)
-  }
-
-  const closeHelp = () => {
-    setAnchorEl(null)
-  }
 
   return (
     <Box sx={{
@@ -147,15 +128,8 @@ const CartItem = (props) => {
                                                     whiteSpace: 'nowrap', 
                                                     overflow: 'hidden'}}
                                           >{nfter}</Typography>
-                                      </Box> : <Box sx={{display:'flex', alignItems:'center'}}>
-                                                      <Typography variant='body2'>Not available</Typography>
-                                                      <Box onMouseOver={openHelp} onMouseLeave={closeHelp}>
-                                                          <CheapIcon name='help' size={16}/>
-                                                      </Box>
-                                                      <CustomPopper idPrefix='nft-unavailable' anchorEl={anchorEl} width={250} placement={'top'} content={<HelpContent/>} />
-                                                </Box>
-                        }
-                        
+                                      </Box> : <UnavailableHelpTip/>
+                        } 
                     </Box>
                   </Box>
               </Box>

@@ -81,7 +81,7 @@ const headCells = [
     id: 'views',
     position: 'left',
     disablePadding: false,
-    label: 'views',
+    label: 'Views',
   },
   {
     id: 'favorites',
@@ -154,7 +154,7 @@ EnhancedTableHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-};
+}
 
 export default function MyNFTList() {
   const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
@@ -162,8 +162,8 @@ export default function MyNFTList() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const statusOptions = ['On', 'Off']
 
-  const [order, setOrder] = React.useState('asc')
-  const [orderBy, setOrderBy] = React.useState('calories')
+  const [order, setOrder] = React.useState('desc')
+  const [orderBy, setOrderBy] = React.useState('createdTime')
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [rowStates, setRowSates] = React.useState(rows)
@@ -174,16 +174,16 @@ export default function MyNFTList() {
     console.log('newOrder = ', newOrder, 'property = ', property)
     setOrder(newOrder);
     setOrderBy(property);
-  };
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-  };
+  }
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
+  }
 
   const visibleRows = React.useMemo(
     () => {
@@ -294,7 +294,6 @@ export default function MyNFTList() {
               <Typography><strong>{sales}</strong> on sales</Typography>
       </Box>
     )
-
   }
 
   //console.log('rowStates :', rowStates)
@@ -309,7 +308,7 @@ export default function MyNFTList() {
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
+              aria-labelledby="My nft list"
               size={'medium'}
             >
               <EnhancedTableHead
@@ -320,7 +319,7 @@ export default function MyNFTList() {
               <TableBody>
                 {
                   visibleRows.map((row, index) => {
-                    const labelId = `enhanced-table-index-${index}`
+                    const labelId = `nft-list-table-index-${index}`
                     return (
                       <TableRow
                         hover
