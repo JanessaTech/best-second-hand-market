@@ -8,7 +8,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 3.5 + ITEM_PADDING_TOP,
-      width: 200,
+      width: 'inherit',
     },
     
   },
@@ -16,6 +16,7 @@ const MenuProps = {
 };
 
 function getStyles(sortName, sortBy, theme) {
+  //console.log(`[CustomSelect] getStyles: sortName=${sortName} sortBy=${sortBy}`)
   return {
     fontWeight:
       sortBy.indexOf(sortName) === -1

@@ -55,15 +55,6 @@ export default function ProfileFilterBar({menuOpen, toggleMenu, notifyFilterUpda
                     <Typography><strong>{stat.sold}</strong> on sales</Typography>
                 </Box>
             </Box>
-            <Box>
-                <CustomSelect 
-                    label={'Sort'} 
-                    showInputLabel={false} 
-                    value={sortBy} 
-                    handleChange={handleSortChange} 
-                    options={sortOptions} 
-                    width={200}/>
-            </Box>
 
     </Box>
   )

@@ -1,10 +1,11 @@
-import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, TableRow, useMediaQuery, TableSortLabel, TablePagination, Button, TextField } from '@mui/material'
+import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, TableRow, useMediaQuery, TableSortLabel, TablePagination, Button, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import {GlobalVariables} from '../MainLayout'
 import ProfileFilterBar from './ProfileFilterBar'
 import PropTypes from 'prop-types'
+import CustomSelect from '../../common/CustomSelect'
 
 function createData(id, name, category, sstatus, price, createdTime, views, favorites) {
   return {
@@ -20,19 +21,21 @@ function createData(id, name, category, sstatus, price, createdTime, views, favo
 }
 
 const rows = [
-  createData(1, 'green monkey', 'Pets', 'On', {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 221),
-  createData(2, 'Cute dress', 'Clothes', 'On', {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 222),
-  createData(3, 'green monkey', 'Clothes', 'On', {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 223),
-  createData(4, 'Frozen yoghurt', 'Clothes', 'On', {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 224),
-  createData(5, 'Gingerbread', 'Clothes', 'On', {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 225),
-  createData(6, 'Honeycomb', 'Clothes', 'On', {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 226),
-  createData(7, 'Ice cream sandwich', 'Clothes', 'On', {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 227),
-  createData(8, 'Jelly Bean', 'Clothes', 'Off', {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 228),
-  createData(9, 'KitKat', 'Clothes', 'On', {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 229),
-  createData(10, 'Lollipop', 'Clothes', 'Off', {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 230),
-  createData(11, 'Marshmallow', 'Clothes', 'Off', {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 231),
-  createData(12, 'Nougat', 'Clothes', 'Off', {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 232),
-  createData(13, 'Oreo', 'Clothes', 'On', {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(1, 'green monkey', 'Pets', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 221),
+  createData(2, 'Cute dress', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 222),
+  createData(3, 'green monkey', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 223),
+  createData(4, 'Frozen yoghurt', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 224),
+  createData(5, 'Gingerbread', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 225),
+  createData(6, 'Honeycomb', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 226),
+  createData(7, 'Ice cream sandwich', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 227),
+  createData(8, 'Jelly Bean', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 228),
+  createData(9, 'KitKat', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 229),
+  createData(10, 'Lollipop', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 230),
+  createData(11, 'Marshmallow', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 231),
+  createData(12, 'Nougat', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 232),
+  createData(13, 'Oreo', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(14, 'Oreo', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(15, 'Oreo', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
 ];
 
 const headCells = [
@@ -68,19 +71,19 @@ const headCells = [
   },
   {
     id: 'createdTime',
-    position: 'center',
+    position: 'left',
     disablePadding: false,
     label: 'Created Time',
   },
   {
     id: 'views',
-    position: 'center',
+    position: 'left',
     disablePadding: false,
     label: 'views',
   },
   {
     id: 'favorites',
-    position: 'center',
+    position: 'left',
     disablePadding: false,
     label: 'Favorites',
   },
@@ -103,22 +106,42 @@ function EnhancedTableHead(props) {
     <TableHead>
         <TableRow>
               {
-                headCells.map((headCell) => (
-                  <TableCell
-                    key={headCell.id}
-                    align={headCell.position}
-                    padding={headCell.disablePadding ? 'none' : 'normal'}
-                    sortDirection={orderBy === headCell.id ? order : false}
-                  >
-                    <TableSortLabel
-                      active={orderBy === headCell.id}
-                      direction={orderBy === headCell.id ? order : 'asc'}
-                      onClick={createSortHandler(headCell.id)}>
-                        {headCell.label}
-                    </TableSortLabel>
-                    
-                  </TableCell>
-                ))
+                headCells.map((headCell) => {
+                  if (headCell.id === 'update') {
+                    return (
+                      <TableCell
+                        sx={{width: 150}}
+                        key={headCell.id}
+                        align={headCell.position}
+                        padding={headCell.disablePadding ? 'none' : 'normal'}
+                        sortDirection={orderBy === headCell.id ? order : false}
+                    >
+                      <TableSortLabel
+                          sx={{cursor:'default', '& svg':{display:'none'}}}
+                          active={orderBy === headCell.id}
+                          direction={orderBy === headCell.id ? order : 'asc'}>
+                            {headCell.label}
+                      </TableSortLabel>
+                    </TableCell>
+                    )
+                  } else {
+                    return (
+                    <TableCell
+                      key={headCell.id}
+                      align={headCell.position}
+                      padding={headCell.disablePadding ? 'none' : 'normal'}
+                      sortDirection={orderBy === headCell.id ? order : false}
+                    >
+                      <TableSortLabel
+                        active={orderBy === headCell.id}
+                        direction={orderBy === headCell.id ? order : 'asc'}
+                        onClick={createSortHandler(headCell.id)}>
+                          {headCell.label}
+                      </TableSortLabel>
+                    </TableCell>
+                    )
+                  }
+                })
               }
         </TableRow>
     </TableHead>
@@ -127,13 +150,15 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired
+  orderBy: PropTypes.string.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
 };
 
 export default function MyNFTList() {
   const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+  const statusOptions = ['On', 'Off']
 
   const [order, setOrder] = React.useState('asc')
   const [orderBy, setOrderBy] = React.useState('calories')
@@ -166,6 +191,32 @@ export default function MyNFTList() {
     }, [order, orderBy, page, rowsPerPage, rowStates]
   )
 
+  const handleStatusChange = (id) => (status) => {
+    console.log('handleStatusChange id=', id, ' status =', status)
+    const newRowStates = []
+    for (var i = 0; i < rowStates.length; i++) {
+      if (rowStates[i].id === id) {
+        newRowStates.push({
+          id: rowStates[i].id,
+          name: rowStates[i].name,
+          category: rowStates[i].category,
+          sstatus: {
+                value: status, 
+                isChanged: true, 
+                backUpValue: rowStates[i].sstatus.backUpValue ? rowStates[i].sstatus.backUpValue: rowStates[i].sstatus.value
+              },
+          price: rowStates[i].price,
+          createdTime: rowStates[i].createdTime,
+          views: rowStates[i].views,
+          favorites: rowStates[i].favorites
+        })
+      } else {
+        newRowStates.push(rowStates[i])
+      }
+    }
+    setRowSates(newRowStates)
+  }
+
   const handlePriceChange = (id) => (e) => {
     console.log('handlePriceChange, id =', id, 'value=', e.target.value)
     const newRowStates = []
@@ -176,7 +227,11 @@ export default function MyNFTList() {
           name: rowStates[i].name,
           category: rowStates[i].category,
           sstatus: rowStates[i].sstatus,
-          price: {value: e.target.value, isChanged: true, backUpValue: rowStates[i].price.backUpValue ? rowStates[i].price.backUpValue: rowStates[i].price.value},
+          price: {
+                value: e.target.value, 
+                isChanged: true, 
+                backUpValue: rowStates[i].price.backUpValue ? rowStates[i].price.backUpValue: rowStates[i].price.value
+                },
           createdTime: rowStates[i].createdTime,
           views: rowStates[i].views,
           favorites: rowStates[i].favorites
@@ -193,7 +248,7 @@ export default function MyNFTList() {
     console.log('call rest api to save changes in row')
   }
 
-  const handleUndoPriceChange = (id) => (e) => {
+  const handleUndoChange = (id) => (e) => {
     console.log('handleUndoPriceChange, id =', id)
     const newRowStates = []
     for (var i = 0; i < rowStates.length; i++) {
@@ -202,8 +257,16 @@ export default function MyNFTList() {
           id: rowStates[i].id,
           name: rowStates[i].name,
           category: rowStates[i].category,
-          sstatus: rowStates[i].sstatus,
-          price: {value: rowStates[i].price.backUpValue, isChanged: false, backUpValue: undefined},
+          sstatus: {
+              value: rowStates[i].sstatus.isChanged ? rowStates[i].sstatus.backUpValue : rowStates[i].sstatus.value, 
+              isChanged: false, 
+              backUpValue: undefined
+              },
+          price: {
+              value: rowStates[i].price.isChanged ? rowStates[i].price.backUpValue : rowStates[i].price.value, 
+              isChanged: false, 
+              backUpValue: undefined
+              },
           createdTime: rowStates[i].createdTime,
           views: rowStates[i].views,
           favorites: rowStates[i].favorites
@@ -215,8 +278,8 @@ export default function MyNFTList() {
     setRowSates(newRowStates)
   }
 
+  console.log('rowStates :', rowStates)
 
-console.log(rowStates)
   return (
     <Box component="main" sx={{width:1}}>
       <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
@@ -254,7 +317,15 @@ console.log(rowStates)
                           </TableCell>
                           <TableCell align="center">{row.name}</TableCell>
                           <TableCell align="center">{row.category}</TableCell>
-                          <TableCell align="center">{row.sstatus}</TableCell>
+                          <TableCell align="center">
+                            <CustomSelect 
+                              label={'status'} 
+                              showInputLabel={false} 
+                              value={row.sstatus.value} 
+                              handleChange={handleStatusChange(row.id)} 
+                              options={statusOptions} 
+                              width={70}/>
+                          </TableCell>
                           <TableCell align="center">
                             <Box>
                               <TextField 
@@ -274,14 +345,24 @@ console.log(rowStates)
                             </Box>
                             
                           </TableCell>
-                          <TableCell align="right">{row.createdTime}</TableCell>
-                          <TableCell align="right">{row.views}</TableCell>
-                          <TableCell align="right">{row.favorites}</TableCell>
-                          <TableCell align="center" sx={{width: 200}}>
-                            {row.price.isChanged && 
+                          <TableCell align="left">{row.createdTime}</TableCell>
+                          <TableCell align="left">{row.views}</TableCell>
+                          <TableCell align="left">{row.favorites}</TableCell>
+                          <TableCell align="center" sx={{width: 150}}>
+                            {(row.price.isChanged || row.sstatus.isChanged) &&
                             <Box sx={{display:'flex'}}>
-                              <Button sx={{textTransform:'none'}} color='customBlack' variant='contained' onClick={handleRowChange(row.id)}>Save</Button>
-                              <Button sx={{textTransform:'none', ml:1}} color='customBlack' variant='contained' onClick={handleUndoPriceChange(row.id)}>Cancel</Button>
+                                  <Button sx={{textTransform:'none'}} 
+                                      color='customBlack' 
+                                      variant='contained' 
+                                      onClick={handleRowChange(row.id)}>
+                                        <Typography variant='body2'>Save</Typography>
+                                  </Button>
+                                  <Button sx={{textTransform:'none', ml:1}} 
+                                          color='customBlack' 
+                                          variant='contained' 
+                                          onClick={handleUndoChange(row.id)}>
+                                            <Typography variant='body2'>Cancel</Typography>
+                                  </Button>
                             </Box>
                             }
                           </TableCell>
@@ -292,13 +373,13 @@ console.log(rowStates)
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
       </Box>

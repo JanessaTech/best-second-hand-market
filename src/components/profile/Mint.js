@@ -221,7 +221,7 @@ export default function Mint() {
                 options={categories} // The content of dropdown list
                 width={1}  //size
                 register={register}  // bind it to useForm
-                errors={errors}  // errros if the value is not conformed with sechema
+                errors={errors}  // errros if the value is not conformed with schema
                 validate={true}  // sometimes, we don't need to do validation where the select is just a general dropdown list. In this case, we set validate as false or leave as undefined
                 />
               <CustomSelect 
