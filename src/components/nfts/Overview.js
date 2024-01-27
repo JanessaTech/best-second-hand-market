@@ -2,7 +2,7 @@ import { Box, Link, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import React, { memo, useEffect, useState } from 'react'
 
-const Overview = ({notifyAlertUpdate, notifyWalletOpen}) => {
+const Overview = ({nft, notifyAlertUpdate, notifyWalletOpen}) => {
   console.log('Overview rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -38,7 +38,7 @@ const Overview = ({notifyAlertUpdate, notifyWalletOpen}) => {
   }
 
   return (
-    <Link href='nft?id=123'>
+    <Link href={`nft?id=${nft?.id}`}>
             <Box sx={{border:'1px solid #f5f5f5', 
                       borderRadius:4, 
                       '&:hover':{border:'2px solid #f5f5f5', cursor:'pointer'}, 
@@ -48,18 +48,18 @@ const Overview = ({notifyAlertUpdate, notifyWalletOpen}) => {
                     <Box
                       component='img'
                       sx={{width: 1, borderRadius:'16px 16px 0 0'}}
-                      alt='A baby money'
-                      src='/imgs/nfts/mk.png'
+                      alt={nft?.title}
+                      src={`/imgs/nfts/${nft?.img}`}
                     />
                     <Box sx={{mx: isSmallScreen ? 1 : 2, mb:1, }}>
                         <Typography variant='h6'>A baby monkey</Typography>
-                        <Typography color='text.secondary' variant='subtitle2'>JanessaTech lab</Typography>
+                        <Typography color='text.secondary' variant='subtitle2'>{nft?.seller}</Typography>
                         <Box sx={{display: 'flex', mt:1}}>
                           <Tooltip title='Ethereum'>
-                            <Box component='img' sx={{width:15, mr:1}} src='/imgs/networks/ethereum.svg'/>
+                            <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${nft?.network}.svg`}/>
                           </Tooltip>
                           <Box sx={{display:'flex', alignItems:'center'}}>
-                            <Typography variant='h6'>12</Typography>
+                            <Typography variant='h6'>{nft?.price}</Typography>
                             <Typography sx={{ml:1}}>CH</Typography>
                           </Box>
                         </Box>  

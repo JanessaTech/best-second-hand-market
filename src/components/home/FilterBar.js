@@ -24,7 +24,7 @@ function getSortByFromLocalStorage() {
     return 'Recent activity'
   }
 
-const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate}) => {
+const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary}) => {
     console.log('FilterBar rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -100,11 +100,7 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate}) => {
                     </Tooltip>
                     
                 </Box>
-                
-                <Box>
-                    <Typography variant='body2'>22,334,111 items</Typography>
-                    <Typography variant='body2' color={'grey'}>{ago} mins ago</Typography>
-                </Box>
+                {handleSummary()}
             </Box>
             <Box>
                 <CustomSelect 
