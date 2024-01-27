@@ -56,7 +56,7 @@ const Overview = ({notifyAlertUpdate, notifyWalletOpen}) => {
                         <Typography color='text.secondary' variant='subtitle2'>JanessaTech lab</Typography>
                         <Box sx={{display: 'flex', mt:1}}>
                           <Tooltip title='Ethereum'>
-                            <Box component='img' sx={{width:15, mr:1}} src='imgs/networks/ethereum.svg'/>
+                            <Box component='img' sx={{width:15, mr:1}} src='/imgs/networks/ethereum.svg'/>
                           </Tooltip>
                           <Box sx={{display:'flex', alignItems:'center'}}>
                             <Typography variant='h6'>12</Typography>

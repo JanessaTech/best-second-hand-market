@@ -7,12 +7,12 @@ import ProfileFilterBar from './ProfileFilterBar'
 import PropTypes from 'prop-types'
 import CustomSelect from '../../common/CustomSelect'
 
-function createData(id, title, img, from, category, sstatus, price, createdTime, views, favorites) {
+function createData(id, title, img, network, category, sstatus, price, createdTime, views, favorites) {
   return {
     id,
     title,
     img, 
-    from, 
+    network, 
     category,
     sstatus,
     price,
@@ -23,82 +23,25 @@ function createData(id, title, img, from, category, sstatus, price, createdTime,
 }
 
 const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'JanessaTech lab', 'Pets', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 221),
-  createData(2, 'Cute dress', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 222),
-  createData(3, 'green monkey', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 223),
-  createData(4, 'Frozen yoghurt', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 224),
-  createData(5, 'Gingerbread', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 225),
-  createData(6, 'Honeycomb', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 226),
-  createData(7, 'Ice cream sandwich', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 227),
-  createData(8, 'Jelly Bean', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 228),
-  createData(9, 'KitKat', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 229),
-  createData(10, 'Lollipop', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 230),
-  createData(11, 'Marshmallow', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 231),
-  createData(12, 'Nougat', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 232),
-  createData(13, 'Oreo', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
-  createData(14, 'Oreo', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
-  createData(15, 'Oreo', 'mk.png', 'JanessaTech lab', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
-];
-
-const headCells = [
-  {
-    id: 'id',
-    position: 'left',
-    disablePadding: false,
-    label: 'ID',
-  },
-  {
-    id: 'title',
-    position: 'center',
-    disablePadding: false,
-    label: 'NFT',
-  },
-  {
-    id: 'category',
-    position: 'left',
-    disablePadding: false,
-    label: 'Category',
-  },
-  {
-    id: 'sstatus',
-    position: 'left',
-    disablePadding: false,
-    label: 'Status',
-  },
-  {
-    id: 'price',
-    position: 'left',
-    disablePadding: false,
-    label: 'Price(CH)',
-  },
-  {
-    id: 'createdTime',
-    position: 'left',
-    disablePadding: false,
-    label: 'Created Time',
-  },
-  {
-    id: 'views',
-    position: 'left',
-    disablePadding: false,
-    label: 'Views',
-  },
-  {
-    id: 'favorites',
-    position: 'left',
-    disablePadding: false,
-    label: 'Favorites',
-  },
-  {
-    id: 'update',
-    position: 'center',
-    disablePadding: false,
-    label: 'Update',
-  },
-];
+  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'Pets', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 221),
+  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 222),
+  createData(3, 'green monkey', 'mk.png', 'ethereum', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 223),
+  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 224),
+  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 225),
+  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 226),
+  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 227),
+  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 228),
+  createData(9, 'KitKat', 'mk.png', 'ethereum', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 229),
+  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 230),
+  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 231),
+  createData(12, 'Nougat', 'mk.png', 'ethereum', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 232),
+  createData(13, 'Oreo', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(14, 'Oreo', 'mk.png', 'ethereum', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(15, 'Oreo', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+]
 
 function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort} = props
+  const { headCells, order, orderBy, onRequestSort} = props
 
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -108,42 +51,23 @@ function EnhancedTableHead(props) {
     <TableHead>
         <TableRow>
               {
-                headCells.map((headCell) => {
-                  if (headCell.id === 'update') {
-                    return (
-                      <TableCell
-                        sx={{width: 150}}
-                        key={headCell.id}
-                        align={headCell.position}
-                        padding={headCell.disablePadding ? 'none' : 'normal'}
-                        sortDirection={orderBy === headCell.id ? order : false}
-                    >
-                      <TableSortLabel
-                          sx={{cursor:'default', '& svg':{display:'none'}}}
-                          active={orderBy === headCell.id}
-                          direction={orderBy === headCell.id ? order : 'asc'}>
-                            {headCell.label}
-                      </TableSortLabel>
-                    </TableCell>
-                    )
-                  } else {
-                    return (
-                    <TableCell
+                headCells.map((headCell) => 
+                <TableCell
+                      sx={{display:headCell.display ? 'table-cell': 'none',px:1, width: headCell.width}}
                       key={headCell.id}
                       align={headCell.position}
                       padding={headCell.disablePadding ? 'none' : 'normal'}
                       sortDirection={orderBy === headCell.id ? order : false}
                     >
                       <TableSortLabel
+                        sx={{cursor: headCell.order ? 'pointer': 'default', '& svg':{display: headCell.order ? 'block': 'none'}}}
                         active={orderBy === headCell.id}
                         direction={orderBy === headCell.id ? order : 'asc'}
-                        onClick={createSortHandler(headCell.id)}>
+                        onClick={headCell.order ? createSortHandler(headCell.id) : (e)=> {}}>
                           {headCell.label}
                       </TableSortLabel>
-                    </TableCell>
-                    )
-                  }
-                })
+                </TableCell>
+                )
               }
         </TableRow>
     </TableHead>
@@ -161,6 +85,84 @@ export default function MyNFTList() {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const statusOptions = ['On', 'Off']
+  const headCells = [
+    {
+      id: 'id',
+      position: 'left',  // 'inherit' | 'left' | 'center' | 'right' | 'justify'
+      disablePadding: false,
+      label: 'ID',
+      order: true,  // Indicate if this column is orderable
+      display: true  // Indicate if this column is visible
+    },
+    {
+      id: 'title',
+      position: 'center',
+      disablePadding: false,
+      label: 'NFT',
+      order: true,
+      display: true
+    },
+    {
+      id: 'category',
+      position: 'left',
+      disablePadding: false,
+      label: 'Category',
+      order: true,
+      display: isSmallScreen ? false : true
+    },
+    {
+      id: 'sstatus',
+      position: 'left',
+      disablePadding: false,
+      label: 'Status',
+      order: true,
+      display: true
+    },
+    {
+      id: 'price',
+      position: 'left',
+      disablePadding: false,
+      label: 'Price(CH)',
+      order: true,
+      display: true
+    },
+    {
+      id: 'createdTime',
+      position: 'left',
+      disablePadding: false,
+      label: 'Created Time',
+      order: true,
+      display: isSmallScreen ? false : true
+    },
+    {
+      id: 'views',
+      position: 'left',
+      disablePadding: false,
+      label: 'Views',
+      order: true,
+      display: isSmallScreen ? false : true
+    },
+    {
+      id: 'favorites',
+      position: 'left',
+      disablePadding: false,
+      label: 'Favorites',
+      order: true,
+      display: isSmallScreen ? false : true
+    },
+    {
+      id: 'update',
+      position: 'center',
+      disablePadding: false,
+      label: 'Update',
+      order: false,
+      display: true
+    }
+  ]
+  
+  const getHeadById = (id) => {
+    return headCells.find(h => h.id === id)
+  }
 
   const [order, setOrder] = React.useState('desc')
   const [orderBy, setOrderBy] = React.useState('createdTime')
@@ -201,7 +203,7 @@ export default function MyNFTList() {
           id: rowStates[i].id,
           title: rowStates[i].title,
           img:  rowStates[i].img,
-          from:  rowStates[i].from,
+          network:  rowStates[i].network,
           category: rowStates[i].category,
           sstatus: {
                 value: status, 
@@ -229,7 +231,7 @@ export default function MyNFTList() {
           id: rowStates[i].id,
           title: rowStates[i].title,
           img:  rowStates[i].img,
-          from:  rowStates[i].from,
+          network:  rowStates[i].network,
           category: rowStates[i].category,
           sstatus: rowStates[i].sstatus,
           price: {
@@ -262,7 +264,7 @@ export default function MyNFTList() {
           id: rowStates[i].id,
           title: rowStates[i].title,
           img:  rowStates[i].img,
-          from:  rowStates[i].from,
+          network:  rowStates[i].network,
           category: rowStates[i].category,
           sstatus: {
               value: rowStates[i].sstatus.isChanged ? rowStates[i].sstatus.backUpValue : rowStates[i].sstatus.value, 
@@ -296,7 +298,7 @@ export default function MyNFTList() {
     )
   }
 
-  //console.log('rowStates :', rowStates)
+  console.log('rowStates :', rowStates)
 
   return (
     <Box component="main" sx={{width:1}}>
@@ -307,11 +309,12 @@ export default function MyNFTList() {
         <Paper sx={{ width: '100%', mb: 2 }}>
           <TableContainer>
             <Table
-              sx={{ minWidth: 750 }}
+              sx={{ minWidth: 150 }}
               aria-labelledby="My nft list"
               size={'medium'}
             >
               <EnhancedTableHead
+                headCells={headCells}
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
@@ -327,33 +330,33 @@ export default function MyNFTList() {
                         sx={{ cursor: 'pointer' }}
                       >
                           <TableCell
+                            sx={{display: getHeadById('id').display? 'table-cell': 'none', px:1}}
                             component="th"
                             id={labelId}
                             scope="row"
                           >
                             {row.id}
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="center" sx={{display: getHeadById('title').display ?'table-cell': 'none', px:1}}>
                             <Link href={`/nft?id=${row.id}`}>
                                 <Box sx={{display:'flex'}}>
                                     <Box
-                                      component='img'
-                                      sx={{width: 50, borderRadius:2, height:50, mr:1}}
-                                      alt={row.title}
-                                      src={`/imgs/nfts/${row.img}`}
+                                        component='img'
+                                        sx={{width: 70, borderRadius:2, height:70, mr:1}}
+                                        alt={row.title}
+                                        src={`/imgs/nfts/${row.img}`}
                                     >
                                     </Box>
-                                    <Box sx={{width:150}}>
+                                    <Box sx={{width:100, display:'flex', flexDirection:'column'}}>
                                         <Typography variant='body1' 
                                           sx={{fontWeight:'bold', whiteSpace: 'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.title}</Typography>
-                                        <Typography variant='body2' color='text.secondary' 
-                                          sx={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.from}</Typography>
+                                        <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.network}.svg`}/>
                                     </Box>
                                 </Box>
                             </Link>
                           </TableCell>
-                          <TableCell align="left">{row.category}</TableCell>
-                          <TableCell align="left">
+                          <TableCell align="left" sx={{display: getHeadById('category').display ?'table-cell': 'none', px:1}}>{row.category}</TableCell>
+                          <TableCell align="left" sx={{display: getHeadById('sstatus').display ?'table-cell': 'none', px:1}}>
                             <CustomSelect 
                               label={'status'} 
                               showInputLabel={false} 
@@ -362,12 +365,12 @@ export default function MyNFTList() {
                               options={statusOptions} 
                               width={70}/>
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="center" sx={{display: getHeadById('id').display ?'table-cell': 'none', px:1}}>
                             <Box>
                               <TextField 
                                   id={`price-${row.id}`} 
                                   variant="standard" 
-                                  sx={{width:120}}
+                                  sx={{width:80}}
                                   type='number'
                                   value={row.price?.value}
                                   onChange={handlePriceChange(row.id)}
@@ -381,10 +384,10 @@ export default function MyNFTList() {
                             </Box>
                             
                           </TableCell>
-                          <TableCell align="left">{row.createdTime}</TableCell>
-                          <TableCell align="left">{row.views}</TableCell>
-                          <TableCell align="left">{row.favorites}</TableCell>
-                          <TableCell align="center" sx={{width: 150}}>
+                          <TableCell align="left" sx={{display: getHeadById('createdTime').display ?'table-cell': 'none', px:1}}>{row.createdTime}</TableCell>
+                          <TableCell align="left" sx={{display: getHeadById('views').display ?'table-cell': 'none', px:1}}>{row.views}</TableCell>
+                          <TableCell align="left" sx={{display: getHeadById('favorites').display ?'table-cell': 'none', px:1}}>{row.favorites}</TableCell>
+                          <TableCell align="center" sx={{display: getHeadById('update').display ?'table-cell': 'none', px:1}}>
                             {(row.price.isChanged || row.sstatus.isChanged) &&
                             <Box sx={{display:'flex'}}>
                                   <Button sx={{textTransform:'none'}} 

@@ -8,12 +8,12 @@ import {GlobalVariables} from '../MainLayout'
 import ProfileFilterBar from './ProfileFilterBar'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
 
-function createData(id, title, img, from, category, price, views, favorites, available) {
+function createData(id, title, img, network, category, price, views, favorites, available) {
   return {
     id,
     title,
     img, 
-    from, 
+    network, 
     category,
     price,
     views,
@@ -23,21 +23,21 @@ function createData(id, title, img, from, category, price, views, favorites, ava
 }
 
 const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'JanessaTech lab', 'Pets', 61, 102, 221),
-  createData(2, 'Cute dress', 'mk.png', 'JanessaTech lab', 'Clothes', 62, 102, 222, true),
-  createData(3, 'green monkey', 'mk.png', 'JanessaTech lab', 'Clothes', 63, 102, 223, true),
-  createData(4, 'Frozen yoghurt', 'mk.png', 'JanessaTech lab', 'Clothes', 64, 102, 224, true),
-  createData(5, 'Gingerbread', 'mk.png', 'JanessaTech lab', 'Clothes', 65, 102, 225, true),
-  createData(6, 'Honeycomb', 'mk.png', 'JanessaTech lab', 'Clothes', 66, 102, 226, true),
-  createData(7, 'Ice cream sandwich', 'mk.png', 'JanessaTech lab', 'Clothes', 67, 102, 227, true),
-  createData(8, 'Jelly Bean', 'mk.png', 'JanessaTech lab', 'Clothes', 68, 102, 228, true),
-  createData(9, 'KitKat', 'mk.png', 'JanessaTech lab', 'Clothes', 69, 102, 229, true),
-  createData(10, 'Lollipop', 'mk.png', 'JanessaTech lab', 'Clothes', 70, 102, 230, true),
-  createData(11, 'Marshmallow', 'mk.png', 'JanessaTech lab', 'Clothes', 71, 102, 231, true),
-  createData(12, 'Nougat', 'mk.png', 'JanessaTech lab', 'Clothes', 72, 102, 232, true),
-  createData(13, 'Oreo', 'mk.png', 'JanessaTech lab', 'Clothes', 73, 102, 233, true),
-  createData(14, 'Oreo', 'mk.png', 'JanessaTech lab', 'Clothes', 74, 102, 233, true),
-  createData(15, 'Oreo', 'mk.png', 'JanessaTech lab', 'Clothes', 75, 102, 233, true),
+  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'Pets', 61, 102, 221),
+  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'Clothes', 62, 102, 222, true),
+  createData(3, 'green monkey', 'mk.png', 'ethereum', 'Clothes', 63, 102, 223, true),
+  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'Clothes', 64, 102, 224, true),
+  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'Clothes', 65, 102, 225, true),
+  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'Clothes', 66, 102, 226, true),
+  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'Clothes', 67, 102, 227, true),
+  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'Clothes', 68, 102, 228, true),
+  createData(9, 'KitKat', 'mk.png', 'ethereum', 'Clothes', 69, 102, 229, true),
+  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'Clothes', 70, 102, 230, true),
+  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'Clothes', 71, 102, 231, true),
+  createData(12, 'Nougat', 'mk.png', 'ethereum', 'Clothes', 72, 102, 232, true),
+  createData(13, 'Oreo', 'mk.png', 'ethereum', 'Clothes', 73, 102, 233, true),
+  createData(14, 'Oreo', 'mk.png', 'ethereum', 'Clothes', 74, 102, 233, true),
+  createData(15, 'Oreo', 'mk.png', 'ethereum', 'Clothes', 75, 102, 233, true),
 ];
 
 const headCells = [
@@ -227,11 +227,10 @@ export default function Favorites() {
                                           src={`/imgs/nfts/${row.img}`}
                                         >
                                         </Box>
-                                        <Box sx={{width:150}}>
+                                        <Box sx={{width:100, display:'flex', flexDirection:'column'}}>
                                             <Typography variant='body1' 
                                               sx={{fontWeight:'bold', whiteSpace: 'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.title}</Typography>
-                                            <Typography variant='body2' color='text.secondary' 
-                                              sx={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.from}</Typography>
+                                            <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.network}.svg`}/>
                                         </Box>
                                     </Box>
                                 </Link>

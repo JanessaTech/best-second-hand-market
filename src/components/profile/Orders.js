@@ -6,12 +6,12 @@ import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import ProfileFilterBar from './ProfileFilterBar'
 import {GlobalVariables} from '../MainLayout'
 
-function createData(id, title, img, from, category, price, orderedTime, seller) {
+function createData(id, title, img, network, category, price, orderedTime, seller) {
   return {
     id,
     title,
     img, 
-    from, 
+    network, 
     category,
     price,
     orderedTime,
@@ -20,22 +20,22 @@ function createData(id, title, img, from, category, price, orderedTime, seller) 
 }
 
 const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'JanessaTech lab', 'Pets', 12, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(2, 'Cute dress', 'mk.png', 'JanessaTech lab', 'Pets', 22, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(3, 'Frozen yoghurt', 'mk.png', 'JanessaTech lab', 'Pets', 32, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(4, 'Gingerbread', 'mk.png', 'JanessaTech lab', 'Pets', 42, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(5, 'Honeycomb', 'mk.png', 'JanessaTech lab', 'Pets', 52, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(6, 'Ice cream sandwich', 'mk.png', 'JanessaTech lab', 'Pets', 62, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(7, 'Jelly Bean', 'mk.png', 'JanessaTech lab', 'Pets', 72, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(8, 'KitKat', 'mk.png', 'JanessaTech lab', 'Pets', 82, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(9, 'Lollipop', 'mk.png', 'JanessaTech lab', 'Pets', 92, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(10, 'Marshmallow', 'mk.png', 'JanessaTech lab', 'Pets', 122, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(11, 'Nougat', 'mk.png', 'JanessaTech lab', 'Pets', 222, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(12, 'Jeniffer', 'mk.png', 'JanessaTech lab', 'Pets', 342, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(13, 'Lidanaa', 'mk.png', 'JanessaTech lab', 'Pets', 442, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(14, 'Test for this one', 'mk.png', 'JanessaTech lab', 'Pets', 62, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(15, 'Day dream for success', 'mk.png', 'JanessaTech lab', 'Pets', 772, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(16, 'Day dream for success2', 'mk.png', 'JanessaTech lab', 'Pets', 772, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'Pets', 12, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'Pets', 22, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(3, 'Frozen yoghurt', 'mk.png', 'ethereum', 'Pets', 32, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(4, 'Gingerbread', 'mk.png', 'ethereum', 'Pets', 42, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(5, 'Honeycomb', 'mk.png', 'ethereum', 'Pets', 52, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(6, 'Ice cream sandwich', 'mk.png', 'ethereum', 'Pets', 62, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(7, 'Jelly Bean', 'mk.png', 'ethereum', 'Pets', 72, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(8, 'KitKat', 'mk.png', 'ethereum', 'Pets', 82, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(9, 'Lollipop', 'mk.png', 'ethereum', 'Pets', 92, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(10, 'Marshmallow', 'mk.png', 'ethereum', 'Pets', 122, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(11, 'Nougat', 'mk.png', 'ethereum', 'Pets', 222, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(12, 'Jeniffer', 'mk.png', 'ethereum', 'Pets', 342, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(13, 'Lidanaa', 'mk.png', 'ethereum', 'Pets', 442, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(14, 'Test for this one', 'mk.png', 'ethereum', 'Pets', 62, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(15, 'Day dream for success', 'mk.png', 'ethereum', 'Pets', 772, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(16, 'Day dream for success2', 'mk.png', 'ethereum', 'Pets', 772, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
 ]
 
 const headCells = [
@@ -205,11 +205,10 @@ export default function Orders() {
                                       src={`/imgs/nfts/${row.img}`}
                                     >
                                     </Box>
-                                    <Box sx={{width:150}}>
+                                    <Box sx={{width:100, display:'flex', flexDirection:'column'}}>
                                         <Typography variant='body1' 
                                           sx={{fontWeight:'bold', whiteSpace: 'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.title}</Typography>
-                                        <Typography variant='body2' color='text.secondary' 
-                                          sx={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.from}</Typography>
+                                        <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.network}.svg`}/>
                                     </Box>
                                 </Box>
                             </Link>
