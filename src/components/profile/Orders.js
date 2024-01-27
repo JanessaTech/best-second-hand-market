@@ -90,6 +90,7 @@ function EnhancedTableHead(props) {
           {
             headCells.map((headCell) => (
               <TableCell
+                sx={{px:1}}
                 key={headCell.id}
                 align={headCell.position}
                 padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -186,21 +187,22 @@ export default function Orders() {
                         <TableRow
                           hover
                           key={row.id}
-                          sx={{ cursor: 'pointer' }}
+                          sx={{ cursor: 'pointer', px:1}}
                         >
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
+                            sx={{px:1}}
                           >
                             {row.id}
                           </TableCell>
-                          <TableCell align="center">
+                          <TableCell align="center" sx={{px:1}}>
                             <Link href={`/nft?id=${row.id}`}>
                                 <Box sx={{display:'flex'}}>
                                     <Box
                                       component='img'
-                                      sx={{width: 50, borderRadius:2, height:50, mr:1}}
+                                      sx={{width: 70, borderRadius:2, height:70, mr:1}}
                                       alt={row.title}
                                       src={`/imgs/nfts/${row.img}`}
                                     >
@@ -213,10 +215,10 @@ export default function Orders() {
                                 </Box>
                             </Link>
                           </TableCell>
-                          <TableCell align="left">{row.category}</TableCell>
-                          <TableCell align="left">{row.price}</TableCell>
-                          <TableCell align="left">{row.orderedTime}</TableCell>
-                          <TableCell align="left">{row.seller}</TableCell>
+                          <TableCell align="left" sx={{px:1}}>{row.category}</TableCell>
+                          <TableCell align="left" sx={{px:1}}>{row.price}</TableCell>
+                          <TableCell align="left" sx={{px:1}}>{row.orderedTime}</TableCell>
+                          <TableCell align="left" sx={{px:1}}>{row.seller}</TableCell>
                         </TableRow>
                       )
                     })

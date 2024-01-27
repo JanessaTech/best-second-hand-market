@@ -5,7 +5,7 @@ const NfterOverview = () => {
   return (
     <Box>
         <Box sx={{display:'flex', alignItems:'center'}}>
-            <Avatar alt='JanessaTech lab' src='imgs/nfters/me.png'/>
+            <Avatar alt='JanessaTech lab' src='/imgs/nfters/111/me.png'/>
             <Box sx={{ml:1}}>
                 <Typography variant='subtitle1'>JanessaTech lab</Typography>
                 <Typography color='text.secondary' variant='body2'>Last login: Jan 01 2024 10:31 AM </Typography>

@@ -327,7 +327,7 @@ export default function MyNFTList() {
                       <TableRow
                         hover
                         key={row.id}
-                        sx={{ cursor: 'pointer' }}
+                        sx={{ cursor: 'pointer', px:1}}
                       >
                           <TableCell
                             sx={{display: getHeadById('id').display? 'table-cell': 'none', px:1}}

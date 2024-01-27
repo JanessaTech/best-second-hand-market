@@ -99,6 +99,7 @@ function EnhancedTableHead(props) {
           headCells.map((headCell) => {
             return (
               <TableCell
+                      sx={{px:1}}
                       key={headCell.id}
                       align={headCell.position}
                       padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -208,21 +209,22 @@ export default function Favorites() {
                           <TableRow
                             hover
                             key={row.id}
-                            sx={{ cursor: 'pointer'}}
+                            sx={{ cursor: 'pointer', px:1}}
                           >
                             <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
+                              component="th"
+                              id={labelId}
+                              scope="row"
+                              sx={{px:1}}
                             >
                             {row.id}
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell align="center" sx={{px:1}}>
                                 <Link href={`/nft?id=${row.id}`}>
                                     <Box sx={{display:'flex'}}>
                                         <Box
                                           component='img'
-                                          sx={{width: 50, borderRadius:2, height:50, mr:1}}
+                                          sx={{width: 70, borderRadius:2, height:70, mr:1}}
                                           alt={row.title}
                                           src={`/imgs/nfts/${row.img}`}
                                         >
@@ -235,20 +237,19 @@ export default function Favorites() {
                                     </Box>
                                 </Link>
                             </TableCell>
-                            <TableCell align="left">{row.category}</TableCell>
-                            <TableCell align="left">
+                            <TableCell align="left" sx={{px:1}}>{row.category}</TableCell>
+                            <TableCell align="left" sx={{px:1}}>
                             {row.available ? row.price : <UnavailableHelpTip/>}
                             </TableCell>
-                            <TableCell align="left">{row.views}</TableCell>
-                            <TableCell align="left">{row.favorites}</TableCell>
-                            <TableCell align="left">
+                            <TableCell align="left" sx={{px:1}}>{row.views}</TableCell>
+                            <TableCell align="left" sx={{px:1}}>{row.favorites}</TableCell>
+                            <TableCell align="left" sx={{px:1}}>
                               <Tooltip title="Delete favorite" placement="right">
                                   <IconButton onClick={handleDelete(row.id)}>
                                       <DeleteIcon />
                                   </IconButton>
                               </Tooltip>
                             </TableCell>
-
                           </TableRow>
                         )
                       })

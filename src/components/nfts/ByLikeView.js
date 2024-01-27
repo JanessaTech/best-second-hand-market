@@ -26,7 +26,7 @@ const ByLikeView = ({user}) => {
   return (
     <Box sx={{display: 'flex', justifyContent:'space-between', alignItems:'center'}}>
         <Box sx={{display:'flex', alignItems:'center', flex:'1 1 50px', minWidth:50}}>
-            <Typography sx={{mr:1}} variant='body2'>By</Typography>
+            <Typography sx={{mr:1}} variant='body2'>Sold by</Typography>
             <Typography variant='body2' color='text.secondary' 
                 sx={{textOverflow: 'ellipsis', 
                     whiteSpace: 'nowrap', 
