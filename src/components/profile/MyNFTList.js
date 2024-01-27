@@ -395,7 +395,7 @@ export default function MyNFTList() {
                                   </Button>
                                   <Button sx={{textTransform:'none', ml:1}} 
                                           color='customBlack' 
-                                          variant='contained' 
+                                          variant='outlined' 
                                           onClick={handleUndoChange(row.id)}>
                                             <Typography variant='body2'>Cancel</Typography>
                                   </Button>

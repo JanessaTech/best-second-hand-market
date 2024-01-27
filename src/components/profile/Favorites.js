@@ -244,8 +244,8 @@ export default function Favorites() {
                             <TableCell align="left">{row.favorites}</TableCell>
                             <TableCell align="left">
                               <Tooltip title="Delete favorite" placement="right">
-                                  <IconButton>
-                                      <DeleteIcon onClick={handleDelete(row.id)}/>
+                                  <IconButton onClick={handleDelete(row.id)}>
+                                      <DeleteIcon />
                                   </IconButton>
                               </Tooltip>
                             </TableCell>
@@ -254,7 +254,6 @@ export default function Favorites() {
                         )
                       })
                     }
-
                   </TableBody>
                 </Table>
             </TableContainer>
