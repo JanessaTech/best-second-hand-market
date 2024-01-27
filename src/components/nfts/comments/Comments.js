@@ -41,7 +41,7 @@ const Comments = ({user})=> {
   const [pagination, setPagination] = useState({
     page: 1,  // the index of the current page
     pageSize: 3, // how many items are shown in one page
-    pages: 0 // how many in total
+    pages: 0 // how many pages in total
   })
 
   useEffect(() => {
@@ -75,6 +75,8 @@ const Comments = ({user})=> {
           page={pagination.page} 
           variant="outlined" 
           color="primary"
+          boundaryCount={1}
+          siblingCount={0}
           onChange={handleChange}/>
     </Box>
   )

@@ -4,10 +4,11 @@ import { GlobalVariables } from '../MainLayout'
 
 export default function HomeContent() {
     console.log('HomeContent rendering ....')
-    const {menuOpen, trigger, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen} = React.useContext(GlobalVariables)
+    const {user, menuOpen, trigger, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen} = React.useContext(GlobalVariables)
 
     return (
         <NFTGallery 
+            user={user}
             menuOpen={menuOpen} 
             toggleMenu={toggleMenu} 
             trigger={trigger} 
