@@ -18,6 +18,7 @@ npm install @mui/icons-material
 npm install react-router-dom
 npm install axios
 npm install react-hook-form @hookform/resolvers yup
+npm install react-infinite-scroll-component
 ```
 
 ## The list of features used in React
