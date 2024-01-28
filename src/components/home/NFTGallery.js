@@ -72,6 +72,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
   useEffect(() => {
     const latestFilter = getFilter()
     console.log('call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', pagination.page)
+    window.scrollTo(0, 0)
   }, [trigger])
 
   
