@@ -4,6 +4,7 @@ import { Box, Grid, Pagination, Typography, useMediaQuery } from '@mui/material'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import FilterBar from './FilterBar'
 import Overview from '../nfts/Overview'
+import OverviewSkeleton from '../nfts/comments/OverviewSkeleton'
 
 function createData(id, img, title, seller, network, price) {
   return {id, img, title, seller, network, price}
@@ -41,6 +42,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
     pageSize: 3, // how many items are shown in one page
     pages: 10 // how many pages in total
   })
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const latestFilter = getFilter()
@@ -70,17 +72,22 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
   //console.log("nfts", nfts)
 
   return (
-    <Box component="main">
+    <Box component="main" sx={{width:1}}>
         <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
         <FilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterUpdate={notifyFilterUpdate} handleSummary={handleSummary}/>
         <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
           <Grid container spacing={2}>
             {
-              nfts.map( (nft) => (
+              !isLoading ? nfts.map( (nft) => (
                 <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
                     <Overview nft={nft} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
                 </Grid>
+              )) : Array.from(new Array(nfts.length)).map((dummyNft) => (
+                <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
+                  <OverviewSkeleton/>
+                </Grid>
               ))
+              
             }
             
             {/* <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
