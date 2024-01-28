@@ -42,7 +42,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
     pageSize: 3, // how many items are shown in one page
     pages: 10 // how many pages in total
   })
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const latestFilter = getFilter()
@@ -86,37 +86,8 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
                 <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
                   <OverviewSkeleton/>
                 </Grid>
-              ))
-              
+              ))         
             }
-            
-            {/* <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
-            </Grid>
-            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
-            </Grid>
-            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
-            </Grid>
-            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
-            </Grid>
-            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
-            </Grid>
-            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
-            </Grid>
-            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
-            </Grid>
-            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
-            </Grid>
-            <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Overview notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
-            </Grid> */}
           </Grid>
           <Pagination 
               sx={{mt:2, display:'flex', justifyContent:'end'}} 
