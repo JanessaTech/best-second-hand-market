@@ -12,6 +12,7 @@ import CheapBottomNavigation from '../common/BottomNavigation'
 import ConnectWallet from './wallet/ConnectWallet'
 import Signup from './wallet/Signup'
 import FilterMenu from '../common/menu/FilterMenu'
+import logger from '../common/Logger'
 
 const GlobalVariables = React.createContext({})
 export {GlobalVariables}
@@ -24,6 +25,7 @@ function isShowMenu(location) {
 }
 
 const MainLayout = () => {
+    logger.debug('[MainLayout] rendering...')
     const outlet = useOutlet()
     const location = useLocation()
     const theme = useTheme()
@@ -53,7 +55,7 @@ const MainLayout = () => {
     }, [isMediumScreen])
 
     useEffect(() => {
-        console.log('[MainLayout], localStorage.getItem(\'isConnected\') = ', localStorage.getItem('isConnected'))
+        logger.info('[MainLayout], localStorage.getItem(\'isConnected\') = ', localStorage.getItem('isConnected'))
         const isConnected = localStorage.getItem('isConnected') ? true : false
         if (isConnected) {
             const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : undefined
@@ -79,7 +81,7 @@ const MainLayout = () => {
     
     // for alerts
     const notifyAlertUpdate = useCallback((_alerts) => {
-        console.log('[MainLayout] notifyAlertUpdate, alerts=', _alerts)
+        logger.info('[MainLayout] notifyAlertUpdate, alerts=', _alerts)
         const newAlerts = []
         for (var i = 0; i < _alerts.length; i++) {
             newAlerts.push({id: alertCnt.current, severity: _alerts[i].severity, message: _alerts[i].message})
@@ -101,7 +103,7 @@ const MainLayout = () => {
     }, [])
         
     const toggleMenu = useCallback(() => {
-        console.log('[MainLayout] toggleMenu is clicked')
+        logger.info('[MainLayout] toggleMenu is clicked')
         if (menu.open) {
             setMenu({open: false, width: 0})
         } else {
@@ -135,7 +137,7 @@ const MainLayout = () => {
         setSignupOpen(true)
     }, [])
 
-    console.log('location: ', location.pathname)
+    logger.debug('location: ', location.pathname)
     return (
         <Container maxWidth='false'>
             <Header 

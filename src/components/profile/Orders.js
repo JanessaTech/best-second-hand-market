@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material/styles'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import ProfileFilterBar from './ProfileFilterBar'
 import {GlobalVariables} from '../MainLayout'
+import logger from '../../common/Logger'
 
 function createData(id, title, img, network, category, price, orderedTime, seller) {
   return {
@@ -117,6 +118,7 @@ EnhancedTableHead.propTypes = {
 };
 
 export default function Orders() {
+  logger.debug('[Orders] rendering...')
   const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -130,7 +132,7 @@ export default function Orders() {
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
-    console.log('newOrder = ', newOrder, 'property = ', property)
+    logger.debug('[Orders] newOrder = ', newOrder, 'property = ', property)
     setOrder(newOrder);
     setOrderBy(property);
   };
@@ -146,7 +148,7 @@ export default function Orders() {
 
   const visibleRows = React.useMemo(
     () => {
-      console.log('call restful api to get result')
+      logger.debug('[Orders] call restful api to get result')
       return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     }, [order, orderBy, page, rowsPerPage, rowStates]
   )

@@ -2,6 +2,7 @@ import { Box, Pagination, Typography } from '@mui/material'
 import React, { memo, useEffect, useState } from 'react'
 import AddComment from './AddComment'
 import OneComment from './OneComment'
+import logger from '../../../common/Logger'
 
 const data = [
   {
@@ -36,7 +37,7 @@ const data = [
   }
 ]
 const Comments = ({user})=> {
-  console.log('Comments rendering')
+  logger.debug('[Comments] rendering')
   const [comments, setComments] = useState([])
   const [pagination, setPagination] = useState({
     page: 1,  // the index of the current page
@@ -45,17 +46,17 @@ const Comments = ({user})=> {
   })
 
   useEffect(() => {
-    console.log('call rest api to get comments based on page and pageSize, return result with how many in total')
+    logger.info('[Comments] useEffect. call rest api to get comments based on page and pageSize, return result with how many in total')
     const total  = 41
-    console.log('page=', pagination.page, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
+    logger.debug('page=', pagination.page, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
     setComments(data)
     setPagination({page: pagination.page, pageSize: pagination.pageSize, pages: Math.ceil(total / pagination.pageSize)})
-  }, [])
+  }, [comments])
 
   const handleChange = (e, value) => {
-    console.log('call rest api to get comments based on page and pageSize, return result with how many in total')
+    logger.info('[Comments] handleChange. call rest api to get comments based on page and pageSize, return result with how many in total')
     const total  = 41
-    console.log('page=', value, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
+    logger.debug('page=', value, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
     setComments(data)
     setPagination({page:value, pageSize: pagination.pageSize, pages: Math.ceil(total / pagination.pageSize)})
   }

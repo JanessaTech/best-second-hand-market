@@ -1,24 +1,25 @@
 import { Box, Link, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import React, { memo, useState } from 'react'
+import logger from '../../common/Logger'
 
 const Overview = ({nft, notifyAlertUpdate, notifyWalletOpen}) => {
-  console.log('[Overview] rendering')
+  logger.debug('[Overview] rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
   const [incart, setIncart] = useState(nft.incart)
 
   const putToCart = () => {
-    console.log('[Overview] putToCart')
-    console.log('[Overview] call restful api to put nft id=', nft.id, ' to cart')
+    logger.info('[Overview] putToCart')
+    logger.info('[Overview] call restful api to put nft id=', nft.id, ' to cart')
     setIncart(true)
     notifyAlertUpdate([{severity: 'success', message: 'Added to shopping cart'}]) // when successful
   }
 
   const removeFromCart = () => {
-    console.log('[Overview] removeFromCart')
-    console.log('[Overview] call restful api to remove nft id=', nft.id, ' from cart')
+    logger.info('[Overview] removeFromCart')
+    logger.info('[Overview] call restful api to remove nft id=', nft.id, ' from cart')
     setIncart(false)
     notifyAlertUpdate([{severity: 'success', message: 'Removed from shopping cart'}]) // when successful
   }
@@ -39,10 +40,8 @@ const Overview = ({nft, notifyAlertUpdate, notifyWalletOpen}) => {
 
   const handleBuyNow = (e) => {
     e.preventDefault()
-    console.log('[handleBuyNow] handleBuyNow...')
+    logger.info('[handleBuyNow] handleBuyNow...')
   }
-
-  //console.log('[Overview] nft id=', nft.id, 'incart=', nft.incart)
 
   return (
     <Link href={`nft?id=${nft?.id}`}>

@@ -1,7 +1,10 @@
 import { Avatar, Box, Button, TextField } from '@mui/material'
 import React, { memo, useState } from 'react'
+import logger from '../../../common/Logger'
 
 const AddComment = ({user, isReply, handleCancelReply}) => {
+    logger.debug('[AddComment] rendering...')
+
     const [state, setState] = useState({
         comment: '',
         cancled: false,
@@ -15,7 +18,7 @@ const AddComment = ({user, isReply, handleCancelReply}) => {
         if (e.target?.value === '' || (e.target?.value && e.target?.value.length <= 200)) {
             setState({...state, comment: e.target.value, showBut: true})
         }else {
-            console.log('e.target?.value:', e.target?.value)
+            logger.debug('[AddComment] handleCommentChanges  e.target?.value:', e.target?.value)
         }
     }
 
@@ -27,7 +30,7 @@ const AddComment = ({user, isReply, handleCancelReply}) => {
     }
 
     const handleLeaveComment = () => {
-        console.log('call here to submit comment...:', state.comment)
+        logger.info('[AddComment] handleLeaveComment. call here to submit comment...:', state.comment)
     }
 
   return (

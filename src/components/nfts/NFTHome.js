@@ -4,10 +4,11 @@ import { useTheme } from '@mui/material/styles'
 import {HeaderHeight} from '../../common/constant'
 import BuyOrCart from './BuyOrCart';
 import NFTDetails from './NFTDetails';
-import Comments from './comments/Comments';
+import Comments from './comments/Comments'
+import logger from '../../common/Logger';
 
 const NFTHome = ({user, openCart, notifyWalletOpen}) => {
-    console.log("NFTHome rendering ...")
+    logger.debug("[NFTHome] rendering...")
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   return (

@@ -1,8 +1,9 @@
-import { Box, Fade, IconButton, Stack, Tooltip, useMediaQuery } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Box, Fade, IconButton, Stack, Tooltip, useMediaQuery } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
-import MuiAlert from '@mui/material/Alert';
-import DeleteIcon from '@mui/icons-material/Delete';
+import MuiAlert from '@mui/material/Alert'
+import DeleteIcon from '@mui/icons-material/Delete'
+import logger from './Logger'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -10,7 +11,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 // we need to refator this function to make it more readable
 export default function CustomSnackBar(props) {
-    console.log('CustomSnackBar rendering ...')
+    logger.debug('[CustomSnackBar] rendering...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const {duration, timeout, alerts, clearAlerts} = props
@@ -19,7 +20,7 @@ export default function CustomSnackBar(props) {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            console.log('This will run after ', duration)
+            logger.debug('[CustomSnackBar] This will run after ', duration)
             handleClearAlerts()
         }, duration)
         return () => clearTimeout(timer)
@@ -27,7 +28,7 @@ export default function CustomSnackBar(props) {
 
     useEffect(() => {
         setAccAlerts([...accAlerts, ...alerts])
-        console.log('[...accAlerts, ...alerts]', [...accAlerts, ...alerts])
+        logger.debug('[...accAlerts, ...alerts]', [...accAlerts, ...alerts])
     }, [alerts])
 
     useEffect(() => {

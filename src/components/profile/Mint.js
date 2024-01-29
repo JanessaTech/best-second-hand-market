@@ -8,6 +8,7 @@ import {GlobalVariables} from '../MainLayout'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomSelect from '../../common/CustomSelect'
+import logger from '../../common/Logger'
 
 const contractData = [
   {
@@ -85,6 +86,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function Mint() {
+  logger.debug('[Mint] rendering...')
   const {notifyAlertUpdate} = React.useContext(GlobalVariables)
   const categories = ['Pets', 'Clothes', 'Cosmetics', 'Outfits', 'Car', 'Devices', 'Books']
   const chainOptions = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
@@ -103,7 +105,7 @@ export default function Mint() {
 
   useEffect(() => {
     let alerts = []
-    console.log('[Mint] errors = ', errors)
+    logger.debug('[Mint] errors = ', errors)
     if (errors?.title) {
       alerts.push({severity: 'error', message: errors?.title?.message})
     }
@@ -124,7 +126,7 @@ export default function Mint() {
     }
     
     if(alerts.length > 0) {
-      console.log('[Mint]sending alerts = ', alerts)
+      logger.info('[Mint] sending alerts = ', alerts)
       notifyAlertUpdate(alerts)
     }  
   }, [errors])
@@ -149,7 +151,7 @@ export default function Mint() {
   }
 
   const handleMint= (data) => {
-    console.log('[Mint] handleMint data =', data)
+    logger.info('[Mint] handleMint data =', data)
 
   }
 
@@ -158,13 +160,13 @@ export default function Mint() {
   }
 
   const handleChainChange = (value) => {
-    console.log('[Mint]handleChainChange. value=', value)
+    logger.info('[Mint]handleChainChange. value=', value)
     const localData = contractData.filter((c) => c.chain === value)[0].local  // set it as local temporaily
-    console.log('localData:', localData)
+    logger.debug('localData:', localData)
     const addresses = localData.map((d) => d.address)
     const standards = localData.map((d) => d.tokenStandard)
-    console.log('addresses =', addresses)
-    console.log('standards =', standards)
+    logger.debug('addresses =', addresses)
+    logger.debug('standards =', standards)
 
     setState({...state, chain: value, addressOptions: addresses, standardOptions: standards, address: '', standard: ''})
     reset()
@@ -172,7 +174,6 @@ export default function Mint() {
 
   const handleAddressChange = (value) => {
     const index = state.addressOptions.indexOf(value)
-    console.log()
     setState({...state, address: value, standard: state.standardOptions[index]})
   }
 
@@ -180,7 +181,7 @@ export default function Mint() {
     setState({...state, standard: value})
   }
 
-  console.log('state: ', state)
+  logger.debug('state: ', state)
 
   return (
     <Box component="main" sx={{width:1}}>

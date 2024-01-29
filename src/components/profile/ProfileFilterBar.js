@@ -1,28 +1,17 @@
 import React, { useState } from 'react'
 import { useTheme } from '@mui/material/styles'
-import { Box, Button, Tooltip, useMediaQuery, Typography} from '@mui/material'
+import { Box, Button, Tooltip, useMediaQuery} from '@mui/material'
 import {DrawerWidth, HeaderHeight, FilterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs'
-import CustomSelect from '../../common/CustomSelect'
+import logger from '../../common/Logger'
 
 export default function ProfileFilterBar({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary}) {
-    console.log('FilterBar rendering ...')
+    logger.debug('[ProfileFilterBar] rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
     const margin = isSmallScreen ? 32 : 48
     const width = menuOpen && !isMediumScreen? `calc(100% - ${DrawerWidth + margin}px)` :`calc(100% - ${margin}px)`
-    const sortOptions = ['Created time', 'Name','Price','View', 'Favorites']
-    const [sortBy, setSortBy] = useState('Created time')
-    const [stat, setStat] = useState({
-        total: 100,
-        sold: 23,
-        unsold: 77
-    })
-    
-    const handleSortChange = (sort) => {
-        setSortBy(sort)
-    }
 
   return (
     <Box sx={{position:'fixed', top: HeaderHeight,

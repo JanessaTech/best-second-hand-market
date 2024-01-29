@@ -1,6 +1,7 @@
 import { Box, FormControl, InputAdornment, ListItemIcon, ListItemText, MenuItem, OutlinedInput, Select, useTheme } from '@mui/material'
 import React, { useState } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
+import logger from '../Logger';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -40,6 +41,7 @@ function getNeworkFromLocalStorage() {
 }
 // codes below should be refactored into CustomSelect.js later on
 const NetworkFilter = ({notify}) => {
+    logger.debug('[NetworkFilter] rendering...')
     const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
     const theme = useTheme()
     const [network, setNetwork] = useState(getNeworkFromLocalStorage())
@@ -54,7 +56,7 @@ const NetworkFilter = ({notify}) => {
         filter = {network: e.target.value}
       }
       localStorage.setItem('filter', JSON.stringify(filter))
-      console.log('[NetworkFilter] store filter:', filter)
+      logger.info('[NetworkFilter] handleNetworkChange. store filter:', filter)
       const trigger = Math.random()
       notify(trigger)
     }

@@ -1,15 +1,16 @@
 import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material'
-import React, { memo, useCallback, useEffect, useState } from 'react'
-import { useTheme } from '@mui/material/styles';
+import React, { memo, useCallback, useState } from 'react'
+import { useTheme } from '@mui/material/styles'
 import {HeaderHeight} from './constant'
 import { CheapIcon } from '../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import ProfileMenu from '../components/profile/ProfileMenu';
-import { Link, useNavigate } from 'react-router-dom';
+import ProfileMenu from '../components/profile/ProfileMenu'
+import { Link, useNavigate } from 'react-router-dom'
+import logger from './Logger'
 
 const Header = ({openCart, login, notifyWalletOpen}) => {
-    console.log('rendering Header ...')
-    console.log('login:', login)
+    logger.debug('[Header] rendering...')
+    logger.debug('[Header] login:', login)
     const theme = useTheme()
     const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -45,7 +46,7 @@ const Header = ({openCart, login, notifyWalletOpen}) => {
 
     const handleMintBut = () => {
         if (login?.isConnected) {
-        console.log('[Header] go to to /profile/mint')
+        logger.info('[Header] handleMintBut. go to to /profile/mint')
         navigate('/profile/mint')
         } else {
             notifyWalletOpen()

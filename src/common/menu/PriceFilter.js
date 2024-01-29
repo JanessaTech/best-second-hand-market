@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form"
 import {capitalize} from '../../utils/StringUtils'
 import {PriceFilterSchema} from '../Schemas'
+import logger from '../Logger'
 
 const NumberInput = (props) => {
     const {placeholder, name, value, changeValueFun, register, errors, ...others} = props
@@ -55,6 +56,7 @@ function getPricesFromLocalStorage() {
   }
 
 const PriceFilter = ({notify, notifyAlertUpdate}) => {
+    logger.debug('[PriceFilter] rendering...')
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(PriceFilterSchema)
     })
@@ -83,7 +85,7 @@ const PriceFilter = ({notify, notifyAlertUpdate}) => {
             filter = {prices: {min: data.min, max: data.max}}
         }
         localStorage.setItem('filter', JSON.stringify(filter))
-        console.log('[PriceFilter] store filter:', filter)
+        logger.info('[PriceFilter] handleApply. store filter:', filter)
         notify(Math.random())
     }
 

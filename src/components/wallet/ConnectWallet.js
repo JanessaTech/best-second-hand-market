@@ -3,6 +3,7 @@ import { Box, Dialog, Grid, IconButton, Tooltip, Typography, useMediaQuery } fro
 import React, { memo } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { CheapIcon } from '../../utils/Svgs'
+import logger from '../../common/Logger'
 
 const WalletItem = (props) => {
     const {img, name, support, handleWallet} = props
@@ -42,7 +43,7 @@ const WalletItem = (props) => {
 }
 
 const ConnectWallet = ({onClose, open, openSignup}) => {
-    console.log('ConnectWallet rendering ')
+    logger.debug('[ConnectWallet] rendering ')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
@@ -51,10 +52,10 @@ const ConnectWallet = ({onClose, open, openSignup}) => {
     }
 
     const handleWallet = () => {
-        console.log('handleWallet')
-        console.log('process wallet connecting ... in chrome extension')
+        logger.debug('[ConnectWallet] handleWallet')
+        logger.info('[ConnectWallet] process wallet connecting ... in chrome extension')
         onClose()
-        console.log('call restful api to check if there is an account associated with the current wallet')
+        logger.info('[ConnectWallet] call restful api to check if there is an account associated with the current wallet')
         const isRegistered = false
         if (!isRegistered) {
             openSignup()
@@ -62,7 +63,7 @@ const ConnectWallet = ({onClose, open, openSignup}) => {
             const user = {id: 111, name: 'JanessaTech lab'}
             localStorage.setItem('isConnected', 'true')
             localStorage.setItem('user', JSON.stringify(user))
-            console.log('isConnected is set as true, notify header')
+            logger.info('isConnected is set as true, notify header')
         }
     }
 

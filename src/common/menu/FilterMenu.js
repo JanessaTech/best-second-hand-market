@@ -6,9 +6,10 @@ import { CheapIcon } from '../../utils/Svgs'
 import CategoryFilter from './CategoryFilter'
 import NetworkFilter from './NetworkFilter'
 import PriceFilter from './PriceFilter'
+import logger from '../Logger'
 
 const FilterMenu = ({width, menuOpen, closeMenu, notifyFilterUpdate, notifyAlertUpdate}) => {
-  console.log('FilterMenu rendering')
+  logger.debug('[FilterMenu] rendering')
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
   const [drawerType, setDrawerType] = useState(isMediumScreen ? 'temporary': 'persistent')

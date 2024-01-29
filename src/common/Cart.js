@@ -1,9 +1,10 @@
 import { Box, Button, Divider, Drawer, IconButton, Tab, Tabs, Tooltip, Typography } from '@mui/material'
 import React, { memo, useState } from 'react'
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@mui/icons-material/Delete'
 import { CheapIcon } from '../utils/Svgs'
 import {CartWidth, HeaderHeight} from './constant'
-import { UnavailableHelpTip } from './TipHelpers';
+import { UnavailableHelpTip } from './TipHelpers'
+import logger from './Logger'
 
 const data = [
   {
@@ -185,13 +186,13 @@ const getFilteredNfts = (nfts, network) => {
 }
 
 const Cart = ({toggleCart, open}) => {
-  console.log('Cart rendering ...')
+  logger.debug('[Cart] rendering...')
   
   const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']  // don't change the order. The order the network should be aligned with the order in tabs
 
   const fetchItems = () => {
     if(open) {
-      console.log('call restful api to get latest items in cart by nfterId')
+      logger.info('call restful api to get latest items in cart by nfterId')
     }
     return data
   }
@@ -206,12 +207,12 @@ const Cart = ({toggleCart, open}) => {
   }
 
   const clearCart = () => {
-    console.log('call restful apis to clear cart for nfterId')
+    logger.info('call restful apis to clear cart for nfterId')
     setState({nfts: state.nfts.filter((nft) => nft.network !== state.network)})
   }
 
   const deleteFromCart = (nftId) => {
-    console.log('call restful api to delete a nft by nftId:', nftId)
+    logger.info('call restful api to delete a nft by nftId:', nftId)
     const newNfts = state.nfts.filter((nft) => nft.nftId !== nftId)
     setState({...state, nfts: newNfts})
   }

@@ -4,8 +4,11 @@ import { Box, IconButton, Typography, useMediaQuery, Link } from '@mui/material'
 import { CheapIcon } from '../../utils/Svgs'
 import NfterOverview from '../nfters/NfterOverview'
 import CustomPopper from '../../common/CustomPopper'
+import logger from '../../common/Logger'
 
 const ByLikeView = ({user}) => {
+    logger.debug('[ByLikeView] rendering...')
+
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const [isLike, setIsLike] = useState(false)

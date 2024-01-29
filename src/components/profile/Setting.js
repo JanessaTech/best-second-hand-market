@@ -8,6 +8,7 @@ import {SettingSchema} from '../../common/Schemas'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {GlobalVariables} from '../MainLayout'
 import CustomSelect from '../../common/CustomSelect'
+import logger from '../../common/Logger'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -22,6 +23,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function Setting() {
+  logger.debug('[Setting] rendering...')
   const {notifyAlertUpdate} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(SettingSchema)})
   const gatewayOptions = ['aaa', 'bbb','ccc','ddd']
@@ -37,13 +39,13 @@ export default function Setting() {
       alerts.push({severity: 'error', message: errors?.name?.message})
     }
     if(alerts.length > 0) {
-      console.log('[Setting]sending alerts = ', alerts)
+      logger.info('[Setting]sending alerts = ', alerts)
       notifyAlertUpdate(alerts)
     }  
   }, [errors])
 
   const handleUpdate = (data) => {
-    console.log('[Setting] data=', data)
+    logger.info('[Setting] data=', data)
   }
 
   const handleInputChanges = (e) => {

@@ -1,7 +1,10 @@
 import { Avatar, Box, Typography } from '@mui/material'
 import React, { memo } from 'react'
+import logger from '../../common/Logger'
 
 const NfterOverview = () => {
+    logger.debug('[NfterOverview] rendering...')
+
   return (
     <Box>
         <Box sx={{display:'flex', alignItems:'center'}}>

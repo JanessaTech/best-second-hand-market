@@ -1,7 +1,8 @@
 import Checkbox from '@mui/material/Checkbox';
 import { Box, Collapse, List, ListItem, ListItemButton, ListItemText, ListSubheader, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
+import logger from '../Logger';
 
 function getCategoriesFromLocalStorage() {
     let filter = localStorage.getItem('filter')
@@ -13,6 +14,7 @@ function getCategoriesFromLocalStorage() {
   }
 
 const CategoryFilter = ({notify}) => {
+    logger.debug('[CategoryFilter] rendering...')
     const categories = ['Pets', 'Clothes', 'Cosmetics', 'Outfits', 'Car', 'Devices', 'Books']
     const [checked, setChecked] = useState(getCategoriesFromLocalStorage())
     const [expand, setExpand] = useState(true)
@@ -35,7 +37,7 @@ const CategoryFilter = ({notify}) => {
             filter = {categories: newChecked}
         }
         localStorage.setItem('filter', JSON.stringify(filter))
-        console.log('[NetworkFilter] store filter:', filter)
+        logger.info('[NetworkFilter] store filter:', filter)
         notify(Math.random())
     }
 

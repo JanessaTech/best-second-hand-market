@@ -7,6 +7,7 @@ import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import {GlobalVariables} from '../MainLayout'
 import ProfileFilterBar from './ProfileFilterBar'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
+import logger from '../../common/Logger'
 
 function createData(id, title, img, network, category, price, views, favorites, available) {
   return {
@@ -127,6 +128,7 @@ EnhancedTableHead.propTypes = {
 }
 
 export default function Favorites() {
+  logger.debug('[Favorites] rendering...')
   const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -140,7 +142,7 @@ export default function Favorites() {
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
-    console.log('newOrder = ', newOrder, 'property = ', property)
+    logger.info('newOrder = ', newOrder, 'property = ', property)
     setOrder(newOrder);
     setOrderBy(property);
   }
@@ -155,8 +157,8 @@ export default function Favorites() {
   }
 
   const handleDelete = (id) => (e) => {
-    console.log('handleDelete id=', id)
-    console.log('call restful api to delete a favorite by id=', id)
+    logger.info('handleDelete id=', id)
+    logger.info('call restful api to delete a favorite by id=', id)
     
     var newRowStates = []
     for (var i = 0; i < rowStates.length; i++) {
@@ -169,7 +171,7 @@ export default function Favorites() {
 
   const visibleRows = React.useMemo(
     () => {
-      console.log('call restful api to get result')
+      logger.info('call restful api to get result')
       return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     }, [order, orderBy, page, rowsPerPage, rowStates]
   )

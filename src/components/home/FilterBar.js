@@ -1,20 +1,10 @@
 import { Box, Button, Tooltip, useMediaQuery } from '@mui/material'
 import React, { memo, useState } from 'react'
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles'
 import {HeaderHeight, DrawerWidth, FilterBarHeight} from '../../common/constant'
-import { CheapIcon } from '../../utils/Svgs';
-import CustomSelect from '../../common/CustomSelect';
-
-function getMins() {
-      const beforeDate = localStorage.getItem('now') ? parseInt(localStorage.getItem('now')) : undefined
-      const nowDate = Math.round(Date.now() / 1000)
-      const secs = beforeDate ? nowDate - beforeDate : 0
-      const mins = Math.round(secs / 60)
-      localStorage.setItem('now', `${nowDate}`)
-      console.log(`${secs} secs ago`)
-      console.log(`${mins} mins ago`)
-      return mins
-}
+import { CheapIcon } from '../../utils/Svgs'
+import CustomSelect from '../../common/CustomSelect'
+import logger from '../../common/Logger'
 
 function getSortByFromLocalStorage() {
     let filter = localStorage.getItem('filter')
@@ -26,7 +16,7 @@ function getSortByFromLocalStorage() {
   }
 
 const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary, handleUpdate}) => {
-    console.log('FilterBar rendering ...')
+    logger.debug('[FilterBar] rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
@@ -45,7 +35,7 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary, han
             filter = {sortBy: sort}
         }
         localStorage.setItem('filter', JSON.stringify(filter))
-        console.log('[FilterBar] store filter:', filter)
+        logger.info('[FilterBar] store filter:', filter)
         notifyFilterUpdate(Math.random())
     }
     

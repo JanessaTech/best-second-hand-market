@@ -6,6 +6,7 @@ import {DepoistSchema} from '../../common/Schemas'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomSelect from '../../common/CustomSelect'
+import logger from '../../common/Logger'
 
 const balances = [
   {
@@ -44,6 +45,7 @@ function getBalanceBy(chain) {
 }
 
 export default function Balance() {
+  logger.debug('[Balance] rendering...')
   const chainOptions = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
   const {notifyAlertUpdate} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(DepoistSchema)})
@@ -62,13 +64,13 @@ export default function Balance() {
       alerts.push({severity: 'error', message: errors?.deposit?.message})
     }
     if(alerts.length > 0) {
-      console.log('[Balance]sending alerts = ', alerts)
+      logger.debug('[Balance]sending alerts = ', alerts)
       notifyAlertUpdate(alerts)
     }  
   }, [errors])
 
   const handleDeposit = (data) => {
-    console.log('[Balance]handleDeposit data=', data)
+    logger.debug('[Balance] handleDeposit data=', data)
 
   }
   const handleInputChanges = (e) => {
@@ -83,7 +85,7 @@ export default function Balance() {
 
   const handleChainChange = (chain) => {
     const balance = getBalanceBy(chain)
-    console.log('balance:', balance)
+    logger.log('[Balance] balance:', balance)
     setState({...state, remainingInChain: balance.remaining, chainSymbol: balance.chainSymbol, chainBy: balance.chain})
   }
 

@@ -1,9 +1,10 @@
 import React from 'react'
 import NFTGallery from './NFTGallery'
 import { GlobalVariables } from '../MainLayout'
+import logger from '../../common/Logger'
 
 export default function HomeContent() {
-    console.log('HomeContent rendering ....')
+    logger.debug('[HomeContent] rendering ....')
     const {user, menuOpen, trigger, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen} = React.useContext(GlobalVariables)
 
     return (

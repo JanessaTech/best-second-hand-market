@@ -6,6 +6,7 @@ import {SignupSchema} from '../../common/Schemas'
 import { useForm } from "react-hook-form"
 import { CheapIcon } from '../../utils/Svgs'
 import { styled } from '@mui/material/styles'
+import logger from '../../common/Logger'
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -20,7 +21,7 @@ const VisuallyHiddenInput = styled('input')({
   });
 
 const Signup = ({onClose, open, notifyAlertUpdate}) => {
-    console.log('Signup rendering ')
+    logger.debug('[Signup] rendering... ')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
     })
@@ -43,7 +44,7 @@ const Signup = ({onClose, open, notifyAlertUpdate}) => {
             alerts.push({severity: 'error', message: errors?.introduction?.message})
         }
         if(alerts.length > 0) {
-            console.log('[Signup]sending alerts = ', alerts)
+            logger.debug('[Signup]sending alerts = ', alerts)
             notifyAlertUpdate(alerts)
         }    
     }, [errors])
@@ -61,8 +62,8 @@ const Signup = ({onClose, open, notifyAlertUpdate}) => {
     }
 
     const handleSignup = (data) => {
-        console.log('data:', data)
-        console.log('call restful api to signup ...')
+        logger.info('data:', data)
+        logger.info('call restful api to signup ...')
         onClose()
 
         const user = {id: 111, name: 'JanessaTech lab'}

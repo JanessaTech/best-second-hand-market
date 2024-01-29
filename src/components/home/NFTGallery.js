@@ -7,6 +7,7 @@ import Overview from './Overview'
 import OverviewSkeleton from '../nfts/comments/OverviewSkeleton'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import config from '../../config'
+import logger from '../../common/Logger'
 
 function createData(id, img, title, seller, network, price, incart) {
   return {id, img, title, seller, network, price, incart}
@@ -30,7 +31,7 @@ function getFilter() {
 }
 
 const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen}) => {
-  console.log('NFTGallery rendering ...')
+  logger.debug('NFTGallery rendering ...')
 
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -47,7 +48,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
   
   useEffect(() => {
     const latestFilter = getFilter()
-    console.log('[NFTGallery]call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', 1)
+    logger.debug('[NFTGallery] call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', 1)
     const total = 403
     const nftsInOnePage = generateData(0, pagination.pageSize)  // assume we get back the first 100 nft for the first page
     setBufferedNfts(nftsInOnePage)
@@ -60,7 +61,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
 
   
   const fetchMoreData  = () => {
-    console.log('[NFTGallery]fetchMoreData in page=', pagination.page)
+    logger.debug('[NFTGallery] fetchMoreData in page=', pagination.page)
     const moreNfts = bufferedNfts.slice(nfts.length, nfts.length + BatchSizeInGallery)
     setNfts([...nfts, ...moreNfts])
     if (nfts.length + moreNfts.length >= Math.min(100, total - (pagination.page - 1) * pagination.pageSize)) {
@@ -71,11 +72,11 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
   }
 
   const handlePageChange = (e, page) => {
-    console.log('[NFTGallery] handlePageChange page=', page)
+    logger.debug('[NFTGallery] handlePageChange page=', page)
     setPagination({...pagination, page: page})
     const latestFilter = getFilter()
-    console.log('call restful api to get new list of nfts based on page and latestFilter', latestFilter, ' and page=', page)
-    console.log('generateData from ', (page - 1) * pagination.pageSize, ' by count =', Math.min(pagination.pageSize, total - (page - 1) * pagination.pageSize))
+    logger.debug('[NFTGallery] call restful api to get new list of nfts based on page and latestFilter', latestFilter, ' and page=', page)
+    logger.debug('[NFTGallery] generateData from ', (page - 1) * pagination.pageSize, ' by count =', Math.min(pagination.pageSize, total - (page - 1) * pagination.pageSize))
     const nftsInOnePage = generateData((page - 1) * pagination.pageSize, Math.min(100, total - (page - 1) * pagination.pageSize))
 
     setBufferedNfts(nftsInOnePage)
@@ -93,9 +94,9 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
   }, [total])
 
   const handleUpdate = useCallback(() => {
-    console.log('[NFTGallery] handleUpdate...')
+    logger.debug('[NFTGallery] handleUpdate...')
     const latestFilter = getFilter()
-    console.log('[NFTGallery] call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', pagination.page)
+    logger.debug('[NFTGallery] call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', pagination.page)
     const total = 504
     const nftsInOnePage = generateData((pagination.page - 1) * pagination.pageSize, Math.min(100, total - (pagination.page - 1) * pagination.pageSize))
     setBufferedNfts(nftsInOnePage)
@@ -107,11 +108,8 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
     localStorage.removeItem('filter')
   }, [pagination])
 
-
-  //console.log('REACT_APP_NODE_ENV = ',process.env.REACT_APP_NODE_ENV)
-  console.log('config:', config)
-  //console.log("nfts", nfts)
-
+  logger.info('config:', config)
+  logger.debug('nfts', nfts)
   return (
     <Box component="main" sx={{width:1}}>
         <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
@@ -131,7 +129,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
             {
               !isLoading ?  
                 nfts.map( (nft) => (
-                  <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
+                  <Grid key={nft.id} item xs={6} sm={4} md={3} lg={2} xl={2}>
                       <Overview nft={nft} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
                   </Grid>
                 ))

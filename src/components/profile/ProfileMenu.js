@@ -2,8 +2,10 @@ import { Avatar, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '
 import React, { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
+import logger from '../../common/Logger'
 
 const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose}) => {
+  logger.debug('[ProfileMenu] rendering...')
   const navigate = useNavigate()
 
     const handleClose = (e) => {
@@ -11,7 +13,7 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose}) => {
     }
 
     const handleDisconnect = () => {
-      console.log('[ProfileMenu] handleDisconnect')
+      logger.info('[ProfileMenu] handleDisconnect')
       localStorage.removeItem('isConnected')
       localStorage.removeItem('user')
       handleProfileMenuClose()

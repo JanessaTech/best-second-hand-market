@@ -6,6 +6,7 @@ import {GlobalVariables} from '../MainLayout'
 import ProfileFilterBar from './ProfileFilterBar'
 import PropTypes from 'prop-types'
 import CustomSelect from '../../common/CustomSelect'
+import logger from '../../common/Logger'
 
 function createData(id, title, img, network, category, sstatus, price, createdTime, views, favorites) {
   return {
@@ -81,6 +82,7 @@ EnhancedTableHead.propTypes = {
 }
 
 export default function MyNFTList() {
+  logger.debug('[MyNFTList] rendering....')
   const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -173,7 +175,7 @@ export default function MyNFTList() {
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
-    console.log('newOrder = ', newOrder, 'property = ', property)
+    logger.debug('newOrder = ', newOrder, 'property = ', property)
     setOrder(newOrder);
     setOrderBy(property);
   }
@@ -189,13 +191,13 @@ export default function MyNFTList() {
 
   const visibleRows = React.useMemo(
     () => {
-      console.log('call restful api to get result')
+      logger.debug('[MyNFTList] call restful api to get result')
       return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     }, [order, orderBy, page, rowsPerPage, rowStates]
   )
 
   const handleStatusChange = (id) => (status) => {
-    console.log('handleStatusChange id=', id, ' status =', status)
+    logger.info('[MyNFTList] handleStatusChange id=', id, ' status =', status)
     const newRowStates = []
     for (var i = 0; i < rowStates.length; i++) {
       if (rowStates[i].id === id) {
@@ -223,7 +225,7 @@ export default function MyNFTList() {
   }
 
   const handlePriceChange = (id) => (e) => {
-    console.log('handlePriceChange, id =', id, 'value=', e.target.value)
+    logger.info('[MyNFTList] handlePriceChange, id =', id, 'value=', e.target.value)
     const newRowStates = []
     for (var i = 0; i < rowStates.length; i++) {
       if (rowStates[i].id === id) {
@@ -251,12 +253,12 @@ export default function MyNFTList() {
   }
 
   const handleRowChange = (id) => (e) => {
-    console.log('handleRowChange, id =', id)
-    console.log('call rest api to save changes in row')
+    logger.info('[MyNFTList] handleRowChange, id =', id)
+    logger.info('[MyNFTList] call rest api to save changes in row')
   }
 
   const handleUndoChange = (id) => (e) => {
-    console.log('handleUndoPriceChange, id =', id)
+    logger.info('[MyNFTList] handleUndoPriceChange, id =', id)
     const newRowStates = []
     for (var i = 0; i < rowStates.length; i++) {
       if (rowStates[i].id === id) {
@@ -298,7 +300,7 @@ export default function MyNFTList() {
     )
   }
 
-  console.log('rowStates :', rowStates)
+  logger.debug('[MyNFTList] rowStates :', rowStates)
 
   return (
     <Box component="main" sx={{width:1}}>

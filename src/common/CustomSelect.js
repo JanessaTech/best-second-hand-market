@@ -16,7 +16,6 @@ const MenuProps = {
 };
 
 function getStyles(sortName, sortBy, theme) {
-  //console.log(`[CustomSelect] getStyles: sortName=${sortName} sortBy=${sortBy}`)
   return {
     fontWeight:
       sortBy.indexOf(sortName) === -1
