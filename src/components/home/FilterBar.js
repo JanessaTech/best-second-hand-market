@@ -1,5 +1,5 @@
-import { Box, Button, Tooltip, Typography, useMediaQuery } from '@mui/material'
-import React, { memo, useEffect, useState } from 'react'
+import { Box, Button, Tooltip, useMediaQuery } from '@mui/material'
+import React, { memo, useState } from 'react'
 import { useTheme } from '@mui/material/styles';
 import {HeaderHeight, DrawerWidth, FilterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs';
@@ -15,6 +15,7 @@ function getMins() {
       console.log(`${mins} mins ago`)
       return mins
 }
+
 function getSortByFromLocalStorage() {
     let filter = localStorage.getItem('filter')
     if (filter) {
@@ -24,7 +25,7 @@ function getSortByFromLocalStorage() {
     return 'Recent activity'
   }
 
-const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary}) => {
+const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary, handleUpdate}) => {
     console.log('FilterBar rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -33,15 +34,9 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary}) =>
     const width = menuOpen && !isMediumScreen? `calc(100% - ${DrawerWidth + margin}px)` :`calc(100% - ${margin}px)`
     const sortOptions = ['Recent activity', 'aa','bb','ccc', 'ddddd','eeee','ffff', 'gggg','hhhhh']
     const [sortBy, setSortBy] = useState(getSortByFromLocalStorage())
-    const [ago, setAgo] = useState(0)
-
-    useEffect(() => {
-        setAgo(getMins())
-    }, [])
 
     const handleSortChange = (sort) => {
         setSortBy(sort)
-
         let filter = localStorage.getItem('filter')
         if (filter) {
             filter = JSON.parse(filter)
@@ -52,14 +47,6 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary}) =>
         localStorage.setItem('filter', JSON.stringify(filter))
         console.log('[FilterBar] store filter:', filter)
         notifyFilterUpdate(Math.random())
-    }
-
-    const handleUpdate = (e) => {
-      e.preventDefault()
-      console.log('handleUpdate ...')
-      const newAgo = getMins()
-      setAgo(newAgo)
-      localStorage.removeItem('filter')
     }
     
   return (

@@ -19,9 +19,10 @@ import Mint from './components/profile/Mint';
 import Balance from './components/profile/Balance';
 import Notification from './components/profile/Notification';
 import ProtectedRoutes from './components/ProtectedRoutes';
+//import cfg from './config/index'
 
 function App() {
-
+  //console.log('[App] cfg=', cfg)
   return (
     <ThemeProvider theme={CheapTheme}>
         <Router>

@@ -19,6 +19,8 @@ npm install react-router-dom
 npm install axios
 npm install react-hook-form @hookform/resolvers yup
 npm install react-infinite-scroll-component
+npm install winston
+npm install dotenv
 ```
 
 ## The list of features used in React
@@ -39,4 +41,5 @@ npm install react-infinite-scroll-component
 
 ```
 npm start
+npm run start_win_dev
 ```

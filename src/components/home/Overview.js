@@ -1,21 +1,27 @@
 import { Box, Link, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useState } from 'react'
 
 const Overview = ({nft, notifyAlertUpdate, notifyWalletOpen}) => {
-  console.log('Overview rendering')
+  console.log('[Overview] rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
-  const [inCart, setInCart] = useState(false)
+  const [incart, setIncart] = useState(nft.incart)
 
-  useEffect(() => {
-    if (inCart) {
-      console.log('call restful api to put to cart..')
-    } else {
-      console.log('call restful api to remove from cart ...')
-    }
-  }, [inCart])
+  const putToCart = () => {
+    console.log('[Overview] putToCart')
+    console.log('[Overview] call restful api to put nft id=', nft.id, ' to cart')
+    setIncart(true)
+    notifyAlertUpdate([{severity: 'success', message: 'Added to shopping cart'}]) // when successful
+  }
+
+  const removeFromCart = () => {
+    console.log('[Overview] removeFromCart')
+    console.log('[Overview] call restful api to remove nft id=', nft.id, ' from cart')
+    setIncart(false)
+    notifyAlertUpdate([{severity: 'success', message: 'Removed from shopping cart'}]) // when successful
+  }
 
   const toggleCart = (e) => {
     e.preventDefault()
@@ -23,19 +29,20 @@ const Overview = ({nft, notifyAlertUpdate, notifyWalletOpen}) => {
     if (!isConnected) {
       notifyWalletOpen()
     } else {
-      if(!inCart){
-        notifyAlertUpdate([{severity: 'success', message: 'Added to shopping cart'}])
+      if(!incart){
+        putToCart()
       } else{
-        notifyAlertUpdate([{severity: 'success', message: 'Removed from shopping cart'}])
+        removeFromCart()
       }
-      setInCart(!inCart)
     } 
   }
 
   const handleBuyNow = (e) => {
     e.preventDefault()
-    console.log('handleBuyNow...')
+    console.log('[handleBuyNow] handleBuyNow...')
   }
+
+  //console.log('[Overview] nft id=', nft.id, 'incart=', nft.incart)
 
   return (
     <Link href={`nft?id=${nft?.id}`}>
@@ -87,7 +94,7 @@ const Overview = ({nft, notifyAlertUpdate, notifyWalletOpen}) => {
                                       justifyContent:'center',
                                       alignItems:'center',
                                       backgroundColor:'rgba(0, 0, 0, 1)'}} onClick={toggleCart}>
-                                        <Typography color='white' variant='body2'>{inCart ? 'Remove from cart': 'Add to cart'}</Typography>
+                                        <Typography color='white' variant='body2'>{incart ? 'Remove from cart': 'Add to cart'}</Typography>
                             </Box>
                 </Box>
             </Box> 
