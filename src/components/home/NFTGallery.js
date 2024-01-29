@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useState} from 'react'
 import { useTheme } from '@mui/material/styles'
 import { Box, Grid, Pagination, Typography, useMediaQuery } from '@mui/material'
-import {HeaderHeight, FilterBarHeight} from '../../common/constant'
+import {HeaderHeight, FilterBarHeight, PageSizeInGallery, BatchSizeInGallery} from '../../common/constant'
 import FilterBar from './FilterBar'
 import Overview from '../nfts/Overview'
 import OverviewSkeleton from '../nfts/comments/OverviewSkeleton'
@@ -10,7 +10,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 function createData(id, img, title, seller, network, price) {
   return {id, img, title, seller, network, price}
 }
-
+/*
 const nftData = [
   createData(1, 'mk.png', 'A baby money1', 'JanessaTech lab', 'ethereum', 11),
   createData(2, 'mk.png', 'A baby money2', 'JanessaTech lab', 'ethereum', 12),
@@ -22,7 +22,7 @@ const nftData = [
   createData(8, 'mk.png', 'A baby money8', 'JanessaTech lab', 'ethereum', 18),
   createData(9, 'mk.png', 'A baby money9', 'JanessaTech lab', 'ethereum', 19),
   createData(10, 'mk.png', 'A baby money10', 'JanessaTech lab', 'ethereum', 20)
-]
+]*/
 
 function generateData(start, count) {
   var res = []
@@ -50,37 +50,32 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
   const [nfts, setNfts] = useState([])
   const [pagination, setPagination] = useState({
     page: 1,  // the index of the current page
-    pageSize: 100, // how many items are shown in one page
+    pageSize: PageSizeInGallery, // how many items are shown in one page
     pages: 0 // how many pages in total
   })
   const [isLoading, setIsLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [total, setTotal] = useState(0)
-
-  useEffect(() => {
-    const latestFilter = getFilter()
-    console.log('call restful api to get the initial list of nfts based on latestFilter', latestFilter, ' user=', user, ' and page=', pagination.page) 
-    const nftsInOnePage = generateData(0, 100)  // assume we get back the first 100 nft for the first page
-    const total = 302  // assume there are 302 nfts in total
-    setBufferedNfts(nftsInOnePage)
-    setNfts(nftsInOnePage.slice(0, 30))
-    setTotal(total)
-    setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize)})
-    window.scrollTo(0, 0)
-  }, [])
   
   useEffect(() => {
     const latestFilter = getFilter()
-    console.log('call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', pagination.page)
+    console.log('call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', 1)
+    const total = 56
+    const nftsInOnePage = generateData(0, pagination.pageSize)  // assume we get back the first 100 nft for the first page
+    setBufferedNfts(nftsInOnePage)
+    setNfts(nftsInOnePage.slice(0, BatchSizeInGallery))
+    setHasMore(true)
+    setTotal(total)
+    setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: 1})
     window.scrollTo(0, 0)
   }, [trigger])
 
   
   const fetchMoreData  = () => {
     console.log('fetchMoreData in page=', pagination.page)
-    const moreNfts = bufferedNfts.slice(nfts.length, nfts.length + 30)
+    const moreNfts = bufferedNfts.slice(nfts.length, nfts.length + BatchSizeInGallery)
     setNfts([...nfts, ...moreNfts])
-    if (nfts.length + moreNfts.length >= Math.min(100, total - (pagination.page - 1) * 100)) {
+    if (nfts.length + moreNfts.length >= Math.min(100, total - (pagination.page - 1) * pagination.pageSize)) {
       setHasMore(false)
     } else {
       setHasMore(true)
@@ -92,11 +87,11 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
     setPagination({...pagination, page: page})
     const latestFilter = getFilter()
     console.log('call restful api to get new list of nfts based on page and latestFilter', latestFilter, ' and page=', page)
-    console.log('generateData from ', (page - 1) * 100, ' by count =', Math.min(100, total - (page - 1) * 100))
-    const nftsInOnePage = generateData((page - 1) * 100, Math.min(100, total - (page - 1) * 100))
+    console.log('generateData from ', (page - 1) * pagination.pageSize, ' by count =', Math.min(pagination.pageSize, total - (page - 1) * pagination.pageSize))
+    const nftsInOnePage = generateData((page - 1) * pagination.pageSize, Math.min(100, total - (page - 1) * pagination.pageSize))
 
     setBufferedNfts(nftsInOnePage)
-    setNfts(nftsInOnePage.slice(0, 30))
+    setNfts(nftsInOnePage.slice(0, BatchSizeInGallery))
     setHasMore(true)
     window.scrollTo(0, 0)
   }
@@ -107,7 +102,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
           <Typography variant='body2'>{total} items</Typography>
       </Box>
     )
-  }, [])
+  }, [total])
 
   //console.log("nfts", nfts)
 
