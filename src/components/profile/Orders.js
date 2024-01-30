@@ -1,5 +1,5 @@
 import { Box, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Typography, useMediaQuery } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
@@ -122,12 +122,18 @@ export default function Orders() {
   const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
 
   const [order, setOrder] = useState('asc')
   const [orderBy, setOrderBy] = useState('calories')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [rowStates, setRowStates] = useState(rows)
+  const [rowStates, setRowStates] = useState([])
+
+  useEffect(() => {
+    logger.debug('[Orders] call restful apis to get the list of my order by user id=', user?.id)
+    setRowStates(rows)
+  })
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

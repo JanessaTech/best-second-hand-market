@@ -1,5 +1,5 @@
 import { Box, IconButton, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Tooltip, Typography, useMediaQuery } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from '@mui/material/styles'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -132,12 +132,18 @@ export default function Favorites() {
   const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
 
   const [order, setOrder] = React.useState('desc')
   const [orderBy, setOrderBy] = React.useState('createdTime')
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
-  const [rowStates, setRowSates] = React.useState(rows)
+  const [rowStates, setRowSates] = React.useState([])
+
+  useEffect(() => {
+    logger.debug('[Favorites] call restful api to get the list of my favorites by user id=', user?.id)
+    setRowSates(rows)
+  }, [])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

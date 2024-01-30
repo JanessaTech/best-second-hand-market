@@ -1,5 +1,5 @@
 import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, TableRow, useMediaQuery, TableSortLabel, TablePagination, Button, TextField, Typography, Link } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import {GlobalVariables} from '../MainLayout'
@@ -86,6 +86,7 @@ export default function MyNFTList() {
   const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
   const statusOptions = ['On', 'Off']
   const headCells = [
     {
@@ -170,7 +171,12 @@ export default function MyNFTList() {
   const [orderBy, setOrderBy] = React.useState('createdTime')
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
-  const [rowStates, setRowSates] = React.useState(rows)
+  const [rowStates, setRowSates] = React.useState([])
+
+  useEffect(() => {
+    logger.debug('[MyNFTList] call restful api to get the list of my nfts by user id=', user.id)
+    setRowSates(rows)
+  }, [])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -301,6 +307,7 @@ export default function MyNFTList() {
   }
 
   logger.debug('[MyNFTList] rowStates :', rowStates)
+  logger.debug('[MyNFTList] user:', user)
 
   return (
     <Box component="main" sx={{width:1}}>
