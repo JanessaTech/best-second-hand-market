@@ -52,13 +52,6 @@ const MainLayout = () => {
         }
     }, [isMediumScreen])
 
-    /*
-    useEffect(() => {
-        const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
-        logger.info('[MainLayout], localStorage.getItem(\'user\') = ', user)   
-        setUser(user)
-    }, [localStorage.getItem('user')])*/
-
     const notifyUserUpdate = useCallback(() => {  
         const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
         logger.info('[MainLayout], notifyUserUpdate. user = ', user)   

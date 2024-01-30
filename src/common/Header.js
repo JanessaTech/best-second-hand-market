@@ -24,6 +24,13 @@ const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate}) => {
         setSearch(e.target.value)
     }
 
+    const handleSearch = () => {
+        logger.debug('[Header] search=', search)
+        if (search && search.length > 0) {
+            navigate(`/?search=${search}`)
+        }
+    }
+
     const resetSearch = (e) => {
         e.preventDefault()
         setSearch('')
@@ -117,7 +124,9 @@ const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate}) => {
                     <Button sx={{textTransform:'none', fontSize:'1.1em', 
                                 ml:1, height:56, '&.MuiButtonBase-root':{px:1}
                                 }} 
-                            variant='contained'>Go</Button>
+                            variant='contained'
+                            onClick={handleSearch}
+                            >Go</Button>
                 </Tooltip>
                 
             </Box>

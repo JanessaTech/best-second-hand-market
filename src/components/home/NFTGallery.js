@@ -8,6 +8,7 @@ import OverviewSkeleton from './OverviewSkeleton'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import config from '../../config'
 import logger from '../../common/Logger'
+import { useSearchParams } from 'react-router-dom'
 
 function createData(id, img, title, seller, network, price, incart) {
   return {id, img, title, seller, network, price, incart}
@@ -35,6 +36,8 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
 
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+  const [searchParams, setSearchParams] = useSearchParams()
+
   const [bufferedNfts, setBufferedNfts] = useState([])
   const [nfts, setNfts] = useState([])
   const [pagination, setPagination] = useState({
@@ -45,32 +48,26 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
   const [isLoading, setIsLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [total, setTotal] = useState(0)
-
-  useEffect(() => {
-    const latestFilter = getFilter()
-    logger.debug('[NFTGallery] call restful api to get the initial list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', 1)
-    const total = 403
-    const nftsInOnePage = generateData(0, pagination.pageSize)  // assume we get back the first 100 nft for the first page
-    setBufferedNfts(nftsInOnePage)
-    setNfts(nftsInOnePage.slice(0, BatchSizeInGallery))
-    setHasMore(true)
-    setTotal(total)
-    setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: 1})
-    window.scrollTo(0, 0)
-  }, [])
   
   useEffect(() => {
     const latestFilter = getFilter()
-    logger.debug('[NFTGallery] call restful api to get the new list of nfts by trigger based on latestFilter', latestFilter, ' and user=', user, ' and page=', 1)
+    const search = searchParams.get('search')
+    logger.debug('[NFTGallery] call restful api to get the new list of nfts by trigger, latestFilter or search')
+    logger.debug('[NFTGallery] trigger=', trigger)
+    logger.debug('[NFTGallery] search=', search)
+    logger.debug('[NFTGallery] latestFilter=', latestFilter)
+    logger.debug('[NFTGallery] page=', 1)
     const total = 403
     const nftsInOnePage = generateData(0, pagination.pageSize)  // assume we get back the first 100 nft for the first page
+    logger.debug('[NFTGallery] nftsInOnePage length', nftsInOnePage.length)
     setBufferedNfts(nftsInOnePage)
+    logger.debug('[NFTGallery] nftsInOnePage.slice(0, BatchSizeInGallery).length', nftsInOnePage.slice(0, BatchSizeInGallery).length)
     setNfts(nftsInOnePage.slice(0, BatchSizeInGallery))
     setHasMore(true)
     setTotal(total)
     setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: 1})
     window.scrollTo(0, 0)
-  }, [trigger])
+  }, [trigger, searchParams])
 
   
   const fetchMoreData  = () => {
