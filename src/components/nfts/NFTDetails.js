@@ -1,5 +1,5 @@
 import { Box, Divider, Typography } from '@mui/material'
-import React, { memo } from 'react'
+import React, { memo} from 'react'
 import logger from '../../common/Logger'
 
 const Space = () => (<Box sx={{width:1, height:10}}></Box>)
@@ -14,35 +14,32 @@ const DetailRow = ({name, value}) => {
     </Box>
   )
 }
-const data = [
-  {name: 'CID', value: 'bafybeifvpojdj4ar5wiawksem3lifksiituu4jdwsr53uopuy7dmish6va'},
-  {name: 'Chain', value: 'Ethereum'},
-  {name: 'Contract address', value: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'},
-  {name: 'Token ID', value: '702'},
-  {name: 'Token standard', value: '721'},
-  {name: 'Category', value: 'Pets'},
-  {name: 'Created time', value: 'Jan 02, 2024'},
-  {name: 'Description', value: 'NFTs can really be anything digital (such as drawings, music, your brain downloaded and turned into an AI), but a lot of the current excitement'}
-]
-const NFTDetails = () => {
+
+const NFTDetails = ({nft}) => {
   logger.debug('[NFTDetails] rendering...')
+ 
   return (
     <Box>
-        <Typography variant='h6'>A baby monkey</Typography>
+        <Typography variant='h6'>{nft?.title}</Typography>
         <Space/>
         <Divider/>
         <Space/>
         <Box sx={{display:'flex', alignItems: 'center'}}>
             <Typography color='text.secondary'>Price:</Typography>
-            <Typography variant='h4'>12 CH</Typography>
+            <Typography variant='h4'>{nft?.price} CH</Typography>
         </Box>
         <Space/>
         <Divider/>
         <Space/>
         <Typography>Details:</Typography>
-        {
-          data.map((d) => (<DetailRow key={d.name} name={d.name} value={d.value}/>))
-        }
+          <DetailRow key='CID' name='CID' value={nft?.cid}/>
+          <DetailRow key='Chain' name='Chain' value={nft?.chain}/>
+          <DetailRow key='Contract address' name='Contract address' value={nft?.address}/>
+          <DetailRow key='Token ID' name='Token ID' value={nft?.tokenId}/>
+          <DetailRow key='Token standard' name='Token standard' value={nft?.tokenStandard}/>
+          <DetailRow key='Category' name='Category' value={nft?.category}/>
+          <DetailRow key='Created time' name='Created time' value={nft?.createdTime}/>
+          <DetailRow key='Description' name='Description' value={nft?.description}/>
         <Space/>
         <Divider/>
         <Space/>

@@ -3,6 +3,7 @@ import React, { memo, useEffect, useState } from 'react'
 import AddComment from './AddComment'
 import OneComment from './OneComment'
 import logger from '../../../common/Logger'
+import { useSearchParams } from 'react-router-dom'
 
 const data = [
   {
@@ -38,7 +39,11 @@ const data = [
 ]
 const Comments = ({user})=> {
   logger.debug('[Comments] rendering')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const id = searchParams.get('id')
+
   const [comments, setComments] = useState([])
+  const [total, setTotal] = useState(0)
   const [pagination, setPagination] = useState({
     page: 1,  // the index of the current page
     pageSize: 3, // how many items are shown in one page
@@ -46,15 +51,22 @@ const Comments = ({user})=> {
   })
 
   useEffect(() => {
-    logger.info('[Comments] useEffect. call rest api to get comments based on page and pageSize, return result with how many in total')
+    logger.info('[Comments] useEffect. call rest api to get comments based on nft id, page, pageSize and return result with how many in total')
+    logger.debug('[Comments] nft id=', id)
+    logger.debug('[Comments] page=', 1)
+    logger.debug('[Comments] pageSize=', pagination.pageSize)
     const total  = 41
-    logger.debug('page=', pagination.page, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
+    logger.debug('page=', 1, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
     setComments(data)
-    setPagination({page: pagination.page, pageSize: pagination.pageSize, pages: Math.ceil(total / pagination.pageSize)})
-  }, [comments])
+    setTotal(total)
+    setPagination({page: 1, pageSize: pagination.pageSize, pages: Math.ceil(total / pagination.pageSize)})
+  }, [])
 
   const handleChange = (e, value) => {
-    logger.info('[Comments] handleChange. call rest api to get comments based on page and pageSize, return result with how many in total')
+    logger.info('[Comments] handleChange. call rest api to get comments based on nft id, page, pageSize, return result with how many in total')
+    logger.debug('[Comments] nft id=', id)
+    logger.debug('[Comments] page=', value)
+    logger.debug('[Comments] pageSize=', pagination.pageSize)
     const total  = 41
     logger.debug('page=', value, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
     setComments(data)
@@ -63,7 +75,7 @@ const Comments = ({user})=> {
 
   return (
     <Box>
-        <Typography>3 comments</Typography>
+        <Typography>{total} comments</Typography>
         { user && <AddComment user={user}/>}
         {
           data.map((c) => (

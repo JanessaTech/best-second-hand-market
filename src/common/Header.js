@@ -1,11 +1,11 @@
 import { Avatar, Badge, Box, Button, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material'
-import React, { memo, useCallback, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight} from './constant'
 import { CheapIcon } from '../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logger from './Logger'
 
 const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate}) => {
@@ -13,12 +13,24 @@ const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate}) => {
     logger.debug('[Header] user:', user)
     const theme = useTheme()
     const navigate = useNavigate()
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-    const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+    const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
+    const [searchParams, setSearchParams] = useSearchParams()
     const [search, setSearch] = useState('')
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [anchorEl, setAnchorEl] =  React.useState(null)
 
+    useEffect(() => {
+        const search = searchParams.get('search')
+        logger.debug('[Header] useEffect search=', search)
+        if(!search) {
+            setSearch('')
+        } else {
+            setSearch(search)
+        }
+        
+    }, [searchParams])
+    
     const handleSearchChanges = (e) => {
         e.preventDefault()
         setSearch(e.target.value)

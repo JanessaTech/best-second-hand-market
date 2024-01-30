@@ -8,7 +8,7 @@ import logger from '../../common/Logger'
 export default function NFTContent() {
     logger.debug('[NFTContent] rendering ....')
     const {user, openCart, notifyWalletOpen} = React.useContext(GlobalVariables)
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams()
     const [id, setId] = useState(parseInt(searchParams.get('id')))
 
     logger.info('[NFTContent] nft id = ', id)

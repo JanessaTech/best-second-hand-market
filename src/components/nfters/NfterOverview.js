@@ -2,25 +2,25 @@ import { Avatar, Box, Typography } from '@mui/material'
 import React, { memo } from 'react'
 import logger from '../../common/Logger'
 
-const NfterOverview = () => {
+const NfterOverview = ({nfter}) => {
     logger.debug('[NfterOverview] rendering...')
 
   return (
     <Box>
         <Box sx={{display:'flex', alignItems:'center'}}>
-            <Avatar alt='JanessaTech lab' src='/imgs/nfters/111/me.png'/>
+            <Avatar alt={nfter?.name} src={`/imgs/nfters/${nfter?.id}/me.png`}/>
             <Box sx={{ml:1}}>
-                <Typography variant='subtitle1'>JanessaTech lab</Typography>
-                <Typography color='text.secondary' variant='body2'>Last login: Jan 01 2024 10:31 AM </Typography>
+                <Typography variant='subtitle1'>{nfter?.name}</Typography>
+                <Typography color='text.secondary' variant='body2'>Last login: {nfter?.login} </Typography>
             </Box>
         </Box>
         <Box sx={{my:1}}>
-            <Typography>Hi, I'm JanessaTech a big fan of NFT. Weclome to my lab to check more NFTs on sale</Typography>
+            <Typography>{nfter?.intro}</Typography>
         </Box>
         <Box>
             <Typography variant='subtitle2'>About the NFTer:</Typography>
-            <Typography variant='body2'>10 NFTs on sale</Typography>
-            <Typography variant='body2'>21 NFTs were bought</Typography>
+            <Typography variant='body2'>{nfter?.sales} NFTs on sale</Typography>
+            <Typography variant='body2'>{nfter?.orders} NFTs were bought</Typography>
         </Box>
     </Box>
   )
