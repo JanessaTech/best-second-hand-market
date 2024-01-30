@@ -4,7 +4,7 @@ import { Box, Grid, Pagination, Typography, useMediaQuery } from '@mui/material'
 import {HeaderHeight, FilterBarHeight, PageSizeInGallery, BatchSizeInGallery} from '../../common/constant'
 import FilterBar from './FilterBar'
 import Overview from './Overview'
-import OverviewSkeleton from '../nfts/comments/OverviewSkeleton'
+import OverviewSkeleton from './OverviewSkeleton'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import config from '../../config'
 import logger from '../../common/Logger'
@@ -31,7 +31,7 @@ function getFilter() {
 }
 
 const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen}) => {
-  logger.debug('NFTGallery rendering ...')
+  logger.debug('[NFTGallery] rendering ...')
 
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -45,10 +45,23 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
   const [isLoading, setIsLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    const latestFilter = getFilter()
+    logger.debug('[NFTGallery] call restful api to get the initial list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', 1)
+    const total = 403
+    const nftsInOnePage = generateData(0, pagination.pageSize)  // assume we get back the first 100 nft for the first page
+    setBufferedNfts(nftsInOnePage)
+    setNfts(nftsInOnePage.slice(0, BatchSizeInGallery))
+    setHasMore(true)
+    setTotal(total)
+    setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: 1})
+    window.scrollTo(0, 0)
+  }, [])
   
   useEffect(() => {
     const latestFilter = getFilter()
-    logger.debug('[NFTGallery] call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', 1)
+    logger.debug('[NFTGallery] call restful api to get the new list of nfts by trigger based on latestFilter', latestFilter, ' and user=', user, ' and page=', 1)
     const total = 403
     const nftsInOnePage = generateData(0, pagination.pageSize)  // assume we get back the first 100 nft for the first page
     setBufferedNfts(nftsInOnePage)
@@ -130,7 +143,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
               !isLoading ?  
                 nfts.map( (nft) => (
                   <Grid key={nft.id} item xs={6} sm={4} md={3} lg={2} xl={2}>
-                      <Overview nft={nft} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
+                      <Overview user={user} nft={nft} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
                   </Grid>
                 ))
                : Array.from(new Array(20)).map((dummy) => (

@@ -19,8 +19,8 @@ npm install react-router-dom
 npm install axios
 npm install react-hook-form @hookform/resolvers yup
 npm install react-infinite-scroll-component
-npm install winston
 npm install dotenv
+npm install loglevel
 ```
 
 ## The list of features used in React
@@ -36,10 +36,12 @@ npm install dotenv
 - axios
 - hardhat
 - @openzeppelin/contracts
+- dotenv
+- loglevel
 
 ## How to start
 
 ```
-npm start
+npm start   // start it as dev by default
 npm run start_win_dev
 ```

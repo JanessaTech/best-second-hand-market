@@ -8,9 +8,9 @@ import ProfileMenu from '../components/profile/ProfileMenu'
 import { Link, useNavigate } from 'react-router-dom'
 import logger from './Logger'
 
-const Header = ({openCart, login, notifyWalletOpen}) => {
+const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate}) => {
     logger.debug('[Header] rendering...')
-    logger.debug('[Header] login:', login)
+    logger.debug('[Header] user:', user)
     const theme = useTheme()
     const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -45,7 +45,7 @@ const Header = ({openCart, login, notifyWalletOpen}) => {
     },[anchorEl])
 
     const handleMintBut = () => {
-        if (login?.isConnected) {
+        if (user) {
         logger.info('[Header] handleMintBut. go to to /profile/mint')
         navigate('/profile/mint')
         } else {
@@ -123,7 +123,7 @@ const Header = ({openCart, login, notifyWalletOpen}) => {
             </Box>
             <Box sx={{display:'flex', alignItems: 'center'}}>
                 {
-                    login?.isConnected ? <Box sx={{display:'flex', alignItems: 'center'}}>
+                    user? <Box sx={{display:'flex', alignItems: 'center'}}>
                     <Box sx={{[theme.breakpoints.down('md')]:{display:'none'}, cursor: 'pointer', mr:1}}>
                         <Typography color={'white'} variant='subtitle1'>Connected</Typography>
                     </Box>
@@ -135,10 +135,15 @@ const Header = ({openCart, login, notifyWalletOpen}) => {
                             aria-expanded={isProfileOpen ? 'true' : undefined}
                             onClick={handleProfileMenuOpen}
                             >
-                                <Avatar alt={login?.user?.name} src={`/imgs/nfters/${login?.user?.id}/me.png`}/>
+                                <Avatar alt={user?.name} src={`/imgs/nfters/${user?.id}/me.png`}/>
                     </IconButton>
                     
-                    <ProfileMenu user={login?.user} anchorEl={anchorEl} open={Boolean(anchorEl)} handleProfileMenuClose={handleProfileMenuClose}/>
+                    <ProfileMenu 
+                            user={user} 
+                            anchorEl={anchorEl} 
+                            open={Boolean(anchorEl)} 
+                            handleProfileMenuClose={handleProfileMenuClose} 
+                            notifyUserUpdate={notifyUserUpdate}/>
                     <IconButton sx={{
                         [theme.breakpoints.down('md')]:{display:'none'},
                         '&:hover':{backgroundColor:'grey'}

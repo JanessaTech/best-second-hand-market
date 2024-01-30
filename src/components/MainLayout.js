@@ -37,9 +37,7 @@ const MainLayout = () => {
     const [walletOpen, setWalletOpen] = useState(false)
     const [signupOpen, setSignupOpen] = useState(false)
     const [alerts, setAlerts] = useState([])
-    const [login, setLogin] = useState({
-        isConnected: localStorage.getItem('isConnected') ? true : false, 
-        user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined})
+    const [user, setUser] = useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined)
     const [menu, setMenu] = useState({
         open: isMediumScreen ? false : true,
         width: isMediumScreen ? 0 : DrawerWidth
@@ -54,28 +52,17 @@ const MainLayout = () => {
         }
     }, [isMediumScreen])
 
+    /*
     useEffect(() => {
-        logger.info('[MainLayout], localStorage.getItem(\'isConnected\') = ', localStorage.getItem('isConnected'))
-        const isConnected = localStorage.getItem('isConnected') ? true : false
-        if (isConnected) {
-            const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : undefined
-            setLogin({isConnected: true, user: user })
-        } else {
-            setLogin({isConnected: false, user: undefined})
-        }
+        const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
+        logger.info('[MainLayout], localStorage.getItem(\'user\') = ', user)   
+        setUser(user)
+    }, [localStorage.getItem('user')])*/
 
-    }, [localStorage.getItem('isConnected')])
-
-    const notifyLoginUpdate = useCallback(() => {  
-        /*  
-        const isConnected = localStorage.getItem('isConnected') ? true : false
-        console.log('[MainLayout] notifyLoginUpdate. isConnected=', isConnected)
-        if (isConnected) {
-            const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : undefined
-            setLogin({isConnected: true, user: user })
-        } else {
-            setLogin({isConnected: false, user: undefined})
-        }*/
+    const notifyUserUpdate = useCallback(() => {  
+        const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
+        logger.info('[MainLayout], notifyUserUpdate. user = ', user)   
+        setUser(user)
     }, [])
 
     
@@ -142,11 +129,12 @@ const MainLayout = () => {
         <Container maxWidth='false'>
             <Header 
                 openCart={openCart} 
-                login={login}
-                notifyWalletOpen={notifyWalletOpen}/>
+                user={user}
+                notifyWalletOpen={notifyWalletOpen}
+                notifyUserUpdate={notifyUserUpdate}/>
             <GlobalVariables.Provider 
                 value={{
-                    user: login.user,
+                    user: user,
                     menuOpen: menu.open, 
                     trigger: trigger,
                     toggleMenu: toggleMenu,
@@ -178,17 +166,19 @@ const MainLayout = () => {
                 onClose={onCloseWallet} 
                 open={walletOpen} 
                 openSignup={openSignup} 
+                notifyUserUpdate={notifyUserUpdate}
             />   
             <Signup
                 onClose={onCloseSignUp} 
                 open={signupOpen} 
-                notifyAlertUpdate={notifyAlertUpdate} 
+                notifyAlertUpdate={notifyAlertUpdate}
+                notifyUserUpdate={notifyUserUpdate}
             />
             <CheapBottomNavigation 
                 openCart={openCart} 
                 toggleMenu={toggleMenu} 
                 isShowMenu={isShowMenu(location.pathname)} 
-                isConnected={login.isConnected}
+                user={user}
                 notifyWalletOpen={notifyWalletOpen}
                 />
         </Container>

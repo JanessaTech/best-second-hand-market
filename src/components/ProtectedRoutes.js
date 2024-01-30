@@ -1,14 +1,14 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 
-function getConnection() {
-    const isConnection = localStorage.getItem('isConnected')
-    if (isConnection) return true
+function getUser() {
+    const user = localStorage.getItem('user')
+    if (user) return true
     return false
 }
 
 export default function ProtectedRoutes() {
-    const isConnection = getConnection()
-    return isConnection ? <Outlet/> : <Navigate to='/'/>
+    const user = getUser()
+    return user ? <Outlet/> : <Navigate to='/'/>
 }
 

@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles'
 import React, { memo, useState } from 'react'
 import logger from '../../common/Logger'
 
-const Overview = ({nft, notifyAlertUpdate, notifyWalletOpen}) => {
+const Overview = ({user, nft, notifyAlertUpdate, notifyWalletOpen}) => {
   logger.debug('[Overview] rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -26,8 +26,8 @@ const Overview = ({nft, notifyAlertUpdate, notifyWalletOpen}) => {
 
   const toggleCart = (e) => {
     e.preventDefault()
-    const isConnected = localStorage.getItem('isConnected')
-    if (!isConnected) {
+    const user = localStorage.getItem('user')
+    if (!user) {
       notifyWalletOpen()
     } else {
       if(!incart){

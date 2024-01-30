@@ -9,8 +9,7 @@ const BuyOrCart = ({user, openCart, notifyWalletOpen}) => {
   const [inCart, setInCart] = useState(false)
 
   const handleCart = () => {
-    const isConnected = localStorage.getItem('isConnected')
-    if (isConnected) {
+    if (user) {
       logger.info('[BuyOrCart] call restful to add to cart then open the cart')
       setInCart(!inCart)
       openCart()

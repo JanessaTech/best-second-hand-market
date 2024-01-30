@@ -20,7 +20,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
-const Signup = ({onClose, open, notifyAlertUpdate}) => {
+const Signup = ({onClose, open, notifyAlertUpdate, notifyUserUpdate}) => {
     logger.debug('[Signup] rendering... ')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
@@ -56,19 +56,19 @@ const Signup = ({onClose, open, notifyAlertUpdate}) => {
     const handleDisConnected = () => {
         reset()
         setState({...state, 'name': '', introduction:'', checked: false} )
-        localStorage.removeItem('isConnected')
         localStorage.removeItem('user')
         onClose()
+        notifyUserUpdate()
     }
 
     const handleSignup = (data) => {
         logger.info('data:', data)
-        logger.info('call restful api to signup ...')
+        logger.info('[Signup] call restful api to signup ...')
         onClose()
 
         const user = {id: 111, name: 'JanessaTech lab'}
-        localStorage.setItem('isConnected', 'true')
         localStorage.setItem('user', JSON.stringify(user))
+        notifyUserUpdate()
     }
 
     const handleInputChanges = (e) => {
