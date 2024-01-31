@@ -39,7 +39,7 @@ const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate}) => {
     const handleSearch = () => {
         logger.debug('[Header] search=', search)
         if (search && search.length > 0) {
-            navigate(`/?search=${search}`)
+            navigate(`/results?search=${search}`)
         }
     }
 
@@ -104,7 +104,7 @@ const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate}) => {
                     id="cheap-search-input" 
                     value={search}
                     variant="outlined" 
-                    placeholder='Search'
+                    placeholder='Explore more nfts'
                     fullWidth
                     InputProps={{
                         startAdornment: (

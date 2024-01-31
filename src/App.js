@@ -27,6 +27,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<MainLayout/>}>
                   <Route index element={<HomeContent/>} />
+                  <Route path='results' element={<HomeContent/>} />
                   <Route path='nft' element={<NFTContent/>} />
                   <Route path="nfters" element={<NFTer/>}/>
                   <Route element={<ProtectedRoutes/>}>
