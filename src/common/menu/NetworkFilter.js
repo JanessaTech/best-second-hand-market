@@ -47,7 +47,7 @@ const NetworkFilter = ({notify, refresh}) => {
     const [network, setNetwork] = useState(getNeworkFromLocalStorage())
     
     useEffect(() => {
-      logger.debug('[NetworkFilter] filter is reset')
+      logger.debug('[NetworkFilter] filter is refreshed')
       setNetwork(getNeworkFromLocalStorage())
     },[refresh])
 

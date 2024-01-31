@@ -127,9 +127,17 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 }
 
+function getFilter() {
+  let filter = localStorage.getItem('filter')
+  if (filter) {
+    return JSON.parse(filter)
+  }
+  return {}
+}
+
 export default function Favorites() {
   logger.debug('[Favorites] rendering...')
-  const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
@@ -141,9 +149,14 @@ export default function Favorites() {
   const [rowStates, setRowSates] = React.useState([])
 
   useEffect(() => {
-    logger.debug('[Favorites] call restful api to get the list of my favorites by user id=', user?.id)
+    logger.debug('[Favorites] call restful api to get the new list of favorites by user id=', user?.id)
+    const latestFilter = getFilter()
+    logger.debug('[Favorites] trigger=', trigger)
+    logger.debug('[Favorites] latestFilter=', latestFilter)
+    logger.debug('[Favorites] page=', 1)
     setRowSates(rows)
-  }, [])
+
+  }, [trigger])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -177,7 +190,6 @@ export default function Favorites() {
 
   const visibleRows = React.useMemo(
     () => {
-      logger.info('[Favorites] call restful api to get result')
       return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     }, [order, orderBy, page, rowsPerPage, rowStates]
   )

@@ -81,9 +81,17 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 }
 
+function getFilter() {
+  let filter = localStorage.getItem('filter')
+  if (filter) {
+    return JSON.parse(filter)
+  }
+  return {}
+}
+
 export default function MyNFTList() {
   logger.debug('[MyNFTList] rendering....')
-  const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
@@ -173,10 +181,16 @@ export default function MyNFTList() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [rowStates, setRowSates] = React.useState([])
 
+
   useEffect(() => {
-    logger.debug('[MyNFTList] call restful api to get the list of my nfts by user id=', user.id)
+    logger.debug('[MyNFTList] call restful api to get the list of my nfts by user id=', user?.id)
+    const latestFilter = getFilter()
+    logger.debug('[MyNFTList] trigger=', trigger)
+    logger.debug('[MyNFTList] latestFilter=', latestFilter)
+    logger.debug('[MyNFTList] page=', 1)
     setRowSates(rows)
-  }, [])
+
+  }, [trigger])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -197,7 +211,6 @@ export default function MyNFTList() {
 
   const visibleRows = React.useMemo(
     () => {
-      logger.debug('[MyNFTList] call restful api to get result')
       return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     }, [order, orderBy, page, rowsPerPage, rowStates]
   )

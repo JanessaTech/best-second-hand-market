@@ -20,7 +20,7 @@ const CategoryFilter = ({notify, refresh}) => {
     const [expand, setExpand] = useState(true)
 
     useEffect(() => {
-        logger.debug('[CategoryFilter] filter is reset')
+        logger.debug('[CategoryFilter] filter is refreshed')
         setChecked(getCategoriesFromLocalStorage())
       },[refresh])
 

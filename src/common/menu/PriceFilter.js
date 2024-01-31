@@ -64,9 +64,9 @@ const PriceFilter = ({notify, notifyAlertUpdate, refresh}) => {
     const [maxValue, setMaxValue] = useState(getPricesFromLocalStorage().max)
 
     useEffect(() => {
-        logger.debug('[PriceFilter] filter is reset')
-        setMinValue(0)
-        setMaxValue(100)
+        logger.debug('[PriceFilter] filter is refreshed')
+        setMinValue(getPricesFromLocalStorage().min)
+        setMaxValue(getPricesFromLocalStorage().max)
       },[refresh])
 
     const changeMinValue = (value) => {

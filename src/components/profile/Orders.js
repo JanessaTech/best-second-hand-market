@@ -117,9 +117,17 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
+function getFilter() {
+  let filter = localStorage.getItem('filter')
+  if (filter) {
+    return JSON.parse(filter)
+  }
+  return {}
+}
+
 export default function Orders() {
   logger.debug('[Orders] rendering...')
-  const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
@@ -131,9 +139,14 @@ export default function Orders() {
   const [rowStates, setRowStates] = useState([])
 
   useEffect(() => {
-    logger.debug('[Orders] call restful apis to get the list of my order by user id=', user?.id)
+    logger.debug('[Orders] call restful api to get the new list of orders by user id=', user?.id)
+    const latestFilter = getFilter()
+    logger.debug('[Orders] trigger=', trigger)
+    logger.debug('[Orders] latestFilter=', latestFilter)
+    logger.debug('[Orders] page=', 1)
     setRowStates(rows)
-  })
+
+  }, [trigger])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -154,7 +167,6 @@ export default function Orders() {
 
   const visibleRows = React.useMemo(
     () => {
-      logger.debug('[Orders] call restful api to get result')
       return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     }, [order, orderBy, page, rowsPerPage, rowStates]
   )

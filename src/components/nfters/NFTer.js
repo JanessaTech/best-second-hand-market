@@ -6,6 +6,7 @@ import logger from '../../common/Logger'
 import {GlobalVariables} from '../MainLayout'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import ProfileFilterBar from '../profile/ProfileFilterBar'
+import { useSearchParams } from 'react-router-dom'
 
 function createData(id, title, img, network, category, price) {
   return {
@@ -104,12 +105,21 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 }
 
+function getFilter() {
+  let filter = localStorage.getItem('filter')
+  if (filter) {
+    return JSON.parse(filter)
+  }
+  return {}
+}
+
 export default function NFTer() {
-  logger.debug('[Favorites] rendering...')
-  const {menuOpen, toggleMenu, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  logger.debug('[NFTer] rendering...')
+  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
+  const [searchParams, setSearchParams] = useSearchParams()
+  const id = searchParams.get('id')
 
   const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('createdTime')
@@ -118,9 +128,14 @@ export default function NFTer() {
   const [rowStates, setRowSates] = useState([])
 
   useEffect(() => {
-    logger.debug('[NFTer] call restful api to get the list of my favorites by user id=', user?.id)
+    logger.debug('[NFTer] call restful api to get the new list of nfts by nfter id=', id)
+    const latestFilter = getFilter()
+    logger.debug('[NFTer] trigger=', trigger)
+    logger.debug('[NFTer] latestFilter=', latestFilter)
+    logger.debug('[NFTer] page=', 1)
     setRowSates(rows)
-  }, [])
+
+  }, [trigger])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
