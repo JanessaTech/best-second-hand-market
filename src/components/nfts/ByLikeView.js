@@ -32,7 +32,10 @@ const ByLikeView = ({user, nft}) => {
     }, [nft?.seller])
     
     const toggleLike = () => {
-        setIsLike(!isLike)
+        if (user?.id) {
+            logger.debug('[ByLikeView] call restful api to add/remove like for user id=', user?.id)
+            setIsLike(!isLike)
+        }  
     }
 
     const closeOverview = () => {

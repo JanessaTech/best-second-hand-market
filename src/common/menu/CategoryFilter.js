@@ -2,7 +2,9 @@ import Checkbox from '@mui/material/Checkbox';
 import { Box, Collapse, List, ListItem, ListItemButton, ListItemText, ListSubheader, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import logger from '../Logger';
+import logger from '../Logger'
+import {CATEGORIES} from '../../common/constant'
+import {capitalize} from '../../utils/StringUtils'
 
 function getCategoriesFromLocalStorage() {
     let filter = localStorage.getItem('filter')
@@ -15,7 +17,6 @@ function getCategoriesFromLocalStorage() {
 
 const CategoryFilter = ({notify, refresh}) => {
     logger.debug('[CategoryFilter] rendering...')
-    const categories = ['Pets', 'Clothes', 'Cosmetics', 'Outfits', 'Car', 'Devices', 'Books']
     const [checked, setChecked] = useState(getCategoriesFromLocalStorage())
     const [expand, setExpand] = useState(true)
 
@@ -67,7 +68,7 @@ const CategoryFilter = ({notify, refresh}) => {
         >
             <Collapse in={!expand} timeout="auto" unmountOnExit>
                 {
-                    categories.map((category) => {
+                    CATEGORIES.map((category) => {
                         const labelId = `checkbox-list-category-label-${category}`;
                         return (
                             <ListItem 
@@ -83,7 +84,7 @@ const CategoryFilter = ({notify, refresh}) => {
                                 }
                             >
                                 <ListItemButton>
-                                    <ListItemText id={'labelId'} primary={category}/>
+                                    <ListItemText id={'labelId'} primary={capitalize(category)}/>
                                 </ListItemButton>
                             </ListItem >
                         )

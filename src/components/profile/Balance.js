@@ -7,25 +7,26 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
+import {NETWORKS} from '../../common/constant'
 
 const balances = [
   {
-    chain: 'Ethereum',
+    chain: 'ethereum',
     chainSymbol: 'ETH',
     remaining: 12.05,
   },
   {
-    chain: 'Polygon',
+    chain: 'polygon',
     chainSymbol: 'MATIC',
     remaining: 124.2,
   },
   {
-    chain: 'Avalanche',
+    chain: 'avalanche',
     chainSymbol: 'AVAX',
     remaining: 1000,
   },
   {
-    chain: 'Solana',
+    chain: 'solana',
     chainSymbol: 'SOL',
     remaining: 256,
   },
@@ -37,7 +38,7 @@ function getBalanceBy(chain) {
     if (balances[i].chain === chain) {
       return balances[i]
     } 
-    if(balances[i].chain === 'Ethereum' && balanceDefault === undefined) {
+    if(balances[i].chain === NETWORKS[0] && balanceDefault === undefined) {
       balanceDefault = balances[i].chain // set default balance in case we cannot find what we want
     }
   }
@@ -46,16 +47,15 @@ function getBalanceBy(chain) {
 
 export default function Balance() {
   logger.debug('[Balance] rendering...')
-  const chainOptions = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
   const {notifyAlertUpdate} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(DepoistSchema)})
   const [state, setState] = useState({
-    remainingInChain: getBalanceBy('Ethereum').remaining,
-    chainSymbol: getBalanceBy('Ethereum').chainSymbol,
+    remainingInChain: getBalanceBy(NETWORKS[0]).remaining,
+    chainSymbol: getBalanceBy(NETWORKS[0]).chainSymbol,
     remainingInCheap: 234,
     cheapSymbol: 'CH',
     deposit: 0,
-    chainBy: 'Ethereum'
+    chainBy: NETWORKS[0]
   })
 
   useEffect(() => {
@@ -109,8 +109,10 @@ export default function Balance() {
                 showInputLabel={true} 
                 value={state.chainBy} 
                 handleChange={handleChainChange} 
-                options={chainOptions} 
-                width={1}/>
+                options={NETWORKS} 
+                width={1}
+                cap={true}
+                />
               <TextField
                 sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width: 1}}
                 id='remainingInChain' 

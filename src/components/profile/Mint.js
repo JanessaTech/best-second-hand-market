@@ -9,10 +9,11 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
+import {NETWORKS, CATEGORIES} from '../../common/constant'
 
 const contractData = [
   {
-    chain: 'Ethereum',
+    chain: 'ethereum',
     local: [
       {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0', tokenStandard: '721'},
       {address: '0xcdcbb4f79e3770252ee32d89b6673eb68ffdd342', tokenStandard: '1155'},
@@ -27,7 +28,7 @@ const contractData = [
     ]
   },
   {
-    chain: 'Polygon',
+    chain: 'polygon',
     local: [
       {address: '0xeeeeee', tokenStandard: 'eeee'},
       {address: '0xffffff', tokenStandard: 'ffff'},
@@ -42,7 +43,7 @@ const contractData = [
     ]
   },
   {
-    chain: 'Avalanche',
+    chain: 'avalanche',
     local: [
       {address: '0xkkkkkkk', tokenStandard: 'kkkk'},
       {address: '0xlllllll', tokenStandard: '1llll'},
@@ -57,7 +58,7 @@ const contractData = [
     ]
   },
   {
-    chain: 'Solana',
+    chain: 'solana',
     local: [
       {address: '0xqqqqqqqq', tokenStandard: 'qqqq'},
       {address: '0xrrrrrrrr', tokenStandard: 'rrrr'},
@@ -88,8 +89,6 @@ const VisuallyHiddenInput = styled('input')({
 export default function Mint() {
   logger.debug('[Mint] rendering...')
   const {notifyAlertUpdate} = React.useContext(GlobalVariables)
-  const categories = ['Pets', 'Clothes', 'Cosmetics', 'Outfits', 'Car', 'Devices', 'Books']
-  const chainOptions = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(MintSchema)})
 
   const [state, setState] = useState({
@@ -219,11 +218,12 @@ export default function Mint() {
                 showInputLabel={true}  // indicator of whether or not we need to show label
                 value={state.category} // the value
                 handleChange={handleCategoryChange} // fun to change to value
-                options={categories} // The content of dropdown list
+                options={CATEGORIES} // The content of dropdown list
                 width={1}  //size
                 register={register}  // bind it to useForm
                 errors={errors}  // errros if the value is not conformed with schema
                 validate={true}  // sometimes, we don't need to do validation where the select is just a general dropdown list. In this case, we set validate as false or leave as undefined
+                cap={true}
                 />
               <CustomSelect 
                 name={'chain'}
@@ -231,11 +231,12 @@ export default function Mint() {
                 showInputLabel={true} 
                 value={state.chain} 
                 handleChange={handleChainChange} 
-                options={chainOptions} 
+                options={NETWORKS} 
                 width={1}
                 register={register}
                 errors={errors}
                 validate={true}
+                cap={true}
                 />
               <CustomSelect 
                 name={'address'}

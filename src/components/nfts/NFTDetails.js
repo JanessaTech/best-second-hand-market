@@ -1,6 +1,7 @@
 import { Box, Divider, Typography } from '@mui/material'
 import React, { memo} from 'react'
 import logger from '../../common/Logger'
+import {capitalize} from '../../utils/StringUtils'
 
 const Space = () => (<Box sx={{width:1, height:10}}></Box>)
 
@@ -33,7 +34,7 @@ const NFTDetails = ({nft}) => {
         <Space/>
         <Typography>Details:</Typography>
           <DetailRow key='CID' name='CID' value={nft?.cid}/>
-          <DetailRow key='Chain' name='Chain' value={nft?.chain}/>
+          <DetailRow key='Chain' name='Chain' value={capitalize(nft?.chain)}/>
           <DetailRow key='Contract address' name='Contract address' value={nft?.address}/>
           <DetailRow key='Token ID' name='Token ID' value={nft?.tokenId}/>
           <DetailRow key='Token standard' name='Token standard' value={nft?.tokenStandard}/>

@@ -1,7 +1,9 @@
 import { Box, FormControl, InputAdornment, ListItemIcon, ListItemText, MenuItem, OutlinedInput, Select, useTheme } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
-import logger from '../Logger';
+import logger from '../Logger'
+import {NETWORKS} from '../constant'
+import {capitalize} from '../../utils/StringUtils'
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -30,10 +32,10 @@ function getNeworkFromLocalStorage() {
   if (filter) {
     filter = JSON.parse(filter)
     if (!filter.network){
-      filter.network = 'Ethereum'
+      filter.network = NETWORKS[0]
     }
   } else {
-    filter = {network: 'Ethereum'}
+    filter = {network: NETWORKS[0]}
   }
   localStorage.setItem('filter', JSON.stringify(filter))
 
@@ -42,7 +44,6 @@ function getNeworkFromLocalStorage() {
 // codes below should be refactored into CustomSelect.js later on
 const NetworkFilter = ({notify, refresh}) => {
     logger.debug('[NetworkFilter] rendering...')
-    const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']
     const theme = useTheme()
     const [network, setNetwork] = useState(getNeworkFromLocalStorage())
     
@@ -52,7 +53,7 @@ const NetworkFilter = ({notify, refresh}) => {
     },[refresh])
 
     const handleNetworkChange = (e) => {
-      setNetwork(e.target.value)
+      setNetwork(e.target.value.toLowerCase())
       let filter = localStorage.getItem('filter')
       if (filter) {
         filter = JSON.parse(filter)
@@ -73,7 +74,7 @@ const NetworkFilter = ({notify, refresh}) => {
             label="network-type-option"
             value={network}
             onChange={handleNetworkChange}
-            renderValue={(p) => p}
+            renderValue={(p) => capitalize(p)}
             input={
             <OutlinedInput 
                 size="small" 
@@ -86,16 +87,16 @@ const NetworkFilter = ({notify, refresh}) => {
             MenuProps={MenuProps}
             >
             {
-                    networks.map((networkName) => (
+                    NETWORKS.map((networkName) => (
                         <MenuItem
                             key={networkName}
                             value={networkName}
-                            style={getStyles(networkName, network, theme)}
+                            style={getStyles(networkName, network.toLowerCase(), theme)}
                         >
                             <ListItemIcon>
-                                <CheapIcon name={networkName.toLowerCase()}/>
+                                <CheapIcon name={networkName}/>
                             </ListItemIcon>
-                            <ListItemText>{networkName}</ListItemText>
+                            <ListItemText>{capitalize(networkName)}</ListItemText>
                         </MenuItem>
                     ))
                 }    

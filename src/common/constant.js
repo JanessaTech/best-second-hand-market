@@ -7,3 +7,6 @@ export const MenuUrls = ['/', '/results', '/nfters', '/profile/nfts', '/profile/
 export const PageSizeInGallery=100
 export const BatchSizeInGallery=30
 export const NETWORKS = ['ethereum', 'polygon', 'avalanche', 'solana']
+export const CATEGORIES = ['pets', 'clothes', 'cosmetics', 'outfits', 'car', 'devices', 'books']
+export const MaxValueInFilter = 100
+export const MinValueInFilter = 0

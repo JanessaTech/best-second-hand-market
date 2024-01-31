@@ -12,7 +12,7 @@ const nftData = {
     title: 'A baby monkey',
     price: 12,
     cid: 'bafybeifvpojdj4ar5wiawksem3lifksiituu4jdwsr53uopuy7dmish6va',
-    chain: 'Ethereum',
+    chain: 'ethereum',
     address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0',
     tokenId: 551,
     tokenStandard: '721',

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import {capitalize} from '../../utils/StringUtils'
 import {PriceFilterSchema} from '../Schemas'
 import logger from '../Logger'
+import {MaxValueInFilter, MinValueInFilter} from '../constant'
 
 const NumberInput = (props) => {
     const {placeholder, name, value, changeValueFun, register, errors, ...others} = props
@@ -44,15 +45,15 @@ function getPricesFromLocalStorage() {
       filter = JSON.parse(filter)
       if (filter.prices) {
         if (!filter.prices.min) {
-            filter.prices.min = 0
+            filter.prices.min = MinValueInFilter
         }
         if (!filter.prices.max) {
-            filter.prices.max = 100
+            filter.prices.max = MaxValueInFilter
         }
         return filter.prices
       }
     }
-    return {min: 0, max: 100}
+    return {min: MinValueInFilter, max: MaxValueInFilter}
   }
 
 const PriceFilter = ({notify, notifyAlertUpdate, refresh}) => {
@@ -78,8 +79,8 @@ const PriceFilter = ({notify, notifyAlertUpdate, refresh}) => {
 
     const handleClear = () => {
         reset()
-        setMinValue(0)
-        setMaxValue(100)
+        setMinValue(MinValueInFilter)
+        setMaxValue(MaxValueInFilter)
     }
 
     const handleApply = (data) => {

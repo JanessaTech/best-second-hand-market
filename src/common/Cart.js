@@ -188,7 +188,7 @@ const getFilteredNfts = (nfts, network) => {
 const Cart = ({user, toggleCart, open}) => {
   logger.debug('[Cart] rendering...')
   const [nfts, setNfts] = useState([])
-  const [network, setNetwork] = useState('ethereum')
+  const [network, setNetwork] = useState(NETWORKS[0])
   
   useEffect(() => {
     if (user?.id && open) {
@@ -214,7 +214,7 @@ const Cart = ({user, toggleCart, open}) => {
 
   const getNetworkName = (tab) =>{
     if (tab >= NETWORKS.length) return NETWORKS[0]
-    return NETWORKS[tab]  // should be fixed at #7
+    return NETWORKS[tab]
   }
 
   const handleTabChanges = (tab) => {
