@@ -55,13 +55,19 @@ function getPricesFromLocalStorage() {
     return {min: 0, max: 100}
   }
 
-const PriceFilter = ({notify, notifyAlertUpdate}) => {
+const PriceFilter = ({notify, notifyAlertUpdate, refresh}) => {
     logger.debug('[PriceFilter] rendering...')
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(PriceFilterSchema)
     })
     const [minValue, setMinValue] = useState(getPricesFromLocalStorage().min)
     const [maxValue, setMaxValue] = useState(getPricesFromLocalStorage().max)
+
+    useEffect(() => {
+        logger.debug('[PriceFilter] filter is reset')
+        setMinValue(0)
+        setMaxValue(100)
+      },[refresh])
 
     const changeMinValue = (value) => {
         setMinValue(value)

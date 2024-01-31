@@ -43,6 +43,7 @@ const MainLayout = () => {
         width: isMediumScreen ? 0 : DrawerWidth
     })
     const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
+    const [refresh, setReresh] = useState(0)  // to notify to reset/refresh menu
 
     useEffect(() => {
         if(!isMediumScreen) {
@@ -73,6 +74,10 @@ const MainLayout = () => {
     const notifyFilterUpdate = useCallback((newTrigger) => {
         setTrigger(newTrigger)
     },[])
+
+    const notifyFilterRefresh = useCallback(() => {
+        setReresh(Math.random())
+    })
 
     const clearAlerts = useCallback(() => {
         setAlerts([])
@@ -124,7 +129,9 @@ const MainLayout = () => {
                 openCart={openCart} 
                 user={user}
                 notifyWalletOpen={notifyWalletOpen}
-                notifyUserUpdate={notifyUserUpdate}/>
+                notifyUserUpdate={notifyUserUpdate}
+                notifyFilterRefresh={notifyFilterRefresh}
+                />
             <GlobalVariables.Provider 
                 value={{
                     user: user,
@@ -143,6 +150,7 @@ const MainLayout = () => {
                             width={menu.width} 
                             menuOpen={menu.open} 
                             closeMenu={closeMenu} 
+                            refresh={refresh}
                             notifyFilterUpdate={notifyFilterUpdate} 
                             notifyAlertUpdate={notifyAlertUpdate}/>
                     }

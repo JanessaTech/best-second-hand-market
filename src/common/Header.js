@@ -8,7 +8,7 @@ import ProfileMenu from '../components/profile/ProfileMenu'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logger from './Logger'
 
-const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate}) => {
+const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate, notifyFilterRefresh}) => {
     logger.debug('[Header] rendering...')
     logger.debug('[Header] user:', user)
     const theme = useTheme()
@@ -39,6 +39,8 @@ const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate}) => {
     const handleSearch = () => {
         logger.debug('[Header] search=', search)
         if (search && search.length > 0) {
+            localStorage.removeItem('filter')
+            notifyFilterRefresh()
             navigate(`/results?search=${search}`)
         }
     }

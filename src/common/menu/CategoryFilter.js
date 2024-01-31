@@ -1,6 +1,6 @@
 import Checkbox from '@mui/material/Checkbox';
 import { Box, Collapse, List, ListItem, ListItemButton, ListItemText, ListSubheader, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import logger from '../Logger';
 
@@ -13,11 +13,16 @@ function getCategoriesFromLocalStorage() {
     return []
   }
 
-const CategoryFilter = ({notify}) => {
+const CategoryFilter = ({notify, refresh}) => {
     logger.debug('[CategoryFilter] rendering...')
     const categories = ['Pets', 'Clothes', 'Cosmetics', 'Outfits', 'Car', 'Devices', 'Books']
     const [checked, setChecked] = useState(getCategoriesFromLocalStorage())
     const [expand, setExpand] = useState(true)
+
+    useEffect(() => {
+        logger.debug('[CategoryFilter] filter is reset')
+        setChecked(getCategoriesFromLocalStorage())
+      },[refresh])
 
     const handleCategoryChanges = (value) => () => {
         const index = checked.indexOf(value)
