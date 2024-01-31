@@ -6,3 +6,4 @@ export const FilterBarHeight = 80
 export const MenuUrls = ['/', '/results', '/nfters', '/profile/nfts', '/profile/orders', '/profile/favorites']
 export const PageSizeInGallery=100
 export const BatchSizeInGallery=30
+export const NETWORKS = ['ethereum', 'polygon', 'avalanche', 'solana']

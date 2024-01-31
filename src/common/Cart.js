@@ -1,86 +1,94 @@
 import { Box, Button, Divider, Drawer, IconButton, Tab, Tabs, Tooltip, Typography } from '@mui/material'
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { CheapIcon } from '../utils/Svgs'
 import {CartWidth, HeaderHeight} from './constant'
 import { UnavailableHelpTip } from './TipHelpers'
+import {NETWORKS} from '../common/constant'
 import logger from './Logger'
+import {capitalize} from '../utils/StringUtils'
 
 const data = [
   {
-    nftId: 1,
+    id: 1,
     title: 'The most fasionable shoes',
     img: 'shoes.jpeg',
-    nfter: 'Fashion lab',
+    sellerName: 'Fashion lab',
     network: 'ethereum',
     available: true,
     price: 12.69
   },
   {
-    nftId: 2,
+    id: 2,
     title: 'The most fasionable Phone',
     img: 'phone.webp',
-    nfter: 'Phone lab',
+    sellerName: 'Phone lab',
     network: 'ethereum',
     available: true,
-    price: 123.6},
+    price: 123.6
+  },
   {
-    nftId: 3,
+    id: 3,
     title: 'A baby monkey',
     img: 'mk.png',
-    nfter: 'JanessaTech lab',
+    sellerName: 'JanessaTech lab',
     network: 'ethereum',
     available: false,
-    price: 100.3},
+    price: 100.3
+  },
   {
-    nftId: 4,
+    id: 4,
     title: 'test1 for polygon',
     img: 'mk.png',
-    nfter: 'Hsddds',
+    sellerName: 'Hsddds',
     network: 'polygon',
     available: true,
-    price: 20.5},
+    price: 20.5
+  },
   {
-    nftId: 5,
+    id: 5,
     title: 'test2 for polygon',
     img: 'mk.png',
-    nfter: 'Jniffer',
+    sellerName: 'Jniffer',
     network: 'polygon',
     available: true,
-    price: 201.1},
+    price: 201.1
+  },
   {
-    nftId: 6,
+    id: 6,
     title: 'test1 for avalanche',
     img: 'mk.png',
-    nfter: 'aks',
+    sellerName: 'aks',
     network: 'avalanche',
     available: true,
-    price: 50.4},
+    price: 50.4
+  },
   {
-    nftId: 7,
+    id: 7,
     title: 'test2 for avalanche',
     img: 'mk.png',
-    nfter: 'laniddd',
+    sellerName: 'laniddd',
     network: 'avalanche',
     available: true,
-    price: 11.5}, 
+    price: 11.5
+  }, 
   {
-    nftId: 8,
+    id: 8,
     title: 'test1 for solana',
     img: 'mk.png',
-    nfter: 'fffff',
+    sellerName: 'fffff',
     network: 'solana',
     available: true,
-    price: 52.4},
+    price: 52.4
+  },
   {
-    nftId: 9,
+    id: 9,
     title: 'test2 for solana',
     img: 'mk.png',
-    nfter: 'xxxxxx',
+    sellerName: 'xxxxxx',
     network: 'solana',
     available: true,
     price: 22.4}, 
-
 ]
 
 function calcPrice(data) {
@@ -94,7 +102,7 @@ function calcPrice(data) {
 }
 
 const CartItem = (props) => {
-  const {nftId, title, img, nfter, available, price, deleteFromCart, ...others} = props
+  const {id, title, img, sellerName, available, price, deleteFromCart} = props
 
   return (
     <Box sx={{
@@ -128,7 +136,7 @@ const CartItem = (props) => {
                                                 sx={{textOverflow: 'ellipsis', 
                                                     whiteSpace: 'nowrap', 
                                                     overflow: 'hidden'}}
-                                          >{nfter}</Typography>
+                                          >{sellerName}</Typography>
                                       </Box> : <UnavailableHelpTip/>
                         } 
                     </Box>
@@ -138,14 +146,14 @@ const CartItem = (props) => {
                 <Typography variant='body2'>{available ? `${price} CH` : ''}</Typography>
               </Box>
           </Box>
-          <IconButton sx={{position:'absolute', right:20, bottom:5, visibility:'hidden', p:0}} onClick={() => deleteFromCart(nftId)}>
+          <IconButton sx={{position:'absolute', right:20, bottom:5, visibility:'hidden', p:0}} onClick={() => deleteFromCart(id)}>
                   <DeleteIcon />
           </IconButton>
     </Box>
   )
 }
 
-const CartTab = (props) => { // todo. hardcode here. should enhance it later on
+const CartTab = (props) => {
   const {handleTabChanges, ...others} = props
   const [tab, setTab] = useState(0)
 
@@ -161,22 +169,14 @@ const CartTab = (props) => { // todo. hardcode here. should enhance it later on
                   variant="scrollable"
                   scrollButtons="auto"
                   >
-                <Tab sx={{textTransform:'none', 
+                {
+                  NETWORKS.map((network) => (
+                    <Tab key={network} sx={{textTransform:'none', 
                           '&.MuiButtonBase-root.MuiTab-root':{minHeight:50},
                           '&.MuiButtonBase-root.MuiTab-root span':{mr:1}
-                        }} icon={<CheapIcon name='ethereum' size={20}/>} iconPosition="start" label="Ethereum"/>
-                <Tab sx={{textTransform:'none', 
-                          '&.MuiButtonBase-root.MuiTab-root':{minHeight:50},
-                          '&.MuiButtonBase-root.MuiTab-root span':{mr:1}
-                        }} icon={<CheapIcon name='polygon' size={20}/>} iconPosition="start" label="Polygon"/>
-                <Tab sx={{textTransform:'none', 
-                          '&.MuiButtonBase-root.MuiTab-root':{minHeight:50},
-                          '&.MuiButtonBase-root.MuiTab-root span':{mr:1}
-                        }} icon={<CheapIcon name='avalanche' size={20}/>} iconPosition="start" label="Avalanche"/>
-                <Tab sx={{textTransform:'none', 
-                          '&.MuiButtonBase-root.MuiTab-root':{minHeight:50},
-                          '&.MuiButtonBase-root.MuiTab-root span':{mr:1}
-                        }} icon={<CheapIcon name='solana' size={20}/>} iconPosition="start" label="Solana"/>
+                        }} icon={<CheapIcon name={network} size={20}/>} iconPosition="start" label={capitalize(network)}/>
+                  ))
+                }
     </Tabs>
   )
 }
@@ -185,46 +185,41 @@ const getFilteredNfts = (nfts, network) => {
   return nfts.filter((nft) => nft.network === network)
 }
 
-const Cart = ({toggleCart, open}) => {
+const Cart = ({user, toggleCart, open}) => {
   logger.debug('[Cart] rendering...')
+  const [nfts, setNfts] = useState([])
+  const [network, setNetwork] = useState('ethereum')
   
-  const networks = ['Ethereum', 'Polygon', 'Avalanche', 'Solana']  // don't change the order. The order the network should be aligned with the order in tabs
-
-  const fetchItems = () => {
-    if(open) {
-      logger.info('call restful api to get latest items in cart by nfterId')
+  useEffect(() => {
+    if (user?.id && open) {
+      logger.debug('[Cart] call restful api to get the list of nfts in cart by user id=', user?.id)
+      setNfts(data)
     }
-    return data
-  }
-  
-  const [state, setState] = useState({
-    nfts: fetchItems(),
-    network: 'ethereum'
-  })
+  }, [user, open])
 
   const closeCart = () => {
     toggleCart()
   }
 
   const clearCart = () => {
-    logger.info('call restful apis to clear cart for nfterId')
-    setState({nfts: state.nfts.filter((nft) => nft.network !== state.network)})
+    logger.info('[Cart] call restful apis to clear cart by user id', user?.id)
+    setNfts(nfts.filter((nft) => nft.network !== network))
   }
 
-  const deleteFromCart = (nftId) => {
-    logger.info('call restful api to delete a nft by nftId:', nftId)
-    const newNfts = state.nfts.filter((nft) => nft.nftId !== nftId)
-    setState({...state, nfts: newNfts})
+  const deleteFromCart = (id) => {
+    logger.info('[Cart] Cart call restful api to delete a nft by nft id:', id)
+    const newNfts = nfts.filter((nft) => nft.id !== id)
+    setNfts(newNfts)
   }
 
   const getNetworkName = (tab) =>{
-    if (tab >= networks.length) return 'ethereum'
-    return networks[tab].toLowerCase()  // should be fixed at #7
+    if (tab >= NETWORKS.length) return NETWORKS[0]
+    return NETWORKS[tab]  // should be fixed at #7
   }
 
   const handleTabChanges = (tab) => {
     const network = getNetworkName(tab)
-    setState({...state, network: network})
+    setNetwork(network)
   }
 
   return (
@@ -252,14 +247,14 @@ const Cart = ({toggleCart, open}) => {
             <CartTab handleTabChanges={handleTabChanges}/>
 
             <Box sx={{display: 'flex', justifyContent:'space-between', my:2}}>
-                <Typography>{getFilteredNfts(state.nfts, state.network).length} items</Typography>
+                <Typography>{getFilteredNfts(nfts, network).length} items</Typography>
                 <Box sx={{cursor:'pointer', '&:hover':{color:'black'}}} onClick={clearCart}>
                       <Typography>Clear all</Typography>
                 </Box>
             </Box>
-            {getFilteredNfts(state.nfts, state.network).map((nft) =>
+            {getFilteredNfts(nfts, network).map((nft) =>
             (
-              <Box key={nft.nftId}>
+              <Box key={nft.id}>
                   <CartItem {...nft} deleteFromCart={deleteFromCart}/>
                   <Divider sx={{my: 2}}/>
               </Box>
@@ -267,9 +262,9 @@ const Cart = ({toggleCart, open}) => {
             
             <Box sx={{display:'flex', justifyContent:'space-between', mt:3}}>
               <Typography variant='h6'>Total price</Typography>
-              <Typography variant='h6'>{calcPrice(getFilteredNfts(state.nfts, state.network))} CH</Typography>
+              <Typography variant='h6'>{calcPrice(getFilteredNfts(nfts, network))} CH</Typography>
             </Box>
-            <Button color='customBlack' variant='contained' disabled={getFilteredNfts(state.nfts, state.network).filter((nft) => nft.available).length === 0}
+            <Button color='customBlack' variant='contained' disabled={getFilteredNfts(nfts, network).filter((nft) => nft.available).length === 0}
                 sx={{textTransform:'none', borderRadius:'50vh', my:3, width:1}}>
                 <Typography variant='h6'>Buy now</Typography>
             </Button>

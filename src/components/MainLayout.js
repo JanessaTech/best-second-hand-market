@@ -158,7 +158,7 @@ const MainLayout = () => {
                 </Box>
                 
             </GlobalVariables.Provider>
-            <Cart toggleCart={toggleCart} open={cartOpen}/>
+            <Cart user={user} toggleCart={toggleCart} open={cartOpen}/>
             {
                     alerts && alerts.length > 0 && 
                         <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlerts={clearAlerts}/>       
