@@ -148,7 +148,7 @@ export default function Favorites() {
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
-    logger.info('newOrder = ', newOrder, 'property = ', property)
+    logger.info('[Favorites] newOrder = ', newOrder, 'property = ', property)
     setOrder(newOrder);
     setOrderBy(property);
   }
@@ -163,8 +163,8 @@ export default function Favorites() {
   }
 
   const handleDelete = (id) => (e) => {
-    logger.info('handleDelete id=', id)
-    logger.info('call restful api to delete a favorite by id=', id)
+    logger.info('[Favorites] handleDelete id=', id)
+    logger.info('[Favorites] call restful api to delete a favorite by id=', id)
     
     var newRowStates = []
     for (var i = 0; i < rowStates.length; i++) {
@@ -177,7 +177,7 @@ export default function Favorites() {
 
   const visibleRows = React.useMemo(
     () => {
-      logger.info('call restful api to get result')
+      logger.info('[Favorites] call restful api to get result')
       return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     }, [order, orderBy, page, rowsPerPage, rowStates]
   )

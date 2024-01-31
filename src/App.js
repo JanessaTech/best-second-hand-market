@@ -27,8 +27,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<MainLayout/>}>
                   <Route index element={<HomeContent/>} />
-                  <Route path='results' element={<HomeContent/>} />
                   <Route path='nft' element={<NFTContent/>} />
+                  <Route path="nfters" element={<NFTer/>}/>
                   <Route element={<ProtectedRoutes/>}>
                     <Route path="profile/nfts" element={<MyNFTList/>}/>
                     <Route path="profile/orders" element={<Orders/>}/>
@@ -37,7 +37,6 @@ function App() {
                     <Route path="profile/notifications" element={<Notification/>}/>
                     <Route path="profile/setting" element={<Setting/>}/>
                     <Route path="profile/balance" element={<Balance/>}/>
-                    <Route path="/nfters" element={<NFTer/>}/>
                     <Route path="*" element={<NoPage/>}/>
                   </Route>
                 </Route>

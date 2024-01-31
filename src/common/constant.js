@@ -3,6 +3,6 @@ export const HeaderHeight = 76
 export const DrawerWidth = 250
 export const CartWidth = 360
 export const FilterBarHeight = 80
-export const MenuUrls = ['/', '/profile/nfts', '/profile/orders', '/profile/favorites']
+export const MenuUrls = ['/', '/profile/nfts', '/profile/orders', '/profile/favorites', '/nfters']
 export const PageSizeInGallery=100
 export const BatchSizeInGallery=30
