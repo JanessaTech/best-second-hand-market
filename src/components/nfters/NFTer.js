@@ -7,6 +7,7 @@ import {GlobalVariables} from '../MainLayout'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import ProfileFilterBar from '../profile/ProfileFilterBar'
 import { useSearchParams } from 'react-router-dom'
+import {capitalize} from '../../utils/StringUtils'
 
 function createData(id, title, img, network, category, price) {
   return {
@@ -20,21 +21,21 @@ function createData(id, title, img, network, category, price) {
 }
 
 const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'Pets', 61),
-  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'Clothes', 62),
-  createData(3, 'green monkey', 'mk.png', 'ethereum', 'Clothes', 63),
-  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'Clothes', 64),
-  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'Clothes', 65),
-  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'Clothes', 66),
-  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'Clothes', 67),
-  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'Clothes', 68),
-  createData(9, 'KitKat', 'mk.png', 'ethereum', 'Clothes', 69),
-  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'Clothes', 70),
-  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'Clothes', 71),
-  createData(12, 'Nougat', 'mk.png', 'ethereum', 'Clothes', 72),
-  createData(13, 'Oreo', 'mk.png', 'ethereum', 'Clothes', 73),
-  createData(14, 'Oreo', 'mk.png', 'ethereum', 'Clothes', 74),
-  createData(15, 'Oreo', 'mk.png', 'ethereum', 'Clothes', 75),
+  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'pets', 61),
+  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'clothes', 62),
+  createData(3, 'green monkey', 'mk.png', 'ethereum', 'clothes', 63),
+  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'clothes', 64),
+  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'clothes', 65),
+  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'clothes', 66),
+  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'clothes', 67),
+  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'clothes', 68),
+  createData(9, 'KitKat', 'mk.png', 'ethereum', 'clothes', 69),
+  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'clothes', 70),
+  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'clothes', 71),
+  createData(12, 'Nougat', 'mk.png', 'ethereum', 'clothes', 72),
+  createData(13, 'Oreo', 'mk.png', 'ethereum', 'clothes', 73),
+  createData(14, 'Oreo', 'mk.png', 'ethereum', 'clothes', 74),
+  createData(15, 'Oreo', 'mk.png', 'ethereum', 'clothes', 75),
 ];
 
 const headCells = [
@@ -122,7 +123,7 @@ export default function NFTer() {
   const id = searchParams.get('id')
 
   const [order, setOrder] = useState('desc')
-  const [orderBy, setOrderBy] = useState('createdTime')
+  const [orderBy, setOrderBy] = useState('price')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [rowStates, setRowSates] = useState([])
@@ -165,7 +166,7 @@ export default function NFTer() {
     const total = rowStates.length
     return (
       <Box>
-              <Typography><strong>{total}</strong> items in favorites </Typography>
+              <Typography><strong>{total}</strong> items</Typography>
       </Box>
     )
   }
@@ -223,7 +224,7 @@ export default function NFTer() {
                                         </Box>
                                     </Link>
                                 </TableCell>
-                                <TableCell align="left" sx={{px:1}}>{row.category}</TableCell>
+                                <TableCell align="left" sx={{px:1}}>{capitalize(row.category)}</TableCell>
                                 <TableCell align="left" sx={{px:1}}>{row.price}</TableCell>
                             </TableRow>
                           )

@@ -1,12 +1,13 @@
 import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, TableRow, useMediaQuery, TableSortLabel, TablePagination, Button, TextField, Typography, Link } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useTheme } from '@mui/material/styles'
-import {HeaderHeight, FilterBarHeight} from '../../common/constant'
+import {HeaderHeight, FilterBarHeight, NFTSTATUS} from '../../common/constant'
 import {GlobalVariables} from '../MainLayout'
 import ProfileFilterBar from './ProfileFilterBar'
 import PropTypes from 'prop-types'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
+import {capitalize} from '../../utils/StringUtils'
 
 function createData(id, title, img, network, category, sstatus, price, createdTime, views, favorites) {
   return {
@@ -24,21 +25,21 @@ function createData(id, title, img, network, category, sstatus, price, createdTi
 }
 
 const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'Pets', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 221),
-  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 222),
-  createData(3, 'green monkey', 'mk.png', 'ethereum', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 223),
-  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 224),
-  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 225),
-  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 226),
-  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 227),
-  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 228),
-  createData(9, 'KitKat', 'mk.png', 'ethereum', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 229),
-  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 230),
-  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 231),
-  createData(12, 'Nougat', 'mk.png', 'ethereum', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 232),
-  createData(13, 'Oreo', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
-  createData(14, 'Oreo', 'mk.png', 'ethereum', 'Clothes', {value: 'Off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
-  createData(15, 'Oreo', 'mk.png', 'ethereum', 'Clothes', {value: 'On', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'pets', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 221),
+  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 222),
+  createData(3, 'green monkey', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 223),
+  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 224),
+  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 225),
+  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 226),
+  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 227),
+  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 228),
+  createData(9, 'KitKat', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 229),
+  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 230),
+  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 231),
+  createData(12, 'Nougat', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 232),
+  createData(13, 'Oreo', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(14, 'Oreo', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(15, 'Oreo', 'mk.png', 'ethereum', 'pets', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
 ]
 
 function EnhancedTableHead(props) {
@@ -95,7 +96,6 @@ export default function MyNFTList() {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
-  const statusOptions = ['On', 'Off']
   const headCells = [
     {
       id: 'id',
@@ -377,15 +377,17 @@ export default function MyNFTList() {
                                 </Box>
                             </Link>
                           </TableCell>
-                          <TableCell align="left" sx={{display: getHeadById('category').display ?'table-cell': 'none', px:1}}>{row.category}</TableCell>
+                          <TableCell align="left" sx={{display: getHeadById('category').display ?'table-cell': 'none', px:1}}>{capitalize(row.category)}</TableCell>
                           <TableCell align="left" sx={{display: getHeadById('sstatus').display ?'table-cell': 'none', px:1}}>
                             <CustomSelect 
                               label={'status'} 
                               showInputLabel={false} 
                               value={row.sstatus.value} 
                               handleChange={handleStatusChange(row.id)} 
-                              options={statusOptions} 
-                              width={70}/>
+                              options={NFTSTATUS} 
+                              width={70}
+                              cap={true}
+                              />
                           </TableCell>
                           <TableCell align="center" sx={{display: getHeadById('id').display ?'table-cell': 'none', px:1}}>
                             <Box>

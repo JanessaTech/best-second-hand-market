@@ -6,6 +6,7 @@ import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import ProfileFilterBar from './ProfileFilterBar'
 import {GlobalVariables} from '../MainLayout'
 import logger from '../../common/Logger'
+import {capitalize} from '../../utils/StringUtils'
 
 function createData(id, title, img, network, category, price, orderedTime, seller) {
   return {
@@ -21,22 +22,22 @@ function createData(id, title, img, network, category, price, orderedTime, selle
 }
 
 const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'Pets', 12, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'Pets', 22, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(3, 'Frozen yoghurt', 'mk.png', 'ethereum', 'Pets', 32, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(4, 'Gingerbread', 'mk.png', 'ethereum', 'Pets', 42, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(5, 'Honeycomb', 'mk.png', 'ethereum', 'Pets', 52, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(6, 'Ice cream sandwich', 'mk.png', 'ethereum', 'Pets', 62, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(7, 'Jelly Bean', 'mk.png', 'ethereum', 'Pets', 72, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(8, 'KitKat', 'mk.png', 'ethereum', 'Pets', 82, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(9, 'Lollipop', 'mk.png', 'ethereum', 'Pets', 92, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(10, 'Marshmallow', 'mk.png', 'ethereum', 'Pets', 122, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(11, 'Nougat', 'mk.png', 'ethereum', 'Pets', 222, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(12, 'Jeniffer', 'mk.png', 'ethereum', 'Pets', 342, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(13, 'Lidanaa', 'mk.png', 'ethereum', 'Pets', 442, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(14, 'Test for this one', 'mk.png', 'ethereum', 'Pets', 62, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(15, 'Day dream for success', 'mk.png', 'ethereum', 'Pets', 772, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
-  createData(16, 'Day dream for success2', 'mk.png', 'ethereum', 'Pets', 772, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'pets', 12, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'pets', 22, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(3, 'Frozen yoghurt', 'mk.png', 'ethereum', 'pets', 32, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(4, 'Gingerbread', 'mk.png', 'ethereum', 'pets', 42, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(5, 'Honeycomb', 'mk.png', 'ethereum', 'pets', 52, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(6, 'Ice cream sandwich', 'mk.png', 'ethereum', 'pets', 62, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(7, 'Jelly Bean', 'mk.png', 'ethereum', 'pets', 72, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(8, 'KitKat', 'mk.png', 'ethereum', 'pets', 82, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(9, 'Lollipop', 'mk.png', 'ethereum', 'pets', 92, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(10, 'Marshmallow', 'mk.png', 'ethereum', 'pets', 122, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(11, 'Nougat', 'mk.png', 'ethereum', 'pets', 222, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(12, 'Jeniffer', 'mk.png', 'ethereum', 'pets', 342, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(13, 'Lidanaa', 'mk.png', 'ethereum', 'pets', 442, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(14, 'Test for this one', 'mk.png', 'ethereum', 'pets', 62, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(15, 'Day dream for success', 'mk.png', 'ethereum', 'pets', 772, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
+  createData(16, 'Day dream for success2', 'mk.png', 'ethereum', 'pets', 772, 'Jan 2th, 2024', '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'),
 ]
 
 const headCells = [
@@ -132,8 +133,8 @@ export default function Orders() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
 
-  const [order, setOrder] = useState('asc')
-  const [orderBy, setOrderBy] = useState('calories')
+  const [order, setOrder] = useState('desc')
+  const [orderBy, setOrderBy] = useState('orderedTime')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [rowStates, setRowStates] = useState([])
@@ -235,7 +236,7 @@ export default function Orders() {
                                 </Box>
                             </Link>
                           </TableCell>
-                          <TableCell align="left" sx={{px:1}}>{row.category}</TableCell>
+                          <TableCell align="left" sx={{px:1}}>{capitalize(row.category)}</TableCell>
                           <TableCell align="left" sx={{px:1}}>{row.price}</TableCell>
                           <TableCell align="left" sx={{px:1}}>{row.orderedTime}</TableCell>
                           <TableCell align="left" sx={{px:1}}>{row.seller}</TableCell>

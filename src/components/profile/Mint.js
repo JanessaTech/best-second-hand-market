@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
-import {NETWORKS, CATEGORIES} from '../../common/constant'
+import {NETWORKS, CATEGORIES, NETOWORKTYPE} from '../../common/constant'
 
 const contractData = [
   {
@@ -95,6 +95,7 @@ export default function Mint() {
     title: '',
     category: '',
     chain: '',
+    chaintype: '',
     address: '',
     standard: '',
     description: '',
@@ -113,6 +114,9 @@ export default function Mint() {
     }
     if (errors?.chain) {
       alerts.push({severity: 'error', message: errors?.chain?.message})
+    }
+    if (errors?.chaintype) {
+      alerts.push({severity: 'error', message: errors?.chaintype?.message})
     }
     if (errors?.address) {
       alerts.push({severity: 'error', message: errors?.address?.message})
@@ -140,6 +144,7 @@ export default function Mint() {
       title: '',
       category: '',
       chain: '',
+      chaintype: '',
       address: '',
       standard: '',
       description: '',
@@ -151,7 +156,6 @@ export default function Mint() {
 
   const handleMint= (data) => {
     logger.info('[Mint] handleMint data =', data)
-
   }
 
   const handleCategoryChange = (value) => {
@@ -160,14 +164,20 @@ export default function Mint() {
 
   const handleChainChange = (value) => {
     logger.info('[Mint]handleChainChange. value=', value)
-    const localData = contractData.filter((c) => c.chain === value)[0].local  // set it as local temporaily
+    setState({...state, chain: value, chaintype: '', addressOptions: [], standardOptions: [], address: '', standard: ''})
+    reset()
+  }
+
+  const handleChaintypeChange = (value) => {
+    logger.info('[Mint] handleChaintypeChange value=', value)
+    const localData = contractData.filter((c) => c.chain === state.chain)[0][value]  // set it as local temporaily
     logger.debug('localData:', localData)
     const addresses = localData.map((d) => d.address)
     const standards = localData.map((d) => d.tokenStandard)
     logger.debug('addresses =', addresses)
     logger.debug('standards =', standards)
 
-    setState({...state, chain: value, addressOptions: addresses, standardOptions: standards, address: '', standard: ''})
+    setState({...state, chaintype: value, addressOptions: addresses, standardOptions: standards, address: '', standard: ''})
     reset()
   }
 
@@ -232,6 +242,19 @@ export default function Mint() {
                 value={state.chain} 
                 handleChange={handleChainChange} 
                 options={NETWORKS} 
+                width={1}
+                register={register}
+                errors={errors}
+                validate={true}
+                cap={true}
+                />
+              <CustomSelect 
+                name={'chaintype'}
+                label={'Chain Type'} 
+                showInputLabel={true} 
+                value={state.chaintype} 
+                handleChange={handleChaintypeChange} 
+                options={NETOWORKTYPE} 
                 width={1}
                 register={register}
                 errors={errors}
