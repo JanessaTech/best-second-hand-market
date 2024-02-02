@@ -106,10 +106,6 @@ export default function Mint() {
     setState({...state, address: value, standard: state.standardOptions[index]})
   }
 
-  const handleStandardChange = (value) => {
-    setState({...state, standard: value})
-  }
-
   logger.debug('state: ', state)
 
   return (

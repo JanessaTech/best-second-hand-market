@@ -20,7 +20,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
-const Signup = ({onClose, open, notifyAlertUpdate, notifyUserUpdate}) => {
+const Signup = ({onClose, open, notifyAlertUpdate, notifyUserUpdate, notifyDisconnectWallet}) => {
     logger.debug('[Signup] rendering... ')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
@@ -59,16 +59,17 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyUserUpdate}) => {
         localStorage.removeItem('user')
         onClose()
         notifyUserUpdate()
+        notifyDisconnectWallet()
     }
 
     const handleSignup = (data) => {
         logger.info('data:', data)
         logger.info('[Signup] call restful api to signup ...')
         onClose()
-
         const user = {id: 111, name: 'JanessaTech lab'}
         localStorage.setItem('user', JSON.stringify(user))
         notifyUserUpdate()
+        
     }
 
     const handleInputChanges = (e) => {

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 
-const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyUserUpdate}) => {
+const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyUserUpdate, notifyDisconnectWallet}) => {
   logger.debug('[ProfileMenu] rendering...')
   const navigate = useNavigate()
   const location = useLocation()
@@ -20,6 +20,7 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyUserUp
       logger.debug('[ProfileMenu] user=', localStorage.getItem('user'))
       handleProfileMenuClose()
       notifyUserUpdate()
+      notifyDisconnectWallet()
       if (location.pathname.startsWith('/profile')) {
         navigate('/')
       }

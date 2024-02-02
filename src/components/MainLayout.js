@@ -42,8 +42,10 @@ const MainLayout = () => {
         open: isMediumScreen ? false : true,
         width: isMediumScreen ? 0 : DrawerWidth
     })
+    // we need to refactor the way how to communicatte between components
     const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
-    const [refresh, setReresh] = useState(0)  // to notify to reset/refresh menu
+    const [refresh, setRefresh] = useState(0)  // to notify to reset/refresh menu
+    const [walletTrigger, setWalletTrigger] = useState(0)  // to notify to disconnect wallet
 
     useEffect(() => {
         if(!isMediumScreen) {
@@ -76,7 +78,11 @@ const MainLayout = () => {
     },[])
 
     const notifyFilterRefresh = useCallback(() => {
-        setReresh(Math.random())
+        setRefresh(Math.random())
+    })
+
+    const notifyDisconnectWallet = useCallback(() => {
+        setWalletTrigger(Math.random())
     })
 
     const clearAlerts = useCallback(() => {
@@ -131,6 +137,7 @@ const MainLayout = () => {
                 notifyWalletOpen={notifyWalletOpen}
                 notifyUserUpdate={notifyUserUpdate}
                 notifyFilterRefresh={notifyFilterRefresh}
+                notifyDisconnectWallet={notifyDisconnectWallet} 
                 />
             <GlobalVariables.Provider 
                 value={{
@@ -166,14 +173,17 @@ const MainLayout = () => {
             <ConnectWallet
                 onClose={onCloseWallet} 
                 open={walletOpen} 
+                walletTrigger={walletTrigger}
                 openSignup={openSignup} 
                 notifyUserUpdate={notifyUserUpdate}
+                notifyAlertUpdate={notifyAlertUpdate}
             />   
             <Signup
                 onClose={onCloseSignUp} 
                 open={signupOpen} 
                 notifyAlertUpdate={notifyAlertUpdate}
                 notifyUserUpdate={notifyUserUpdate}
+                notifyDisconnectWallet={notifyDisconnectWallet}
             />
             <CheapBottomNavigation 
                 openCart={openCart} 
