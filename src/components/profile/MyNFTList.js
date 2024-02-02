@@ -321,7 +321,7 @@ export default function MyNFTList() {
 
   logger.debug('[MyNFTList] rowStates :', rowStates)
   logger.debug('[MyNFTList] user:', user)
-
+  
   return (
     <Box component="main" sx={{width:1}}>
       <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>

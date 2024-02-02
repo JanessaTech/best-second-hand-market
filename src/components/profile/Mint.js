@@ -1,7 +1,5 @@
 import { Box, Button, Container, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import { styled } from '@mui/material/styles'
 import {HeaderHeight} from '../../common/constant'
 import {MintSchema} from '../../common/Schemas'
 import {GlobalVariables} from '../MainLayout'
@@ -9,82 +7,9 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
-import {NETWORKS, CATEGORIES, NETOWORKTYPE} from '../../common/constant'
+import {NETWORKS, CATEGORIES} from '../../common/constant'
+import config from '../../config/index'
 
-const contractData = [
-  {
-    chain: 'ethereum',
-    local: [
-      {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0', tokenStandard: '721'},
-      {address: '0xcdcbb4f79e3770252ee32d89b6673eb68ffdd342', tokenStandard: '1155'},
-    ],
-    testnet: [
-      {address: '0xaaaaaa', tokenStandard: 'aaaa'},
-      {address: '0xbbbbbb', tokenStandard: 'bbbb'},
-    ],
-    mainnet: [
-      {address: '0xcccccc', tokenStandard: 'cccc'},
-      {address: '0xdddddd', tokenStandard: 'dddd'},
-    ]
-  },
-  {
-    chain: 'polygon',
-    local: [
-      {address: '0xeeeeee', tokenStandard: 'eeee'},
-      {address: '0xffffff', tokenStandard: 'ffff'},
-    ],
-    testnet: [
-      {address: '0xggggg', tokenStandard: 'gggg'},
-      {address: '0xhhhhh', tokenStandard: 'hhhh'},
-    ],
-    mainnet: [
-      {address: '0xiiiiii', tokenStandard: 'iiii'},
-      {address: '0xjjjjjj', tokenStandard: 'jjjj'},
-    ]
-  },
-  {
-    chain: 'avalanche',
-    local: [
-      {address: '0xkkkkkkk', tokenStandard: 'kkkk'},
-      {address: '0xlllllll', tokenStandard: '1llll'},
-    ],
-    testnet: [
-      {address: '0xmmmmmmm', tokenStandard: 'mmmm'},
-      {address: '0xnnnnnnn', tokenStandard: 'nnnn'},
-    ],
-    mainnet: [
-      {address: '0xoooooo', tokenStandard: 'oooo'},
-      {address: '0xpppppp', tokenStandard: 'pppp'},
-    ]
-  },
-  {
-    chain: 'solana',
-    local: [
-      {address: '0xqqqqqqqq', tokenStandard: 'qqqq'},
-      {address: '0xrrrrrrrr', tokenStandard: 'rrrr'},
-    ],
-    testnet: [
-      {address: '0xssssssss', tokenStandard: 'ssss'},
-      {address: '0xtttttttt', tokenStandard: 'tttt'},
-    ],
-    mainnet: [
-      {address: '0xuuuuuuuu', tokenStandard: 'uuuu'},
-      {address: '0xvvvvvvvv', tokenStandard: 'vvvv'},
-    ]
-  }
-]
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
 
 export default function Mint() {
   logger.debug('[Mint] rendering...')
@@ -95,7 +20,6 @@ export default function Mint() {
     title: '',
     category: '',
     chain: '',
-    chaintype: '',
     address: '',
     standard: '',
     description: '',
@@ -144,7 +68,6 @@ export default function Mint() {
       title: '',
       category: '',
       chain: '',
-      chaintype: '',
       address: '',
       standard: '',
       description: '',
@@ -164,20 +87,17 @@ export default function Mint() {
 
   const handleChainChange = (value) => {
     logger.info('[Mint]handleChainChange. value=', value)
-    setState({...state, chain: value, chaintype: '', addressOptions: [], standardOptions: [], address: '', standard: ''})
-    reset()
-  }
-
-  const handleChaintypeChange = (value) => {
-    logger.info('[Mint] handleChaintypeChange value=', value)
-    const localData = contractData.filter((c) => c.chain === state.chain)[0][value]  // set it as local temporaily
+    logger.debug('[Mint] config=', config)
+    const env = config?.env
+    logger.debug('[Mint] env=', env)
+    const localData = config.contracts.filter((c) => c.chain === value)[0][env]  // set it as local temporaily
     logger.debug('localData:', localData)
-    const addresses = localData.map((d) => d.address)
-    const standards = localData.map((d) => d.tokenStandard)
+    const addresses = localData?.map((d) => d.address)
+    const standards = localData?.map((d) => d.tokenStandard)
     logger.debug('addresses =', addresses)
     logger.debug('standards =', standards)
 
-    setState({...state, chaintype: value, addressOptions: addresses, standardOptions: standards, address: '', standard: ''})
+    setState({...state, chain: value, addressOptions: addresses, standardOptions: standards, address: '', standard: ''})
     reset()
   }
 
@@ -249,19 +169,6 @@ export default function Mint() {
                 cap={true}
                 />
               <CustomSelect 
-                name={'chaintype'}
-                label={'Chain Type'} 
-                showInputLabel={true} 
-                value={state.chaintype} 
-                handleChange={handleChaintypeChange} 
-                options={NETOWORKTYPE} 
-                width={1}
-                register={register}
-                errors={errors}
-                validate={true}
-                cap={true}
-                />
-              <CustomSelect 
                 name={'address'}
                 label={'Contract address'} 
                 showInputLabel={true} 
@@ -287,14 +194,6 @@ export default function Mint() {
                     readOnly: true
                   }}
               />
-              <Button sx={{textTransform: 'none'}}
-                            component="label" 
-                            variant="contained" 
-                            startIcon={<CloudUploadIcon />} 
-                            color='customBlack'>
-                        Upload your profile image file
-                        <VisuallyHiddenInput type="file" />
-              </Button>
               <TextField
                   sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}}}
                   id='description' 

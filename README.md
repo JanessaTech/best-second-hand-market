@@ -44,4 +44,5 @@ npm install loglevel
 ```
 npm start   // start it as dev by default
 npm run start_win_dev
+npm run start_win_stage
 ```

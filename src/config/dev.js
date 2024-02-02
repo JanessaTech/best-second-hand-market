@@ -1,4 +1,9 @@
+import globalConfig from './global'
+
 const config = {
-    domain: 'http://example-dev.com'
+    ...globalConfig,
+    domain: 'http://example-dev.com',
+    env: 'local'
   }
+
 export default config;

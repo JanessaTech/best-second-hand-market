@@ -8,7 +8,6 @@ export const PageSizeInGallery=100
 export const BatchSizeInGallery=30
 export const PageSizeInComments=3
 export const NETWORKS = ['ethereum', 'polygon', 'avalanche', 'solana']
-export const NETOWORKTYPE = ['local', 'testnet', 'mainnet']
 export const CATEGORIES = ['pets', 'clothes', 'cosmetics', 'outfits', 'car', 'devices', 'books']
 export const MaxValueInFilter = 100
 export const MinValueInFilter = 0
