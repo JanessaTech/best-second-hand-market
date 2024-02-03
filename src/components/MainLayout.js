@@ -13,6 +13,8 @@ import ConnectWallet from './wallet/ConnectWallet'
 import Signup from './wallet/Signup'
 import FilterMenu from '../common/menu/FilterMenu'
 import logger from '../common/Logger'
+import {ethers} from 'ethers'
+import DisconnectWallet from './wallet/DisconnectWallet'
 
 const GlobalVariables = React.createContext({})
 export {GlobalVariables}
@@ -35,6 +37,7 @@ const MainLayout = () => {
     // state variables
     const [cartOpen, setCartOpen] = useState(false)
     const [walletOpen, setWalletOpen] = useState(false)
+    const [walletAddressChange, setWalletAddressChange] = useState(false)
     const [signupOpen, setSignupOpen] = useState(false)
     const [alerts, setAlerts] = useState([])
     const [user, setUser] = useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined)
@@ -54,6 +57,25 @@ const MainLayout = () => {
             setMenu({open: false, width: 0})
         }
     }, [isMediumScreen])
+
+    useEffect(() => {
+        if (window.ethereum) {
+            logger.debug('[MainLayout] add handleWalletAddressChanged to monitor the change of wallet address')
+            window.ethereum.on('accountsChanged', handleWalletAddressChanged)
+        }
+        return () => {
+            if(window.ethereum) { 
+                logger.debug('[MainLayout] remove handleWalletAddressChanged')
+                window.ethereum.removeListener('accountsChanged', handleWalletAddressChanged);
+            }
+        }
+    }, [])
+
+    const handleWalletAddressChanged = (accounts) => {
+        const normalizedAccounts = accounts.map((a) => ethers.getAddress(a))
+        logger.debug('[MainLayout] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
+        setWalletAddressChange(true)
+    }
 
     const notifyUserUpdate = useCallback(() => {  
         const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
@@ -119,6 +141,11 @@ const MainLayout = () => {
         setWalletOpen(true)
     }, [])
 
+    // for wallet address changes
+    const onCloseWalletChange = useCallback(() => {
+        setWalletAddressChange(false)
+    }, [])
+
     // for signup
     const onCloseSignUp = useCallback(() => {
         setSignupOpen(false)
@@ -177,7 +204,13 @@ const MainLayout = () => {
                 openSignup={openSignup} 
                 notifyUserUpdate={notifyUserUpdate}
                 notifyAlertUpdate={notifyAlertUpdate}
-            />   
+            />  
+            <DisconnectWallet 
+                onClose={onCloseWalletChange}
+                open={walletAddressChange}
+                notifyDisconnectWallet={notifyDisconnectWallet}
+                notifyUserUpdate={notifyUserUpdate}
+                /> 
             <Signup
                 onClose={onCloseSignUp} 
                 open={signupOpen} 

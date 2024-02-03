@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 import {BACKEND_ADDR} from '../../common/constant'
-import { BrowserProvider } from 'ethers'
+import { BrowserProvider, ethers } from 'ethers'
 import { SiweMessage } from 'siwe'
 
 const domain = window.location.host
@@ -195,13 +195,15 @@ const ConnectWallet = ({onClose, open, walletTrigger, openSignup, notifyUserUpda
         logger.debug('[ConnectWallet] signInWithEthereum')
         const signer = await provider.getSigner();
         const address = await signer.getAddress()
+        const normalizedAddress = ethers.getAddress(address)
         const statement = 'Sign in with Ethereum to the app.'
         const network  = await provider.getNetwork()
         logger.debug('[ConnectWallet] signInWithEthereu. network:', network)
         const chainId = (await provider.getNetwork()).chainId
         logger.debug('[ConnectWallet] signInWithEthereu. address=', address)
+        logger.debug('[ConnectWallet] signInWithEthereu. normalizedAddress=', normalizedAddress)
         logger.debug('[ConnectWallet] signInWithEthereu. chainId=', chainId)
-        const message = await createSiweMessage(address, statement, chainId)
+        const message = await createSiweMessage(normalizedAddress, statement, chainId)
         logger.debug(message)
         const signature = await signer.signMessage(message)
         logger.debug("[ConnectWallet] signInWithEthereu. signature:", signature)

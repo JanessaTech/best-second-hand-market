@@ -17,7 +17,6 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyUserUp
       logger.info('[ProfileMenu] handleDisconnect')
       logger.debug('[ProfileMenu] delete user in localStorage')
       localStorage.removeItem('user')
-      logger.debug('[ProfileMenu] user=', localStorage.getItem('user'))
       handleProfileMenuClose()
       notifyUserUpdate()
       notifyDisconnectWallet()
