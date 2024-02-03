@@ -8,68 +8,109 @@ import {BACKEND_ADDR} from '../../common/constant'
 const domain = window.location.host
 const origin = window.location.origin
 
+class NetworkError extends Error {
+    constructor(message) {
+      super(message);
+      this.name = 'NetworkError';
+    }
+}
+
+class JsonError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = 'JsonError';
+    }
+}
+
 const getNonce = async () => {
-    const rawResponse = await fetch(`${BACKEND_ADDR}/apis/v1/siwe/nonce`, {
-      method: 'GET',
-      headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-      },
-    })
-    const content = await rawResponse.json();
-    console.log(content);
-    return content?.data?.nonce
+    try {
+        const rawResponse = await fetch(`${BACKEND_ADDR}/apis/v1/siwe/nonce`, {
+            method: 'GET',
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+            },
+          })
+          logger.debug('[MetaMaskWallet] rawResponse=', rawResponse)
+          const content = await rawResponse.json()
+          if (!content?.success) {
+            throw new JsonError(content?.message)
+          }
+          logger.debug('[MetaMaskWallet] getNonce ', content)
+          return content?.data?.nonce
+    } catch(e) {
+        if ( e instanceof JsonError) {
+            throw e
+        } else {
+            throw new NetworkError('Failed to get nonce, please check network')
+        }   
+    }
   }
 
   const verify = async (data) => {
-    const rawResponse = await fetch(`${BACKEND_ADDR}/apis/v1/siwe/verify`, {
-      method: 'POST',
-      headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    const content = await rawResponse.json();
-    console.log(content);
-    return content?.data?.verify
+    try {
+        const rawResponse = await fetch(`${BACKEND_ADDR}/apis/v1/siwe/verify`, {
+        method: 'POST',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+        })
+        const content = await rawResponse.json()
+        if (!content?.success) {
+            throw new JsonError(content?.message)
+        }
+        logger.debug('[MetaMaskWallet] verify ',content)
+        return content?.data?.verify
+    } catch(e) {
+        if ( e instanceof JsonError) {
+            throw e
+        } else {
+            throw new NetworkError('Failed to verify signature, please check network')
+        }
+    }
   }
 
 export default function MetaMaskWallet({onClose, walletTrigger, openSignup, notifyUserUpdate, notifyAlertUpdate}) {
     const [provider, setProvider] = useState(undefined)
     const [isWalletLogin, setIsWalletLogin] = useState(false)
     const [signIn, setSignIn] = useState(false)
-    const [sig, setSig] = useState('')
+    const [address, setAddress] = useState('')
 
     useEffect(() => {
         logger.debug('[MetaMaskWallet] useEffect. Call signInWithEthereum')
         if (provider && isWalletLogin && !signIn) {
             signInWithEthereum()
             .then((response) => {
-                const {verified, signature} = response
+                const {verified, signature, addr} = response
                 if (!verified) {
                     notifyAlertUpdate([{severity: 'error', message: 'Failed to Sign in, Please sign in again'}])
                 } else {
                     setSignIn(true)
-                    setSig(signature)
+                    setAddress(addr)
                 } 
             })
             .catch((e) => {
+                logger.debug('[MetaMaskWallet] failed to sigin due to ', e)
                 if (e?.info?.error?.code === 4001) {
                     notifyAlertUpdate([{severity: 'error', message: 'Please click Sign in'}])
+                } else if (e instanceof NetworkError || e instanceof JsonError) {
+                    notifyAlertUpdate([{severity: 'error', message: e?.message}])
                 } else {
-                    notifyAlertUpdate([{severity: 'error', message: 'Refesh page and try again'}])
+                    notifyAlertUpdate([{severity: 'error', message: 'Refresh page and try again'}])
                 }
             })
         }
         if (signIn) {
             onClose()
             logger.info('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet')
-            const isRegistered = false
+            const isRegistered = true
             if (!isRegistered) {
                 openSignup()
             } else {
                 // login by wallet address
+                logger.debug('[MetaMaskWallet] login address=', address)
                 const user = {id: 111, name: 'JanessaTech lab'}
                 localStorage.setItem('user', JSON.stringify(user))
                 logger.info('user is set as ', user, 'notify header')
@@ -117,7 +158,7 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
         logger.debug("[MetaMaskWallet] signInWithEthereu. signature:", signature)
         const verified = await verify({message: message, signature: signature})
         logger.debug('[MetaMaskWallet] signInWithEthereu. verified:', verified)
-        return {'verified': verified, 'signature': signature}
+        return {'verified': verified, 'signature': signature, 'addr': normalizedAddress}
     }
 
     const isMetaMaskAvailable = () => {
@@ -125,15 +166,12 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
         let vail = false
         if (window?.ethereum) {
             if (window.ethereum?.isMetaMask) {
-                logger.debug('[MetaMaskWallet] MetaMask is active')
                 vail = true
             } else {
-                logger.debug('[MetaMaskWallet] MetaMask is not available')
                 alerts.push({severity: 'error', message: 'MetaMask is not available'})
             }
 
-        }   else {
-            logger.debug('[MetaMaskWallet] Ethereum support is not found')
+        } else {
             alerts.push({severity: 'error', message: 'Ethereum support is not found'})
         }
         if (alerts.length > 0) {
