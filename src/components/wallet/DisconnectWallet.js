@@ -1,9 +1,9 @@
 import { Box, Button, Dialog, IconButton, Tooltip, Typography } from '@mui/material'
-import React from 'react'
+import React, { memo } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 
-export default function DisconnectWallet({onClose, open, notifyDisconnectWallet, notifyUserUpdate}) {
+const DisconnectWallet = ({onClose, open, notifyDisconnectWallet, notifyUserUpdate}) => {
 
     const handleClose = () => {
         localStorage.removeItem('user')
@@ -34,4 +34,6 @@ export default function DisconnectWallet({onClose, open, notifyDisconnectWallet,
     </Dialog>
   )
 }
+
+export default memo(DisconnectWallet)
 

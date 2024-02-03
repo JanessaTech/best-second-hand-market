@@ -69,12 +69,16 @@ const MainLayout = () => {
                 window.ethereum.removeListener('accountsChanged', handleWalletAddressChanged);
             }
         }
-    }, [])
+    }, [user])
 
-    const handleWalletAddressChanged = (accounts) => {
-        const normalizedAccounts = accounts.map((a) => ethers.getAddress(a))
-        logger.debug('[MainLayout] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
-        setWalletAddressChange(true)
+    const handleWalletAddressChanged = (accounts) => { 
+        logger.debug('[MainLayout] handleWalletAddressChanged. user=', user)
+        logger.debug('[MainLayout] handleWalletAddressChanged. localStorage.getItem(\'user\')', localStorage.getItem('user'))
+        if (user) {
+            const normalizedAccounts = accounts.map((a) => ethers.getAddress(a))
+            logger.debug('[MainLayout] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
+            setWalletAddressChange(true)
+        }
     }
 
     const notifyUserUpdate = useCallback(() => {  
@@ -155,7 +159,8 @@ const MainLayout = () => {
         setSignupOpen(true)
     }, [])
 
-    logger.debug('location: ', location.pathname)
+    logger.debug('[MainLayout] location: ', location.pathname)
+    logger.debug('[MainLayout] user:', user)
     return (
         <Container maxWidth='false'>
             <Header 
