@@ -26,10 +26,10 @@ const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notify
                 window.ethereum.removeListener('accountsChanged', handleWalletAddressChanged);
             }
         }
-    }, [])
+    }, [wallet])
 
     const handleWalletAddressChanged = (accounts) => { 
-        logger.debug('[MetaMaskWallet] handleWalletAddressChanged.')
+        logger.debug('[MetaMaskWallet] handleWalletAddressChanged. wallet=', wallet)
         const normalizedAccounts = accounts.map((a) => ethers.getAddress(a))
         logger.debug('[MetaMaskWallet] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
         if (wallet) { //

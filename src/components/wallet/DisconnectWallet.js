@@ -6,7 +6,7 @@ import logger from '../../common/Logger'
 const DisconnectWallet = ({onClose, open, notifyDisconnectWallet, notifyWalletUpdate}) => {
 
     const handleClose = () => {
-        localStorage.removeItem('user')
+        localStorage.removeItem('walletType')
         logger.debug('[DisconnectWallet] deleted user in localStorage')
         notifyDisconnectWallet()
         notifyWalletUpdate(undefined)
