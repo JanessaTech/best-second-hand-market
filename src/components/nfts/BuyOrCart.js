@@ -6,14 +6,14 @@ import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
 
-const BuyOrCart = ({nft, user, openCart, notifyWalletOpen}) => {
+const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen}) => {
   logger.debug('[BuyOrCart] rendering...')
   const [searchParams, setSearchParams] = useSearchParams()
   const id = searchParams.get('id')
   const [inCart, setInCart] = useState(false)
 
   const handleCart = () => {
-    if (user) {
+    if (wallet) {
       logger.info('[BuyOrCart] call restful to add to cart then open the cart')
       setInCart(!inCart)
       openCart()
@@ -31,7 +31,7 @@ const BuyOrCart = ({nft, user, openCart, notifyWalletOpen}) => {
           src={`/imgs/nfts/${nft.img}`}
         >
         </Box>
-        <ByLikeView user={user} nft={nft}/>
+        <ByLikeView wallet={wallet} nft={nft}/>
         <Box>
             {
               nft?.available ? 

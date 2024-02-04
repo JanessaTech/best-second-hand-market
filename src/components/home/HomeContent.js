@@ -5,11 +5,11 @@ import logger from '../../common/Logger'
 
 export default function HomeContent() {
     logger.debug('[HomeContent] rendering ....')
-    const {user, menuOpen, trigger, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyDisconnectWallet} = React.useContext(GlobalVariables)
+    const {wallet, menuOpen, trigger, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen} = React.useContext(GlobalVariables)
 
     return (
         <NFTGallery 
-            user={user}
+            wallet={wallet}
             menuOpen={menuOpen} 
             toggleMenu={toggleMenu} 
             trigger={trigger} 

@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
 import logger from './Logger'
 
-const CheapBottomNavigation = ({openCart, toggleMenu, isShowMenu, user, notifyWalletOpen}) => {
+const CheapBottomNavigation = ({ wallet, openCart, toggleMenu, isShowMenu, notifyWalletOpen}) => {
     logger.info('[CheapBottomNavigation] rendering...')
     const theme = useTheme()
     const navigate = useNavigate()
@@ -20,7 +20,7 @@ const CheapBottomNavigation = ({openCart, toggleMenu, isShowMenu, user, notifyWa
 
     const handleMintBut = () => {
       logger.debug('[CheapBottomNavigation] handleMintBut')
-      if (user) {
+      if (wallet) {
         logger.info('[CheapBottomNavigation] go to to /profile/mint')
       navigate('/profile/mint')
       } else {
@@ -48,8 +48,8 @@ const CheapBottomNavigation = ({openCart, toggleMenu, isShowMenu, user, notifyWa
                 <Tooltip title='Mint your NFT'>
                   <BottomNavigationAction label="Mint" icon={<CheapIcon name={'mint-nft'}/>} onClick={handleMintBut} />
                 </Tooltip>
-                <Tooltip title={user ? 'Open cart' : 'Connect to wallet'}>
-                  <BottomNavigationAction label={user ? 'Cart' : 'Wallet'} icon={<CheapIcon name={user ? 'cart-black': 'my-balance'}/>} onClick={user ? openCart: notifyWalletOpen}/>
+                <Tooltip title={wallet ? 'Open cart' : 'Connect to wallet'}>
+                  <BottomNavigationAction label={wallet ? 'Cart' : 'Wallet'} icon={<CheapIcon name={wallet ? 'cart-black': 'my-balance'}/>} onClick={wallet ? openCart: notifyWalletOpen}/>
                 </Tooltip>
             </BottomNavigation>
          </Paper>

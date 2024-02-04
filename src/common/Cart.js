@@ -185,24 +185,24 @@ const getFilteredNfts = (nfts, network) => {
   return nfts.filter((nft) => nft.network === network)
 }
 
-const Cart = ({user, toggleCart, open}) => {
+const Cart = ({wallet, toggleCart, open}) => {
   logger.debug('[Cart] rendering...')
   const [nfts, setNfts] = useState([])
   const [network, setNetwork] = useState(NETWORKS[0])
   
   useEffect(() => {
-    if (user?.id && open) {
-      logger.debug('[Cart] call restful api to get the list of nfts in cart by user id=', user?.id)
+    if (wallet?.id && open) {
+      logger.debug('[Cart] call restful api to get the list of nfts in cart by wallet\'s user id=', wallet?.id)
       setNfts(data)
     }
-  }, [user, open])
+  }, [wallet, open])
 
   const closeCart = () => {
     toggleCart()
   }
 
   const clearCart = () => {
-    logger.info('[Cart] call restful apis to clear cart by user id', user?.id)
+    logger.info('[Cart] call restful apis to clear cart by wallet\'s user id', wallet?.id)
     setNfts(nfts.filter((nft) => nft.network !== network))
   }
 

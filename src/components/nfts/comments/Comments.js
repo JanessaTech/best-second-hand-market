@@ -38,7 +38,7 @@ const data = [
     content: 'Hi, JanessaTech lab'
   }
 ]
-const Comments = ({user})=> {
+const Comments = ({wallet})=> {
   logger.debug('[Comments] rendering')
   const [searchParams, setSearchParams] = useSearchParams()
   const id = searchParams.get('id')
@@ -77,10 +77,10 @@ const Comments = ({user})=> {
   return (
     <Box>
         <Typography>{total} comments</Typography>
-        { user && <AddComment user={user}/>}
+        { wallet && <AddComment wallet={wallet}/>}
         {
           data.map((c) => (
-          <OneComment key={c.id} deep={1} comment={c} user={user}/>
+          <OneComment key={c.id} deep={1} comment={c} wallet={wallet}/>
           ))
         }
         <Pagination 

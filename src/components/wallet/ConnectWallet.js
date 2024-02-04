@@ -8,7 +8,7 @@ import WalletItem from './WalletItem'
 import MetaMaskWallet from './MetaMaskWallet'
 
 
-const ConnectWallet = ({onClose, open, walletTrigger, openSignup, notifyUserUpdate, notifyAlertUpdate}) => {
+const ConnectWallet = ({onClose, open, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange}) => {
     logger.debug('[ConnectWallet] rendering ')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -34,7 +34,14 @@ const ConnectWallet = ({onClose, open, walletTrigger, openSignup, notifyUserUpda
         <Box sx={{p:3,pt:0}}>
             <Grid container spacing={2} >
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                    <MetaMaskWallet onClose={onClose} walletTrigger={walletTrigger} openSignup={openSignup} notifyUserUpdate={notifyUserUpdate} notifyAlertUpdate={notifyAlertUpdate}/>
+                    <MetaMaskWallet 
+                        onClose={onClose} 
+                        walletTrigger={walletTrigger} 
+                        openSignup={openSignup} 
+                        notifyAlertUpdate={notifyAlertUpdate} 
+                        notifyWalletUpdate={notifyWalletUpdate}
+                        notifyWalletAddressChange={notifyWalletAddressChange}
+                        />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
                     <WalletItem name='WalletConnect' img='walletcollect.png' support={false}/>

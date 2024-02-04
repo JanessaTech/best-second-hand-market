@@ -15,6 +15,7 @@ import FilterMenu from '../common/menu/FilterMenu'
 import logger from '../common/Logger'
 import {ethers} from 'ethers'
 import DisconnectWallet from './wallet/DisconnectWallet'
+import {GetCurrentWallet} from '../utils/Wallet'
 
 const GlobalVariables = React.createContext({})
 export {GlobalVariables}
@@ -40,7 +41,8 @@ const MainLayout = () => {
     const [walletAddressChange, setWalletAddressChange] = useState(false)
     const [signupOpen, setSignupOpen] = useState(false)
     const [alerts, setAlerts] = useState([])
-    const [user, setUser] = useState(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined)
+    const [user, setUser] = useState(undefined)
+    const [wallet, setWallet] = useState()
     const [menu, setMenu] = useState({
         open: isMediumScreen ? false : true,
         width: isMediumScreen ? 0 : DrawerWidth
@@ -58,33 +60,30 @@ const MainLayout = () => {
         }
     }, [isMediumScreen])
 
-    useEffect(() => {
-        if (window.ethereum) {
-            logger.debug('[MainLayout] add handleWalletAddressChanged to monitor the change of wallet address')
-            window.ethereum.on('accountsChanged', handleWalletAddressChanged)
-        }
-        return () => {
-            if(window.ethereum) { 
-                logger.debug('[MainLayout] remove handleWalletAddressChanged')
-                window.ethereum.removeListener('accountsChanged', handleWalletAddressChanged);
-            }
-        }
-    }, [user])
+    useEffect(() => {  // it shows how to call async fun in useEffect
+        (async () => {
+            try {
+                const currentWallet = await GetCurrentWallet()
+                setWallet(currentWallet)
+            } catch (e) {
+                logger.debug('[MainLayout] Failed to call GetCurrentWallet in useEffect due to ', e)
+            }    
+        })()
+    }, [])
 
-    const handleWalletAddressChanged = (accounts) => { 
-        logger.debug('[MainLayout] handleWalletAddressChanged. user=', user)
-        logger.debug('[MainLayout] handleWalletAddressChanged. localStorage.getItem(\'user\')', localStorage.getItem('user'))
-        if (user) {
-            const normalizedAccounts = accounts.map((a) => ethers.getAddress(a))
-            logger.debug('[MainLayout] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
-            setWalletAddressChange(true)
-        }
-    }
 
     const notifyUserUpdate = useCallback(() => {  
         const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
         logger.info('[MainLayout], notifyUserUpdate. user = ', user)   
         setUser(user)
+    }, [])
+
+    const notifyWalletAddressChange = useCallback(() => {  // we don't allow wallet addres to be updated once it is updated by notifyWalletUpdate
+        setWalletAddressChange(true)
+    }, [])
+
+    const notifyWalletUpdate = useCallback((newWallet) => { // for the first time we update wallet address
+        setWallet(newWallet)
     }, [])
 
     
@@ -160,20 +159,20 @@ const MainLayout = () => {
     }, [])
 
     logger.debug('[MainLayout] location: ', location.pathname)
-    logger.debug('[MainLayout] user:', user)
+    logger.debug('[MainLayout] wallet:', wallet)
     return (
         <Container maxWidth='false'>
             <Header 
                 openCart={openCart} 
-                user={user}
+                wallet={wallet}
                 notifyWalletOpen={notifyWalletOpen}
-                notifyUserUpdate={notifyUserUpdate}
                 notifyFilterRefresh={notifyFilterRefresh}
                 notifyDisconnectWallet={notifyDisconnectWallet} 
+                notifyWalletUpdate={notifyWalletUpdate}
                 />
             <GlobalVariables.Provider 
                 value={{
-                    user: user,
+                    wallet: wallet,
                     menuOpen: menu.open, 
                     trigger: trigger,
                     toggleMenu: toggleMenu,
@@ -197,7 +196,7 @@ const MainLayout = () => {
                 </Box>
                 
             </GlobalVariables.Provider>
-            <Cart user={user} toggleCart={toggleCart} open={cartOpen}/>
+            <Cart wallet={wallet} toggleCart={toggleCart} open={cartOpen}/>
             {
                     alerts && alerts.length > 0 && 
                         <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlerts={clearAlerts}/>       
@@ -207,8 +206,9 @@ const MainLayout = () => {
                 open={walletOpen} 
                 walletTrigger={walletTrigger}
                 openSignup={openSignup} 
-                notifyUserUpdate={notifyUserUpdate}
                 notifyAlertUpdate={notifyAlertUpdate}
+                notifyWalletUpdate={notifyWalletUpdate}
+                notifyWalletAddressChange={notifyWalletAddressChange}
             />  
             <DisconnectWallet 
                 onClose={onCloseWalletChange}
@@ -220,14 +220,15 @@ const MainLayout = () => {
                 onClose={onCloseSignUp} 
                 open={signupOpen} 
                 notifyAlertUpdate={notifyAlertUpdate}
+                notifyWalletUpdate={notifyWalletUpdate}
                 notifyUserUpdate={notifyUserUpdate}
                 notifyDisconnectWallet={notifyDisconnectWallet}
             />
             <CheapBottomNavigation 
+                wallet={wallet}
                 openCart={openCart} 
                 toggleMenu={toggleMenu} 
                 isShowMenu={isShowMenu(location.pathname)} 
-                user={user}
                 notifyWalletOpen={notifyWalletOpen}
                 />
         </Container>

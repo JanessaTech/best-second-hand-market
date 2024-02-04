@@ -4,6 +4,7 @@ import logger from '../../common/Logger'
 import { BrowserProvider, ethers } from 'ethers'
 import { SiweMessage } from 'siwe'
 import {BACKEND_ADDR} from '../../common/constant'
+import {GetCurrentWallet} from '../../utils/Wallet'
 
 const domain = window.location.host
 const origin = window.location.origin
@@ -72,7 +73,8 @@ const getNonce = async () => {
     }
   }
 
-export default function MetaMaskWallet({onClose, walletTrigger, openSignup, notifyUserUpdate, notifyAlertUpdate}) {
+export default function MetaMaskWallet({onClose, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange}) {
+    logger.debug('[MetaMaskWallet] rendering ...')
     const [provider, setProvider] = useState(undefined)
     const [isWalletLogin, setIsWalletLogin] = useState(false)
     const [signIn, setSignIn] = useState(false)
@@ -109,15 +111,35 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
             if (!isRegistered) {
                 openSignup()
             } else {
-                // login by wallet address
+                // get user info by wallet address
                 logger.debug('[MetaMaskWallet] login address=', address)
-                const user = {id: 111, name: 'JanessaTech lab'}
-                localStorage.setItem('user', JSON.stringify(user))
-                logger.info('user is set as ', user, 'notify header')
-                notifyUserUpdate()
+                logger.debug('[MetaMaskWallet] call restful api to  get user info by address =', address)
+                const newWallet = {address: address, user: {id: 111, name: 'JanessaTech lab'}}
+                localStorage.setItem('walletType', 'metamask')  // a flag to indicate which type of wallet is being used
+                notifyWalletUpdate(newWallet)
             }
         }
     }, [provider, isWalletLogin, signIn])
+
+    useEffect(() => {
+        if (window.ethereum) {
+            logger.debug('[MetaMaskWallet] add handleWalletAddressChanged to monitor the change of wallet address')
+            window.ethereum.on('accountsChanged', handleWalletAddressChanged)
+        }
+        return () => {
+            if(window.ethereum) { 
+                logger.debug('[MetaMaskWallet] remove handleWalletAddressChanged')
+                window.ethereum.removeListener('accountsChanged', handleWalletAddressChanged);
+            }
+        }
+    }, [])
+
+    const handleWalletAddressChanged = (accounts) => { 
+        logger.debug('[MetaMaskWallet] handleWalletAddressChanged.')
+        const normalizedAccounts = accounts.map((a) => ethers.getAddress(a))
+        logger.debug('[MetaMaskWallet] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
+        notifyWalletAddressChange()
+    }
 
     useEffect(() => {
         logger.debug('[MetaMaskWallet] disconnect MetaMaskwallet in useEffect')
@@ -199,6 +221,8 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
                 }
             })
             setProvider(newProvider)
+        } else {
+            notifyAlertUpdate([{severity: 'error', message: 'Please intall MetaMask'}])
         }
     }
 

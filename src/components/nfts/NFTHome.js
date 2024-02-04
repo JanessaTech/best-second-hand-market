@@ -26,7 +26,7 @@ const nftData = {
     description: 'NFTs can really be anything digital (such as drawings, music, your brain downloaded and turned into an AI), but a lot of the current excitement'
 }
 
-const NFTHome = ({user, openCart, notifyWalletOpen}) => {
+const NFTHome = ({wallet, openCart, notifyWalletOpen}) => {
     logger.debug("[NFTHome] rendering...")
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -47,11 +47,11 @@ const NFTHome = ({user, openCart, notifyWalletOpen}) => {
                 <Grid item xs={isSmallScreen ? 12 : 7}>
                     <Box sx={{mr:5}}>
                         <NFTDetails nft={nft}/>
-                        <Comments user={user}/>
+                        <Comments wallet={wallet}/>
                     </Box>
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <BuyOrCart nft={nft} user={user} openCart={openCart} notifyWalletOpen={notifyWalletOpen}/>
+                    <BuyOrCart nft={nft} wallet={wallet} openCart={openCart} notifyWalletOpen={notifyWalletOpen}/>
                 </Grid>
             </Grid>
         </Box>      

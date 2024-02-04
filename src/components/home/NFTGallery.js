@@ -31,7 +31,7 @@ function getFilter() {
   return {}
 }
 
-const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen}) => {
+const NFTGallery = ({wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen}) => {
   logger.debug('[NFTGallery] rendering ...')
 
   const theme = useTheme()
@@ -106,7 +106,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
   const handleUpdate = useCallback(() => {
     logger.debug('[NFTGallery] handleUpdate...')
     const latestFilter = getFilter()
-    logger.debug('[NFTGallery] call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and user=', user, ' and page=', pagination.page)
+    logger.debug('[NFTGallery] call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and wallet=', wallet, ' and page=', pagination.page)
     const total = 504
     const nftsInOnePage = generateData((pagination.page - 1) * pagination.pageSize, Math.min(100, total - (pagination.page - 1) * pagination.pageSize))
     setBufferedNfts(nftsInOnePage)
@@ -140,7 +140,7 @@ const NFTGallery = ({user, menuOpen, toggleMenu, trigger, notifyFilterUpdate, no
               !isLoading ?  
                 nfts.map( (nft) => (
                   <Grid key={nft.id} item xs={6} sm={4} md={3} lg={2} xl={2}>
-                      <Overview user={user} nft={nft} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
+                      <Overview wallet={wallet} nft={nft} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
                   </Grid>
                 ))
                : Array.from(new Array(20)).map((dummy) => (

@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 
-const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyUserUpdate, notifyDisconnectWallet}) => {
+const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyDisconnectWallet, notifyWalletUpdate}) => {
   logger.debug('[ProfileMenu] rendering...')
   const navigate = useNavigate()
   const location = useLocation()
@@ -15,10 +15,8 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyUserUp
 
     const handleDisconnect = () => {
       logger.info('[ProfileMenu] handleDisconnect')
-      logger.debug('[ProfileMenu] delete user in localStorage')
-      localStorage.removeItem('user')
       handleProfileMenuClose()
-      notifyUserUpdate()
+      notifyWalletUpdate(undefined)
       notifyDisconnectWallet()
       if (location.pathname.startsWith('/profile')) {
         navigate('/')
@@ -50,7 +48,7 @@ const ProfileMenu = ({user, anchorEl, open, handleProfileMenuClose, notifyUserUp
     >
         <MenuItem onClick={() => handleClick("/profile/nfts")}>
           <ListItemIcon>
-            <Avatar alt='JanessaTech lab' src={`/imgs/nfters/${user?.id}/me.png`} sx={{ width: 25, height: 25 }}/>
+            <Avatar alt='JanessaTech lab' src={`/imgs/nfters/${wallet?.user?.id}/me.png`} sx={{ width: 25, height: 25 }}/>
           </ListItemIcon>
           <ListItemText>My NFTs</ListItemText>
         </MenuItem>

@@ -3,7 +3,7 @@ import React, { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import AddComment from './AddComment'
 
-const OneComment = ({deep, comment, user}) => {
+const OneComment = ({deep, comment, wallet}) => {
   const profileSize = deep === 1 ?  40 : 30
   const [state, setState] = useState({
     cancelReply: true
@@ -29,14 +29,14 @@ const OneComment = ({deep, comment, user}) => {
                   </Box>
                   <Box sx={{mt:1}}>
                     <Typography>{comment?.content}
-                      {deep === 1 && user && <Button sx={{ml:2, borderRadius:'50vh', textTransform:'none'}} 
+                      {deep === 1 && wallet && <Button sx={{ml:2, borderRadius:'50vh', textTransform:'none'}} 
                                              color='customBlack' variant='contained'
                                              onClick={toggleReply}>
                                         <Typography variant='body2'>{state.cancelReply ? 'Reply' : 'Cancel reply'}</Typography>
                                      </Button>
                       }
                     </Typography>
-                    {!state.cancelReply && <AddComment isReply={true} handleCancelReply={handleCancelReply} user={user}/>}
+                    {!state.cancelReply && <AddComment isReply={true} handleCancelReply={handleCancelReply} wallet={wallet}/>}
                     { comment?.repliedComments && 
                       <Box>
                         {

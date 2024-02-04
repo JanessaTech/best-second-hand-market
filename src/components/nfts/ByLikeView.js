@@ -15,7 +15,7 @@ const sellerData = {
     orders: 20
 }
 
-const ByLikeView = ({user, nft}) => {
+const ByLikeView = ({wallet, nft}) => {
     logger.debug('[ByLikeView] rendering...')
 
     const theme = useTheme()
@@ -32,8 +32,8 @@ const ByLikeView = ({user, nft}) => {
     }, [nft?.seller])
     
     const toggleLike = () => {
-        if (user?.id) {
-            logger.debug('[ByLikeView] call restful api to add/remove like for user id=', user?.id)
+        if (wallet?.user?.id) {
+            logger.debug('[ByLikeView] call restful api to add/remove like for user id=', wallet?.user?.id)
             setIsLike(!isLike)
         }  
     }
@@ -73,7 +73,7 @@ const ByLikeView = ({user, nft}) => {
         </Box>
         <Box sx={{display:'flex'}}>
             {
-                user ? 
+                wallet ? 
                 <Box sx={{display:'flex', alignItems:'center', mr:2}}>
                     <IconButton onClick={toggleLike} sx={{p:0}}>
                         <CheapIcon name={isLike ? 'my-favorite-red':'my-favorite'} size={25}/>

@@ -8,9 +8,9 @@ import ProfileMenu from '../components/profile/ProfileMenu'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logger from './Logger'
 
-const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate, notifyFilterRefresh, notifyDisconnectWallet}) => {
+const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notifyDisconnectWallet, notifyWalletUpdate}) => {
     logger.debug('[Header] rendering...')
-    logger.debug('[Header] user:', user)
+    logger.debug('[Header] wallet:', wallet)
     const theme = useTheme()
     const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -66,7 +66,7 @@ const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate, notifyFilte
     },[anchorEl])
 
     const handleMintBut = () => {
-        if (user) {
+        if (wallet) {
         logger.info('[Header] handleMintBut. go to to /profile/mint')
         navigate('/profile/mint')
         } else {
@@ -146,9 +146,9 @@ const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate, notifyFilte
             </Box>
             <Box sx={{display:'flex', alignItems: 'center'}}>
                 {
-                    user? <Box sx={{display:'flex', alignItems: 'center'}}>
+                    wallet ? <Box sx={{display:'flex', alignItems: 'center'}}>
                     <Box sx={{[theme.breakpoints.down('md')]:{display:'none'}, cursor: 'pointer', mr:1}}>
-                        <Typography color={'white'} variant='subtitle1'>Connected</Typography>
+                        <Typography sx={{width:83}} color={'white'} variant='subtitle1'>Connected</Typography>
                     </Box>
                     <IconButton 
                             sx={{'&:hover':{backgroundColor:'grey'}, p:0}}
@@ -158,16 +158,16 @@ const Header = ({openCart, user, notifyWalletOpen, notifyUserUpdate, notifyFilte
                             aria-expanded={isProfileOpen ? 'true' : undefined}
                             onClick={handleProfileMenuOpen}
                             >
-                                <Avatar alt={user?.name} src={`/imgs/nfters/${user?.id}/me.png`}/>
+                                <Avatar alt={wallet?.user?.name} src={`/imgs/nfters/${wallet?.user?.id}/me.png`}/>
                     </IconButton>
                     
                     <ProfileMenu 
-                            user={user} 
+                            wallet={wallet} 
                             anchorEl={anchorEl} 
                             open={Boolean(anchorEl)} 
                             handleProfileMenuClose={handleProfileMenuClose} 
-                            notifyUserUpdate={notifyUserUpdate}
                             notifyDisconnectWallet={notifyDisconnectWallet}
+                            notifyWalletUpdate={notifyWalletUpdate}
                             />
                             
                     <IconButton sx={{
