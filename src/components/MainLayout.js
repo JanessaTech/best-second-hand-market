@@ -13,7 +13,6 @@ import ConnectWallet from './wallet/ConnectWallet'
 import Signup from './wallet/Signup'
 import FilterMenu from '../common/menu/FilterMenu'
 import logger from '../common/Logger'
-import {ethers} from 'ethers'
 import DisconnectWallet from './wallet/DisconnectWallet'
 import {GetCurrentWallet} from '../utils/Wallet'
 
@@ -64,6 +63,7 @@ const MainLayout = () => {
         (async () => {
             try {
                 const currentWallet = await GetCurrentWallet()
+                logger.debug('[MainLayout] currentWallet=', currentWallet)
                 setWallet(currentWallet)
             } catch (e) {
                 logger.debug('[MainLayout] Failed to call GetCurrentWallet in useEffect due to ', e)
@@ -204,6 +204,7 @@ const MainLayout = () => {
             <ConnectWallet
                 onClose={onCloseWallet} 
                 open={walletOpen} 
+                wallet={wallet}
                 walletTrigger={walletTrigger}
                 openSignup={openSignup} 
                 notifyAlertUpdate={notifyAlertUpdate}
@@ -214,7 +215,7 @@ const MainLayout = () => {
                 onClose={onCloseWalletChange}
                 open={walletAddressChange}
                 notifyDisconnectWallet={notifyDisconnectWallet}
-                notifyUserUpdate={notifyUserUpdate}
+                notifyWalletUpdate={notifyWalletUpdate}
                 /> 
             <Signup
                 onClose={onCloseSignUp} 

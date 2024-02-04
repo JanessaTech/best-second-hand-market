@@ -191,8 +191,8 @@ const Cart = ({wallet, toggleCart, open}) => {
   const [network, setNetwork] = useState(NETWORKS[0])
   
   useEffect(() => {
-    if (wallet?.id && open) {
-      logger.debug('[Cart] call restful api to get the list of nfts in cart by wallet\'s user id=', wallet?.id)
+    if (wallet?.user.id && open) {
+      logger.debug('[Cart] call restful api to get the list of nfts in cart by wallet\'s user id=', wallet?.user.id)
       setNfts(data)
     }
   }, [wallet, open])
@@ -202,7 +202,7 @@ const Cart = ({wallet, toggleCart, open}) => {
   }
 
   const clearCart = () => {
-    logger.info('[Cart] call restful apis to clear cart by wallet\'s user id', wallet?.id)
+    logger.info('[Cart] call restful apis to clear cart by wallet\'s user id', wallet?.user?.id)
     setNfts(nfts.filter((nft) => nft.network !== network))
   }
 

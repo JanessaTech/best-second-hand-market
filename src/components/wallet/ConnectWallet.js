@@ -1,17 +1,41 @@
 
 import { Box, Dialog, Grid, IconButton, Tooltip, Typography, useMediaQuery } from '@mui/material'
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 import WalletItem from './WalletItem'
 import MetaMaskWallet from './MetaMaskWallet'
+import {ethers} from 'ethers'
 
 
-const ConnectWallet = ({onClose, open, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange}) => {
+const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange}) => {
     logger.debug('[ConnectWallet] rendering ')
+    logger.debug('[ConnectWallet] wallet=',wallet)
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+
+    useEffect(() => {
+        if (window.ethereum) {
+            logger.debug('[ConnectWallet] add handleWalletAddressChanged to monitor the change of wallet address')
+            window.ethereum.on('accountsChanged', handleWalletAddressChanged)
+        }
+        return () => {
+            if(window.ethereum) { 
+                logger.debug('[ConnectWallet] remove handleWalletAddressChanged')
+                window.ethereum.removeListener('accountsChanged', handleWalletAddressChanged);
+            }
+        }
+    }, [])
+
+    const handleWalletAddressChanged = (accounts) => { 
+        logger.debug('[MetaMaskWallet] handleWalletAddressChanged.')
+        const normalizedAccounts = accounts.map((a) => ethers.getAddress(a))
+        logger.debug('[MetaMaskWallet] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
+        if (wallet) { //
+            notifyWalletAddressChange()
+        }
+    }
 
     const handleClose = () => {
         onClose()

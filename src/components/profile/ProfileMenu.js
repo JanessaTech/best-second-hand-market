@@ -15,6 +15,7 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyDisc
 
     const handleDisconnect = () => {
       logger.info('[ProfileMenu] handleDisconnect')
+      localStorage.removeItem('walletType')
       handleProfileMenuClose()
       notifyWalletUpdate(undefined)
       notifyDisconnectWallet()
