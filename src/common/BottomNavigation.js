@@ -4,7 +4,7 @@ import BottomNavigation from '@mui/material/BottomNavigation'
 import BottomNavigationAction from '@mui/material/BottomNavigationAction'
 import { CheapIcon } from '../utils/Svgs'
 import { useTheme } from '@mui/material/styles'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logger from './Logger'
 
 const CheapBottomNavigation = ({ wallet, openCart, toggleMenu, isShowMenu, notifyWalletOpen}) => {
@@ -13,18 +13,13 @@ const CheapBottomNavigation = ({ wallet, openCart, toggleMenu, isShowMenu, notif
     const navigate = useNavigate()
     const [value, setValue] = React.useState(0)
 
-    const goHome = () => {
-      logger.debug('[CheapBottomNavigation] goHome ...')
-      navigate('/')
-    }
-
     const handleMintBut = () => {
       logger.debug('[CheapBottomNavigation] handleMintBut')
       if (wallet) {
         logger.info('[CheapBottomNavigation] go to to /profile/mint')
-      navigate('/profile/mint')
+        navigate('/profile/mint')
       } else {
-          notifyWalletOpen()
+        notifyWalletOpen()
       }
   }
     
@@ -42,7 +37,7 @@ const CheapBottomNavigation = ({ wallet, openCart, toggleMenu, isShowMenu, notif
                 isShowMenu ? <Tooltip title='Filter'>
                             <BottomNavigationAction label="Filter" icon={<CheapIcon name={'filter'}/>} onClick={toggleMenu}/>
                          </Tooltip> : <Tooltip title='Home'>
-                                         <BottomNavigationAction label="Home" icon={<CheapIcon name={'home'}/>} onClick={goHome}/>
+                                         <BottomNavigationAction label="Home" icon={<CheapIcon name={'home'}/>} component={Link} to="/"/>
                                       </Tooltip>
                }
                 <Tooltip title='Mint your NFT'>

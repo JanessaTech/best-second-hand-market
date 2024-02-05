@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
+import {Link as RouterLink } from "react-router-dom"
 import { Box, IconButton, Typography, useMediaQuery, Link } from '@mui/material'
 import { CheapIcon } from '../../utils/Svgs'
 import NfterOverview from '../nfters/NfterOverview'
@@ -59,7 +60,7 @@ const ByLikeView = ({wallet, nft}) => {
                 onMouseOver={openOverview}
                 onMouseLeave={closeOverview}
                 >
-                    <Link href={`/nfters?id=${seller?.id}`} 
+                    <Link component={RouterLink} to={`/nfters?id=${seller?.id}`} 
                         sx={{
                             '&:hover':{color:'primary.main'},
                             '&:active':{color:'primary.dark'}

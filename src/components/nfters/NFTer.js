@@ -8,6 +8,7 @@ import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import ProfileFilterBar from '../profile/ProfileFilterBar'
 import { useSearchParams } from 'react-router-dom'
 import {capitalize} from '../../utils/StringUtils'
+import {Link as RouterLink } from "react-router-dom"
 
 function createData(id, title, img, network, category, price) {
   return {
@@ -116,7 +117,7 @@ function getFilter() {
 
 export default function NFTer() {
   logger.debug('[NFTer] rendering...')
-  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const [searchParams, setSearchParams] = useSearchParams()
@@ -127,6 +128,11 @@ export default function NFTer() {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [rowStates, setRowSates] = useState([])
+
+  useEffect(() => {
+    logger.debug('[NFTer] call notifyShowMenu in useEffect')
+    notifyShowMenu()
+  }, [])
 
   useEffect(() => {
     logger.debug('[NFTer] call restful api to get the new list of nfts by nfter id=', id)
@@ -207,7 +213,7 @@ export default function NFTer() {
                                   {row.id}
                                 </TableCell>
                                 <TableCell align="center" sx={{px:1}}>
-                                    <Link href={`/nft?id=${row.id}`}>
+                                    <Link component={RouterLink} to={`/nft?id=${row.id}`}>
                                         <Box sx={{display:'flex'}}>
                                             <Box
                                               component='img'

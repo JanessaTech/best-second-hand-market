@@ -13,7 +13,7 @@ import config from '../../config/index'
 
 export default function Mint() {
   logger.debug('[Mint] rendering...')
-  const {notifyAlertUpdate} = React.useContext(GlobalVariables)
+  const {notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(MintSchema)})
 
   const [state, setState] = useState({
@@ -26,6 +26,11 @@ export default function Mint() {
     addressOptions: [],
     standardOptions: []
   })
+
+  useEffect(() => {
+    logger.debug('[Mint] call notifyHideMenu in useEffect')
+    notifyHideMenu()
+  }, [])
 
   useEffect(() => {
     let alerts = []

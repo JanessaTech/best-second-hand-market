@@ -7,7 +7,7 @@ const DisconnectWallet = ({onClose, open, notifyDisconnectWallet, notifyWalletUp
 
     const handleClose = () => {
         localStorage.removeItem('walletType')
-        logger.debug('[DisconnectWallet] deleted user in localStorage')
+        logger.debug('[DisconnectWallet] deleted walletType in localStorage')
         notifyDisconnectWallet()
         notifyWalletUpdate(undefined)
         onClose()

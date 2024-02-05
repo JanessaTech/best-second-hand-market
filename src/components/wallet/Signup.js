@@ -75,8 +75,6 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyDis
         .catch((e) => {
             logger.debug('[Signup] handleSignup. Failed to get a wallet due to ', e)
         })
-        const user = {id: 111, name: 'JanessaTech lab'}
-        localStorage.setItem('user', JSON.stringify(user))
     }
 
     const handleInputChanges = (e) => {

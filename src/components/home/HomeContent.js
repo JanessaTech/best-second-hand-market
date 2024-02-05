@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import NFTGallery from './NFTGallery'
 import { GlobalVariables } from '../MainLayout'
 import logger from '../../common/Logger'
-import { Box } from '@mui/material'
-import { Link } from 'react-router-dom'
 
 export default function HomeContent() {
     logger.debug('[HomeContent] rendering ....')
-    const {wallet, menuOpen, trigger, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen} = React.useContext(GlobalVariables)
+    const {wallet, menuOpen, trigger, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyShowMenu} = React.useContext(GlobalVariables)
 
+    useEffect(() => {
+        logger.debug('[HomeContent] call notifyShowMenu in useEffect')
+        notifyShowMenu()
+    }, [])
+    
     return (
         <NFTGallery 
             wallet={wallet}

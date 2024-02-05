@@ -1,6 +1,7 @@
 import { Box, Link, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import React, { memo, useState } from 'react'
+import {Link as RouterLink } from "react-router-dom"
 import logger from '../../common/Logger'
 
 const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen}) => {
@@ -43,7 +44,7 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen}) => {
   }
 
   return (
-    <Link href={`nft?id=${nft?.id}`}>
+    <Link component={RouterLink} to={`/nft?id=${nft?.id}`}>
             <Box sx={{border:'1px solid #f5f5f5', 
                       borderRadius:4, 
                       '&:hover':{border:'2px solid #f5f5f5', cursor:'pointer'}, 

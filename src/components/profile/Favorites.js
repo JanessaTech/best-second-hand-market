@@ -1,5 +1,6 @@
 import { Box, IconButton, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import React, { useEffect } from 'react'
+import {Link as RouterLink } from "react-router-dom"
 import PropTypes from 'prop-types'
 import { useTheme } from '@mui/material/styles'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -138,7 +139,7 @@ function getFilter() {
 
 export default function Favorites() {
   logger.debug('[Favorites] rendering...')
-  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   
@@ -147,6 +148,11 @@ export default function Favorites() {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [rowStates, setRowSates] = React.useState([])
+
+  useEffect(() => {
+    logger.debug('[Favorites] call notifyShowMenu in useEffect')
+    notifyShowMenu()
+  }, [])
 
   useEffect(() => {
     logger.debug('[Favorites] call restful api to get the new list of favorites by user id=', wallet?.user?.id)
@@ -240,7 +246,7 @@ export default function Favorites() {
                             {row.id}
                             </TableCell>
                             <TableCell align="center" sx={{px:1}}>
-                                <Link href={`/nft?id=${row.id}`}>
+                                <Link component={RouterLink} to={`/nft?id=${row.id}`}>
                                     <Box sx={{display:'flex'}}>
                                         <Box
                                           component='img'

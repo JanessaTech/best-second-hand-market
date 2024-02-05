@@ -1,13 +1,12 @@
 import { Avatar, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
 import React, { memo } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 
 const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyDisconnectWallet, notifyWalletUpdate}) => {
   logger.debug('[ProfileMenu] rendering...')
   const navigate = useNavigate()
-  const location = useLocation()
 
     const handleClose = (e) => {
         handleProfileMenuClose()
@@ -19,7 +18,8 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyDisc
       handleProfileMenuClose()
       notifyWalletUpdate(undefined)
       notifyDisconnectWallet()
-      if (location.pathname.startsWith('/profile')) {
+      const location = window.location.pathname
+      if (location.startsWith('/profile')) {
         navigate('/')
       }
     }

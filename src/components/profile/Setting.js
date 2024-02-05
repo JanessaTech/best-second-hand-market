@@ -24,7 +24,7 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function Setting() {
   logger.debug('[Setting] rendering...')
-  const {notifyAlertUpdate} = React.useContext(GlobalVariables)
+  const {notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(SettingSchema)})
   const gatewayOptions = ['aaa', 'bbb','ccc','ddd']
   const [state, setState] = useState({
@@ -32,6 +32,11 @@ export default function Setting() {
     walletAddress: '0xb129c8aD40e31bC421F37b5B418CF1Bfe1175536',
     gateway: 'aaa'
   })
+
+  useEffect(() => {
+    logger.debug('[Setting] call notifyHideMenu in useEffect')
+    notifyHideMenu()
+  }, [])
 
   useEffect(() => {
     let alerts = []

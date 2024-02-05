@@ -106,7 +106,7 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
         if (signIn) {
             onClose()
             logger.info('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet')
-            const isRegistered = true
+            const isRegistered = false
             if (!isRegistered) {
                 localStorage.setItem('walletType', 'metamask')
                 openSignup()

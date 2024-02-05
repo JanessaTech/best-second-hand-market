@@ -26,13 +26,13 @@ function isShowMenu(location) {
     return false
 }
 
-const MainLayout = () => {
+const MainLayout = (props) => {
     logger.debug('[MainLayout] rendering...')
-    const outlet = useOutlet()
-    const location = useLocation()
+    
     const theme = useTheme()
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
     const alertCnt = useRef(0)
+    const location = window.location.pathname  // do not use useLocation because it causes rerendering
     
     // state variables
     const [cartOpen, setCartOpen] = useState(false)
@@ -40,11 +40,13 @@ const MainLayout = () => {
     const [walletAddressChange, setWalletAddressChange] = useState(false)
     const [signupOpen, setSignupOpen] = useState(false)
     const [alerts, setAlerts] = useState([])
-    const [wallet, setWallet] = useState()
+    const [wallet, setWallet] = useState(undefined)
     const [menu, setMenu] = useState({
         open: isMediumScreen ? false : true,
         width: isMediumScreen ? 0 : DrawerWidth
     })
+    const [showMenu, setShowMenu] = useState(isShowMenu(location))
+
     // we need to refactor the way how to communicatte between components
     const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
     const [refresh, setRefresh] = useState(0)  // to notify to reset/refresh menu
@@ -96,11 +98,19 @@ const MainLayout = () => {
 
     const notifyFilterRefresh = useCallback(() => {
         setRefresh(Math.random())
-    })
+    }, [])
 
     const notifyDisconnectWallet = useCallback(() => {
         setWalletTrigger(Math.random())
-    })
+    }, [])
+
+    const notifyShowMenu = useCallback(() => {
+        setShowMenu(true)
+    },[])
+
+    const notifyHideMenu = useCallback(() => {
+        setShowMenu(false)
+    }, [])
 
     const clearAlerts = useCallback(() => {
         setAlerts([])
@@ -150,19 +160,19 @@ const MainLayout = () => {
         setSignupOpen(true)
     }, [])
 
-    logger.debug('[MainLayout] location: ', location.pathname)
+    logger.debug('[MainLayout] location: ', location)
     logger.debug('[MainLayout] wallet:', wallet)
     return (
         <Container maxWidth='false'>
             <Header 
-                openCart={openCart} 
-                wallet={wallet}
-                notifyWalletOpen={notifyWalletOpen}
-                notifyFilterRefresh={notifyFilterRefresh}
-                notifyDisconnectWallet={notifyDisconnectWallet} 
-                notifyWalletUpdate={notifyWalletUpdate}
+                 openCart={openCart} 
+                 wallet={wallet}
+                 notifyWalletOpen={notifyWalletOpen}
+                 notifyFilterRefresh={notifyFilterRefresh}
+                 notifyDisconnectWallet={notifyDisconnectWallet} 
+                 notifyWalletUpdate={notifyWalletUpdate}
                 />
-            <GlobalVariables.Provider 
+             <GlobalVariables.Provider 
                 value={{
                     wallet: wallet,
                     menuOpen: menu.open, 
@@ -171,11 +181,13 @@ const MainLayout = () => {
                     openCart: openCart,
                     notifyFilterUpdate: notifyFilterUpdate,
                     notifyAlertUpdate: notifyAlertUpdate,
-                    notifyWalletOpen: notifyWalletOpen
+                    notifyWalletOpen: notifyWalletOpen,
+                    notifyShowMenu: notifyShowMenu,
+                    notifyHideMenu: notifyHideMenu
                     }}>
                 <Box sx={{display: 'flex'}}>
                     {
-                    isShowMenu(location.pathname) && 
+                    showMenu && 
                         <FilterMenu 
                             width={menu.width} 
                             menuOpen={menu.open} 
@@ -184,11 +196,11 @@ const MainLayout = () => {
                             notifyFilterUpdate={notifyFilterUpdate} 
                             notifyAlertUpdate={notifyAlertUpdate}/>
                     }
-                    {outlet}
+                    {props.children}
                 </Box>
                 
             </GlobalVariables.Provider>
-            <Cart wallet={wallet} toggleCart={toggleCart} open={cartOpen}/>
+           <Cart wallet={wallet} toggleCart={toggleCart} open={cartOpen}/>
             {
                     alerts && alerts.length > 0 && 
                         <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlerts={clearAlerts}/>       
@@ -209,6 +221,7 @@ const MainLayout = () => {
                 notifyDisconnectWallet={notifyDisconnectWallet}
                 notifyWalletUpdate={notifyWalletUpdate}
                 /> 
+           
             <Signup
                 onClose={onCloseSignUp} 
                 open={signupOpen} 
@@ -220,9 +233,9 @@ const MainLayout = () => {
                 wallet={wallet}
                 openCart={openCart} 
                 toggleMenu={toggleMenu} 
-                isShowMenu={isShowMenu(location.pathname)} 
+                isShowMenu={showMenu} 
                 notifyWalletOpen={notifyWalletOpen}
-                />
+            />
         </Container>
     )
 }

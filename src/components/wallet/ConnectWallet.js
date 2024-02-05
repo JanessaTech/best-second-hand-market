@@ -8,7 +8,6 @@ import WalletItem from './WalletItem'
 import MetaMaskWallet from './MetaMaskWallet'
 import {ethers} from 'ethers'
 
-
 const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange}) => {
     logger.debug('[ConnectWallet] rendering ')
     logger.debug('[ConnectWallet] wallet=',wallet)

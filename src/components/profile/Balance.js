@@ -47,7 +47,7 @@ function getBalanceBy(chain) {
 
 export default function Balance() {
   logger.debug('[Balance] rendering...')
-  const {notifyAlertUpdate} = React.useContext(GlobalVariables)
+  const {notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(DepoistSchema)})
   const [state, setState] = useState({
     remainingInChain: getBalanceBy(NETWORKS[0]).remaining,
@@ -57,6 +57,11 @@ export default function Balance() {
     deposit: 0,
     chainBy: NETWORKS[0]
   })
+
+  useEffect(() => {
+    logger.debug('[Setting] call notifyHideMenu in useEffect')
+    notifyHideMenu()
+  }, [])
 
   useEffect(() => {
     let alerts = []

@@ -1,5 +1,6 @@
 import { Box, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Typography, useMediaQuery } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import {Link as RouterLink } from "react-router-dom"
 import PropTypes from 'prop-types'
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
@@ -128,7 +129,7 @@ function getFilter() {
 
 export default function Orders() {
   logger.debug('[Orders] rendering...')
-  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
@@ -137,6 +138,11 @@ export default function Orders() {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [rowStates, setRowStates] = useState([])
+
+  useEffect(() => {
+    logger.debug('[Orders] call notifyShowMenu in useEffect')
+    notifyShowMenu()
+  }, [])
 
   useEffect(() => {
     logger.debug('[Orders] call restful api to get the new list of orders by user id=', wallet?.user?.id)
@@ -218,7 +224,7 @@ export default function Orders() {
                             {row.id}
                           </TableCell>
                           <TableCell align="center" sx={{px:1}}>
-                            <Link href={`/nft?id=${row.id}`}>
+                            <Link component={RouterLink} to={`/nft?id=${row.id}`}>
                                 <Box sx={{display:'flex'}}>
                                     <Box
                                       component='img'

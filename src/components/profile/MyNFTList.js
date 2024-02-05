@@ -1,5 +1,6 @@
 import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, TableRow, useMediaQuery, TableSortLabel, TablePagination, Button, TextField, Typography, Link } from '@mui/material'
 import React, { useEffect } from 'react'
+import {Link as RouterLink } from "react-router-dom"
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight, FilterBarHeight, NFTSTATUS} from '../../common/constant'
 import {GlobalVariables} from '../MainLayout'
@@ -92,7 +93,7 @@ function getFilter() {
 
 export default function MyNFTList() {
   logger.debug('[MyNFTList] rendering....')
-  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const headCells = [
@@ -180,6 +181,10 @@ export default function MyNFTList() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [rowStates, setRowSates] = React.useState([])
 
+  useEffect(() => {
+    logger.debug('[MyNFTList] call notifyShowMenu in useEffect')
+    notifyShowMenu()
+  }, [])
 
   useEffect(() => {
     logger.debug('[MyNFTList] call restful api to get the list of my nfts by user id=', wallet?.user?.id)
@@ -359,7 +364,7 @@ export default function MyNFTList() {
                             {row.id}
                           </TableCell>
                           <TableCell align="center" sx={{display: getHeadById('title').display ?'table-cell': 'none', px:1}}>
-                            <Link href={`/nft?id=${row.id}`}>
+                            <Link component={RouterLink} to={`/nft?id=${row.id}`}>
                                 <Box sx={{display:'flex'}}>
                                     <Box
                                         component='img'

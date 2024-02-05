@@ -15,21 +15,21 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notify
     const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
-    const [searchParams, setSearchParams] = useSearchParams()
+    //const [searchParams, setSearchParams] = useSearchParams()
     const [search, setSearch] = useState('')
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [anchorEl, setAnchorEl] =  React.useState(null)
 
-    useEffect(() => {
-        const search = searchParams.get('search')
-        logger.debug('[Header] useEffect search=', search)
-        if(!search) {
-            setSearch('')
-        } else {
-            setSearch(search)
-        }
+//     useEffect(() => {
+//         const search = searchParams.get('search')
+//         logger.debug('[Header] useEffect search=', search)
+//         if(!search) {
+//             setSearch('')
+//         } else {
+//             setSearch(search)
+//         }
         
-    }, [searchParams])
+//     }, [searchParams])
     
     const handleSearchChanges = (e) => {
         e.preventDefault()
@@ -41,7 +41,7 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notify
         if (search && search.length > 0) {
             localStorage.removeItem('filter')
             notifyFilterRefresh()
-            navigate(`/results?search=${search}`)
+            //navigate(`/results?search=${search}`)
         }
     }
 
@@ -68,47 +68,47 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notify
     const handleMintBut = () => {
         if (wallet) {
         logger.info('[Header] handleMintBut. go to to /profile/mint')
-        navigate('/profile/mint')
+            navigate('/profile/mint')
         } else {
             notifyWalletOpen()
         }
     }
 
-  return (
-    <Box sx={{
+   return (
+     <Box sx={{
         width: 1, height: HeaderHeight, 
         backgroundColor: 'black', 
         position: 'fixed', top: 0, left: 0, 
         px: isSmallScreen ? 2: 3,
         boxSizing:'border-box',
         zIndex: (theme) => theme.zIndex.drawer + 1}}> 
-        <Box sx={{display: 'flex', alignItems: 'center', justifyContent:'space-between'}}>
-            <Box sx={{display: 'flex', alignItems: 'center'}}>
-                <IconButton sx={{pl:0}} component={Link} to='/'>
-                    <Avatar alt='Cheap' src='/imgs/header/handshake.svg' sx={{ width:60, height:60}}/>
-                </IconButton>
-                <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Cheap</Typography>
-            </Box>
-            <Box>
-                <Button 
-                    variant='contained' 
-                    sx={{textTransform:'none', fontSize:'1.2em',
-                     [theme.breakpoints.down('md')]:{display:'none'}}}
-                    onClick={handleMintBut}
-                     >Mint a NFT</Button>
-            </Box>
-            <Box sx={{width: isMediumScreen? 0.6:0.4, display: 'flex', alignItems: 'center'}}>
-                <TextField sx={{backgroundColor:'white', borderRadius:2,
-                    '& .MuiOutlinedInput-root':{
-                        '&.Mui-focused fieldset': {borderColor:'black', border:0},
-                      }
-                    }}
-                    id="cheap-search-input" 
-                    value={search}
-                    variant="outlined" 
-                    placeholder='Explore more nfts'
-                    fullWidth
-                    InputProps={{
+         <Box sx={{display: 'flex', alignItems: 'center', justifyContent:'space-between'}}>
+             <Box sx={{display: 'flex', alignItems: 'center'}}>
+                 <IconButton sx={{pl:0}} component={Link} to='/'>
+                     <Avatar alt='Cheap' src='/imgs/header/handshake.svg' sx={{ width:60, height:60}}/>
+                 </IconButton>
+                 <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Cheap</Typography>
+             </Box>
+             <Box>
+                 <Button 
+                     variant='contained' 
+                     sx={{textTransform:'none', fontSize:'1.2em',
+                      [theme.breakpoints.down('md')]:{display:'none'}}}
+                     onClick={handleMintBut}
+                      >Mint a NFT</Button>
+             </Box>
+             <Box sx={{width: isMediumScreen? 0.6:0.4, display: 'flex', alignItems: 'center'}}>
+                 <TextField sx={{backgroundColor:'white', borderRadius:2,
+                     '& .MuiOutlinedInput-root':{
+                         '&.Mui-focused fieldset': {borderColor:'black', border:0},
+                       }
+                     }}
+                     id="cheap-search-input" 
+                     value={search}
+                     variant="outlined" 
+                     placeholder='Explore more nfts'
+                     fullWidth
+                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start" sx={{[theme.breakpoints.down('sm')]:{display:'none'}}}>
                                 <CheapIcon name={'search'}/>
@@ -194,8 +194,8 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notify
                 }
             </Box>
         </Box>     
-    </Box>
-  )
+     </Box>
+   )
 }
 
 export default memo(Header)
