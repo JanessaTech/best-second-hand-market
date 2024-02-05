@@ -138,11 +138,10 @@ function getFilter() {
 
 export default function Favorites() {
   logger.debug('[Favorites] rendering...')
-  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
-
+  
   const [order, setOrder] = React.useState('desc')
   const [orderBy, setOrderBy] = React.useState('price')
   const [page, setPage] = React.useState(0)
@@ -150,7 +149,7 @@ export default function Favorites() {
   const [rowStates, setRowSates] = React.useState([])
 
   useEffect(() => {
-    logger.debug('[Favorites] call restful api to get the new list of favorites by user id=', user?.id)
+    logger.debug('[Favorites] call restful api to get the new list of favorites by user id=', wallet?.user?.id)
     const latestFilter = getFilter()
     logger.debug('[Favorites] trigger=', trigger)
     logger.debug('[Favorites] latestFilter=', latestFilter)

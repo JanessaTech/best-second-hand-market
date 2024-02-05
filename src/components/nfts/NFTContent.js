@@ -3,6 +3,7 @@ import NFTHome from './NFTHome'
 import { GlobalVariables } from '../MainLayout'
 import { useSearchParams } from 'react-router-dom'
 import logger from '../../common/Logger'
+import { Box } from '@mui/material'
 
 export default function NFTContent() {
     logger.debug('[NFTContent] rendering ....')

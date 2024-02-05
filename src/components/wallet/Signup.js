@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { CheapIcon } from '../../utils/Svgs'
 import { styled } from '@mui/material/styles'
 import logger from '../../common/Logger'
+import {GetCurrentWallet} from '../../utils/Wallet'
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -20,7 +21,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
-const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyUserUpdate, notifyDisconnectWallet}) => {
+const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyDisconnectWallet}) => {
     logger.debug('[Signup] rendering... ')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
@@ -56,9 +57,9 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyUse
     const handleDisConnected = () => {
         reset()
         setState({...state, 'name': '', introduction:'', checked: false} )
-        localStorage.removeItem('user')
+        localStorage.removeItem('walletType')
         onClose()
-        notifyUserUpdate()
+        notifyWalletUpdate(undefined)
         notifyDisconnectWallet()
     }
 
@@ -66,10 +67,16 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyUse
         logger.info('data:', data)
         logger.info('[Signup] call restful api to signup ...')
         onClose()
+        GetCurrentWallet()
+        .then((wallet) => {
+            logger.debug('[Signup] handleSignup get a wallet = ', wallet)
+            notifyWalletUpdate(wallet)
+        })
+        .catch((e) => {
+            logger.debug('[Signup] handleSignup. Failed to get a wallet due to ', e)
+        })
         const user = {id: 111, name: 'JanessaTech lab'}
         localStorage.setItem('user', JSON.stringify(user))
-        notifyUserUpdate()
-        
     }
 
     const handleInputChanges = (e) => {

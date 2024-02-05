@@ -92,10 +92,9 @@ function getFilter() {
 
 export default function MyNFTList() {
   logger.debug('[MyNFTList] rendering....')
-  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
   const headCells = [
     {
       id: 'id',
@@ -183,7 +182,7 @@ export default function MyNFTList() {
 
 
   useEffect(() => {
-    logger.debug('[MyNFTList] call restful api to get the list of my nfts by user id=', user?.id)
+    logger.debug('[MyNFTList] call restful api to get the list of my nfts by user id=', wallet?.user?.id)
     const latestFilter = getFilter()
     logger.debug('[MyNFTList] trigger=', trigger)
     logger.debug('[MyNFTList] latestFilter=', latestFilter)
@@ -320,7 +319,7 @@ export default function MyNFTList() {
   }
 
   logger.debug('[MyNFTList] rowStates :', rowStates)
-  logger.debug('[MyNFTList] user:', user)
+  logger.debug('[MyNFTList] wallet:', wallet)
   
   return (
     <Box component="main" sx={{width:1}}>

@@ -40,7 +40,6 @@ const MainLayout = () => {
     const [walletAddressChange, setWalletAddressChange] = useState(false)
     const [signupOpen, setSignupOpen] = useState(false)
     const [alerts, setAlerts] = useState([])
-    const [user, setUser] = useState(undefined)
     const [wallet, setWallet] = useState()
     const [menu, setMenu] = useState({
         open: isMediumScreen ? false : true,
@@ -69,13 +68,6 @@ const MainLayout = () => {
                 logger.debug('[MainLayout] Failed to call GetCurrentWallet in useEffect due to ', e)
             }    
         })()
-    }, [])
-
-
-    const notifyUserUpdate = useCallback(() => {  
-        const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
-        logger.info('[MainLayout], notifyUserUpdate. user = ', user)   
-        setUser(user)
     }, [])
 
     const notifyWalletAddressChange = useCallback(() => {  // we don't allow wallet addres to be updated once it is updated by notifyWalletUpdate
@@ -222,7 +214,6 @@ const MainLayout = () => {
                 open={signupOpen} 
                 notifyAlertUpdate={notifyAlertUpdate}
                 notifyWalletUpdate={notifyWalletUpdate}
-                notifyUserUpdate={notifyUserUpdate}
                 notifyDisconnectWallet={notifyDisconnectWallet}
             />
             <CheapBottomNavigation 

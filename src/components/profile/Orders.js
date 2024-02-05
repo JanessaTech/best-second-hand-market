@@ -128,10 +128,9 @@ function getFilter() {
 
 export default function Orders() {
   logger.debug('[Orders] rendering...')
-  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): undefined
 
   const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('orderedTime')
@@ -140,7 +139,7 @@ export default function Orders() {
   const [rowStates, setRowStates] = useState([])
 
   useEffect(() => {
-    logger.debug('[Orders] call restful api to get the new list of orders by user id=', user?.id)
+    logger.debug('[Orders] call restful api to get the new list of orders by user id=', wallet?.user?.id)
     const latestFilter = getFilter()
     logger.debug('[Orders] trigger=', trigger)
     logger.debug('[Orders] latestFilter=', latestFilter)

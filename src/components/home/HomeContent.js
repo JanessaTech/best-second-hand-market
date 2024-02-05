@@ -2,6 +2,8 @@ import React from 'react'
 import NFTGallery from './NFTGallery'
 import { GlobalVariables } from '../MainLayout'
 import logger from '../../common/Logger'
+import { Box } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 export default function HomeContent() {
     logger.debug('[HomeContent] rendering ....')
