@@ -26,7 +26,7 @@ const svgMapping = new Map([
   ['ethereum', '/imgs/networks/ethereum.svg'],
   ['avalanche', '/imgs/networks/avalanche.svg'],
   ['polygon', '/imgs/networks/polygon.svg'],
-  ['solana', '/imgs/networks/solana.svg'],
+  ['gnosis', '/imgs/networks/gnosis.svg'],
 
   // for nft detail page
   ['view', '/imgs/nft-detail/view.svg'],

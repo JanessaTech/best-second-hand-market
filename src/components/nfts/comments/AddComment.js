@@ -2,7 +2,7 @@ import { Avatar, Box, Button, TextField } from '@mui/material'
 import React, { memo, useState } from 'react'
 import logger from '../../../common/Logger'
 
-const AddComment = ({wallet, isReply, handleCancelReply}) => {
+const AddComment = ({wallet, isReply, handleCancelReply, handleAfterCommentAdded}) => {
     logger.debug('[AddComment] rendering...')
 
     const [state, setState] = useState({
@@ -30,7 +30,9 @@ const AddComment = ({wallet, isReply, handleCancelReply}) => {
     }
 
     const handleLeaveComment = () => {
-        logger.info('[AddComment] handleLeaveComment. call here to submit comment...:', state.comment)
+        logger.info('[AddComment] handleLeaveComment. call restful api to submit comment...:', state.comment)
+        handleAfterCommentAdded(isReply)
+        setState({...state, comment: ''})
     }
 
   return (

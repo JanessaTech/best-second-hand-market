@@ -73,14 +73,26 @@ const Comments = ({wallet})=> {
     setComments(data)
     setPagination({page:value, pageSize: pagination.pageSize, pages: Math.ceil(total / pagination.pageSize)})
   }
+  const handleAfterCommentAdded = (isReply) => {
+    logger.debug('[Comments] handleAfterCommentAdded. call rest api to get comments based on nft id, page, pageSize, return result with how many in total')
+    const total  = 42
+    const page = 1
+    logger.debug('[Comments] nft id=', id)
+    logger.debug('[Comments] page=', isReply? pagination.page : page)
+    logger.debug('[Comments] pageSize=', pagination.pageSize)
+    logger.debug('[Comments] page=', page, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
+    logger.debug('[Comments] isReply=', isReply)
+    setComments(data)
+    setPagination({page: isReply? pagination.page : page, pageSize: pagination.pageSize, pages: Math.ceil(total / pagination.pageSize)})
+  }
 
   return (
     <Box>
         <Typography>{total} comments</Typography>
-        { wallet && <AddComment wallet={wallet}/>}
+        { wallet && <AddComment wallet={wallet} handleAfterCommentAdded={handleAfterCommentAdded}/>}
         {
           data.map((c) => (
-          <OneComment key={c.id} deep={1} comment={c} wallet={wallet}/>
+          <OneComment key={c.id} deep={1} comment={c} wallet={wallet} handleAfterCommentAdded={handleAfterCommentAdded}/>
           ))
         }
         <Pagination 

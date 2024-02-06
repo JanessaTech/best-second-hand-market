@@ -34,7 +34,9 @@ export default function Mint() {
 
   useEffect(() => {
     let alerts = []
-    logger.debug('[Mint] errors = ', errors)
+    if (errors && errors.length > 0) {
+      logger.debug('[Mint] errors = ', errors)
+    }
     if (errors?.title) {
       alerts.push({severity: 'error', message: errors?.title?.message})
     }
@@ -84,6 +86,8 @@ export default function Mint() {
 
   const handleMint= (data) => {
     logger.info('[Mint] handleMint data =', data)
+    logger.debug('[Mint] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
+
   }
 
   const handleCategoryChange = (value) => {
@@ -111,7 +115,7 @@ export default function Mint() {
     setState({...state, address: value, standard: state.standardOptions[index]})
   }
 
-  logger.debug('state: ', state)
+  //logger.debug('state: ', state)
 
   return (
     <Box component="main" sx={{width:1}}>

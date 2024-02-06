@@ -11,7 +11,8 @@ export const SignupSchema = yup.object().shape({
 })
 
 export const SettingSchema = yup.object().shape({
-    name: yup.string().required('Display name is required').max(20, 'name is less than 20 characters')
+    name: yup.string().required('Display name is required').max(20, 'name is less than 20 characters'),
+    intro: yup.string().max(10).optional()
 })
 
 export const DepoistSchema = yup.object().shape({

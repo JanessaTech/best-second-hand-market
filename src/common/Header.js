@@ -15,21 +15,21 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notify
     const navigate = useNavigate()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
-    //const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const [search, setSearch] = useState('')
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [anchorEl, setAnchorEl] =  React.useState(null)
 
-//     useEffect(() => {
-//         const search = searchParams.get('search')
-//         logger.debug('[Header] useEffect search=', search)
-//         if(!search) {
-//             setSearch('')
-//         } else {
-//             setSearch(search)
-//         }
+    useEffect(() => {
+        const search = searchParams.get('search')
+        logger.debug('[Header] useEffect search=', search)
+        if(!search) {
+            setSearch('')
+        } else {
+            setSearch(search)
+        }
         
-//     }, [searchParams])
+    }, [searchParams])
     
     const handleSearchChanges = (e) => {
         e.preventDefault()
@@ -41,7 +41,7 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notify
         if (search && search.length > 0) {
             localStorage.removeItem('filter')
             notifyFilterRefresh()
-            //navigate(`/results?search=${search}`)
+            navigate(`/results?search=${search}`)
         }
     }
 

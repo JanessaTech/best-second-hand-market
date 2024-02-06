@@ -19,7 +19,7 @@ const MenuProps = {
 function getStyles(sortName, sortBy, theme) {
   return {
     fontWeight:
-      sortBy.indexOf(sortName) === -1
+    !sortBy || sortBy.indexOf(sortName) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };

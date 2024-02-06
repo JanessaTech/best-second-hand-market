@@ -22,6 +22,12 @@ const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen}) => {
     }
   }
 
+  const handleBuy = (e) => {
+    e.preventDefault()
+    logger.debug('[BuyOrCart] call wallet to by the nft by address and token id')
+    logger.debug('[BuyOrCart] once the buying is done successffuly, we should call restful to log an order as the history')
+  }
+
   return (
     <Box>
         <Box 
@@ -38,7 +44,9 @@ const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen}) => {
               <Box sx={{mt:1, display: 'flex', justifyContent:'center'}}>
                   <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0, mr:4}} 
                           color='customBlack' 
-                          variant='contained'>
+                          variant='contained'
+                          onClick={handleBuy}
+                          >
                             <Typography variant='h6'>Buy now</Typography>
                   </Button>
                   <IconButton sx={{p:0, position:'relative'}} onClick={handleCart}>

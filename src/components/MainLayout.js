@@ -1,6 +1,4 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useOutlet } from 'react-router-dom'
 import { Container } from '@mui/system'
 import { useTheme } from '@mui/material/styles'
 import { Box, useMediaQuery } from '@mui/material'

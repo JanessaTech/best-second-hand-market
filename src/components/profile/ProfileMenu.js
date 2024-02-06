@@ -18,6 +18,7 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyDisc
       handleProfileMenuClose()
       notifyWalletUpdate(undefined)
       notifyDisconnectWallet()
+      logger.debug('[ProfileMenu] call restful api to logout')
       const location = window.location.pathname
       if (location.startsWith('/profile')) {
         navigate('/')

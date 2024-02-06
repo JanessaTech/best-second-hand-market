@@ -106,14 +106,14 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, 
   const handleUpdate = useCallback(() => {
     logger.debug('[NFTGallery] handleUpdate...')
     const latestFilter = getFilter()
-    logger.debug('[NFTGallery] call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and wallet=', wallet, ' and page=', pagination.page)
+    logger.debug('[NFTGallery] call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and wallet=', wallet, ' and page=', 1)
     const total = 504
     const nftsInOnePage = generateData((pagination.page - 1) * pagination.pageSize, Math.min(100, total - (pagination.page - 1) * pagination.pageSize))
     setBufferedNfts(nftsInOnePage)
     setNfts(nftsInOnePage.slice(0, BatchSizeInGallery))
     setHasMore(true)
     setTotal(total)
-    setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: pagination.page})
+    setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: 1})
     window.scrollTo(0, 0)
     localStorage.removeItem('filter')
   }, [pagination])

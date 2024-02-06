@@ -163,7 +163,6 @@ export default function NFTer() {
 
   const visibleRows = React.useMemo(
     () => {
-      logger.info('[NFTer] call restful api to get result')
       return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     }, [order, orderBy, page, rowsPerPage, rowStates]
   )

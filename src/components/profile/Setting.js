@@ -22,19 +22,24 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+const userData = {
+  id: 111,
+  name: 'Janessatech',
+  gateway: 'bbb',
+  intro: 'This is me'
+}
+
 export default function Setting() {
   logger.debug('[Setting] rendering...')
-  const {notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
+  const {wallet, notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(SettingSchema)})
   const gatewayOptions = ['aaa', 'bbb','ccc','ddd']
-  const [state, setState] = useState({
-    name: '',
-    walletAddress: '0xb129c8aD40e31bC421F37b5B418CF1Bfe1175536',
-    gateway: 'aaa'
-  })
+  const [state, setState] = useState({gateway: 'aaa'}) // we must have a default value for gateway
 
   useEffect(() => {
     logger.debug('[Setting] call notifyHideMenu in useEffect')
+    logger.debug('[Setting] call restful api to get user by the wallet address=', wallet?.address)
+    setState({...userData, walletAddress: wallet?.address})
     notifyHideMenu()
   }, [])
 
@@ -43,14 +48,18 @@ export default function Setting() {
     if (errors?.name) {
       alerts.push({severity: 'error', message: errors?.name?.message})
     }
+    if (errors?.intro) {
+      alerts.push({severity: 'error', message: errors?.intro?.message})
+    }
     if(alerts.length > 0) {
-      logger.info('[Setting]sending alerts = ', alerts)
+      logger.info('[Setting] sending alerts = ', alerts)
       notifyAlertUpdate(alerts)
     }  
   }, [errors])
 
   const handleUpdate = (data) => {
-    logger.info('[Setting] data=', data)
+    logger.debug('[Setting] data=', data)
+    logger.debug('[Setting] call restful api to save user setting')
   }
 
   const handleInputChanges = (e) => {
@@ -86,7 +95,7 @@ export default function Setting() {
                 aria-label='name'
                 name='name'
                 label='Display name'
-                value={state.name}
+                value={state?.name}
                 error={errors?.name? true: false}
                 placeholder='Display name' 
                 {...register('name')}
@@ -102,8 +111,8 @@ export default function Setting() {
                 aria-label='wallet address'
                 name='wallet-address'
                 label='wallet address'
-                value={state.walletAddress}
-                placeholder='Display name' 
+                value={state?.walletAddress}
+                placeholder='Wallet address' 
                 size="small"
                 fullWidth
                 multiline
@@ -119,10 +128,28 @@ export default function Setting() {
                         Upload your profile image file
                         <VisuallyHiddenInput type="file" />
           </Button>
+          <TextField
+              sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}
+              }} 
+              id='introduction' 
+              aria-label='introduction'
+              name='intro'
+              label='Introduction'
+              value={state.intro}
+              error={errors?.intro? true: false}
+              placeholder='Your brief introduction' 
+              {...register('intro')}
+              variant='outlined'
+              size="small"
+              fullWidth
+              multiline
+              rows={4}
+              onChange={handleInputChanges}
+              />
           <CustomSelect 
                 label={'Gateway'} 
                 showInputLabel={true} 
-                value={state.gateway} 
+                value={state?.gateway} 
                 handleChange={handleGatewayChange} 
                 options={gatewayOptions} 
                 width={0.6}/>
