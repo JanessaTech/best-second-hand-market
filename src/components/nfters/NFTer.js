@@ -117,7 +117,7 @@ function getFilter() {
 
 export default function NFTer() {
   logger.debug('[NFTer] rendering...')
-  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const [searchParams, setSearchParams] = useSearchParams()
@@ -130,8 +130,8 @@ export default function NFTer() {
   const [rowStates, setRowSates] = useState([])
 
   useEffect(() => {
-    if (wallet?.address) {
-      logger.debug('[NFTer] call restful api to get the new list of nfts by wallet address=', wallet?.address)
+    if (id) {
+      logger.debug('[NFTer] call restful api to get the new list of nfts by nfter id=', id)
       const latestFilter = getFilter()
       logger.debug('[NFTer] trigger=', trigger)
       logger.debug('[NFTer] latestFilter=', latestFilter)
@@ -140,7 +140,7 @@ export default function NFTer() {
     }
     logger.debug('[NFTer] call notifyShowMenu in useEffect')
     notifyShowMenu()
-  }, [wallet, trigger])
+  }, [trigger])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
