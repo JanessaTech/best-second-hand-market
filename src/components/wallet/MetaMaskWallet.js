@@ -105,17 +105,19 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
         }
         if (signIn) {
             onClose()
-            logger.info('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet')
+            logger.info('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet address=', address)
             const isRegistered = false
             if (!isRegistered) {
-                localStorage.setItem('walletType', 'metamask')
+                const login = {'walletType' : 'metamask', address: address}
+                localStorage.setItem('login', JSON.stringify(login))
                 openSignup()
             } else {
-                // get user info by wallet address
-                logger.debug('[MetaMaskWallet] login address=', address)
-                logger.debug('[MetaMaskWallet] call restful api to  get user info by address =', address)
-                const newWallet = {address: address, user: {id: 111, name: 'JanessaTech lab'}}
-                localStorage.setItem('walletType', 'metamask')  // a flag to indicate which type of wallet is being used
+                // get user info by login using wallet address
+                logger.debug('[MetaMaskWallet] call restful api to login with logined user by address=', address)
+                const loginedUser = {id: 111, name: 'JanessaTech lab'}
+                const newWallet = {address: address, user: loginedUser}
+                const login = {'walletType' : 'metamask', user: loginedUser, address: address}
+                localStorage.setItem('login', JSON.stringify(login)) 
                 notifyWalletUpdate(newWallet)
             }
         }
@@ -124,7 +126,7 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
     
 
     useEffect(() => {
-        logger.debug('[MetaMaskWallet] disconnect MetaMaskwallet in useEffect')
+        logger.debug('[MetaMaskWallet] reset MetaMaskwallet in useEffect')
         setSignIn(false)
         setIsWalletLogin(false)
         setProvider(undefined)

@@ -98,7 +98,7 @@ const MainLayout = (props) => {
         setRefresh(Math.random())
     }, [])
 
-    const notifyDisconnectWallet = useCallback(() => {
+    const notifyResetWallet = useCallback(() => {
         setWalletTrigger(Math.random())
     }, [])
 
@@ -167,7 +167,7 @@ const MainLayout = (props) => {
                  wallet={wallet}
                  notifyWalletOpen={notifyWalletOpen}
                  notifyFilterRefresh={notifyFilterRefresh}
-                 notifyDisconnectWallet={notifyDisconnectWallet} 
+                 notifyResetWallet={notifyResetWallet} 
                  notifyWalletUpdate={notifyWalletUpdate}
                 />
              <GlobalVariables.Provider 
@@ -216,7 +216,7 @@ const MainLayout = (props) => {
             <DisconnectWallet 
                 onClose={onCloseWalletChange}
                 open={walletAddressChange}
-                notifyDisconnectWallet={notifyDisconnectWallet}
+                notifyResetWallet={notifyResetWallet}
                 notifyWalletUpdate={notifyWalletUpdate}
                 /> 
            
@@ -225,7 +225,7 @@ const MainLayout = (props) => {
                 open={signupOpen} 
                 notifyAlertUpdate={notifyAlertUpdate}
                 notifyWalletUpdate={notifyWalletUpdate}
-                notifyDisconnectWallet={notifyDisconnectWallet}
+                notifyResetWallet={notifyResetWallet}
             />
             <CheapBottomNavigation 
                 wallet={wallet}

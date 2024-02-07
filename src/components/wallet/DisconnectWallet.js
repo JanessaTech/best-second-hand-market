@@ -3,12 +3,19 @@ import React, { memo } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 
-const DisconnectWallet = ({onClose, open, notifyDisconnectWallet, notifyWalletUpdate}) => {
+const DisconnectWallet = ({onClose, open, notifyResetWallet, notifyWalletUpdate}) => {
 
     const handleClose = () => {
-        localStorage.removeItem('walletType')
-        logger.debug('[DisconnectWallet] deleted walletType in localStorage')
-        notifyDisconnectWallet()
+        /**
+         * There are 4 places wen remove login from localStorage
+         * 1. here
+         * 2. handleDisconnect in ProfileMenu
+         * 3. handleDisConnected in Signup
+         * 4. handleSignup in Signup
+         */
+        localStorage.removeItem('login')
+        logger.debug('[DisconnectWallet] deleted login in localStorage')
+        notifyResetWallet()
         notifyWalletUpdate(undefined)
         onClose()
     }

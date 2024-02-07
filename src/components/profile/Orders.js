@@ -140,19 +140,17 @@ export default function Orders() {
   const [rowStates, setRowStates] = useState([])
 
   useEffect(() => {
+    if (wallet?.address) {
+      logger.debug('[Orders] call restful api to get the new list of orders by wallet address=', wallet?.address)
+      const latestFilter = getFilter()
+      logger.debug('[Orders] trigger=', trigger)
+      logger.debug('[Orders] latestFilter=', latestFilter)
+      logger.debug('[Orders] page=', 1)
+      setRowStates(rows)
+    }
     logger.debug('[Orders] call notifyShowMenu in useEffect')
     notifyShowMenu()
-  }, [])
-
-  useEffect(() => {
-    logger.debug('[Orders] call restful api to get the new list of orders by user id=', wallet?.user?.id)
-    const latestFilter = getFilter()
-    logger.debug('[Orders] trigger=', trigger)
-    logger.debug('[Orders] latestFilter=', latestFilter)
-    logger.debug('[Orders] page=', 1)
-    setRowStates(rows)
-
-  }, [trigger])
+  }, [wallet, trigger])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form"
 import { CheapIcon } from '../../utils/Svgs'
 import { styled } from '@mui/material/styles'
 import logger from '../../common/Logger'
-import {GetCurrentWallet} from '../../utils/Wallet'
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -21,7 +20,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
-const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyDisconnectWallet}) => {
+const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyResetWallet}) => {
     logger.debug('[Signup] rendering... ')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
@@ -57,24 +56,29 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyDis
     const handleDisConnected = () => {
         reset()
         setState({...state, 'name': '', introduction:'', checked: false} )
-        localStorage.removeItem('walletType')
+        localStorage.removeItem('login')
         onClose()
         notifyWalletUpdate(undefined)
-        notifyDisconnectWallet()
+        notifyResetWallet()
     }
 
     const handleSignup = (data) => {
         logger.info('data:', data)
-        logger.info('[Signup] call restful api to signup ...')
         onClose()
-        GetCurrentWallet()
-        .then((wallet) => {
-            logger.debug('[Signup] handleSignup get a wallet = ', wallet)
+        var login = localStorage.getItem('login') ? JSON.parse(localStorage.getItem('login')) : undefined
+        logger.debug('[Signup] handleSignup login = ', login)
+        if (!login || !login?.address) {
+            logger.error('[Signup] error. Cannot find login in localStorage or login does not have the address sigined')
+        } else {
+            logger.debug('[Signup] call restful api to register user: associcate a new user with the wallet address =', login?.address)
+            const registeredUser = {id: 111, name: 'JanessaTech lab'}
+            login = {...login, user: registeredUser}
+            localStorage.removeItem('login')  // remove the outdated data
+            localStorage.setItem('login', JSON.stringify(login))
+            const wallet = {address: login?.address, user: registeredUser}
+            logger.debug('[Signup] call notifyWalletUpdate after registeration is successful')
             notifyWalletUpdate(wallet)
-        })
-        .catch((e) => {
-            logger.debug('[Signup] handleSignup. Failed to get a wallet due to ', e)
-        })
+        }
     }
 
     const handleInputChanges = (e) => {

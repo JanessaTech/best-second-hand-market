@@ -1,14 +1,13 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 
-function getWalletType() {
-    const walletType = localStorage.getItem('walletType')
-    if (walletType) return true
-    return false
+function inLogined() {
+    const login = localStorage.getItem('login') ? JSON.parse(localStorage.getItem('login')) : undefined
+    return login && login?.user
 }
 
 export default function ProtectedRoutes() {
-    const walletType = getWalletType()
-    return walletType ? <Outlet/> : <Navigate to='/'/>
+    const logined = inLogined()
+    return logined ? <Outlet/> : <Navigate to='/'/>
 }
 

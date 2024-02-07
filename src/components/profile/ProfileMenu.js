@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 
-const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyDisconnectWallet, notifyWalletUpdate}) => {
+const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyResetWallet, notifyWalletUpdate}) => {
   logger.debug('[ProfileMenu] rendering...')
   const navigate = useNavigate()
 
@@ -14,10 +14,10 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyDisc
 
     const handleDisconnect = () => {
       logger.info('[ProfileMenu] handleDisconnect')
-      localStorage.removeItem('walletType')
+      localStorage.removeItem('login')
       handleProfileMenuClose()
       notifyWalletUpdate(undefined)
-      notifyDisconnectWallet()
+      notifyResetWallet()
       logger.debug('[ProfileMenu] call restful api to logout')
       const location = window.location.pathname
       if (location.startsWith('/profile')) {

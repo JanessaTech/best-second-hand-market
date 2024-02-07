@@ -150,19 +150,17 @@ export default function Favorites() {
   const [rowStates, setRowSates] = React.useState([])
 
   useEffect(() => {
+    if (wallet?.address) {
+      logger.debug('[Favorites] call restful api to get the new list of favorites by wallet address=', wallet?.address)
+      const latestFilter = getFilter()
+      logger.debug('[Favorites] trigger=', trigger)
+      logger.debug('[Favorites] latestFilter=', latestFilter)
+      logger.debug('[Favorites] page=', 1)
+      setRowSates(rows)
+    }
     logger.debug('[Favorites] call notifyShowMenu in useEffect')
     notifyShowMenu()
-  }, [])
-
-  useEffect(() => {
-    logger.debug('[Favorites] call restful api to get the new list of favorites by user id=', wallet?.user?.id)
-    const latestFilter = getFilter()
-    logger.debug('[Favorites] trigger=', trigger)
-    logger.debug('[Favorites] latestFilter=', latestFilter)
-    logger.debug('[Favorites] page=', 1)
-    setRowSates(rows)
-
-  }, [trigger])
+  }, [wallet, trigger])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

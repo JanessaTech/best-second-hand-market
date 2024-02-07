@@ -182,19 +182,17 @@ export default function MyNFTList() {
   const [rowStates, setRowSates] = React.useState([])
 
   useEffect(() => {
+    if (wallet?.address) {
+      logger.debug('[MyNFTList] call restful api to get the list of my nfts by wallet address=', wallet?.address)
+      const latestFilter = getFilter()
+      logger.debug('[MyNFTList] trigger=', trigger)
+      logger.debug('[MyNFTList] latestFilter=', latestFilter)
+      logger.debug('[MyNFTList] page=', 1)
+      setRowSates(rows)
+    }
     logger.debug('[MyNFTList] call notifyShowMenu in useEffect')
     notifyShowMenu()
-  }, [])
-
-  useEffect(() => {
-    logger.debug('[MyNFTList] call restful api to get the list of my nfts by user id=', wallet?.user?.id)
-    const latestFilter = getFilter()
-    logger.debug('[MyNFTList] trigger=', trigger)
-    logger.debug('[MyNFTList] latestFilter=', latestFilter)
-    logger.debug('[MyNFTList] page=', 1)
-    setRowSates(rows)
-
-  }, [trigger])
+  }, [wallet, trigger])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
