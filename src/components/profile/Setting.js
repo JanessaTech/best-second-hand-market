@@ -25,6 +25,7 @@ const VisuallyHiddenInput = styled('input')({
 const userData = {
   id: 111,
   name: 'Janessatech',
+  walletAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
   gateway: 'bbb',
   intro: 'This is me'
 }
@@ -34,14 +35,22 @@ export default function Setting() {
   const {wallet, notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(SettingSchema)})
   const gatewayOptions = ['aaa', 'bbb','ccc','ddd']
-  const [state, setState] = useState({gateway: 'aaa'}) // we must have a default value for gateway
+  const [state, setState] = useState({
+    name:'',
+    walletAddress: '',
+    gateway: 'aaa',
+    intro:''
+  }) // we must have a default value for gateway
 
   useEffect(() => {
     logger.debug('[Setting] call notifyHideMenu in useEffect')
-    logger.debug('[Setting] call restful api to get user by the wallet address=', wallet?.address)
-    setState({...userData, walletAddress: wallet?.address})
+    if (wallet?.address) {
+      logger.debug('[Setting] call restful api to get user by the wallet address=', wallet?.address)
+      setState({...userData})
+    }
+    reset()
     notifyHideMenu()
-  }, [])
+  }, [wallet])
 
   useEffect(() => {
     let alerts = []
