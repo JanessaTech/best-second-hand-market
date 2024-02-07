@@ -97,7 +97,12 @@ export default function Mint() {
   const handleChainChange = (value) => {
     logger.info('[Mint]handleChainChange. value=', value)
     logger.debug('[Mint] config=', config)
-    const env = config?.env
+    var env = config?.env
+    if (!env || ['local', 'testnet', 'mainnet'].indexOf(env) === -1) {
+      logger.error('[NetworkFilter] you do not set env varaible correctly. Use local by default')
+      env = 'local'
+    }
+
     logger.debug('[Mint] env=', env)
     const localData = config.contracts.filter((c) => c.chain === value)[0][env]  // set it as local temporaily
     logger.debug('localData:', localData)

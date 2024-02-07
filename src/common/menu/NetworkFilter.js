@@ -4,6 +4,7 @@ import { CheapIcon } from '../../utils/Svgs'
 import logger from '../Logger'
 import {NETWORKS} from '../constant'
 import {capitalize} from '../../utils/StringUtils'
+import config from '../../config/index'
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -65,6 +66,17 @@ const NetworkFilter = ({notify, refresh}) => {
       logger.info('[NetworkFilter] handleNetworkChange. store filter:', filter)
       const trigger = Math.random()
       notify(trigger)
+      test()
+    }
+
+    const test = () => {
+      var env = config?.env
+      if (!env || ['local', 'testnet', 'mainnet'].indexOf(env) === -1) {
+        logger.error('[NetworkFilter] you do not set env varaible correctly. Use local by default')
+        env = 'local'
+      }
+      const networks = config.chains[env]
+      logger.debug('[NetworkFilter] networks=',networks)
     }
 
   return (
