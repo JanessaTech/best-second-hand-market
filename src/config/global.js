@@ -61,11 +61,11 @@ const config = {
           ]
         }
       ],
-      chains: {
+      chains: { // to do: add validation for chains
         local: [
           {
           chainId: 31337,
-          chainName: 'localHardhat',
+          chainName: 'hardhat',
           currency: 'HardHatETH',
           rpcUrls:'http://127.0.0.1:8545/',
           contracts: [
@@ -77,7 +77,7 @@ const config = {
         testnet:[
           {
             chainId: 11155111,
-            chainName: 'Sepolia',
+            chainName: 'sepolia',
             currency: 'SepoliaETH',
             rpcUrls:'https://sepolia.infura.io/v3/',
             contracts:[
@@ -87,7 +87,7 @@ const config = {
           },
           {
             chainId: 80001,
-            chainName: 'Mumbai',
+            chainName: 'mumbai',
             currency: 'MATIC',
             rpcUrls:'https://rpc-mumbai.maticvigil.com',
             contracts:[
@@ -97,7 +97,7 @@ const config = {
           },
           {
             chainId: 43113,
-            chainName: 'Fuji',
+            chainName: 'fuji',
             currency: 'AVAX',
             rpcUrls:'https://api.avax-test.network/ext/bc/C/rpc',
             contracts:[
@@ -107,7 +107,7 @@ const config = {
           },
           {
             chainId: 10200,
-            chainName: 'Chiado',
+            chainName: 'chiado',
             currency: 'XDAI',
             rpcUrls:'https://rpc.chiadochain.net',
             contracts:[

@@ -2,9 +2,8 @@ import { Box, FormControl, InputAdornment, ListItemIcon, ListItemText, MenuItem,
 import React, { useEffect, useState } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../Logger'
-import {NETWORKS} from '../constant'
 import {capitalize} from '../../utils/StringUtils'
-import config from '../../config/index'
+import {networks, getChainName} from '../../utils/Chain'
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -28,56 +27,49 @@ function getStyles(networkName, network, theme) {
     };
   }
 
-function getNeworkFromLocalStorage() {
+function getNetworkFromLocalStorage() {
   let filter = localStorage.getItem('filter')
   if (filter) {
     filter = JSON.parse(filter)
-    if (!filter.network){
-      filter.network = NETWORKS[0]
+    if (!filter.chainId){
+      filter.chainId = networks()[0].chainId
     }
   } else {
-    filter = {network: NETWORKS[0]}
+    filter = {chainId: networks()[0].chainId}
   }
   localStorage.setItem('filter', JSON.stringify(filter))
 
-  return filter.network
+  logger.debug('[NetworkFilter] getNetworkFromLocalStorage. filter.chainId=', filter.chainId)
+  return filter.chainId
 }
 // codes below should be refactored into CustomSelect.js later on
 const NetworkFilter = ({notify, refresh}) => {
     logger.debug('[NetworkFilter] rendering...')
     const theme = useTheme()
-    const [network, setNetwork] = useState(getNeworkFromLocalStorage())
+    const [network, setNetwork] = useState(getNetworkFromLocalStorage())
     
     useEffect(() => {
       logger.debug('[NetworkFilter] filter is refreshed')
-      setNetwork(getNeworkFromLocalStorage())
+      setNetwork(getNetworkFromLocalStorage())
     },[refresh])
 
     const handleNetworkChange = (e) => {
-      setNetwork(e.target.value.toLowerCase())
+      logger.debug('[NetworkFilter] handleNetworkChange. e?.target?.value=', e?.target?.value)
+      setNetwork(e.target.value)
       let filter = localStorage.getItem('filter')
       if (filter) {
         filter = JSON.parse(filter)
-        filter.network = e.target.value
+        filter.chainId = e.target.value
       } else {
-        filter = {network: e.target.value}
+        filter = {chainId: e.target.value}
       }
       localStorage.setItem('filter', JSON.stringify(filter))
       logger.info('[NetworkFilter] handleNetworkChange. store filter:', filter)
       const trigger = Math.random()
       notify(trigger)
-      test()
     }
 
-    const test = () => {
-      var env = config?.env
-      if (!env || ['local', 'testnet', 'mainnet'].indexOf(env) === -1) {
-        logger.error('[NetworkFilter] you do not set env varaible correctly. Use local by default')
-        env = 'local'
-      }
-      const networks = config.chains[env]
-      logger.debug('[NetworkFilter] networks=',networks)
-    }
+    console.log('[NetworkFilter] chainId = ', network)
 
   return (
     <Box sx={{mt:2, mb:3}}>
@@ -86,29 +78,28 @@ const NetworkFilter = ({notify, refresh}) => {
             label="network-type-option"
             value={network}
             onChange={handleNetworkChange}
-            renderValue={(p) => capitalize(p)}
+            renderValue={(p) => (capitalize(getChainName(p)))}
             input={
             <OutlinedInput 
                 size="small" 
                 startAdornment={
                 <InputAdornment position="start">
-                    <CheapIcon name={network.toLowerCase()}/>
+                    <CheapIcon name={getChainName(network)}/>
                 </InputAdornment>
                 }
                 />}
             MenuProps={MenuProps}
             >
             {
-                    NETWORKS.map((networkName) => (
+                    networks().map((network) => (
                         <MenuItem
-                            key={networkName}
-                            value={networkName}
-                            style={getStyles(networkName, network.toLowerCase(), theme)}
+                            key={network.chainId}
+                            value={network.chainId}
                         >
                             <ListItemIcon>
-                                <CheapIcon name={networkName}/>
+                                <CheapIcon name={network.chainName}/>
                             </ListItemIcon>
-                            <ListItemText>{capitalize(networkName)}</ListItemText>
+                            <ListItemText>{capitalize(network.chainName)}</ListItemText>
                         </MenuItem>
                     ))
                 }    

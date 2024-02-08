@@ -27,6 +27,11 @@ const svgMapping = new Map([
   ['avalanche', '/imgs/networks/avalanche.svg'],
   ['polygon', '/imgs/networks/polygon.svg'],
   ['gnosis', '/imgs/networks/gnosis.svg'],
+  ['hardhat', '/imgs/networks/hardhat.svg'],
+  ['sepolia', '/imgs/networks/sepolia.svg'],
+  ['mumbai', '/imgs/networks/mumbai.svg'],
+  ['fuji', '/imgs/networks/fuji.svg'],
+  ['chiado', '/imgs/networks/chiado.svg'],
 
   // for nft detail page
   ['view', '/imgs/nft-detail/view.svg'],

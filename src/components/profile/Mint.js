@@ -120,8 +120,6 @@ export default function Mint() {
     setState({...state, address: value, standard: state.standardOptions[index]})
   }
 
-  //logger.debug('state: ', state)
-
   return (
     <Box component="main" sx={{width:1}}>
       <Box sx={{width:1, height: HeaderHeight}}></Box>

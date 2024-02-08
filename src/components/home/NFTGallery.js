@@ -117,7 +117,9 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, 
     window.scrollTo(0, 0)
     localStorage.removeItem('filter')
   }, [pagination])
+
   logger.debug('nfts', nfts)
+  
   return (
     <Box component="main" sx={{width:1}}>
         <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
