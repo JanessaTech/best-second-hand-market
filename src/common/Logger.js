@@ -5,9 +5,10 @@ function getLogger() {
     const env = process.env.REACT_APP_ENV
     if (env === 'prod') {
         //logger.setLevel('error')
-        logger.setLevel('info')
+        logger.setLevel('trace')
     } else if (env === 'stage') {
-        logger.setLevel('info')
+        logger.setLevel('trace')
+        //logger.setLevel('info')
     } else {
         logger.setLevel('trace')
     }

@@ -2,27 +2,28 @@ import React, { memo, useEffect, useState } from 'react'
 import { Box, Grid, useMediaQuery} from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight} from '../../common/constant'
-import BuyOrCart from './BuyOrCart';
-import NFTDetails from './NFTDetails';
+import BuyOrCart from './BuyOrCart'
+import NFTDetails from './NFTDetails'
 import Comments from './comments/Comments'
-import logger from '../../common/Logger';
-import { useSearchParams } from 'react-router-dom';
+import logger from '../../common/Logger'
+import { useSearchParams } from 'react-router-dom'
+import {getChainName, getStandard} from '../../utils/Chain'
 
 const nftData = {
     title: 'A baby monkey',
     price: 12,
-    cid: 'bafybeifvpojdj4ar5wiawksem3lifksiituu4jdwsr53uopuy7dmish6va',  // get by contract
+    ipfs: `ipfs://bafkreiftnbrvpu3apwgolxqlpmfea4rwqqxru6ddlcbd2msgbmsrwjcqzi`,  // returned by backned, get by chainId&address&tokenId
     chainId:1,
-    chain: 'ethereum',  // get by chainId
+    chain: getChainName(1),  // get by chainId, not need returned by backend
     address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0',
     tokenId: 551,  
-    tokenStandard: '721', // get by address
+    tokenStandard: getStandard(1, '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'), // get by chainId &address,not needed returned by backend
     category: 'Pets',
     available: true,
     likes: 100,
     views: 2000,
-    seller: 111,
-    img: 'mk.png',  // get by cid and gateway
+    seller: 111,  // user id, returned by backned, get by chainId&address&tokenId
+    img: 'mk.png',  // get by cid and gateway, return full url by backend
     createdTime: 'Jan 02, 2024',
     description: 'NFTs can really be anything digital (such as drawings, music, your brain downloaded and turned into an AI), but a lot of the current excitement'
 }

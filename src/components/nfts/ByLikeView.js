@@ -27,7 +27,7 @@ const ByLikeView = ({wallet, nft}) => {
 
     useEffect(() => {
         if (nft?.seller) {
-            logger.debug('[ByLikeView] call restful api to get Overview of seller by seller address =', nft?.seller)
+            logger.debug('[ByLikeView] call restful api to get Overview of seller by seller user id =', nft?.seller)
             setSeller(sellerData)
         }
     }, [nft?.seller])

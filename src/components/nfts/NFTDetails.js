@@ -33,7 +33,7 @@ const NFTDetails = ({nft}) => {
         <Divider/>
         <Space/>
         <Typography>Details:</Typography>
-          <DetailRow key='CID' name='CID' value={nft?.cid}/>
+          <DetailRow key='IPFS URL' name='IPFS URL' value={nft?.ipfs}/>
           <DetailRow key='Chain' name='Chain' value={capitalize(nft?.chain)}/>
           <DetailRow key='Contract address' name='Contract address' value={nft?.address}/>
           <DetailRow key='Token ID' name='Token ID' value={nft?.tokenId}/>

@@ -6,11 +6,13 @@ import FilterBar from './FilterBar'
 import Overview from './Overview'
 import OverviewSkeleton from './OverviewSkeleton'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import config from '../../config'
 import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 
-function createData(id, img, title, seller, network, price, incart) {
+function createData(id, img, title, seller, network, price, incart) { 
+  // 1. incart is always fasle when no one is logined
+  // 2. we need return chainId which is used to get chainName(network here)
+  // 3. There should be a wallet in backend to get the owner of nft. owner is seller
   return {id, img, title, seller, network, price, incart}
 }
 
