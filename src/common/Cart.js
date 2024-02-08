@@ -4,17 +4,18 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { CheapIcon } from '../utils/Svgs'
 import {CartWidth, HeaderHeight} from './constant'
 import { UnavailableHelpTip } from './TipHelpers'
-import {NETWORKS} from '../common/constant'
 import logger from './Logger'
 import {capitalize} from '../utils/StringUtils'
+import {networks} from '../utils/Chain'
 
 const data = [
   {
     id: 1,
     title: 'The most fasionable shoes',
-    img: 'shoes.jpeg',
+    img: 'shoes.jpeg',  // full url returned by backend
+    seller: 111, // better to return it if the use in future
     sellerName: 'Fashion lab',
-    network: 'ethereum',
+    chainId: 1,
     available: true,
     price: 12.69
   },
@@ -22,8 +23,9 @@ const data = [
     id: 2,
     title: 'The most fasionable Phone',
     img: 'phone.webp',
+    seller: 111,
     sellerName: 'Phone lab',
-    network: 'ethereum',
+    chainId: 1,
     available: true,
     price: 123.6
   },
@@ -31,8 +33,9 @@ const data = [
     id: 3,
     title: 'A baby monkey',
     img: 'mk.png',
+    seller: 111,
     sellerName: 'JanessaTech lab',
-    network: 'ethereum',
+    chainId: 1,
     available: false,
     price: 100.3
   },
@@ -40,8 +43,9 @@ const data = [
     id: 4,
     title: 'test1 for polygon',
     img: 'mk.png',
+    seller: 111,
     sellerName: 'Hsddds',
-    network: 'polygon',
+    chainId: 137,
     available: true,
     price: 20.5
   },
@@ -49,8 +53,9 @@ const data = [
     id: 5,
     title: 'test2 for polygon',
     img: 'mk.png',
+    seller: 111,
     sellerName: 'Jniffer',
-    network: 'polygon',
+    chainId: 137,
     available: true,
     price: 201.1
   },
@@ -58,8 +63,9 @@ const data = [
     id: 6,
     title: 'test1 for avalanche',
     img: 'mk.png',
+    seller: 111,
     sellerName: 'aks',
-    network: 'avalanche',
+    chainId: 43114,
     available: true,
     price: 50.4
   },
@@ -67,8 +73,9 @@ const data = [
     id: 7,
     title: 'test2 for avalanche',
     img: 'mk.png',
+    seller: 111,
     sellerName: 'laniddd',
-    network: 'avalanche',
+    chainId: 43114,
     available: true,
     price: 11.5
   }, 
@@ -76,8 +83,9 @@ const data = [
     id: 8,
     title: 'test1 for solana',
     img: 'mk.png',
+    seller: 111,
     sellerName: 'fffff',
-    network: 'solana',
+    chainId: 100,
     available: true,
     price: 52.4
   },
@@ -85,8 +93,9 @@ const data = [
     id: 9,
     title: 'test2 for solana',
     img: 'mk.png',
+    seller: 111,
     sellerName: 'xxxxxx',
-    network: 'solana',
+    chainId: 100,
     available: true,
     price: 22.4}, 
 ]
@@ -170,25 +179,25 @@ const CartTab = (props) => {
                   scrollButtons="auto"
                   >
                 {
-                  NETWORKS.map((network) => (
-                    <Tab key={network} sx={{textTransform:'none', 
+                  networks().map((network) => (
+                    <Tab key={network.chainId} sx={{textTransform:'none', 
                           '&.MuiButtonBase-root.MuiTab-root':{minHeight:50},
                           '&.MuiButtonBase-root.MuiTab-root span':{mr:1}
-                        }} icon={<CheapIcon name={network} size={20}/>} iconPosition="start" label={capitalize(network)}/>
+                        }} icon={<CheapIcon name={network.chainName} size={20}/>} iconPosition="start" label={capitalize(network.chainName)}/>
                   ))
                 }
     </Tabs>
   )
 }
 
-const getFilteredNfts = (nfts, network) => {
-  return nfts.filter((nft) => nft.network === network)
+const getFilteredNfts = (nfts, chainId) => {
+  return nfts.filter((nft) => nft.chainId === chainId)
 }
 
 const Cart = ({wallet, toggleCart, open}) => {
   logger.debug('[Cart] rendering...')
   const [nfts, setNfts] = useState([])
-  const [network, setNetwork] = useState(NETWORKS[0])
+  const [chainId, setChainId] = useState(networks()[0].chainId)
   
   useEffect(() => {
     if (wallet?.user.id && open) {
@@ -203,7 +212,7 @@ const Cart = ({wallet, toggleCart, open}) => {
 
   const clearCart = () => {
     logger.info('[Cart] call restful apis to clear cart by wallet\'s user id', wallet?.user?.id)
-    setNfts(nfts.filter((nft) => nft.network !== network))
+    setNfts(nfts.filter((nft) => nft.chainId !== chainId))
   }
 
   const deleteFromCart = (id) => {
@@ -212,15 +221,18 @@ const Cart = ({wallet, toggleCart, open}) => {
     setNfts(newNfts)
   }
 
-  const getNetworkName = (tab) =>{
-    if (tab >= NETWORKS.length) return NETWORKS[0]
-    return NETWORKS[tab]
+  const getChainId = (tab) => {
+    const chains = networks()
+    if (tab >= chains.length) return chains[0].chainId
+    return chains[tab].chainId
   }
 
   const handleTabChanges = (tab) => {
-    const network = getNetworkName(tab)
-    setNetwork(network)
+    const chainId = getChainId(tab)
+    setChainId(chainId)
   }
+
+  logger.debug('[Cart] chainId=', chainId)
 
   return (
     <Drawer
@@ -247,12 +259,12 @@ const Cart = ({wallet, toggleCart, open}) => {
             <CartTab handleTabChanges={handleTabChanges}/>
 
             <Box sx={{display: 'flex', justifyContent:'space-between', my:2}}>
-                <Typography>{getFilteredNfts(nfts, network).length} items</Typography>
+                <Typography>{getFilteredNfts(nfts, chainId).length} items</Typography>
                 <Box sx={{cursor:'pointer', '&:hover':{color:'black'}}} onClick={clearCart}>
                       <Typography>Clear all</Typography>
                 </Box>
             </Box>
-            {getFilteredNfts(nfts, network).map((nft) =>
+            {getFilteredNfts(nfts, chainId).map((nft) =>
             (
               <Box key={nft.id}>
                   <CartItem {...nft} deleteFromCart={deleteFromCart}/>
@@ -262,9 +274,9 @@ const Cart = ({wallet, toggleCart, open}) => {
             
             <Box sx={{display:'flex', justifyContent:'space-between', mt:3}}>
               <Typography variant='h6'>Total price</Typography>
-              <Typography variant='h6'>{calcPrice(getFilteredNfts(nfts, network))} CH</Typography>
+              <Typography variant='h6'>{calcPrice(getFilteredNfts(nfts, chainId))} CH</Typography>
             </Box>
-            <Button color='customBlack' variant='contained' disabled={getFilteredNfts(nfts, network).filter((nft) => nft.available).length === 0}
+            <Button color='customBlack' variant='contained' disabled={getFilteredNfts(nfts, chainId).filter((nft) => nft.available).length === 0}
                 sx={{textTransform:'none', borderRadius:'50vh', my:3, width:1}}>
                 <Typography variant='h6'>Buy now</Typography>
             </Button>

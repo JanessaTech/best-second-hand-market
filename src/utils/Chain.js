@@ -8,7 +8,6 @@ export function networks() {
       env = 'local'
     }
     const nets = config.chains[env]
-    logger.debug('[Utils - Chain] networks=',nets)
     return nets
 }
 

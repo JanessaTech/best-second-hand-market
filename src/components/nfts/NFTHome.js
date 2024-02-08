@@ -23,7 +23,7 @@ const nftData = {
     likes: 100,
     views: 2000,
     seller: 111,  // user id, returned by backned, get by chainId&address&tokenId
-    img: 'mk.png',  // get by cid and gateway, return full url by backend
+    img: 'mk.png',  // get by ipfs and gateway, return full url by backend
     createdTime: 'Jan 02, 2024',
     description: 'NFTs can really be anything digital (such as drawings, music, your brain downloaded and turned into an AI), but a lot of the current excitement'
 }
