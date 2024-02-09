@@ -13,6 +13,7 @@ import FilterMenu from '../common/menu/FilterMenu'
 import logger from '../common/Logger'
 import DisconnectWallet from './wallet/DisconnectWallet'
 import {GetCurrentWallet} from '../utils/Wallet'
+import { BrowserProvider } from 'ethers'
 
 const GlobalVariables = React.createContext({})
 export {GlobalVariables}
@@ -39,11 +40,13 @@ const MainLayout = (props) => {
     const [signupOpen, setSignupOpen] = useState(false)
     const [alerts, setAlerts] = useState([])
     const [wallet, setWallet] = useState(undefined)
+    const [walletProvider, setWalletProvider] = useState(undefined)
     const [menu, setMenu] = useState({
         open: isMediumScreen ? false : true,
         width: isMediumScreen ? 0 : DrawerWidth
     })
     const [showMenu, setShowMenu] = useState(isShowMenu(location))
+    const [eventsBus, setEventsBus] = useState({})
 
     // we need to refactor the way how to communicatte between components
     const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
@@ -157,9 +160,17 @@ const MainLayout = (props) => {
     const openSignup = useCallback(() => {
         setSignupOpen(true)
     }, [])
+    
+    const notifyNetworkCheck = async () => {
+        logger.debug('[MainLayout] notifyNetworkCheck', eventsBus)
+        if (eventsBus.child) {
+            eventsBus.child()
+        }
+    }
 
     logger.debug('[MainLayout] location: ', location)
     logger.debug('[MainLayout] wallet:', wallet)
+
     return (
         <Container maxWidth='false'>
             <Header 
@@ -181,7 +192,8 @@ const MainLayout = (props) => {
                     notifyAlertUpdate: notifyAlertUpdate,
                     notifyWalletOpen: notifyWalletOpen,
                     notifyShowMenu: notifyShowMenu,
-                    notifyHideMenu: notifyHideMenu
+                    notifyHideMenu: notifyHideMenu,
+                    notifyNetworkCheck: notifyNetworkCheck
                     }}>
                 <Box sx={{display: 'flex'}}>
                     {
@@ -209,9 +221,11 @@ const MainLayout = (props) => {
                 wallet={wallet}
                 walletTrigger={walletTrigger}
                 openSignup={openSignup} 
+                setWalletProvider={setWalletProvider}
                 notifyAlertUpdate={notifyAlertUpdate}
                 notifyWalletUpdate={notifyWalletUpdate}
                 notifyWalletAddressChange={notifyWalletAddressChange}
+                eventsBus={eventsBus}
             />  
             <DisconnectWallet 
                 onClose={onCloseWalletChange}

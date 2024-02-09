@@ -1,23 +1,32 @@
 
 import { Box, Dialog, Grid, IconButton, Tooltip, Typography, useMediaQuery } from '@mui/material'
-import React, { memo, useEffect } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 import WalletItem from './WalletItem'
 import MetaMaskWallet from './MetaMaskWallet'
 import {ethers} from 'ethers'
+import {GetCurrentWalletProvider} from '../../utils/Wallet'
 
-const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange}) => {
+const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, eventsBus}) => {
     logger.debug('[ConnectWallet] rendering ')
     logger.debug('[ConnectWallet] wallet=',wallet)
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+    const [walletProvider, setWalletProvider] = useState(undefined)
 
     useEffect(() => {
         if (window.ethereum) {
             logger.debug('[ConnectWallet] add handleWalletAddressChanged to monitor the change of wallet address')
             window.ethereum.on('accountsChanged', handleWalletAddressChanged)
+        }
+        if (wallet) {
+            const provider = GetCurrentWalletProvider()
+            if (provider) {
+                logger.debug('[ConnectWallet] useEffect. setWalletProvider in case signup or refresh page')
+                setWalletProvider(provider)
+            }
         }
         return () => {
             if(window.ethereum) { 
@@ -26,11 +35,18 @@ const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notify
             }
         }
     }, [wallet])
+    
+    useEffect(() => {
+        if (walletProvider) {
+            logger.debug('[ConnectWallet] add someChildFunction to eventsBus')
+            eventsBus.child = someChildFunction
+        }
+    }, [walletProvider])
 
     const handleWalletAddressChanged = (accounts) => { 
-        logger.debug('[MetaMaskWallet] handleWalletAddressChanged. wallet=', wallet)
+        logger.debug('[ConnectWallet] handleWalletAddressChanged. wallet=', wallet)
         const normalizedAccounts = accounts.map((a) => ethers.getAddress(a))
-        logger.debug('[MetaMaskWallet] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
+        logger.debug('[ConnectWallet] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
         if (wallet) { //
             notifyWalletAddressChange()
         }
@@ -40,6 +56,18 @@ const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notify
         onClose()
     }
 
+    const someChildFunction = async () => {
+        if (walletProvider) {
+            try {
+                const chainId = await walletProvider.send('eth_chainId')
+                logger.debug('current chainId is =', parseInt(chainId.substring(2), 16))
+            } catch(e) {
+                logger.debug('[ConnectWallet] failed to send eth_chainId due to', e)
+            }
+        }
+    }
+
+    
   return (
     <Dialog
         sx={{'& .MuiPaper-root.MuiDialog-paper':{width:isSmallScreen ? 0.9: 0.5, height: 'fit-content', borderRadius:5}}} 
@@ -63,7 +91,7 @@ const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notify
                         openSignup={openSignup} 
                         notifyAlertUpdate={notifyAlertUpdate} 
                         notifyWalletUpdate={notifyWalletUpdate}
-                        notifyWalletAddressChange={notifyWalletAddressChange}
+                        setWalletProvider={setWalletProvider}
                         />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>

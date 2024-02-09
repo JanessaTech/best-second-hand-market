@@ -1,6 +1,6 @@
 
 import logger from "../common/Logger"
-import {ethers} from 'ethers'
+import {ethers, BrowserProvider} from 'ethers'
 
 const getMetaMaskWallet = async () => {
     if (window?.ethereum) {
@@ -52,4 +52,19 @@ const GetCurrentWallet = async () => {
     }
 }
 
-export {GetCurrentWallet}
+const GetCurrentWalletProvider = () => {
+    const login = localStorage.getItem('login') ? JSON.parse(localStorage.getItem('login')) : undefined
+    const walletType = login?.walletType
+    const user = login?.user
+    console.log('[Utils - wallet] GetCurrentWalletProvider  walletType=', walletType)
+    if (walletType && user) {
+        switch(walletType) {
+            case 'metamask':
+                return new BrowserProvider(window.ethereum)
+            default:
+                return undefined
+        }
+    }
+}
+
+export {GetCurrentWallet, GetCurrentWalletProvider}

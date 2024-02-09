@@ -6,7 +6,8 @@ import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
 
-const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen}) => {
+
+const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheck}) => {
   logger.debug('[BuyOrCart] rendering...')
   const [searchParams, setSearchParams] = useSearchParams()
   const id = searchParams.get('id')
@@ -22,10 +23,15 @@ const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen}) => {
     }
   }
 
-  const handleBuy = (e) => {
-    e.preventDefault()
-    logger.debug('[BuyOrCart] call wallet to by the nft by address and token id')
-    logger.debug('[BuyOrCart] once the buying is done successffuly, we should call restful to log an order as the history')
+  const handleBuy = async () => {
+    if (wallet) {
+      logger.debug('[BuyOrCart] call wallet to by the nft by address and token id')
+      logger.debug('[BuyOrCart] once the buying is done successffuly, we should call restful to log an order as the history')
+      notifyNetworkCheck()
+    } else {
+      notifyWalletOpen()
+    }
+    
   }
 
   return (

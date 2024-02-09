@@ -72,7 +72,7 @@ const getNonce = async () => {
     }
   }
 
-export default function MetaMaskWallet({onClose, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange}) {
+export default function MetaMaskWallet({onClose, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate,setWalletProvider}) {
     logger.debug('[MetaMaskWallet] rendering ...')
     const [provider, setProvider] = useState(undefined)
     const [isWalletLogin, setIsWalletLogin] = useState(false)
@@ -90,6 +90,8 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
                 } else {
                     setSignIn(true)
                     setAddress(addr)
+                    logger.debug('[MetaMaskWallet]  setWalletProvider')
+                    setWalletProvider(provider)
                 } 
             })
             .catch((e) => {
@@ -113,7 +115,7 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
                 openSignup()
             } else {
                 // get user info by login using wallet address
-                logger.debug('[MetaMaskWallet] call restful api to login with logined user by address=', address)
+                logger.debug('[MetaMaskWallet] call restful api to login with logined user returned by address=', address)
                 const loginedUser = {id: 111, name: 'JanessaTech lab'}
                 const newWallet = {address: address, user: loginedUser}
                 const login = {'walletType' : 'metamask', user: loginedUser, address: address}
@@ -122,8 +124,6 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
             }
         }
     }, [provider, isWalletLogin, signIn])
-
-    
 
     useEffect(() => {
         logger.debug('[MetaMaskWallet] reset MetaMaskwallet in useEffect')
