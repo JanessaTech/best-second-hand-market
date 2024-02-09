@@ -50,7 +50,6 @@ const MainLayout = (props) => {
     // we need to refactor the way how to communicatte between components
     const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
     const [refresh, setRefresh] = useState(0)  // to notify to reset/refresh menu
-    const [walletTrigger, setWalletTrigger] = useState(0)  // to notify to disconnect wallet
 
     useEffect(() => {
         if(!isMediumScreen) {
@@ -96,9 +95,18 @@ const MainLayout = (props) => {
         setTrigger(newTrigger)
     },[])
 
-    const notifyFilterRefresh = useCallback(() => {
-        setRefresh(Math.random())
-    }, [])
+    const notifyFilterMenuReset = () => {
+        logger.debug('[MainLayout] notifyFilterMenuReset', eventsBus)
+        if (eventsBus?.handleNetworkFilterReset){
+            eventsBus.handleNetworkFilterReset()
+        }
+        if (eventsBus?.handleCategoryFilterReset){
+            eventsBus.handleCategoryFilterReset()
+        }
+        if (eventsBus?.handlePriceFilterReset) {
+            eventsBus.handlePriceFilterReset()
+        }
+    }
 
     const notifyShowMenu = useCallback(() => {
         setShowMenu(true)
@@ -172,7 +180,7 @@ const MainLayout = (props) => {
                  openCart={openCart} 
                  wallet={wallet}
                  notifyWalletOpen={notifyWalletOpen}
-                 notifyFilterRefresh={notifyFilterRefresh}
+                 notifyFilterMenuReset={notifyFilterMenuReset}
                  notifyWalletUpdate={notifyWalletUpdate}
                 />
              <GlobalVariables.Provider 
@@ -195,8 +203,8 @@ const MainLayout = (props) => {
                         <FilterMenu 
                             width={menu.width} 
                             menuOpen={menu.open} 
-                            closeMenu={closeMenu} 
-                            refresh={refresh}
+                            closeMenu={closeMenu}
+                            eventsBus={eventsBus}
                             notifyFilterUpdate={notifyFilterUpdate} 
                             notifyAlertUpdate={notifyAlertUpdate}/>
                     }

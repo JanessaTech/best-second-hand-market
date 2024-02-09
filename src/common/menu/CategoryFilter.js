@@ -15,15 +15,20 @@ function getCategoriesFromLocalStorage() {
     return []
   }
 
-const CategoryFilter = ({notify, refresh}) => {
+const CategoryFilter = ({notify, eventsBus}) => {
     logger.debug('[CategoryFilter] rendering...')
     const [checked, setChecked] = useState(getCategoriesFromLocalStorage())
     const [expand, setExpand] = useState(true)
-
+    
     useEffect(() => {
-        logger.debug('[CategoryFilter] filter is refreshed')
+        logger.debug('[CategoryFilter] add handleCategoryFilterReset to eventsBus')
+        eventsBus.handleCategoryFilterReset = handleCategoryFilterReset
+    }, [])
+
+    const handleCategoryFilterReset = () => {
+        logger.debug('[CategoryFilter] handleCategoryFilterReset')
         setChecked(getCategoriesFromLocalStorage())
-      },[refresh])
+    }
 
     const handleCategoryChanges = (value) => () => {
         const index = checked.indexOf(value)

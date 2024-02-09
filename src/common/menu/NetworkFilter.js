@@ -32,7 +32,7 @@ function getNetworkFromLocalStorage() {
   if (filter) {
     filter = JSON.parse(filter)
     if (!filter.chainId){
-      filter.chainId = networks()[0].chainId
+      filter.chainId = networks()[0].chainId  // choose the chainId of the first network by default
     }
   } else {
     filter = {chainId: networks()[0].chainId}
@@ -42,16 +42,21 @@ function getNetworkFromLocalStorage() {
   logger.debug('[NetworkFilter] getNetworkFromLocalStorage. filter.chainId=', filter.chainId)
   return filter.chainId
 }
-// codes below should be refactored into CustomSelect.js later on
-const NetworkFilter = ({notify, refresh}) => {
+// to do: codes below should be refactored into CustomSelect.js
+const NetworkFilter = ({notify, eventsBus}) => {
     logger.debug('[NetworkFilter] rendering...')
     const theme = useTheme()
     const [network, setNetwork] = useState(getNetworkFromLocalStorage())
-    
+
     useEffect(() => {
-      logger.debug('[NetworkFilter] filter is refreshed')
+      logger.debug('[NetworkFilter] add handleNetworkFilterReset to eventsBus')
+      eventsBus.handleNetworkFilterReset = handleNetworkFilterReset
+    }, [])
+
+    const handleNetworkFilterReset = () => {
+      logger.debug('[NetworkFilter] handleNetworkFilterReset')
       setNetwork(getNetworkFromLocalStorage())
-    },[refresh])
+    }
 
     const handleNetworkChange = (e) => {
       logger.debug('[NetworkFilter] handleNetworkChange. e?.target?.value=', e?.target?.value)
