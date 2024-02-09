@@ -45,9 +45,7 @@ const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, no
 
     const handleWalletAddressChanged = (accounts) => { 
         logger.debug('[ConnectWallet] handleWalletAddressChanged. wallet=', wallet)
-        const normalizedAccounts = accounts.map((a) => ethers.getAddress(a))
-        logger.debug('[ConnectWallet] handleWalletAddressChanged normalizedAccounts', normalizedAccounts)
-        if (wallet) { //
+        if (wallet) { 
             notifyWalletAddressChange()
         }
     }

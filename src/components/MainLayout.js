@@ -46,11 +46,7 @@ const MainLayout = (props) => {
     })
     const [showMenu, setShowMenu] = useState(isShowMenu(location))
     const [eventsBus, setEventsBus] = useState({})
-
-    // we need to refactor the way how to communicatte between components
-    const [trigger, setTrigger] = useState(0) // to notify the changes of filter options
-    const [refresh, setRefresh] = useState(0)  // to notify to reset/refresh menu
-
+   
     useEffect(() => {
         if(!isMediumScreen) {
             setMenu({open: true, width: DrawerWidth})
@@ -71,15 +67,19 @@ const MainLayout = (props) => {
         })()
     }, [])
 
-    const notifyWalletAddressChange = useCallback(() => {  // we don't allow wallet addres to be updated once it is updated by notifyWalletUpdate
+    // for wallet address changes
+    const notifyWalletAddressChange = useCallback(() => {  // once user is connected to a wallet, chaning wallet address will lead to user to be forced to logout
         setWalletAddressChange(true)
+    }, [])
+
+    const onCloseWalletChange = useCallback(() => {
+        setWalletAddressChange(false)
     }, [])
 
     const notifyWalletUpdate = useCallback((newWallet) => { // for the first time we update wallet address
         setWallet(newWallet)
     }, [])
 
-    
     // for alerts
     const notifyAlertUpdate = useCallback((_alerts) => {
         logger.info('[MainLayout] notifyAlertUpdate, alerts=', _alerts)
@@ -91,9 +91,12 @@ const MainLayout = (props) => {
         setAlerts(newAlerts)
     }, [])
 
-    const notifyFilterUpdate = useCallback((newTrigger) => {
-        setTrigger(newTrigger)
-    },[])
+    const notifyFilterUpdate = () => {
+        logger.debug('[MainLayout] notifyFilterUpdate', eventsBus)
+        if (eventsBus?.handleFilterUpdate) {
+            eventsBus.handleFilterUpdate()
+        }
+    }
 
     const notifyFilterMenuReset = () => {
         logger.debug('[MainLayout] notifyFilterMenuReset', eventsBus)
@@ -105,6 +108,13 @@ const MainLayout = (props) => {
         }
         if (eventsBus?.handlePriceFilterReset) {
             eventsBus.handlePriceFilterReset()
+        }
+    }
+
+    const notifyNetworkCheck = async (chainId) => {
+        logger.debug('[MainLayout] notifyNetworkCheck', eventsBus)
+        if (eventsBus.networkCheck) {
+            eventsBus.networkCheck(chainId)
         }
     }
 
@@ -150,11 +160,6 @@ const MainLayout = (props) => {
         setWalletOpen(true)
     }, [])
 
-    // for wallet address changes
-    const onCloseWalletChange = useCallback(() => {
-        setWalletAddressChange(false)
-    }, [])
-
     // for signup
     const onCloseSignUp = useCallback(() => {
         setSignupOpen(false)
@@ -164,13 +169,6 @@ const MainLayout = (props) => {
         setSignupOpen(true)
     }, [])
     
-    const notifyNetworkCheck = async (chainId) => {
-        logger.debug('[MainLayout] notifyNetworkCheck', eventsBus)
-        if (eventsBus.networkCheck) {
-            eventsBus.networkCheck(chainId)
-        }
-    }
-
     logger.debug('[MainLayout] location: ', location)
     logger.debug('[MainLayout] wallet:', wallet)
 
@@ -186,8 +184,8 @@ const MainLayout = (props) => {
              <GlobalVariables.Provider 
                 value={{
                     wallet: wallet,
-                    menuOpen: menu.open, 
-                    trigger: trigger,
+                    menuOpen: menu.open,
+                    eventsBus: eventsBus,
                     toggleMenu: toggleMenu,
                     openCart: openCart,
                     notifyFilterUpdate: notifyFilterUpdate,

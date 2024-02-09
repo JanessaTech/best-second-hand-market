@@ -33,7 +33,7 @@ function getFilter() {
   return {}
 }
 
-const NFTGallery = ({wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheck}) => {
+const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheck}) => {
   logger.debug('[NFTGallery] rendering ...')
 
   const theme = useTheme()
@@ -52,10 +52,23 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, 
   const [total, setTotal] = useState(0)
   
   useEffect(() => {
+    fetchData()
+  }, [searchParams])
+
+  useEffect(() => {
+    logger.debug('[NFTGallery] add handleFilterUpdate to eventsBus')
+    eventsBus.handleFilterUpdate = handleFilterUpdate
+  }, [])
+
+  const handleFilterUpdate = () => {
+    logger.debug('[NFTGallery] handleFilterUpdate')
+    fetchData()
+  }
+
+  const fetchData = () => {
     const latestFilter = getFilter()
     const search = searchParams.get('search')
-    logger.debug('[NFTGallery] call restful api to get the new list of nfts by trigger, latestFilter or search')
-    logger.debug('[NFTGallery] trigger=', trigger)
+    logger.debug('[NFTGallery] call restful api to get the new list of nfts by latestFilter or search')
     logger.debug('[NFTGallery] search=', search)
     logger.debug('[NFTGallery] latestFilter=', latestFilter)
     logger.debug('[NFTGallery] page=', 1)
@@ -69,9 +82,8 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, 
     setTotal(total)
     setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: 1})
     window.scrollTo(0, 0)
-  }, [trigger, searchParams])
+  }
 
-  
   const fetchMoreData  = () => {
     logger.debug('[NFTGallery] fetchMoreData in page=', pagination.page)
     const moreNfts = bufferedNfts.slice(nfts.length, nfts.length + BatchSizeInGallery)

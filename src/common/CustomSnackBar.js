@@ -9,7 +9,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-// we need to refator this function to make it more readable
+// to do: we need to refator this function to make it more readable
 export default function CustomSnackBar(props) {
     logger.debug('[CustomSnackBar] rendering...')
     const theme = useTheme()
