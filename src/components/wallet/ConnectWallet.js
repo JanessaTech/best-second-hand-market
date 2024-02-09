@@ -9,7 +9,7 @@ import MetaMaskWallet from './MetaMaskWallet'
 import {ethers} from 'ethers'
 import {GetCurrentWalletProvider} from '../../utils/Wallet'
 
-const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, eventsBus}) => {
+const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, eventsBus}) => {
     logger.debug('[ConnectWallet] rendering ')
     logger.debug('[ConnectWallet] wallet=',wallet)
     const theme = useTheme()
@@ -38,8 +38,8 @@ const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notify
     
     useEffect(() => {
         if (walletProvider) {
-            logger.debug('[ConnectWallet] add someChildFunction to eventsBus')
-            eventsBus.child = someChildFunction
+            logger.debug('[ConnectWallet] add networkCheck to eventsBus')
+            eventsBus.networkCheck = networkCheck
         }
     }, [walletProvider])
 
@@ -56,11 +56,11 @@ const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notify
         onClose()
     }
 
-    const someChildFunction = async () => {
+    const networkCheck = async (chainId) => {
         if (walletProvider) {
             try {
-                const chainId = await walletProvider.send('eth_chainId')
-                logger.debug('current chainId is =', parseInt(chainId.substring(2), 16))
+                const _chainId = await walletProvider.send('eth_chainId')
+                logger.debug('The chainId your wallet is using is =', parseInt(_chainId.substring(2), 16), '. nft chainId is=', chainId)
             } catch(e) {
                 logger.debug('[ConnectWallet] failed to send eth_chainId due to', e)
             }
@@ -87,7 +87,6 @@ const ConnectWallet = ({onClose, open, wallet, walletTrigger, openSignup, notify
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
                     <MetaMaskWallet 
                         onClose={onClose} 
-                        walletTrigger={walletTrigger} 
                         openSignup={openSignup} 
                         notifyAlertUpdate={notifyAlertUpdate} 
                         notifyWalletUpdate={notifyWalletUpdate}

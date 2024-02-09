@@ -9,17 +9,17 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 
-function createData(id, img, title, seller, network, price, incart) { 
+function createData(id, img, title, seller, chainId, network, price, incart) { 
   // 1. incart is always fasle when no one is logined
   // 2. we need return chainId which is used to get chainName(network here)
   // 3. There should be a wallet in backend to get the owner of nft. owner is seller
-  return {id, img, title, seller, network, price, incart}
+  return {id, img, title, seller, chainId, network, price, incart}
 }
 
 function generateData(start, count) {
   var res = []
   for (var i = start; i < start + count; i++) {
-    const data = createData(i, 'mk.png', `A baby money${i}`, `JanessaTech lab${i}`, 'ethereum', i, true)
+    const data = createData(i, 'mk.png', `A baby money${i}`, `JanessaTech lab${i}`, 1, 'ethereum', i, true)
     res.push(data)
   }
   return res
@@ -33,7 +33,7 @@ function getFilter() {
   return {}
 }
 
-const NFTGallery = ({wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen}) => {
+const NFTGallery = ({wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheck}) => {
   logger.debug('[NFTGallery] rendering ...')
 
   const theme = useTheme()
@@ -142,7 +142,7 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, 
               !isLoading ?  
                 nfts.map( (nft) => (
                   <Grid key={nft.id} item xs={6} sm={4} md={3} lg={2} xl={2}>
-                      <Overview wallet={wallet} nft={nft} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
+                      <Overview wallet={wallet} nft={nft} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen} notifyNetworkCheck={notifyNetworkCheck}/>
                   </Grid>
                 ))
                : Array.from(new Array(20)).map((dummy) => (

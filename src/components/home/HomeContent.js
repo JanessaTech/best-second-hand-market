@@ -5,7 +5,7 @@ import logger from '../../common/Logger'
 
 export default function HomeContent() {
     logger.debug('[HomeContent] rendering ....')
-    const {wallet, menuOpen, trigger, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyShowMenu} = React.useContext(GlobalVariables)
+    const {wallet, menuOpen, trigger, toggleMenu, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyShowMenu, notifyNetworkCheck} = React.useContext(GlobalVariables)
 
     useEffect(() => {
         logger.debug('[HomeContent] call notifyShowMenu in useEffect')
@@ -21,6 +21,7 @@ export default function HomeContent() {
             notifyFilterUpdate={notifyFilterUpdate} 
             notifyAlertUpdate={notifyAlertUpdate}
             notifyWalletOpen={notifyWalletOpen}
+            notifyNetworkCheck={notifyNetworkCheck}
         />
     )
 }

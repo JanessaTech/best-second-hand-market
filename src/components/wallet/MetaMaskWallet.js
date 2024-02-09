@@ -72,7 +72,7 @@ const getNonce = async () => {
     }
   }
 
-export default function MetaMaskWallet({onClose, walletTrigger, openSignup, notifyAlertUpdate, notifyWalletUpdate,setWalletProvider}) {
+export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, notifyWalletUpdate, setWalletProvider}) {
     logger.debug('[MetaMaskWallet] rendering ...')
     const [provider, setProvider] = useState(undefined)
     const [isWalletLogin, setIsWalletLogin] = useState(false)
@@ -124,13 +124,6 @@ export default function MetaMaskWallet({onClose, walletTrigger, openSignup, noti
             }
         }
     }, [provider, isWalletLogin, signIn])
-
-    useEffect(() => {
-        logger.debug('[MetaMaskWallet] reset MetaMaskwallet in useEffect')
-        setSignIn(false)
-        setIsWalletLogin(false)
-        setProvider(undefined)
-    }, [walletTrigger])
 
     const createSiweMessage = async(address, statement, chainId) => {
         const nonce = await getNonce()

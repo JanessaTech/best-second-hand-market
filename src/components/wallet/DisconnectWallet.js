@@ -3,7 +3,7 @@ import React, { memo } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 
-const DisconnectWallet = ({onClose, open, notifyResetWallet, notifyWalletUpdate}) => {
+const DisconnectWallet = ({onClose, open, notifyWalletUpdate}) => {
 
     const handleClose = () => {
         /**
@@ -15,7 +15,6 @@ const DisconnectWallet = ({onClose, open, notifyResetWallet, notifyWalletUpdate}
          */
         localStorage.removeItem('login')
         logger.debug('[DisconnectWallet] deleted login in localStorage')
-        notifyResetWallet()
         notifyWalletUpdate(undefined)
         onClose()
     }

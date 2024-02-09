@@ -40,7 +40,6 @@ const MainLayout = (props) => {
     const [signupOpen, setSignupOpen] = useState(false)
     const [alerts, setAlerts] = useState([])
     const [wallet, setWallet] = useState(undefined)
-    const [walletProvider, setWalletProvider] = useState(undefined)
     const [menu, setMenu] = useState({
         open: isMediumScreen ? false : true,
         width: isMediumScreen ? 0 : DrawerWidth
@@ -101,10 +100,6 @@ const MainLayout = (props) => {
         setRefresh(Math.random())
     }, [])
 
-    const notifyResetWallet = useCallback(() => {
-        setWalletTrigger(Math.random())
-    }, [])
-
     const notifyShowMenu = useCallback(() => {
         setShowMenu(true)
     },[])
@@ -161,10 +156,10 @@ const MainLayout = (props) => {
         setSignupOpen(true)
     }, [])
     
-    const notifyNetworkCheck = async () => {
+    const notifyNetworkCheck = async (chainId) => {
         logger.debug('[MainLayout] notifyNetworkCheck', eventsBus)
-        if (eventsBus.child) {
-            eventsBus.child()
+        if (eventsBus.networkCheck) {
+            eventsBus.networkCheck(chainId)
         }
     }
 
@@ -178,7 +173,6 @@ const MainLayout = (props) => {
                  wallet={wallet}
                  notifyWalletOpen={notifyWalletOpen}
                  notifyFilterRefresh={notifyFilterRefresh}
-                 notifyResetWallet={notifyResetWallet} 
                  notifyWalletUpdate={notifyWalletUpdate}
                 />
              <GlobalVariables.Provider 
@@ -219,9 +213,7 @@ const MainLayout = (props) => {
                 onClose={onCloseWallet} 
                 open={walletOpen} 
                 wallet={wallet}
-                walletTrigger={walletTrigger}
                 openSignup={openSignup} 
-                setWalletProvider={setWalletProvider}
                 notifyAlertUpdate={notifyAlertUpdate}
                 notifyWalletUpdate={notifyWalletUpdate}
                 notifyWalletAddressChange={notifyWalletAddressChange}
@@ -230,7 +222,6 @@ const MainLayout = (props) => {
             <DisconnectWallet 
                 onClose={onCloseWalletChange}
                 open={walletAddressChange}
-                notifyResetWallet={notifyResetWallet}
                 notifyWalletUpdate={notifyWalletUpdate}
                 /> 
            
@@ -239,7 +230,6 @@ const MainLayout = (props) => {
                 open={signupOpen} 
                 notifyAlertUpdate={notifyAlertUpdate}
                 notifyWalletUpdate={notifyWalletUpdate}
-                notifyResetWallet={notifyResetWallet}
             />
             <CheapBottomNavigation 
                 wallet={wallet}

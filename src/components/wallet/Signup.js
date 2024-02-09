@@ -20,7 +20,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
   });
 
-const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyResetWallet}) => {
+const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
     logger.debug('[Signup] rendering... ')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(SignupSchema)
@@ -59,7 +59,6 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate, notifyRes
         localStorage.removeItem('login')
         onClose()
         notifyWalletUpdate(undefined)
-        notifyResetWallet()
     }
 
     const handleSignup = (data) => {

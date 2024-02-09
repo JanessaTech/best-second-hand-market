@@ -8,7 +8,7 @@ import ProfileMenu from '../components/profile/ProfileMenu'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logger from './Logger'
 
-const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notifyResetWallet, notifyWalletUpdate}) => {
+const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notifyWalletUpdate}) => {
     logger.debug('[Header] rendering...')
     logger.debug('[Header] wallet:', wallet)
     const theme = useTheme()
@@ -165,8 +165,7 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterRefresh, notify
                             wallet={wallet} 
                             anchorEl={anchorEl} 
                             open={Boolean(anchorEl)} 
-                            handleProfileMenuClose={handleProfileMenuClose} 
-                            notifyResetWallet={notifyResetWallet}
+                            handleProfileMenuClose={handleProfileMenuClose}
                             notifyWalletUpdate={notifyWalletUpdate}
                             />
                             
