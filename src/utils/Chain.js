@@ -1,14 +1,32 @@
 import config from '../config/index'
 import logger from '../common/Logger'
 
+function getEnv() {
+  var env = config?.env
+  if (!env || ['local', 'testnet', 'mainnet'].indexOf(env) === -1) {
+    logger.error('[Utils - Chain] you do not set env varaible correctly. It should be one of values in [\'local\', \'testnet\', \'mainnet\']. Use local by default')
+    env = 'local'
+  }
+  return env
+}
+
 export function networks() {
-    var env = config?.env
-    if (!env || ['local', 'testnet', 'mainnet'].indexOf(env) === -1) {
-      logger.error('[Utils - Chain] you do not set env varaible correctly. Use local by default')
-      env = 'local'
-    }
+    var env = getEnv()
     const nets = config.chains[env]
     return nets
+}
+
+export function getDefaultChain() {
+  const nks = networks()
+  logger.debug('[Utils - Chain] getDefaultChain. nks=', nks)
+  var env = getEnv()
+  if (!nks || nks.length === 0) {
+    logger.error('[Utils - Chain] you should set at least one chain in chains in global.js under ', env)
+    return 1
+  } else {
+    logger.debug('[Utils - Chain] default chain =', nks[0].chainId)
+    return nks[0].chainId
+  }
 }
 
 export function getChainName(chainId) {

@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
-import {NETWORKS, CATEGORIES} from '../../common/constant'
-import config from '../../config/index'
+import {CATEGORIES} from '../../common/constant'
+import {networks, getChainName} from '../../utils/Chain'
 
 
 export default function Mint() {
@@ -18,13 +18,12 @@ export default function Mint() {
 
   const [state, setState] = useState({
     title: '',
+    ipfs: '',
     category: '',
-    chain: '',
+    chainId: '',
     address: '',
-    standard: '',
     description: '',
-    addressOptions: [],
-    standardOptions: []
+    addressOptions: []
   })
 
   useEffect(() => {
@@ -40,20 +39,17 @@ export default function Mint() {
     if (errors?.title) {
       alerts.push({severity: 'error', message: errors?.title?.message})
     }
+    if (errors?.ipfs) {
+      alerts.push({severity: 'error', message: errors?.ipfs?.message})
+    }
     if (errors?.category) {
       alerts.push({severity: 'error', message: errors?.category?.message})
     }
-    if (errors?.chain) {
-      alerts.push({severity: 'error', message: errors?.chain?.message})
-    }
-    if (errors?.chaintype) {
-      alerts.push({severity: 'error', message: errors?.chaintype?.message})
+    if (errors?.chainId) {
+      alerts.push({severity: 'error', message: errors?.chainId?.message})
     }
     if (errors?.address) {
       alerts.push({severity: 'error', message: errors?.address?.message})
-    }
-    if (errors?.standard) {
-      alerts.push({severity: 'error', message: errors?.standard?.message})
     }
     if (errors?.description) {
       alerts.push({severity: 'error', message: errors?.description?.message})
@@ -73,13 +69,12 @@ export default function Mint() {
   const handleReset = () => {
     setState({
       title: '',
+      ipfs: '',
       category: '',
-      chain: '',
+      chainId: '',
       address: '',
-      standard: '',
       description: '',
-      addressOptions: [],
-      standardOptions: []})
+      addressOptions: []})
 
     reset()
   }
@@ -87,7 +82,6 @@ export default function Mint() {
   const handleMint= (data) => {
     logger.info('[Mint] handleMint data =', data)
     logger.debug('[Mint] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
-
   }
 
   const handleCategoryChange = (value) => {
@@ -95,23 +89,15 @@ export default function Mint() {
   }
 
   const handleChainChange = (value) => {
-    logger.info('[Mint]handleChainChange. value=', value)
-    logger.debug('[Mint] config=', config)
-    var env = config?.env
-    if (!env || ['local', 'testnet', 'mainnet'].indexOf(env) === -1) {
-      logger.error('[NetworkFilter] you do not set env varaible correctly. Use local by default')
-      env = 'local'
+    logger.info('[Mint] handleChainChange. chainId=', value)
+    const chain = networks().find(n => n.chainId === value)
+    if (!chain) {
+      logger.debug('[Mint] Cannot find chain by chainId. Please check the correction of configration in global.js')
+    } else {
+      const addresses = chain?.contracts?.map(contract => contract.address)
+      logger.debug('[Mint] addresses available by chainId', value, addresses )
+      setState({...state, chainId: value, addressOptions: addresses, address: ''})
     }
-
-    logger.debug('[Mint] env=', env)
-    const localData = config.contracts.filter((c) => c.chain === value)[0][env]  // set it as local temporaily
-    logger.debug('localData:', localData)
-    const addresses = localData?.map((d) => d.address)
-    const standards = localData?.map((d) => d.tokenStandard)
-    logger.debug('addresses =', addresses)
-    logger.debug('standards =', standards)
-
-    setState({...state, chain: value, addressOptions: addresses, standardOptions: standards, address: '', standard: ''})
     reset()
   }
 
@@ -150,6 +136,21 @@ export default function Mint() {
                   fullWidth
                   onChange={handleInputChanges}
               />
+              <TextField
+                  sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}}}
+                  id='ipfs' 
+                  aria-label='IPFS URL'
+                  name='ipfs'
+                  label='IPFS URL'
+                  value={state.ipfs}
+                  error={errors?.ipfs? true: false}
+                  placeholder='IPFS URL' 
+                  {...register('ipfs')}
+                  variant='outlined'
+                  size="small"
+                  fullWidth
+                  onChange={handleInputChanges}
+              />
               <CustomSelect
                 name={'category'}  // used by schema
                 label={'Category'} // shown in label
@@ -164,17 +165,18 @@ export default function Mint() {
                 cap={true}
                 />
               <CustomSelect 
-                name={'chain'}
+                name={'chainId'}
                 label={'Chain'} 
                 showInputLabel={true} 
-                value={state.chain} 
+                value={state.chainId} 
                 handleChange={handleChainChange} 
-                options={NETWORKS} 
+                options={networks().map(n => n.chainId)} 
                 width={1}
                 register={register}
                 errors={errors}
                 validate={true}
                 cap={true}
+                renderFun={(chainId) => `${getChainName(chainId)}(${chainId})`}
                 />
               <CustomSelect 
                 name={'address'}
@@ -188,20 +190,6 @@ export default function Mint() {
                 errors={errors}
                 validate={true}
                 />
-              <TextField
-                  sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}}}
-                  id='standard' 
-                  aria-label='standard'
-                  name='standard'
-                  label='NFT standard'
-                  value={state.standard}
-                  variant='outlined'
-                  size="small"
-                  fullWidth
-                  InputProps={{
-                    readOnly: true
-                  }}
-              />
               <TextField
                   sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}}}
                   id='description' 

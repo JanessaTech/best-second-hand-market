@@ -102,9 +102,9 @@ const NetworkFilter = ({notify, eventsBus}) => {
                             value={network.chainId}
                         >
                             <ListItemIcon>
-                                <CheapIcon name={network.chainName}/>
+                                <CheapIcon name={getChainName(network.chainId)}/>
                             </ListItemIcon>
-                            <ListItemText>{capitalize(network.chainName)}</ListItemText>
+                            <ListItemText>{capitalize(getChainName(network.chainId))}</ListItemText>
                         </MenuItem>
                     ))
                 }    

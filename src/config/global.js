@@ -68,7 +68,7 @@ const config = {
           chainName: 'hardhat',
           currency: 'HardHatETH',
           rpcUrls:'http://127.0.0.1:8545/',
-          contracts: [
+          contracts: [  // configure at least one
               {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0', tokenStandard: '721'},
               {address: '0xcdcbb4f79e3770252ee32d89b6673eb68ffdd342', tokenStandard: '1155'},
             ]

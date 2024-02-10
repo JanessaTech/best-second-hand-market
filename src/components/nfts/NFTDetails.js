@@ -34,7 +34,7 @@ const NFTDetails = ({nft}) => {
         <Space/>
         <Typography>Details:</Typography>
           <DetailRow key='IPFS URL' name='IPFS URL' value={nft?.ipfs}/>
-          <DetailRow key='Chain ID' name='Chain' value={nft?.chainId}/>
+          <DetailRow key='Chain ID' name='Chain ID' value={nft?.chainId}/>
           <DetailRow key='Chain' name='Chain' value={capitalize(nft?.chain)}/>
           <DetailRow key='Contract address' name='Contract address' value={nft?.address}/>
           <DetailRow key='Token ID' name='Token ID' value={nft?.tokenId}/>

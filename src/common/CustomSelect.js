@@ -2,6 +2,7 @@ import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import { FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material'
 import {capitalize} from '../utils/StringUtils'
+import logger from './Logger';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -16,12 +17,24 @@ const MenuProps = {
   disableScrollLock: true,
 };
 
-function getStyles(sortName, sortBy, theme) {
+function getStyles(option, value, theme) {
+  //logger.trace('[CustomSelect] getStyles. option=', option, ' value=', value)
+  //logger.trace('[CustomSelect] typeof value=', typeof value)
+  var fontWeight = theme.typography.fontWeightRegular
+  if (typeof value === 'number') {
+    if (option === value) {
+      fontWeight = theme.typography.fontWeightMedium
+    }
+  } else if (typeof value === 'string') {
+    if (value.indexOf(option) !== -1) {
+      fontWeight = theme.typography.fontWeightMedium
+    }
+  } else {
+    // undefined or other types
+    // TBD
+  }
   return {
-    fontWeight:
-    !sortBy || sortBy.indexOf(sortName) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
+    fontWeight: fontWeight
   };
 }
 
@@ -43,10 +56,21 @@ export default function CustomSelect(props) {
   // you need to set register, name, errors and validate as being true when you want to use useForm to validate the Select 
   // check Mint.js to see how to use Select with useForm
   // for the case without using useForm, check Balance.js for more usage
-  const {label, showInputLabel, value, handleChange, options, width, register, name, errors, validate, cap} = props
+  const {label, showInputLabel, value, handleChange, options, width, register, name, errors, validate, cap, renderFun} = props
 
   const handleSelectChange = (e) => {
       handleChange(e.target.value)
+  }
+
+  const getOptionRenderValue = (p, cap, optionFun) => {
+    if (cap && optionFun) {
+      return capitalize(optionFun(p))
+    } else if (cap) {
+      return capitalize(p)
+    } else if (optionFun) {
+      return optionFun(p)
+    }
+      return p
   }
 
   return (
@@ -56,7 +80,9 @@ export default function CustomSelect(props) {
                         label={label}
                         value={value}
                         onChange={handleSelectChange}
-                        renderValue={(p) => cap ? capitalize(p): p}
+                        renderValue={(p) => {
+                          return getOptionRenderValue(p, cap, renderFun)
+                        }}
                         input={validate ? <OutlinedInput 
                                             size="small" 
                                             label={showInputLabel? label : ''} 
@@ -75,7 +101,7 @@ export default function CustomSelect(props) {
                                     value={option}
                                     style={getStyles(option, value, theme)}
                                 >
-                                    {cap ? capitalize(option) : option}
+                                    {getOptionRenderValue(option, cap, renderFun)}
                                 </MenuItem>
                             ))
                         }                        
