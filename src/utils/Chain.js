@@ -39,6 +39,16 @@ export function getChainName(chainId) {
   return nks.find( n => n.chainId === chainId)?.chainName
 }
 
+export function getChainCurrency(chainId) {
+  const nks = networks()
+  const chain = nks.find( n => n.chainId === chainId)
+  if (!chain) {
+    logger.error('[Utils - Chain] getChainName. cannot find chain by chainId=', chainId)
+    return nks[0].currency  // return the currency of first chain in nks by default
+  }
+  return nks.find( n => n.chainId === chainId)?.currency
+}
+
 export function getStandard(chainId, address) {
   const nks = networks()
   var chain = nks.find( n => n.chainId === chainId)

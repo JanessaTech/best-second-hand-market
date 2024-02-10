@@ -1,61 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, Container, InputAdornment,TextField, Typography } from '@mui/material'
-import {HeaderHeight} from '../../common/constant'
+import {HeaderHeight, SYSSYMBOL} from '../../common/constant'
 import {GlobalVariables} from '../../components/MainLayout'
 import {DepoistSchema} from '../../common/Schemas'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
-import {NETWORKS} from '../../common/constant'
-
-const balances = [
-  {
-    chain: 'ethereum',
-    chainSymbol: 'ETH',
-    remaining: 12.05,
-  },
-  {
-    chain: 'polygon',
-    chainSymbol: 'MATIC',
-    remaining: 124.2,
-  },
-  {
-    chain: 'avalanche',
-    chainSymbol: 'AVAX',
-    remaining: 1000,
-  },
-  {
-    chain: 'solana',
-    chainSymbol: 'SOL',
-    remaining: 256,
-  },
-]
-
-function getBalanceBy(chain) {
-  var balanceDefault = undefined
-  for (var i= 0; i < balances.length; i++) {
-    if (balances[i].chain === chain) {
-      return balances[i]
-    } 
-    if(balances[i].chain === NETWORKS[0] && balanceDefault === undefined) {
-      balanceDefault = balances[i].chain // set default balance in case we cannot find what we want
-    }
-  }
-  return balanceDefault
-}
+import {getChainName, networks, getChainCurrency} from '../../utils/Chain'
 
 export default function Balance() {
   logger.debug('[Balance] rendering...')
   const {notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(DepoistSchema)})
   const [state, setState] = useState({
-    remainingInChain: getBalanceBy(NETWORKS[0]).remaining,
-    chainSymbol: getBalanceBy(NETWORKS[0]).chainSymbol,
+    remainingInChain: 0,
+    chainSymbol: '',
     remainingInCheap: 234,
-    cheapSymbol: 'CH',
+    cheapSymbol: SYSSYMBOL,
     deposit: 0,
-    chainBy: NETWORKS[0]
+    chainId: ''
   })
 
   useEffect(() => {
@@ -65,6 +29,9 @@ export default function Balance() {
 
   useEffect(() => {
     let alerts = []
+    if (errors?.chainId) {
+      alerts.push({severity: 'error', message: errors?.chainId?.message})
+    }
     if (errors?.deposit) {
       alerts.push({severity: 'error', message: errors?.deposit?.message})
     }
@@ -88,10 +55,10 @@ export default function Balance() {
     reset()
   }
 
-  const handleChainChange = (chain) => {
-    const balance = getBalanceBy(chain)
-    logger.log('[Balance] balance:', balance)
-    setState({...state, remainingInChain: balance.remaining, chainSymbol: balance.chainSymbol, chainBy: balance.chain})
+  const handleChainChange = (chainId) => {
+    logger.debug('[Balance] handleChainChange. chainId=', chainId)
+    const chainSymbol = getChainCurrency(chainId)
+    setState({...state, chainSymbol: chainSymbol, chainId: chainId})
   }
 
   return (
@@ -110,20 +77,25 @@ export default function Balance() {
             noValidate
             autoComplete="off">
               <CustomSelect 
+                name={'chainId'}
                 label={'Chain'} 
                 showInputLabel={true} 
-                value={state.chainBy} 
+                value={state.chainId} 
                 handleChange={handleChainChange} 
-                options={NETWORKS} 
+                options={networks().map(n => n.chainId)} 
                 width={1}
+                register={register}
+                errors={errors}
+                validate={true}
                 cap={true}
+                renderFun={(chainId) => `${getChainName(chainId)}(${chainId})`}
                 />
               <TextField
                 sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width: 1}}
                 id='remainingInChain' 
                 aria-label='remainingInChain'
                 name='remainingInChain'
-                label={`Balance in ${state.chainBy}`}
+                label={`Balance in ${state.chainId ? getChainName(state.chainId) : ''}`}
                 value={state.remainingInChain}
                 variant='outlined'
                 size="small"
