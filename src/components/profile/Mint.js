@@ -102,8 +102,7 @@ export default function Mint() {
   }
 
   const handleAddressChange = (value) => {
-    const index = state.addressOptions.indexOf(value)
-    setState({...state, address: value, standard: state.standardOptions[index]})
+    setState({...state, address: value})
   }
 
   return (
