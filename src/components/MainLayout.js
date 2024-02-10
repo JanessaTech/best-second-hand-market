@@ -80,8 +80,7 @@ const MainLayout = (props) => {
 
     const notifyWalletNetworkChange = useCallback((chainId) => {
         setWalletNetworkChange(true)
-        //setNewNetwork(chainId)
-        setNewNetwork(100)
+        setNewNetwork(chainId)
     }, [])
 
     const onCloseWalletNetworkChange = useCallback(() => {

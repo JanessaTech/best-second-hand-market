@@ -57,8 +57,11 @@ const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, no
         if (walletProvider) {
             try {
                 const _chainId = await walletProvider.send('eth_chainId')
-                logger.debug('The chainId your wallet is using is =', parseInt(_chainId.substring(2), 16), '. nft chainId is=', chainId)
-                notifyWalletNetworkChange(chainId)
+                const currentChainId = parseInt(_chainId.substring(2), 16)
+                logger.debug('The chainId your wallet is using is =', currentChainId, '. nft chainId is=', chainId)
+                if (chainId !== currentChainId) {
+                    notifyWalletNetworkChange(chainId)
+                }
             } catch(e) {
                 logger.debug('[ConnectWallet] failed to send eth_chainId due to', e)
             }
