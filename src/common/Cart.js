@@ -194,7 +194,7 @@ const getFilteredNfts = (nfts, chainId) => {
   return nfts.filter((nft) => nft.chainId === chainId)
 }
 
-const Cart = ({wallet, toggleCart, open}) => {
+const Cart = ({wallet, toggleCart, open, notifyNetworkCheck}) => {
   logger.debug('[Cart] rendering...')
   const [nfts, setNfts] = useState([])
   const [chainId, setChainId] = useState(networks()[0].chainId)
@@ -230,6 +230,11 @@ const Cart = ({wallet, toggleCart, open}) => {
   const handleTabChanges = (tab) => {
     const chainId = getChainId(tab)
     setChainId(chainId)
+  }
+
+  const handleBuy = () => {
+    logger.debug('[Cart] handleBuy. call wallet to buy...')
+    notifyNetworkCheck(chainId)
   }
 
   logger.debug('[Cart] chainId=', chainId)
@@ -276,8 +281,13 @@ const Cart = ({wallet, toggleCart, open}) => {
               <Typography variant='h6'>Total price</Typography>
               <Typography variant='h6'>{calcPrice(getFilteredNfts(nfts, chainId))} CH</Typography>
             </Box>
-            <Button color='customBlack' variant='contained' disabled={getFilteredNfts(nfts, chainId).filter((nft) => nft.available).length === 0}
-                sx={{textTransform:'none', borderRadius:'50vh', my:3, width:1}}>
+            <Button 
+              color='customBlack' 
+              variant='contained' 
+              disabled={getFilteredNfts(nfts, chainId).filter((nft) => nft.available).length === 0}
+              sx={{textTransform:'none', borderRadius:'50vh', my:3, width:1}}
+              onClick={handleBuy}
+              >
                 <Typography variant='h6'>Buy now</Typography>
             </Button>
         </Box>

@@ -6,7 +6,6 @@ import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 import WalletItem from './WalletItem'
 import MetaMaskWallet from './MetaMaskWallet'
-import {ethers} from 'ethers'
 import {GetCurrentWalletProvider} from '../../utils/Wallet'
 
 const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, eventsBus}) => {
