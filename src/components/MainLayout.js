@@ -13,7 +13,7 @@ import FilterMenu from '../common/menu/FilterMenu'
 import logger from '../common/Logger'
 import DisconnectWallet from './wallet/DisconnectWallet'
 import {GetCurrentWallet} from '../utils/Wallet'
-import { BrowserProvider } from 'ethers'
+import ChangeWalletNetwork from './wallet/ChangeWalletNetwork'
 
 const GlobalVariables = React.createContext({})
 export {GlobalVariables}
@@ -37,6 +37,8 @@ const MainLayout = (props) => {
     const [cartOpen, setCartOpen] = useState(false)
     const [walletOpen, setWalletOpen] = useState(false)
     const [walletAddressChange, setWalletAddressChange] = useState(false)
+    const [walletNetworkChange, setWalletNetworkChange] = useState(false)
+    const [newNetwork, setNewNetwork] = useState(undefined)
     const [signupOpen, setSignupOpen] = useState(false)
     const [alerts, setAlerts] = useState([])
     const [wallet, setWallet] = useState(undefined)
@@ -68,12 +70,23 @@ const MainLayout = (props) => {
     }, [])
 
     // for wallet address changes
-    const notifyWalletAddressChange = useCallback(() => {  // once user is connected to a wallet, chaning wallet address will lead to user to be forced to logout
+    const notifyWalletAddressChange = useCallback(() => {  // once user is connected to a wallet, changing wallet address will lead to user to be forced to logout
         setWalletAddressChange(true)
     }, [])
 
     const onCloseWalletChange = useCallback(() => {
         setWalletAddressChange(false)
+    }, [])
+
+    const notifyWalletNetworkChange = useCallback((chainId) => {
+        setWalletNetworkChange(true)
+        //setNewNetwork(chainId)
+        setNewNetwork(100)
+    }, [])
+
+    const onCloseWalletNetworkChange = useCallback(() => {
+        setWalletNetworkChange(false)
+        setNewNetwork(undefined)
     }, [])
 
     const notifyWalletUpdate = useCallback((newWallet) => { // for the first time we update wallet address
@@ -223,13 +236,20 @@ const MainLayout = (props) => {
                 notifyAlertUpdate={notifyAlertUpdate}
                 notifyWalletUpdate={notifyWalletUpdate}
                 notifyWalletAddressChange={notifyWalletAddressChange}
+                notifyWalletNetworkChange={notifyWalletNetworkChange}
                 eventsBus={eventsBus}
             />  
             <DisconnectWallet 
                 onClose={onCloseWalletChange}
                 open={walletAddressChange}
                 notifyWalletUpdate={notifyWalletUpdate}
-                /> 
+            />
+            <ChangeWalletNetwork
+                newNetwork={newNetwork}
+                onClose={onCloseWalletNetworkChange}
+                open={walletNetworkChange}
+                notifyAlertUpdate={notifyAlertUpdate}
+            />
            
             <Signup
                 onClose={onCloseSignUp} 

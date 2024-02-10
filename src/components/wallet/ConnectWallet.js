@@ -8,7 +8,7 @@ import WalletItem from './WalletItem'
 import MetaMaskWallet from './MetaMaskWallet'
 import {GetCurrentWalletProvider} from '../../utils/Wallet'
 
-const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, eventsBus}) => {
+const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, notifyWalletNetworkChange, eventsBus}) => {
     logger.debug('[ConnectWallet] rendering ')
     logger.debug('[ConnectWallet] wallet=',wallet)
     const theme = useTheme()
@@ -58,6 +58,7 @@ const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, no
             try {
                 const _chainId = await walletProvider.send('eth_chainId')
                 logger.debug('The chainId your wallet is using is =', parseInt(_chainId.substring(2), 16), '. nft chainId is=', chainId)
+                notifyWalletNetworkChange(chainId)
             } catch(e) {
                 logger.debug('[ConnectWallet] failed to send eth_chainId due to', e)
             }
