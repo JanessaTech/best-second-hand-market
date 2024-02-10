@@ -150,8 +150,8 @@ export default function Favorites() {
   const [rowStates, setRowSates] = React.useState([])
 
   useEffect(() => {
-    if (wallet?.address) {
-      logger.debug('[Favorites] call restful api to get the new list of favorites by wallet address=', wallet?.address)
+    if (wallet?.user) {
+      logger.debug('[Favorites] call restful api to get the new list of favorites by user id=', wallet?.user?.id)
       const latestFilter = getFilter()
       logger.debug('[Favorites] trigger=', trigger)
       logger.debug('[Favorites] latestFilter=', latestFilter)

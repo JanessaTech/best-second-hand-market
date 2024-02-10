@@ -182,8 +182,8 @@ export default function MyNFTList() {
   const [rowStates, setRowSates] = React.useState([])
 
   useEffect(() => {
-    if (wallet?.address) {
-      logger.debug('[MyNFTList] call restful api to get the list of my nfts by wallet address=', wallet?.address)
+    if (wallet?.user) {
+      logger.debug('[MyNFTList] call restful api to get the list of my nfts by user id=', wallet?.user?.id)
       const latestFilter = getFilter()
       logger.debug('[MyNFTList] trigger=', trigger)
       logger.debug('[MyNFTList] latestFilter=', latestFilter)

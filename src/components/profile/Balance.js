@@ -11,21 +11,26 @@ import {getChainName, networks, getChainCurrency} from '../../utils/Chain'
 
 export default function Balance() {
   logger.debug('[Balance] rendering...')
-  const {notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
+  const {wallet, notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(DepoistSchema)})
   const [state, setState] = useState({
-    remainingInChain: 0,
+    balanceInChain: 0,
     chainSymbol: '',
-    remainingInCheap: 234,
+    balanceInCheap: 0,
     cheapSymbol: SYSSYMBOL,
     deposit: 0,
     chainId: ''
   })
 
   useEffect(() => {
-    logger.debug('[Setting] call notifyHideMenu in useEffect')
+    if (wallet?.user) {
+      logger.debug('[Balance] call restful api to get cheap balance by user id = ', wallet?.user?.id)
+      const balanceInCheap = 234
+      setState({...state, balanceInCheap: balanceInCheap})
+    }
+    logger.debug('[Balance] call notifyHideMenu in useEffect')
     notifyHideMenu()
-  }, [])
+  }, [wallet])
 
   useEffect(() => {
     let alerts = []
@@ -57,8 +62,10 @@ export default function Balance() {
 
   const handleChainChange = (chainId) => {
     logger.debug('[Balance] handleChainChange. chainId=', chainId)
+    logger.debug('[Balance] call wallet to get balance by chainId = ', chainId)
+    const balanceInChain = 100
     const chainSymbol = getChainCurrency(chainId)
-    setState({...state, chainSymbol: chainSymbol, chainId: chainId})
+    setState({...state, chainSymbol: chainSymbol, chainId: chainId, balanceInChain: balanceInChain})
   }
 
   return (
@@ -92,11 +99,11 @@ export default function Balance() {
                 />
               <TextField
                 sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width: 1}}
-                id='remainingInChain' 
-                aria-label='remainingInChain'
-                name='remainingInChain'
+                id='balanceInChain' 
+                aria-label='balanceInChain'
+                name='balanceInChain'
                 label={`Balance in ${state.chainId ? getChainName(state.chainId) : ''}`}
-                value={state.remainingInChain}
+                value={state.balanceInChain}
                 variant='outlined'
                 size="small"
                 InputProps={{
@@ -108,11 +115,11 @@ export default function Balance() {
                 />
               <TextField
                 sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width: 1}}
-                id='remainingInCheap' 
-                aria-label='remainingInCheap'
-                name='remainingInCheap'
+                id='balanceInCheap' 
+                aria-label='balanceInCheap'
+                name='balanceInCheap'
                 label={`Balance in Cheap`}
-                value={state.remainingInCheap}
+                value={state.balanceInCheap}
                 variant='outlined'
                 size="small"
                 InputProps={{

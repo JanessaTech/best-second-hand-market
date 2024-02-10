@@ -140,8 +140,8 @@ export default function Orders() {
   const [rowStates, setRowStates] = useState([])
 
   useEffect(() => {
-    if (wallet?.address) {
-      logger.debug('[Orders] call restful api to get the new list of orders by wallet address=', wallet?.address)
+    if (wallet?.user) {
+      logger.debug('[Orders] call restful api to get the new list of orders by user id=', wallet?.user?.id)
       const latestFilter = getFilter()
       logger.debug('[Orders] trigger=', trigger)
       logger.debug('[Orders] latestFilter=', latestFilter)
