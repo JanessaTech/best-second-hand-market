@@ -40,6 +40,7 @@ const GetCurrentWallet = async () => {
             switch(walletType) {
                 case 'metamask':
                     const wallet = await getMetaMaskWallet()
+                    if (wallet.user.id !== user.id) return undefined
                     return wallet
                 default:
                     throw new Error('Support metamask only')
