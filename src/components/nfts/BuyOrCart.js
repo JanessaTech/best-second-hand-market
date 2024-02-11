@@ -7,7 +7,7 @@ import { useSearchParams } from 'react-router-dom'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
 
 
-const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheck}) => {
+const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[BuyOrCart] rendering...')
   const [searchParams, setSearchParams] = useSearchParams()
   const id = searchParams.get('id')
@@ -27,8 +27,7 @@ const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheck}
     if (wallet) {
       logger.debug('[BuyOrCart] call wallet to by the nft by address and token id')
       logger.debug('[BuyOrCart] once the buying is done successffuly, we should call restful to log an order as the history')
-      notifyNetworkCheck(nft?.chainId)
-      logger.debug('[BuyOrCart] call wallet to pay')  //we cannot call it directly
+      notifyNetworkCheckAndBuy(nft?.chainId, [nft.id], [nft.price])
     } else {
       notifyWalletOpen()
     }

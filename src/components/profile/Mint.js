@@ -13,7 +13,7 @@ import {networks, getChainName} from '../../utils/Chain'
 
 export default function Mint() {
   logger.debug('[Mint] rendering...')
-  const {notifyAlertUpdate, notifyHideMenu, notifyNetworkCheck} = React.useContext(GlobalVariables)
+  const {notifyAlertUpdate, notifyHideMenu, notifyNetworkCheckAndBuy} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(MintSchema)})
 
   const [state, setState] = useState({
@@ -81,7 +81,7 @@ export default function Mint() {
 
   const handleMint= (data) => {
     logger.info('[Mint] handleMint data =', data)
-    notifyNetworkCheck(state.chainId)
+    notifyNetworkCheckAndBuy(state.chainId)
     logger.debug('[Mint] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
   }
 

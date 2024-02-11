@@ -10,6 +10,7 @@ import { useSearchParams } from 'react-router-dom'
 import {getChainName, getStandard} from '../../utils/Chain'
 
 const nftData = {
+    id:112,
     title: 'A baby monkey',
     price: 12,
     ipfs: `ipfs://bafkreiftnbrvpu3apwgolxqlpmfea4rwqqxru6ddlcbd2msgbmsrwjcqzi`,  // returned by backned, get by chainId&address&tokenId
@@ -28,7 +29,7 @@ const nftData = {
     description: 'NFTs can really be anything digital (such as drawings, music, your brain downloaded and turned into an AI), but a lot of the current excitement'
 }
 
-const NFTHome = ({wallet, openCart, notifyWalletOpen, notifyNetworkCheck}) => {
+const NFTHome = ({wallet, openCart, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
     logger.debug("[NFTHome] rendering...")
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -53,7 +54,7 @@ const NFTHome = ({wallet, openCart, notifyWalletOpen, notifyNetworkCheck}) => {
                     </Box>
                 </Grid>
                 <Grid item xs={isSmallScreen ? 12 : 5}>
-                    <BuyOrCart nft={nft} wallet={wallet} openCart={openCart} notifyWalletOpen={notifyWalletOpen} notifyNetworkCheck={notifyNetworkCheck}/>
+                    <BuyOrCart nft={nft} wallet={wallet} openCart={openCart} notifyWalletOpen={notifyWalletOpen} notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
                 </Grid>
             </Grid>
         </Box>      

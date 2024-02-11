@@ -37,8 +37,8 @@ const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, no
     
     useEffect(() => {
         if (walletProvider) {
-            logger.debug('[ConnectWallet] add networkCheck to eventsBus')
-            eventsBus.networkCheck = networkCheck
+            logger.debug('[ConnectWallet] add networkCheckAndBuy to eventsBus')
+            eventsBus.networkCheckAndBuy = networkCheckAndBuy
         }
     }, [walletProvider])
 
@@ -53,14 +53,22 @@ const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, no
         onClose()
     }
 
-    const networkCheck = async (chainId) => {
+    const handleBuy = (chainId, nftIds, prices) => {
+        logger.debug(`[ConnectWallet] handleBuy. chainId=${chainId}, nftIds=${nftIds}, prices=${prices}`)
+    }
+
+    const networkCheckAndBuy = async (chainId, nftIds, prices) => {
         if (walletProvider) {
             try {
                 const _chainId = await walletProvider.send('eth_chainId')
                 const currentChainId = parseInt(_chainId.substring(2), 16)
-                logger.debug('The chainId your wallet is using is =', currentChainId, '. nft chainId is=', chainId)
+                logger.debug('[ConnectWallet] The chainId your wallet is using is =', currentChainId, '. nft chainId is=', chainId)
                 if (chainId !== currentChainId) {
                     notifyWalletNetworkChange(chainId)
+                } else {
+                    if (nftIds && prices && nftIds.length > 0 && prices.length > 0) {
+                        handleBuy(chainId, nftIds, prices)
+                    }
                 }
             } catch(e) {
                 logger.debug('[ConnectWallet] failed to send eth_chainId due to', e)

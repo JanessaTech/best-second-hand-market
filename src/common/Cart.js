@@ -194,7 +194,7 @@ const getFilteredNfts = (nfts, chainId) => {
   return nfts.filter((nft) => nft.chainId === chainId)
 }
 
-const Cart = ({wallet, toggleCart, open, notifyNetworkCheck}) => {
+const Cart = ({wallet, toggleCart, open, notifyNetworkCheckAndBuy}) => {
   logger.debug('[Cart] rendering...')
   const [nfts, setNfts] = useState([])
   const [chainId, setChainId] = useState(networks()[0].chainId)
@@ -233,8 +233,7 @@ const Cart = ({wallet, toggleCart, open, notifyNetworkCheck}) => {
   }
 
   const handleBuy = () => {
-    notifyNetworkCheck(chainId)
-    logger.debug('[Cart] handleBuy. call wallet to buy...')
+    notifyNetworkCheckAndBuy(chainId, getFilteredNfts(nfts, chainId).filter(nft => nft.available).map(nft => nft.id), getFilteredNfts(nfts, chainId).filter(nft => nft.available).map(nft => nft.price))
   }
 
   logger.debug('[Cart] chainId=', chainId)

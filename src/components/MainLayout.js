@@ -123,10 +123,19 @@ const MainLayout = (props) => {
         }
     }
 
-    const notifyNetworkCheck = async (chainId) => {
-        logger.debug('[MainLayout] notifyNetworkCheck', eventsBus)
-        if (eventsBus.networkCheck) {
-            eventsBus.networkCheck(chainId)
+    /**
+     * We only conduct checking when nftIds and prices are empty or undefined
+     * When nftIds and prices are not empty, we first check if the network is consistent,
+     * it not, we switch the network first when you click the first buy button.
+     * Once the switching is done, we trigger the buying process when you click the buy button again
+     * @param {*} chainId - The chainId the list of nfts belong to
+     * @param {*} nftIds  - The list of nfts we will buy
+     * @param {*} prices - The list of prices of each nft above
+     */
+    const notifyNetworkCheckAndBuy = async (chainId, nftIds, prices) => {
+        logger.debug('[MainLayout] notifyNetworkCheckAndBuy', eventsBus)
+        if (eventsBus.networkCheckAndBuy) {
+            eventsBus.networkCheckAndBuy(chainId, nftIds, prices)
         }
     }
 
@@ -205,7 +214,7 @@ const MainLayout = (props) => {
                     notifyWalletOpen: notifyWalletOpen,
                     notifyShowMenu: notifyShowMenu,
                     notifyHideMenu: notifyHideMenu,
-                    notifyNetworkCheck: notifyNetworkCheck
+                    notifyNetworkCheckAndBuy: notifyNetworkCheckAndBuy
                     }}>
                 <Box sx={{display: 'flex'}}>
                     {
@@ -222,7 +231,7 @@ const MainLayout = (props) => {
                 </Box>
                 
             </GlobalVariables.Provider>
-           <Cart wallet={wallet} toggleCart={toggleCart} open={cartOpen} notifyNetworkCheck={notifyNetworkCheck}/>
+           <Cart wallet={wallet} toggleCart={toggleCart} open={cartOpen} notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
             {
                     alerts && alerts.length > 0 && 
                         <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlerts={clearAlerts}/>       

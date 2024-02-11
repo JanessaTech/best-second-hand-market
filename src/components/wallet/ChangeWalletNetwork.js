@@ -19,11 +19,11 @@ export default function ChangeWalletNetwork({newNetwork, onClose, open, notifyAl
         if (provider) {
             try {
                 await provider.send('wallet_switchEthereumChain', [{chainId: newChanid}])
-                logger.debug(`[ChangeWalletNetwork] Changing network to chainId ${newNetwork} is successful.`)
-                notifyAlertUpdate([{severity: 'success', message: `Changing network to chainId ${newNetwork} is successful.`}])
+                logger.debug(`[ChangeWalletNetwork] Switched network to chainId ${newNetwork} successfully.`)
+                notifyAlertUpdate([{severity: 'success', message: `Switched network to chainId ${newNetwork} successfully.`}])
                 onClose()
             } catch (e) {
-                logger.debug('[ChangeWalletNetwork] failed to update network due to ', e)
+                logger.debug('[ChangeWalletNetwork] Failed to update network due to ', e)
                 if (e?.info?.error?.code === 4001) {
                     logger.debug('[ChangeWalletNetwork] You reject changing network')
                     notifyAlertUpdate([{severity: 'error', message: `You rejected switching network. Please try again by clicking switching network`}])
@@ -81,7 +81,7 @@ export default function ChangeWalletNetwork({newNetwork, onClose, open, notifyAl
             <Box sx={{mb:2}}>
                 <Typography variant='h5' sx={{textAlign:'center'}}>Inconsistent network used in your wallet found</Typography>
                 <Typography variant='body2' color='text.secondary' sx={{textAlign:'center'}}>
-                   {add ? `Add the network chainId ${newNetwork} to your wallet` : `Change the wallet network to chainId ${newNetwork}`} 
+                   {add ? `Add the network chainId ${newNetwork} to your wallet` : `Switch the wallet network to chainId ${newNetwork}`} 
                 </Typography>
                 <Tooltip title='Close'>
                     <IconButton onClick={handleClose} sx={{position:'absolute', top:-40, right:-20}}>

@@ -4,7 +4,7 @@ import React, { memo, useState } from 'react'
 import {Link as RouterLink } from "react-router-dom"
 import logger from '../../common/Logger'
 
-const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheck}) => {
+const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[Overview] rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -43,8 +43,7 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
     if (!wallet) {
       notifyWalletOpen()
     } else {
-      notifyNetworkCheck(nft?.chainId)
-      logger.info('[Overview] handleBuyNow. Collect your wallet and buy it') //we cannot call it directly
+      notifyNetworkCheckAndBuy(nft?.chainId, [nft.id], [nft.price])
     }
   }
 
