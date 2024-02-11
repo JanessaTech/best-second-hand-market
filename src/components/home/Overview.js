@@ -43,8 +43,8 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
     if (!wallet) {
       notifyWalletOpen()
     } else {
-      logger.info('[Overview] handleBuyNow. Collect your wallet and buy it')
       notifyNetworkCheck(nft?.chainId)
+      logger.info('[Overview] handleBuyNow. Collect your wallet and buy it') //we cannot call it directly
     }
   }
 

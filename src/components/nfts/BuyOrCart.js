@@ -28,6 +28,7 @@ const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheck}
       logger.debug('[BuyOrCart] call wallet to by the nft by address and token id')
       logger.debug('[BuyOrCart] once the buying is done successffuly, we should call restful to log an order as the history')
       notifyNetworkCheck(nft?.chainId)
+      logger.debug('[BuyOrCart] call wallet to pay')  //we cannot call it directly
     } else {
       notifyWalletOpen()
     }

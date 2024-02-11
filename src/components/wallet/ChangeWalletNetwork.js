@@ -15,7 +15,7 @@ export default function ChangeWalletNetwork({newNetwork, onClose, open, notifyAl
     const handleUpdate = async () => {
         const provider = GetCurrentWalletProvider()
         const newChanid = '0x' + Number(newNetwork).toString(16)
-        logger.debug('newChanid = ', newChanid)
+        logger.debug('[ChangeWalletNetwork] handleUpdate. newChanid = ', newChanid)
         if (provider) {
             try {
                 await provider.send('wallet_switchEthereumChain', [{chainId: newChanid}])

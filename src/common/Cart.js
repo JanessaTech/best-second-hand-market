@@ -233,8 +233,8 @@ const Cart = ({wallet, toggleCart, open, notifyNetworkCheck}) => {
   }
 
   const handleBuy = () => {
-    logger.debug('[Cart] handleBuy. call wallet to buy...')
     notifyNetworkCheck(chainId)
+    logger.debug('[Cart] handleBuy. call wallet to buy...')
   }
 
   logger.debug('[Cart] chainId=', chainId)

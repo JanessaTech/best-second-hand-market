@@ -44,8 +44,8 @@ export default function Setting() {
 
   useEffect(() => {
     logger.debug('[Setting] call notifyHideMenu in useEffect')
-    if (wallet?.address) {
-      logger.debug('[Setting] call restful api to get user by the wallet address=', wallet?.address)
+    if (wallet?.user) {
+      logger.debug('[Setting] call restful api to get user by user id =', wallet?.user.id)
       setState({...userData})
     }
     reset()
