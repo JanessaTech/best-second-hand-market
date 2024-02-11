@@ -28,7 +28,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
 
     const [state, setState] = useState({
         name: '',
-        introduction: '',
+        intro: '',
         checked: false
     })
 
@@ -40,8 +40,8 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
         if(errors?.checked) {
             alerts.push({severity: 'error', message: errors?.checked?.message})
         }
-        if(errors?.introduction) {
-            alerts.push({severity: 'error', message: errors?.introduction?.message})
+        if(errors?.intro) {
+            alerts.push({severity: 'error', message: errors?.intro?.message})
         }
         if(alerts.length > 0) {
             logger.debug('[Signup]sending alerts = ', alerts)
@@ -142,12 +142,12 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
                         }} 
                         id='introduction' 
                         aria-label='introduction'
-                        name='introduction'
+                        name='intro'
                         label='Introduction'
-                        value={state.introduction}
-                        error={errors?.introduction? true: false}
+                        value={state.intro}
+                        error={errors?.intro? true: false}
                         placeholder='Your brief introduction' 
-                        {...register('introduction')}
+                        {...register('intro')}
                         variant='outlined'
                         size="small"
                         fullWidth
