@@ -47,7 +47,7 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
     pageSize: PageSizeInGallery, // how many items are shown in one page
     pages: 0 // how many pages in total
   })
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [hasMore, setHasMore] = useState(false)
   const [total, setTotal] = useState(0)
   
@@ -78,7 +78,9 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
     setHasMore(true)
     setTotal(total)
     setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: 1})
+    setIsLoading(false)
     window.scrollTo(0, 0)
+
   }
 
   const fetchMoreData  = () => {
