@@ -48,17 +48,14 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
     pages: 0 // how many pages in total
   })
   const [isLoading, setIsLoading] = useState(false)
-  const [hasMore, setHasMore] = useState(true)
+  const [hasMore, setHasMore] = useState(false)
   const [total, setTotal] = useState(0)
   
   useEffect(() => {
-    fetchData()
-  }, [searchParams])
-
-  useEffect(() => {
     logger.debug('[NFTGallery] add handleFilterUpdate to eventsBus')
     eventsBus.handleFilterUpdate = handleFilterUpdate
-  }, [])
+    fetchData()
+  }, [searchParams])
 
   const handleFilterUpdate = () => {
     logger.debug('[NFTGallery] handleFilterUpdate')
