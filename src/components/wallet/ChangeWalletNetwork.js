@@ -18,7 +18,8 @@ export default function ChangeWalletNetwork({newNetwork, onClose, open, notifyAl
         logger.debug('[ChangeWalletNetwork] handleUpdate. newChanid = ', newChanid)
         if (provider) {
             try {
-                await provider.send('wallet_switchEthereumChain', [{chainId: newChanid}])
+                const response = await provider.send('wallet_switchEthereumChain', [{chainId: newChanid}])
+                logger.debug('[ChangeWalletNetwork] response=', response)
                 logger.debug(`[ChangeWalletNetwork] Switched network to chainId ${newNetwork} successfully.`)
                 notifyAlertUpdate([{severity: 'success', message: `Switched network to chainId ${newNetwork} successfully.`}])
                 onClose()
@@ -37,6 +38,8 @@ export default function ChangeWalletNetwork({newNetwork, onClose, open, notifyAl
                     onClose()
                 }
             }
+        } else {
+            logger.error('[ChangeWalletNetwork] provider is null')
         }
     }
 
