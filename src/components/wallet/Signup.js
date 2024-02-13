@@ -55,7 +55,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
 
     const handleDisConnected = () => {
         reset()
-        setState({...state, 'name': '', introduction:'', checked: false} )
+        setState({...state, 'name': '', intro:'', checked: false} )
         localStorage.removeItem('login')
         onClose()
         notifyWalletUpdate(undefined)
