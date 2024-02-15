@@ -7,7 +7,7 @@ export const PriceFilterSchema = yup.object().shape({
 export const SignupSchema = yup.object().shape({
     name: yup.string().required('Display name is required').max(20, 'Display name should be less than 20 characters'),
     checked: yup.boolean().oneOf([true], "You must accept the terms and conditions"),
-    intro: yup.string().max(2, 'Introduction should be less than 200 characters').optional()
+    intro: yup.string().max(200, 'Introduction should be less than 200 characters').optional()
 })
 
 export const SettingSchema = yup.object().shape({
