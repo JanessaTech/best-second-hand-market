@@ -46,3 +46,9 @@ npm start   // start it as dev by default
 npm run start_win_dev
 npm run start_win_stage
 ```
+
+## How to run test cases for smart contracts
+
+```
+npx hardhat test .\test\CoreMarket1155.js
+```

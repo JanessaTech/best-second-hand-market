@@ -25,8 +25,7 @@ const VisuallyHiddenInput = styled('input')({
 const userData = {
   id: 111,
   name: 'Janessatech',
-  walletAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
-  gateway: 'bbb',
+  address: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
   intro: 'This is me'
 }
 
@@ -34,11 +33,9 @@ export default function Setting() {
   logger.debug('[Setting] rendering...')
   const {wallet, notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(SettingSchema)})
-  const gatewayOptions = ['aaa', 'bbb','ccc','ddd']
   const [state, setState] = useState({
     name:'',
-    walletAddress: '',
-    gateway: 'aaa',
+    address: '',
     intro:''
   }) // we must have a default value for gateway
 
@@ -81,10 +78,6 @@ export default function Setting() {
     reset()
   }
 
-  const handleGatewayChange = (gateway) => {
-    setState({...state, gateway: gateway})
-  }
-
   return (
     <Box component="main" sx={{width:1}}>
       <Box sx={{width:1, height: HeaderHeight}}/>
@@ -120,7 +113,7 @@ export default function Setting() {
                 aria-label='wallet address'
                 name='wallet-address'
                 label='wallet address'
-                value={state?.walletAddress}
+                value={state?.address}
                 placeholder='Wallet address' 
                 size="small"
                 fullWidth
@@ -155,13 +148,6 @@ export default function Setting() {
               rows={4}
               onChange={handleInputChanges}
               />
-          <CustomSelect 
-                label={'Gateway'} 
-                showInputLabel={true} 
-                value={state?.gateway} 
-                handleChange={handleGatewayChange} 
-                options={gatewayOptions} 
-                width={0.6}/>
           <Box sx={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Button variant='outlined' color='customBlack' sx={{textTransform:'none'}} onClick={handleReset}>Reset</Button>
                   <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none', ml:2}}>Save</Button>

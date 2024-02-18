@@ -5,13 +5,13 @@ export const PriceFilterSchema = yup.object().shape({
     max: yup.number().typeError('ERROR: A positve number is required for Max field!').moreThan(yup.ref('min'), "Max should be > Min")
 })
 export const SignupSchema = yup.object().shape({
-    name: yup.string().required('Display name is required').max(20, 'Display name should be less than 20 characters'),
+    name : yup.string().min(5, 'Display name must have at least 5 characters').max(20, 'Display name must have at most 20 characters').required('Display name is required'),
     checked: yup.boolean().oneOf([true], "You must accept the terms and conditions"),
     intro: yup.string().max(200, 'Introduction should be less than 200 characters').optional()
 })
 
 export const SettingSchema = yup.object().shape({
-    name: yup.string().required('Display name is required').max(20, 'Display name is less than 20 characters'),
+    name : yup.string().min(5, 'Display name must have at least 5 characters').max(20, 'Display name must have at most 20 characters').required('Display name is required'),
     intro: yup.string().max(200, 'Introduction should be less than 200 characters').optional()
 })
 
