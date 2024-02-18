@@ -66,7 +66,7 @@ describe('CoreMarket1155', function () {
             await coreMarket1155.mint(address1, uris[0])
             await expect(coreMarket1155.buy(ethers.ZeroAddress, address2, [0])).to.be.reverted
         })
-        it("Should fail to buy when from is invalid address", async function () {
+        it("Should fail to buy when to is invalid address", async function () {
             const {coreMarket1155, address1, address2, uris} = await loadFixture(deployMyTodoFixture)
             await coreMarket1155.mint(address1, uris[0])
             await expect(coreMarket1155.buy(address2, ethers.ZeroAddress, [0])).to.be.reverted
@@ -130,7 +130,7 @@ describe('CoreMarket1155', function () {
             await coreMarket1155.mint(address1, uris[0])
             await expect(coreMarket1155.doSafeBuy(ethers.ZeroAddress, address2, [0])).to.be.reverted
         })
-        it("Should fail to doSafeBuy when from is invalid address", async function () {
+        it("Should fail to doSafeBuy when to is invalid address", async function () {
             const {coreMarket1155, address1, address2, uris} = await loadFixture(deployMyTodoFixture)
             await coreMarket1155.mint(address1, uris[0])
             await expect(coreMarket1155.doSafeBuy(address2, ethers.ZeroAddress, [0])).to.be.reverted
