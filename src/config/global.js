@@ -8,7 +8,7 @@ const config = {
           rpcUrls:'http://127.0.0.1:8545/',
           contracts: [  // configure at least one
               {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0', tokenStandard: '721'},
-              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68ffdd342', tokenStandard: '1155'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68ffdd341', tokenStandard: '1155'},
             ]
           }
         ],
@@ -19,8 +19,8 @@ const config = {
             currency: 'SepoliaETH',
             rpcUrls:'https://sepolia.infura.io/v3/',
             contracts:[
-              {address: '0xaaaaaa', tokenStandard: 'aaaa'},
-              {address: '0xbbbbbb', tokenStandard: 'bbbb'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf2', tokenStandard: 'aaaa'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf3', tokenStandard: 'bbbb'},
             ]
           },
           {
@@ -29,8 +29,8 @@ const config = {
             currency: 'MATIC',
             rpcUrls:'https://rpc-mumbai.maticvigil.com',
             contracts:[
-              {address: '0xcccccc', tokenStandard: 'cccc'},
-              {address: '0xdddddd', tokenStandard: 'dddd'}
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf4', tokenStandard: 'cccc'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf5', tokenStandard: 'dddd'}
             ]
           },
           {
@@ -39,8 +39,8 @@ const config = {
             currency: 'AVAX',
             rpcUrls:'https://api.avax-test.network/ext/bc/C/rpc',
             contracts:[
-              {address: '0xeeeeee', tokenStandard: 'eeee'},
-              {address: '0xffffff', tokenStandard: 'ffff'}
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf6', tokenStandard: 'eeee'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf7', tokenStandard: 'ffff'}
             ]
           },
           {
@@ -49,8 +49,8 @@ const config = {
             currency: 'XDAI',
             rpcUrls:'https://rpc.chiadochain.net',
             contracts:[
-              {address: '0xggggg', tokenStandard: 'gggg'},
-              {address: '0xhhhhh', tokenStandard: 'hhhh'}
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf8', tokenStandard: 'gggg'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf9', tokenStandard: 'hhhh'}
             ]
           }
         ],
