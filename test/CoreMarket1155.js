@@ -60,6 +60,53 @@ describe('CoreMarket1155', function () {
         })
     })
 
+    describe("mintBatch", function () {
+        it("Should fail to mint using invalid to address", async function () {
+            const {coreMarket1155, uris} = await loadFixture(deployMyTodoFixture)
+            await expect(coreMarket1155.mintBatch(ethers.ZeroAddress, uris)).to.be.reverted;
+        })
+        it("Should mintBatch successfully with correct result", async function () {
+            const {coreMarket1155, address1, uris} = await loadFixture(deployMyTodoFixture)
+            await coreMarket1155.mintBatch(address1, uris)
+            const newToken = Number(await coreMarket1155.getNextToken()) - 1
+            const uri = await coreMarket1155.getUri(newToken)
+            const owner = await coreMarket1155.ownerOfToken(newToken)
+            const tokenIds = await coreMarket1155.tokensOfAddress(address1)
+            const balance = await coreMarket1155.balanceOf(address1, newToken)
+            
+            expect(newToken).to.equal(uris.length - 1)
+            expect(uri).to.equal(uris[uris.length - 1])
+            expect(owner).to.equal(address1)
+            expect(tokenIds).to.eql([0n, 1n, 2n, 3n, 4n, 5n])
+            expect(balance).to.equal(1)
+        })
+    })
+
+    describe("getAllTokenIds", function () {
+        it ("Should return the correct list of tokens when using mint", async function () {
+            const {coreMarket1155, address1, address2, uris} = await loadFixture(deployMyTodoFixture)
+            await coreMarket1155.mint(address1, uris[0])
+            await coreMarket1155.mint(address1, uris[1])
+            await coreMarket1155.mint(address1, uris[2])
+            await coreMarket1155.mint(address2, uris[3])
+            await coreMarket1155.mint(address2, uris[4])
+            await coreMarket1155.mint(address2, uris[5])
+
+            const allTokenIds = await coreMarket1155.getAllTokenIds()
+
+            expect(allTokenIds).to.eql([0n, 1n, 2n, 3n, 4n, 5n])
+        })
+        it ("Should return the correct list of tokens when using mintBatch", async function () {
+            const {coreMarket1155, address1, address2, uris} = await loadFixture(deployMyTodoFixture)
+            await coreMarket1155.mintBatch(address1, uris)
+            await coreMarket1155.mintBatch(address2, uris)
+
+            const allTokenIds = await coreMarket1155.getAllTokenIds()
+
+            expect(allTokenIds).to.eql([0n, 1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n, 9n, 10n, 11n])
+        })
+    })
+
     describe("buy", function () {
         it("Should fail to buy when from is invalid address", async function () {
             const {coreMarket1155, address1, address2, uris} = await loadFixture(deployMyTodoFixture)

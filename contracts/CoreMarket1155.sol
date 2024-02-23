@@ -13,6 +13,7 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
     string private _symbol;
     mapping(uint tokenId => address) private _owners;
     mapping(address => uint[]) private tokenIdsOfAddress;
+    uint[] private allTokenIds;
 
     constructor(address initialOwner, string memory symbol_) ERC1155("") Ownable(initialOwner) {
         _symbol = symbol_;
@@ -43,6 +44,7 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         _mint(to, tokenId, 1, "");
         uris[tokenId] = _uri;
         _owners[tokenId] = to;
+        allTokenIds.push(tokenId);
         tokenIdsOfAddress[to].push(tokenId);
         tokenId++;
         return tokenId;
@@ -57,11 +59,16 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
             amounts[i] = 1;
             uris[tokenId] = _uris[i];
             _owners[tokenId] = to;
+            allTokenIds.push(tokenId);
             tokenIdsOfAddress[to].push(tokenId);
             tokenId++;
         }
         _mintBatch(to, tokenIds, amounts, "");
         return tokenIds;
+    }
+
+    function getAllTokenIds() public view returns(uint[] memory) {
+        return allTokenIds;
     }
 
     function getNextToken() public view returns(uint) {
