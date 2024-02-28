@@ -45,6 +45,7 @@ npm install loglevel
 npm start   // start it as dev by default
 npm run start_win_dev
 npm run start_win_stage
+npm run start_win_prod
 ```
 
 ## How to run test cases for smart contracts

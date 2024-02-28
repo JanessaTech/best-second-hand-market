@@ -61,8 +61,8 @@ const config = {
             currency: 'ETH',
             rpcUrls:'https://mainnet.infura.io/v3/',
             contracts:[
-              {address: '0xiiiiii', tokenStandard: 'iiii'},
-              {address: '0xjjjjjj', tokenStandard: 'jjjj'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb18', tokenStandard: 'iiii'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb28', tokenStandard: 'jjjj'},
             ]
           },
           {
@@ -71,8 +71,8 @@ const config = {
             currency: 'MATIC',
             rpcUrls:'https://polygon-rpc.com',
             contracts:[
-              {address: '0xkkkkkkk', tokenStandard: 'kkkk'},
-              {address: '0xlllllll', tokenStandard: '1llll'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb38', tokenStandard: 'kkkk'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb48', tokenStandard: '1llll'},
             ]
           },
           {
@@ -81,8 +81,8 @@ const config = {
             currency: 'AVAX',
             rpcUrls:'https://avalanche-mainnet.infura.io',
             contracts:[
-              {address: '0xmmmmmmm', tokenStandard: 'mmmm'},
-              {address: '0xnnnnnnn', tokenStandard: 'nnnn'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb58', tokenStandard: 'mmmm'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb68', tokenStandard: 'nnnn'},
             ]
           },
           {
@@ -91,8 +91,8 @@ const config = {
             currency: 'XDAI',
             rpcUrls:'https://rpc.gnosischain.com',
             contracts:[
-              {address: '0xoooooo', tokenStandard: 'oooo'},
-              {address: '0xpppppp', tokenStandard: 'pppp'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb78', tokenStandard: 'oooo'},
+              {address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb88', tokenStandard: 'pppp'},
             ]
           }
         ]
