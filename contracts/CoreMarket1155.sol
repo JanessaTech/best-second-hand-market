@@ -15,6 +15,13 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
     mapping(address => uint[]) private tokenIdsOfAddress;
     uint[] private allTokenIds;
 
+    event mint_tracer(address indexed to, string uri);
+    event mintBatch_tracer(address indexed to, string[] uris);
+    event buy_tracer(address indexed from, address indexed to, uint[] ids);
+    event doSafeBuy_tracer(address indexed from, address indexed to, uint[] ids);
+    event buyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss);
+    event doSafeBuyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss);
+
     constructor(address initialOwner, string memory symbol_) ERC1155("") Ownable(initialOwner) {
         _symbol = symbol_;
     }
@@ -47,6 +54,7 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         allTokenIds.push(tokenId);
         tokenIdsOfAddress[to].push(tokenId);
         tokenId++;
+        emit mint_tracer(to, _uri);
         return tokenId;
     }
 
@@ -64,6 +72,7 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
             tokenId++;
         }
         _mintBatch(to, tokenIds, amounts, "");
+        emit mintBatch_tracer(to, _uris);
         return tokenIds;
     }
 
@@ -117,6 +126,7 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
             removeId(_tokenIds, ids[i]);
         }
         _update(from, to, ids, values);
+        emit buy_tracer(from ,to, ids);
     }
 
     function removeId(uint[] storage _tokenIds, uint id) internal {
@@ -150,6 +160,7 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
             removeId(_tokenIds, ids[i]);
         } 
         _updateWithAcceptanceCheck(from, to, ids, values, "");
+        emit doSafeBuy_tracer(from, to, ids);
     }
 
     function buyBatch(address[] memory froms, address to, uint[][] memory idss) public {
@@ -159,7 +170,8 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
             uint[] memory ids = idss[i];
             doIdsCheck(from, ids);
             buy(from, to, ids);
-        } 
+        }
+        emit buyBatch_tracer(froms, to, idss);
     }
 
     function doSafeBuyBatch(address[] memory froms, address to, uint[][] memory idss) public {
@@ -170,5 +182,6 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
             doIdsCheck(from, ids);
             doSafeBuy(from, to, ids);
         } 
+        emit doSafeBuyBatch_tracer(froms, to, idss);
     }
 }
