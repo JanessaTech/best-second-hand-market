@@ -7,8 +7,16 @@ import { useForm } from "react-hook-form"
 import { CheapIcon } from '../../utils/Svgs'
 import { styled } from '@mui/material/styles'
 import logger from '../../common/Logger'
+import {isFileImage} from '../../utils/FileUtils'
 
-const VisuallyHiddenInput = styled('input')({
+  const VisuallyHiddenInput = styled(props => {
+    const {type, onChange} = props
+    return <input
+        id='profile' 
+        name='profile'
+        type={type} 
+        onChange={onChange}/>
+  })({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
     height: 1,
@@ -19,7 +27,6 @@ const VisuallyHiddenInput = styled('input')({
     whiteSpace: 'nowrap',
     width: 1,
   });
-
 const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
     logger.debug('[Signup] rendering... ')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({
@@ -29,11 +36,13 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
     const [state, setState] = useState({
         name: '',
         intro: '',
-        checked: false
+        checked: false,
+        selectedFile: undefined
     })
 
     useEffect(() => {
         let alerts = []
+        //logger.debug('[useEffect] errors = ', errors)
         if (errors?.name) {
             alerts.push({severity: 'error', message: errors?.name?.message})
         }
@@ -89,6 +98,18 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
         setState({...state, 'checked': !state.checked})
     }
 
+    const onFileChange = (e) => {
+        logger.debug('[Signup] onFileChange')
+        const file = e.target.files[0]
+        logger.debug('[Signup] file name:', file?.name)
+        logger.debug('[Signup] file type:', file?.type)
+        if (isFileImage(file)) {
+            setState({...state, selectedFile: e.target.files[0]})
+        } else {
+            notifyAlertUpdate([{severity: 'error', message: 'Please choose an image. We support png, jpg and gif only'}])
+        }
+    }
+
     return (
         <Dialog  
             sx={{'& .MuiPaper-root.MuiDialog-paper':{width:0.3, height: 'fit-content', borderRadius:5, minWidth:320}}} open={open}>
@@ -129,14 +150,18 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
                         fullWidth
                         onChange={handleInputChanges}
                         />
-                    <Button sx={{textTransform: 'none'}}
-                            component="label" 
-                            variant="contained" 
-                            startIcon={<CloudUploadIcon />} 
-                            color='customBlack'>
-                        Upload your profile image file
-                        <VisuallyHiddenInput type="file" />
-                    </Button>
+                    <Box>
+                        <Button sx={{textTransform: 'none'}}
+                                component="label"
+                                variant="contained"
+                                startIcon={<CloudUploadIcon />}
+                                color='customBlack'>
+                            Upload your profile image file
+                            <VisuallyHiddenInput type="file" onChange={onFileChange}/>
+                        </Button>
+                        <Typography variant='body2' sx={{height:20, width:1}}>{state?.selectedFile?.name}</Typography>
+                    </Box>
+                    
                     <TextField
                         sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}
                         }} 

@@ -11,5 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+::-webkit-file-upload-button {
+  display: none;
+}
+input[type='file'] {
+  display: none;
+}
 
 iframe#webpack-dev-server-client-overlay{display:none!important}

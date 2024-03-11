@@ -51,6 +51,7 @@ export default function Setting() {
 
   useEffect(() => {
     let alerts = []
+    
     if (errors?.name) {
       alerts.push({severity: 'error', message: errors?.name?.message})
     }
