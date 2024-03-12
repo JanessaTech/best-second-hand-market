@@ -10,6 +10,7 @@ import logger from '../../common/Logger'
 import {isFileImage} from '../../utils/FileUtils'
 import config from '../../config'
 import axios from 'axios'
+import {user} from '../../utils/serverClient'
 
 
   const VisuallyHiddenInput = styled(props => {
@@ -73,46 +74,30 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
         notifyWalletUpdate(undefined)
     }
 
-    const handleSignup = (data) => {
+    const handleSignup = async (data) => {
         logger.info('data:', data)
-        onClose()
         var login = localStorage.getItem('login') ? JSON.parse(localStorage.getItem('login')) : undefined
         logger.debug('[Signup] handleSignup login = ', login)
         if (!login || !(login?.address)) {
             logger.error('[Signup] error. Cannot find login in localStorage or login does not have the address sigined')
         } else {
             logger.debug('[Signup] call restful api to register user: associcate a new user with the wallet address =', login?.address)
-
             const formData = new FormData()
             formData.append('name', data.name)
             formData.append('address', login?.address)
             formData.append('intro', data.intro)
             formData.append('profile', state.selectedFile)
-            axios.post(`${config.BACKEND_ADDR}/apis/v1/users/register`, formData, 
-            {
-                headers: {'Content-Type': 'multipart/form-data'}
-            })
-            .then((response) => {
-                logger.debug('registered a new user successfully')
-                logger.debug(response)
-                const responseData = response?.data
-                if (!responseData || !(responseData?.success)) {
-                    const errMsg = responseData ? responseData?.message : `Failed to register the user ${data.user}.Please try it again`
-                    throw new Error(errMsg)
-                } else {
-                    const registeredUser = responseData.data.user
-                    login = {...login, user: registeredUser}
-                    logger.debug('[Signup] login = ', login)
-                    localStorage.removeItem('login')  // remove the outdated data
-                    localStorage.setItem('login', JSON.stringify(login))
-                    const wallet = {address: login?.address, user: registeredUser}
-                    logger.debug('[Signup] call notifyWalletUpdate after registeration is successful')
-                    notifyWalletUpdate(wallet)
-                } 
-            })
-            .catch((err) => {
-                logger.error('Failed to register the user', data.name)
-                logger.error(err)
+            try {
+                const registeredUser = await user.register(formData)
+                login = {...login, user: registeredUser}
+                logger.debug('[Signup] login = ', login)
+                localStorage.removeItem('login')  // remove the outdated data
+                localStorage.setItem('login', JSON.stringify(login))
+                const wallet = {address: login?.address, user: registeredUser}
+                logger.debug('[Signup] call notifyWalletUpdate after registeration is successful')
+                onClose()
+                notifyWalletUpdate(wallet)
+            } catch (err) {
                 let errMsg = ''
                 if (err?.response?.data?.message) {
                     errMsg = err?.response?.data?.message
@@ -120,7 +105,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
                     errMsg = err?.message
                 }
                 notifyAlertUpdate([{severity: 'error', message: errMsg}])
-            })
+            }
         }
     }
 
