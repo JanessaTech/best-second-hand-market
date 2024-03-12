@@ -22,7 +22,22 @@ export const register = async (formData) => {
         headers: {'Content-Type': 'multipart/form-data'}})
         return response?.data?.data?.user
     } catch (err) {
-        logger.error('Failed to register the user', formData.name)
+        logger.error('Failed to register the user', formData.get('name'))
+        logger.error(err)
+        throw err
+    }
+}
+
+export const loginByAddress = async (address) => {
+    logger.debug('[serverClient.user] loginByAddress. address =', address)
+    try {
+        const response = await axios.post(`${config.BACKEND_ADDR}/apis/v1/users/login`,{
+            address: address
+        })
+        logger.debug('response =', response)
+        return response?.data?.data?.user
+    } catch (err) {
+        logger.error('[serverClient.user] findUserByAddress. Failed to login by the address', address)
         logger.error(err)
         throw err
     }

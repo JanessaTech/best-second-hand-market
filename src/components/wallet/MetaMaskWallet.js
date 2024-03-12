@@ -4,6 +4,7 @@ import logger from '../../common/Logger'
 import { BrowserProvider, ethers } from 'ethers'
 import { SiweMessage } from 'siwe'
 import config from '../../config'
+import {user} from '../../utils/serverClient'
 
 const domain = window.location.host
 const origin = window.location.origin
@@ -105,6 +106,7 @@ export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, 
                 }
             })
         }
+        /*
         if (signIn) {
             onClose()
             logger.info('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet address=', address)
@@ -122,6 +124,57 @@ export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, 
                 localStorage.setItem('login', JSON.stringify(login)) 
                 notifyWalletUpdate(newWallet)
             }
+        }*/
+        if (signIn) {
+            
+            logger.info('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet address=', address)
+            user.loginByAddress(address)
+            .then((loginedUser) => {
+                if (!loginedUser) {
+                    throw new Error('Failed to login. Please try again')
+                }
+                // get logined user by login using wallet address
+                logger.debug('[MetaMaskWallet] Got a logined user by address ', address, ' loginedUser =', loginedUser)
+                const newWallet = {address: address, user: loginedUser}
+                const login = {'walletType' : 'metamask', user: loginedUser, address: address}
+                localStorage.setItem('login', JSON.stringify(login)) 
+                onClose()
+                notifyWalletUpdate(newWallet)
+            })
+            .catch((err) => {
+                if (err?.response?.data?.code === 404) {
+                    // we hit here in case there is no user associated with the address
+                    logger.debug('[MetaMaskWallet] no registered user by address ', address, ' is found. navigate to signup page')
+                    const login = {'walletType' : 'metamask', address: address}
+                    localStorage.setItem('login', JSON.stringify(login))
+                    onClose()
+                    openSignup()
+                } else {
+                    /**
+                     *  we hit here in 2 cases:
+                     *  1. network issue
+                     *  2. backend internal issue like validation issue which should be bugs we need to fix
+                     *  */
+                    logger.error('Failed to login by address ', address)
+                    logger.error(err)
+                    const errMsg = err?.message
+                }
+            })
+            /*
+            const isRegistered = false
+            if (!isRegistered) {
+                const login = {'walletType' : 'metamask', address: address}
+                localStorage.setItem('login', JSON.stringify(login))
+                openSignup()
+            } else {
+                // get user info by login using wallet address
+                logger.debug('[MetaMaskWallet] call restful api to login with logined user returned by address=', address)
+                const loginedUser = {id: 111, name: 'JanessaTech lab'}
+                const newWallet = {address: address, user: loginedUser}
+                const login = {'walletType' : 'metamask', user: loginedUser, address: address}
+                localStorage.setItem('login', JSON.stringify(login)) 
+                notifyWalletUpdate(newWallet)
+            }*/
         }
     }, [provider, isWalletLogin, signIn])
 
