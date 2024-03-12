@@ -7,6 +7,7 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logger from './Logger'
+import config from '../config'
 
 const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, notifyWalletUpdate}) => {
     logger.debug('[Header] rendering...')
@@ -158,7 +159,7 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, noti
                             aria-expanded={isProfileOpen ? 'true' : undefined}
                             onClick={handleProfileMenuOpen}
                             >
-                                <Avatar alt={wallet?.user?.name} src={`/imgs/nfters/${wallet?.user?.id}/me.png`}/>
+                                <Avatar alt={wallet?.user?.name} src={`${config.BACKEND_ADDR}/${wallet?.user?.profile}`}/>
                     </IconButton>
                     
                     <ProfileMenu 

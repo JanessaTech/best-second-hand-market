@@ -8,6 +8,9 @@ import { CheapIcon } from '../../utils/Svgs'
 import { styled } from '@mui/material/styles'
 import logger from '../../common/Logger'
 import {isFileImage} from '../../utils/FileUtils'
+import config from '../../config'
+import axios from 'axios'
+
 
   const VisuallyHiddenInput = styled(props => {
     const {type, onChange} = props
@@ -75,17 +78,49 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
         onClose()
         var login = localStorage.getItem('login') ? JSON.parse(localStorage.getItem('login')) : undefined
         logger.debug('[Signup] handleSignup login = ', login)
-        if (!login || !login?.address) {
+        if (!login || !(login?.address)) {
             logger.error('[Signup] error. Cannot find login in localStorage or login does not have the address sigined')
         } else {
             logger.debug('[Signup] call restful api to register user: associcate a new user with the wallet address =', login?.address)
-            const registeredUser = {id: 111, name: 'JanessaTech lab'}
-            login = {...login, user: registeredUser}
-            localStorage.removeItem('login')  // remove the outdated data
-            localStorage.setItem('login', JSON.stringify(login))
-            const wallet = {address: login?.address, user: registeredUser}
-            logger.debug('[Signup] call notifyWalletUpdate after registeration is successful')
-            notifyWalletUpdate(wallet)
+
+            const formData = new FormData()
+            formData.append('name', data.name)
+            formData.append('address', login?.address)
+            formData.append('intro', data.intro)
+            formData.append('profile', state.selectedFile)
+            axios.post(`${config.BACKEND_ADDR}/apis/v1/users/register`, formData, 
+            {
+                headers: {'Content-Type': 'multipart/form-data'}
+            })
+            .then((response) => {
+                logger.debug('registered a new user successfully')
+                logger.debug(response)
+                const responseData = response?.data
+                if (!responseData || !(responseData?.success)) {
+                    const errMsg = responseData ? responseData?.message : `Failed to register the user ${data.user}.Please try it again`
+                    throw new Error(errMsg)
+                } else {
+                    const registeredUser = responseData.data.user
+                    login = {...login, user: registeredUser}
+                    logger.debug('[Signup] login = ', login)
+                    localStorage.removeItem('login')  // remove the outdated data
+                    localStorage.setItem('login', JSON.stringify(login))
+                    const wallet = {address: login?.address, user: registeredUser}
+                    logger.debug('[Signup] call notifyWalletUpdate after registeration is successful')
+                    notifyWalletUpdate(wallet)
+                } 
+            })
+            .catch((err) => {
+                logger.error('Failed to register the user', data.name)
+                logger.error(err)
+                let errMsg = ''
+                if (err?.response?.data?.message) {
+                    errMsg = err?.response?.data?.message
+                } else {
+                    errMsg = err?.message
+                }
+                notifyAlertUpdate([{severity: 'error', message: errMsg}])
+            })
         }
     }
 
@@ -103,11 +138,16 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
         const file = e.target.files[0]
         logger.debug('[Signup] file name:', file?.name)
         logger.debug('[Signup] file type:', file?.type)
-        if (isFileImage(file)) {
-            setState({...state, selectedFile: e.target.files[0]})
-        } else {
+        logger.debug('[Signup] file size:', file.size)
+        if (file && !isFileImage(file)) {
             notifyAlertUpdate([{severity: 'error', message: 'Please choose an image. We support png, jpg and gif only'}])
+            return
         }
+        if (file && file.size > config.multer.fileSize) {
+            notifyAlertUpdate([{severity: 'error', message: 'The file chosen should be less than 1M '}]) 
+            return
+        }
+        setState({...state, selectedFile: e.target?.files[0]})
     }
 
     return (
@@ -133,7 +173,9 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
                         '& .MuiFormControlLabel-root > span':{ pr:2}
                     }}
                     noValidate
-                    autoComplete="off">
+                    autoComplete="off"
+                    encType='multipart/form-data'
+                    >
                     <TextField
                         sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}
                             }}

@@ -3,6 +3,7 @@ import React, { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
+import config from '../../config'
 
 const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWalletUpdate}) => {
   logger.debug('[ProfileMenu] rendering...')
@@ -49,7 +50,7 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWall
     >
         <MenuItem onClick={() => handleClick("/profile/nfts")}>
           <ListItemIcon>
-            <Avatar alt='JanessaTech lab' src={`/imgs/nfters/${wallet?.user?.id}/me.png`} sx={{ width: 25, height: 25 }}/>
+            <Avatar alt={wallet?.user?.name} src={`${config.BACKEND_ADDR}/${wallet?.user?.profile}`} sx={{ width: 25, height: 25 }}/>
           </ListItemIcon>
           <ListItemText>My NFTs</ListItemText>
         </MenuItem>

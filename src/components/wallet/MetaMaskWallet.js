@@ -3,7 +3,7 @@ import WalletItem from './WalletItem'
 import logger from '../../common/Logger'
 import { BrowserProvider, ethers } from 'ethers'
 import { SiweMessage } from 'siwe'
-import {BACKEND_ADDR} from '../../common/constant'
+import config from '../../config'
 
 const domain = window.location.host
 const origin = window.location.origin
@@ -24,7 +24,7 @@ class JsonError extends Error {
 
 const getNonce = async () => {
     try {
-        const rawResponse = await fetch(`${BACKEND_ADDR}/apis/v1/siwe/nonce`, {
+        const rawResponse = await fetch(`${config.BACKEND_ADDR}/apis/v1/siwe/nonce`, {
             method: 'GET',
             headers: {
             'Accept': 'application/json',
@@ -49,7 +49,7 @@ const getNonce = async () => {
 
   const verify = async (data) => {
     try {
-        const rawResponse = await fetch(`${BACKEND_ADDR}/apis/v1/siwe/verify`, {
+        const rawResponse = await fetch(`${config.BACKEND_ADDR}/apis/v1/siwe/verify`, {
         method: 'POST',
         headers: {
         'Accept': 'application/json',

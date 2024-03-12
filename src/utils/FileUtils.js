@@ -1,5 +1,6 @@
+import config from '../config'
+
 export function isFileImage(file) {
-    const acceptedImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
- 
+    const acceptedImageTypes = config.multer.acceptedImageTypes
     return file && acceptedImageTypes.includes(file['type'])
 }

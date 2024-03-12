@@ -156,8 +156,8 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
                       <Overview wallet={wallet} nft={nft} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen} notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
                   </Grid>
                 ))
-               : Array.from(new Array(20)).map((dummy) => (
-                <Grid item xs={6} sm={4} md={3} lg={2} xl={2}>
+               : Array.from(new Array(20)).map((dummy, index) => (
+                <Grid key={index} item xs={6} sm={4} md={3} lg={2} xl={2}>
                   <OverviewSkeleton/>
                 </Grid>
               ))         

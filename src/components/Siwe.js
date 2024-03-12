@@ -1,7 +1,7 @@
 import { BrowserProvider } from 'ethers';
 import { Box, Button } from '@mui/material';
 import { SiweMessage } from 'siwe';
-import {BACKEND_ADDR} from '../common/constant'
+import config from '../config'
 
 
 const domain = window.location.host;
@@ -12,7 +12,7 @@ export default function Siwe() {
   const provider = new BrowserProvider(window.ethereum);
 
   const getNonce = async () => {
-    const rawResponse = await fetch(`${BACKEND_ADDR}/apis/v1/siwe/nonce`, {
+    const rawResponse = await fetch(`${config.BACKEND_ADDR}/apis/v1/siwe/nonce`, {
       method: 'GET',
       headers: {
       'Accept': 'application/json',
@@ -25,7 +25,7 @@ export default function Siwe() {
   }
 
   const verify = async (data) => {
-    const rawResponse = await fetch(`${BACKEND_ADDR}/apis/v1/siwe/verify`, {
+    const rawResponse = await fetch(`${config.BACKEND_ADDR}/apis/v1/siwe/verify`, {
       method: 'POST',
       headers: {
       'Accept': 'application/json',

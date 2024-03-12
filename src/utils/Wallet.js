@@ -1,6 +1,7 @@
 
 import logger from "../common/Logger"
 import {ethers, BrowserProvider} from 'ethers'
+import {user} from '../utils/serverClient'
 
 const getMetaMaskWallet = async () => {
     if (window?.ethereum) {
@@ -26,11 +27,14 @@ const handleMetaMaskAccounts = async (accounts) => {
 const getUserByWalletAddress = async (account) => {
     logger.debug('[Utils - wallet] getUserByWalletAddress. call restful api to get user by address =', ethers.getAddress(account))
     // throw error when we cannot find user associated with the wallet address
-    return {address: ethers.getAddress(account), user: {id: 111, name: 'JanessaTech lab'}}
+    const registedUser = await user.findUserByAddress(ethers.getAddress(account))
+    logger.debug('[Utils - wallet] getUserByWalletAddress. registedUser =', registedUser)
+    return {address: ethers.getAddress(account), user: registedUser}
 }
 
 const GetCurrentWallet = async () => {
     const login = localStorage.getItem('login') ? JSON.parse(localStorage.getItem('login')) : undefined
+    logger.debug('[Utils - wallet] GetCurrentWallet. login = ', login)
     const walletType = login?.walletType
     const user = login?.user
     console.log('[Utils - wallet] GetCurrentWallet  walletType=', walletType)
