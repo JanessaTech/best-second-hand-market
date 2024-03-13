@@ -26,7 +26,6 @@ const handleMetaMaskAccounts = async (accounts) => {
 
 const getUserByWalletAddress = async (account) => {
     logger.debug('[Utils - wallet] getUserByWalletAddress. call restful api to get user by address =', ethers.getAddress(account))
-    // throw error when we cannot find user associated with the wallet address
     const registedUser = await user.findUserByAddress(ethers.getAddress(account))
     logger.debug('[Utils - wallet] getUserByWalletAddress. registedUser =', registedUser)
     return {address: ethers.getAddress(account), user: registedUser}

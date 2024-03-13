@@ -19,13 +19,6 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWall
       
       try {
         await user.logoutByAddress(wallet?.address)
-        localStorage.removeItem('login')
-        handleProfileMenuClose()
-        notifyWalletUpdate(undefined)
-        const location = window.location.pathname
-        if (location.startsWith('/profile')) {
-          navigate('/')
-        }
         notifyAlertUpdate([{severity: 'success', message: 'Logout successfully'}])
       } catch (err) {
         // it is a bug if code hits here (except network issue)
@@ -36,6 +29,13 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWall
             errMsg = err?.message
         }
         notifyAlertUpdate([{severity: 'error', message: errMsg}])
+      }
+      localStorage.removeItem('login')
+      handleProfileMenuClose()
+      notifyWalletUpdate(undefined)
+      const location = window.location.pathname
+      if (location.startsWith('/profile')) {
+        navigate('/')
       }
     }
 

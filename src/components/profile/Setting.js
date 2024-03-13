@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, TextField } from '@mui/material'
+import React, { memo, useEffect, useState } from 'react'
+import { Box, Button, Container, TextField, Typography } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { styled } from '@mui/material/styles'
 import {HeaderHeight} from '../../common/constant'
@@ -7,10 +7,19 @@ import { useForm } from 'react-hook-form'
 import {SettingSchema} from '../../common/Schemas'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {GlobalVariables} from '../MainLayout'
-import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
+import {user} from '../../utils/serverClient'
+import {isFileImage} from '../../utils/FileUtils'
+import config from '../../config'
 
-const VisuallyHiddenInput = styled('input')({
+const VisuallyHiddenInput = styled(props => {
+  const {type, onChange} = props
+  return <input
+      id='profile' 
+      name='profile'
+      type={type} 
+      onChange={onChange}/>
+})({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
   height: 1,
@@ -22,28 +31,36 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-const userData = {
-  id: 111,
-  name: 'Janessatech',
-  address: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
-  intro: 'This is me'
-}
-
-export default function Setting() {
+const Setting = () => {
   logger.debug('[Setting] rendering...')
-  const {wallet, notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
+  const {wallet, notifyAlertUpdate, notifyWalletUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(SettingSchema)})
   const [state, setState] = useState({
+    id: '',
     name:'',
     address: '',
-    intro:''
+    intro:'',
+    selectedFile: undefined
   }) // we must have a default value for gateway
 
   useEffect(() => {
     logger.debug('[Setting] call notifyHideMenu in useEffect')
-    if (wallet?.user) {
-      logger.debug('[Setting] call restful api to get user by user id =', wallet?.user.id)
-      setState({...userData})
+    if (wallet?.address) {
+      logger.debug('[Setting] call restful api to get user by address =', wallet?.address)
+      user.findUserByAddress(wallet.address)
+      .then((user) => {
+        setState({id: user?.id, name: user?.name, address: user.address, intro: user?.intro})
+      })
+      .catch((err) => {
+        // there is a bug we need to fix if codes hit here except network issue
+        let errMsg = ''
+        if (err?.response?.data?.message) {
+            errMsg = err?.response?.data?.message
+        } else {
+            errMsg = err?.message
+        }
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+      })
     }
     reset()
     notifyHideMenu()
@@ -64,9 +81,34 @@ export default function Setting() {
     }  
   }, [errors])
 
-  const handleUpdate = (data) => {
+  const handleUpdate = async (data) => {
     logger.debug('[Setting] data=', data)
     logger.debug('[Setting] call restful api to save user setting')
+    const formData = new FormData()
+    formData.append('id', state.id)
+    formData.append('name', data.name)
+    formData.append('intro', data.intro)
+    formData.append('profile', state.selectedFile)
+    try {
+      const updatedUser  = await user.update(formData)
+      var login = localStorage.getItem('login') ? JSON.parse(localStorage.getItem('login')) : undefined
+      login = {...login, user: updatedUser}
+      logger.debug('[Setting] login = ', login)
+      localStorage.removeItem('login')  // remove the outdated data
+      localStorage.setItem('login', JSON.stringify(login))
+      const wallet = {address: login?.address, user: updatedUser}
+      logger.debug('[Setting] call notifyWalletUpdate after update is successful')
+      notifyWalletUpdate(wallet)
+      notifyAlertUpdate([{severity: 'success', message: 'setting was updated successfully'}])
+    } catch(err) {
+      let errMsg = ''
+      if (err?.response?.data?.message) {
+          errMsg = err?.response?.data?.message
+      } else {
+          errMsg = err?.message
+      }
+      notifyAlertUpdate([{severity: 'error', message: errMsg}])
+    }
   }
 
   const handleInputChanges = (e) => {
@@ -79,6 +121,24 @@ export default function Setting() {
     reset()
   }
 
+  const onFileChange = (e) => {
+    logger.debug('[Setting] onFileChange')
+    const file = e.target.files[0]
+    logger.debug('[Setting] file name:', file?.name)
+    logger.debug('[Setting] file type:', file?.type)
+    logger.debug('[Setting] file size:', file.size)
+    if (file && !isFileImage(file)) {
+        notifyAlertUpdate([{severity: 'error', message: 'Please choose an image. We support png, jpg and gif only'}])
+        return
+    }
+    if (file && file.size > config.multer.fileSize) {
+        notifyAlertUpdate([{severity: 'error', message: 'The file chosen should be less than 1M '}]) 
+        return
+    }
+    setState({...state, selectedFile: e.target?.files[0]})
+  }
+  console.log('state = ', state)
+
   return (
     <Box component="main" sx={{width:1}}>
       <Box sx={{width:1, height: HeaderHeight}}/>
@@ -90,7 +150,9 @@ export default function Setting() {
           }}
           onSubmit={handleSubmit(handleUpdate)}
           noValidate
-          autoComplete="off">
+          autoComplete="off"
+          encType='multipart/form-data'
+          >
 
           <TextField
                 sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}}}
@@ -123,14 +185,17 @@ export default function Setting() {
                   readOnly: true,
                 }}
           />
-          <Button sx={{textTransform: 'none'}}
-                            component="label" 
-                            variant="contained" 
-                            startIcon={<CloudUploadIcon />} 
-                            color='customBlack'>
-                        Upload your profile image file
-                        <VisuallyHiddenInput type="file" />
-          </Button>
+          <Box>
+              <Button sx={{textTransform: 'none'}}
+                                component="label" 
+                                variant="contained" 
+                                startIcon={<CloudUploadIcon />} 
+                                color='customBlack'>
+                            Upload your profile image file
+                            <VisuallyHiddenInput type="file" onChange={onFileChange}/>
+              </Button>
+              <Typography variant='body2' sx={{height:20, width:1}}>{state?.selectedFile?.name}</Typography>
+          </Box>
           <TextField
               sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}
               }} 
@@ -160,4 +225,6 @@ export default function Setting() {
     </Box>
   )
 }
+
+export default memo(Setting)
 

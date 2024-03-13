@@ -212,6 +212,7 @@ const MainLayout = (props) => {
                     openCart: openCart,
                     notifyFilterUpdate: notifyFilterUpdate,
                     notifyAlertUpdate: notifyAlertUpdate,
+                    notifyWalletUpdate: notifyWalletUpdate, 
                     notifyWalletOpen: notifyWalletOpen,
                     notifyShowMenu: notifyShowMenu,
                     notifyHideMenu: notifyHideMenu,

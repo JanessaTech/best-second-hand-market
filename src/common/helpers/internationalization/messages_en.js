@@ -6,5 +6,6 @@ export default {
     user_failed_findby_address: 'Failed to find an user by address {0} due to {1}',
     user_failed_register: 'Failed to register the user {0} due to {1}',
     user_failed_login: 'Failed to logout by address {0} due to {1}',
-    user_failed_logout: 'Failed to logout by address {0} due to {1}'
+    user_failed_logout: 'Failed to logout by address {0} due to {1}',
+    user_failed_update: 'Failed to update the user {0} due to {1}',
 }

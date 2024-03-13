@@ -25,7 +25,7 @@ export const register = async (formData) => {
         return response?.data?.data?.user
     } catch (err) {
         const reason = err?.response?.data?.message || err?.message || err
-        logger.error('[serverClient.user] findUserByAddress.', messageHelper.getMessage('user_failed_register', formData.get('name'), reason))
+        logger.error('[serverClient.user] register.', messageHelper.getMessage('user_failed_register', formData.get('name'), reason))
         logger.error(err)
         throw err
     }
@@ -41,7 +41,7 @@ export const loginByAddress = async (address) => {
         return response?.data?.data?.user
     } catch (err) {
         const reason = err?.response?.data?.message || err?.message || err
-        logger.error('[serverClient.user] findUserByAddress.', messageHelper.getMessage('user_failed_login', address, reason))
+        logger.error('[serverClient.user] loginByAddress.', messageHelper.getMessage('user_failed_login', address, reason))
         logger.error(err)
         throw err
     }
@@ -58,6 +58,20 @@ export const logoutByAddress = async (address) => {
     } catch (err) {
         const reason = err?.response?.data?.message || err?.message || err
         logger.error('[serverClient.user] logoutByAddress', messageHelper.getMessage('user_failed_logout', address, reason))
+        logger.error(err)
+        throw err
+    }
+}
+
+export const update = async (formData) => {
+    logger.debug('[serverClient.user] update')
+    try {
+        const response = await axios.post(`${config.BACKEND_ADDR}/apis/v1/users/update`, formData, {
+        headers: {'Content-Type': 'multipart/form-data'}})
+        return response?.data?.data?.user
+    } catch (err) {
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.user] update.', messageHelper.getMessage('user_failed_update', formData.get('name'), reason))
         logger.error(err)
         throw err
     }
