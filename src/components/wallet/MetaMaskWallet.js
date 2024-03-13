@@ -121,6 +121,7 @@ export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, 
                 localStorage.setItem('login', JSON.stringify(login)) 
                 onClose()
                 notifyWalletUpdate(newWallet)
+                notifyAlertUpdate([{severity: 'success', message: 'Login successfully'}])
             })
             .catch((err) => {
                 if (err?.response?.data?.code === 404) {

@@ -9,7 +9,6 @@ import { styled } from '@mui/material/styles'
 import logger from '../../common/Logger'
 import {isFileImage} from '../../utils/FileUtils'
 import config from '../../config'
-import axios from 'axios'
 import {user} from '../../utils/serverClient'
 
 

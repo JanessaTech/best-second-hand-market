@@ -26,6 +26,7 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWall
         if (location.startsWith('/profile')) {
           navigate('/')
         }
+        notifyAlertUpdate([{severity: 'success', message: 'Logout successfully'}])
       } catch (err) {
         // it is a bug if code hits here (except network issue)
         let errMsg = ''
