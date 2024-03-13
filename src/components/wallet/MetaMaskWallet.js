@@ -106,32 +106,13 @@ export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, 
                 }
             })
         }
-        /*
-        if (signIn) {
-            onClose()
-            logger.info('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet address=', address)
-            const isRegistered = false
-            if (!isRegistered) {
-                const login = {'walletType' : 'metamask', address: address}
-                localStorage.setItem('login', JSON.stringify(login))
-                openSignup()
-            } else {
-                // get user info by login using wallet address
-                logger.debug('[MetaMaskWallet] call restful api to login with logined user returned by address=', address)
-                const loginedUser = {id: 111, name: 'JanessaTech lab'}
-                const newWallet = {address: address, user: loginedUser}
-                const login = {'walletType' : 'metamask', user: loginedUser, address: address}
-                localStorage.setItem('login', JSON.stringify(login)) 
-                notifyWalletUpdate(newWallet)
-            }
-        }*/
         if (signIn) {
             
             logger.info('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet address=', address)
             user.loginByAddress(address)
             .then((loginedUser) => {
                 if (!loginedUser) {
-                    throw new Error('Failed to login. Please try again')
+                    throw new Error('Failed to login. Please try again') // code shouldn't hit here. it is a bug if it did
                 }
                 // get logined user by login using wallet address
                 logger.debug('[MetaMaskWallet] Got a logined user by address ', address, ' loginedUser =', loginedUser)
@@ -157,24 +138,15 @@ export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, 
                      *  */
                     logger.error('Failed to login by address ', address)
                     logger.error(err)
-                    const errMsg = err?.message
+                    let errMsg = ''
+                    if (err?.response?.data?.message) {
+                        errMsg = err?.response?.data?.message
+                    } else {
+                        errMsg = err?.message
+                    }
+                    notifyAlertUpdate([{severity: 'error', message: errMsg}])
                 }
             })
-            /*
-            const isRegistered = false
-            if (!isRegistered) {
-                const login = {'walletType' : 'metamask', address: address}
-                localStorage.setItem('login', JSON.stringify(login))
-                openSignup()
-            } else {
-                // get user info by login using wallet address
-                logger.debug('[MetaMaskWallet] call restful api to login with logined user returned by address=', address)
-                const loginedUser = {id: 111, name: 'JanessaTech lab'}
-                const newWallet = {address: address, user: loginedUser}
-                const login = {'walletType' : 'metamask', user: loginedUser, address: address}
-                localStorage.setItem('login', JSON.stringify(login)) 
-                notifyWalletUpdate(newWallet)
-            }*/
         }
     }, [provider, isWalletLogin, signIn])
 
