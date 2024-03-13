@@ -49,6 +49,7 @@ const Setting = () => {
       logger.debug('[Setting] call restful api to get user by address =', wallet?.address)
       user.findUserByAddress(wallet.address)
       .then((user) => {
+        reset()
         setState({id: user?.id, name: user?.name, address: user.address, intro: user?.intro})
       })
       .catch((err) => {
@@ -62,7 +63,6 @@ const Setting = () => {
         notifyAlertUpdate([{severity: 'error', message: errMsg}])
       })
     }
-    reset()
     notifyHideMenu()
   }, [wallet])
 
