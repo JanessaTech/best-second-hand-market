@@ -169,7 +169,7 @@ export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, 
         const signer = await provider.getSigner();
         const address = await signer.getAddress()
         const normalizedAddress = ethers.getAddress(address)
-        const statement = 'Sign in with Ethereum to the app.'
+        const statement = config.SignInEth
         const network  = await provider.getNetwork()
         logger.debug('[MetaMaskWallet] signInWithEthereu. network:', network)
         const chainId = (await provider.getNetwork()).chainId
