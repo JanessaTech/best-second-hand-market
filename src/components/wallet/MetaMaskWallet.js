@@ -5,6 +5,7 @@ import { BrowserProvider, ethers } from 'ethers'
 import { SiweMessage } from 'siwe'
 import config from '../../config'
 import {user} from '../../utils/serverClient'
+import messageHelper from '../../common/helpers/internationalization/messageHelper'
 
 const domain = window.location.host
 const origin = window.location.origin
@@ -107,15 +108,14 @@ export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, 
             })
         }
         if (signIn) {
-            
-            logger.info('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet address=', address)
+            logger.debug('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet address=', address)
             user.loginByAddress(address)
             .then((loginedUser) => {
                 if (!loginedUser) {
                     throw new Error('Failed to login. Please try again') // code shouldn't hit here. it is a bug if it did
                 }
                 // get logined user by login using wallet address
-                logger.debug('[MetaMaskWallet] Got a logined user by address ', address, ' loginedUser =', loginedUser)
+                logger.debug(messageHelper.getMessage('metamask_get_logined_user_success', 'MetaMaskWallet', address, loginedUser))
                 const newWallet = {address: address, user: loginedUser}
                 const login = {'walletType' : 'metamask', user: loginedUser, address: address}
                 localStorage.setItem('login', JSON.stringify(login)) 
@@ -125,7 +125,7 @@ export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, 
             .catch((err) => {
                 if (err?.response?.data?.code === 404) {
                     // we hit here in case there is no user associated with the address
-                    logger.debug('[MetaMaskWallet] no registered user by address ', address, ' is found. navigate to signup page')
+                    logger.debug(messageHelper.getMessage('metamask_user_not_found', 'MetaMaskWallet', address))
                     const login = {'walletType' : 'metamask', address: address}
                     localStorage.setItem('login', JSON.stringify(login))
                     onClose()

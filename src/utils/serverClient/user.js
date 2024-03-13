@@ -1,6 +1,7 @@
 import config from '../../config'
 import axios from 'axios'
 import logger from '../../common/Logger'
+import messageHelper from '../../common/helpers/internationalization/messageHelper'
 
 export const findUserByAddress = async (address) => {
     logger.debug('[serverClient.user] findUserByAddress. address = ', address)
@@ -9,7 +10,8 @@ export const findUserByAddress = async (address) => {
         logger.debug('response =', response)
         return response?.data?.data?.user
     } catch (err) {
-        logger.error('[serverClient.user] findUserByAddress. Failed to find user by', address)
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.user] findUserByAddress.', messageHelper.getMessage('user_failed_findby_address', address, reason))
         logger.error(err)
         throw err
     }
@@ -22,7 +24,8 @@ export const register = async (formData) => {
         headers: {'Content-Type': 'multipart/form-data'}})
         return response?.data?.data?.user
     } catch (err) {
-        logger.error('Failed to register the user', formData.get('name'))
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.user] findUserByAddress.', messageHelper.getMessage('user_failed_register', formData.get('name'), reason))
         logger.error(err)
         throw err
     }
@@ -37,7 +40,24 @@ export const loginByAddress = async (address) => {
         logger.debug('response =', response)
         return response?.data?.data?.user
     } catch (err) {
-        logger.error('[serverClient.user] findUserByAddress. Failed to login by the address', address)
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.user] findUserByAddress.', messageHelper.getMessage('user_failed_login', address, reason))
+        logger.error(err)
+        throw err
+    }
+}
+
+export const logoutByAddress = async (address) => {
+    logger.debug('[serverClient.user] loginByAddress. address =', address)
+    try {
+        const response = await axios.post(`${config.BACKEND_ADDR}/apis/v1/users/login`,{
+            address: address
+        })
+        logger.debug('response =', response)
+        return response?.data?.data?.user
+    } catch (err) {
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.user] logoutByAddress', messageHelper.getMessage('user_failed_logout', address, reason))
         logger.error(err)
         throw err
     }
