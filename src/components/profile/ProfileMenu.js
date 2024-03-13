@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 import config from '../../config'
+import {user} from '../../utils/serverClient'
 
-const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWalletUpdate}) => {
+const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWalletUpdate, notifyAlertUpdate}) => {
   logger.debug('[ProfileMenu] rendering...')
   const navigate = useNavigate()
 
@@ -13,15 +14,27 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWall
         handleProfileMenuClose()
     }
 
-    const handleDisconnect = () => {
+    const handleDisconnect = async () => {
       logger.info('[ProfileMenu] handleDisconnect')
-      localStorage.removeItem('login')
-      handleProfileMenuClose()
-      notifyWalletUpdate(undefined)
-      logger.debug('[ProfileMenu] call restful api to logout')
-      const location = window.location.pathname
-      if (location.startsWith('/profile')) {
-        navigate('/')
+      
+      try {
+        await user.logoutByAddress(wallet?.address)
+        localStorage.removeItem('login')
+        handleProfileMenuClose()
+        notifyWalletUpdate(undefined)
+        const location = window.location.pathname
+        if (location.startsWith('/profile')) {
+          navigate('/')
+        }
+      } catch (err) {
+        // it is a bug if code hits here (except network issue)
+        let errMsg = ''
+        if (err?.response?.data?.message) {
+            errMsg = err?.response?.data?.message
+        } else {
+            errMsg = err?.message
+        }
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
       }
     }
 

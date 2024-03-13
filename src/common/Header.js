@@ -9,7 +9,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import logger from './Logger'
 import config from '../config'
 
-const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, notifyWalletUpdate}) => {
+const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, notifyWalletUpdate, notifyAlertUpdate}) => {
     logger.debug('[Header] rendering...')
     logger.debug('[Header] wallet:', wallet)
     const theme = useTheme()
@@ -168,6 +168,7 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, noti
                             open={Boolean(anchorEl)} 
                             handleProfileMenuClose={handleProfileMenuClose}
                             notifyWalletUpdate={notifyWalletUpdate}
+                            notifyAlertUpdate={notifyAlertUpdate}
                             />
                             
                     <IconButton sx={{

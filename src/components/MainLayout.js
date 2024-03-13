@@ -201,6 +201,7 @@ const MainLayout = (props) => {
                  notifyWalletOpen={notifyWalletOpen}
                  notifyFilterMenuReset={notifyFilterMenuReset}
                  notifyWalletUpdate={notifyWalletUpdate}
+                 notifyAlertUpdate={notifyAlertUpdate}
                 />
              <GlobalVariables.Provider 
                 value={{
@@ -225,7 +226,8 @@ const MainLayout = (props) => {
                             closeMenu={closeMenu}
                             eventsBus={eventsBus}
                             notifyFilterUpdate={notifyFilterUpdate} 
-                            notifyAlertUpdate={notifyAlertUpdate}/>
+                            notifyAlertUpdate={notifyAlertUpdate}
+                            />
                     }
                     {props.children}
                 </Box>
