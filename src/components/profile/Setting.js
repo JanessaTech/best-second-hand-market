@@ -49,7 +49,7 @@ const Setting = () => {
       logger.debug('[Setting] call restful api to get user by address =', wallet?.address)
       user.findUserByAddress(wallet.address)
       .then((user) => {
-        reset()
+        reset()  // we need reset before set new state. otherwise the new state cannot be registered to useForm
         setState({id: user?.id, name: user?.name, address: user.address, intro: user?.intro})
       })
       .catch((err) => {
