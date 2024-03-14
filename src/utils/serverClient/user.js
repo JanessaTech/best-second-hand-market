@@ -76,3 +76,17 @@ export const update = async (formData) => {
         throw err
     }
 }
+
+export const getOverViewById = async (id) => {
+    logger.debug('[serverClient.user] getOverViewById. userId =', id)
+    try {
+        const response = await axios.get(`${config.BACKEND_ADDR}/apis/v1/users/overview/${id}`)
+        logger.debug('response =', response)
+        return response?.data?.data?.overview
+    } catch (err) {
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.user] getOverViewById.', messageHelper.getMessage('user_failed_overview', id, reason))
+        logger.error(err)
+        throw err
+    }
+}

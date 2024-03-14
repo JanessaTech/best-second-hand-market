@@ -5,13 +5,14 @@ import ByLikeView from './ByLikeView'
 import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
+import config from '../../config'
 
 
 const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[BuyOrCart] rendering...')
   const [searchParams, setSearchParams] = useSearchParams()
   const id = searchParams.get('id')
-  const [inCart, setInCart] = useState(false)
+  const [inCart, setInCart] = useState(!!nft?.inCart)
 
   const handleCart = () => {
     if (wallet) {
@@ -40,13 +41,13 @@ const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheckA
           sx={{width:1, borderRadius:2, mb:1}}
           component='img'
           alt={nft?.title}
-          src={`/imgs/nfts/${nft.img}`}
+          src={nft?.url}
         >
         </Box>
         <ByLikeView wallet={wallet} nft={nft}/>
         <Box>
             {
-              nft?.available ? 
+              nft?.status === config.NFTSTATUS.On.description ? 
               <Box sx={{mt:1, display: 'flex', justifyContent:'center'}}>
                   <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0, mr:4}} 
                           color='customBlack' 

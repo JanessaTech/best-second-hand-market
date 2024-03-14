@@ -1,6 +1,7 @@
 import { Avatar, Box, Button, TextField } from '@mui/material'
 import React, { memo, useState } from 'react'
 import logger from '../../../common/Logger'
+import config from '../../../config'
 
 const AddComment = ({wallet, isReply, handleCancelReply, handleAfterCommentAdded}) => {
     logger.debug('[AddComment] rendering...')
@@ -37,7 +38,7 @@ const AddComment = ({wallet, isReply, handleCancelReply, handleAfterCommentAdded
 
   return (
     <Box sx={{display:'flex', mt:1}}>
-        <Avatar alt="Remy Sharp" src={`/imgs/nfters/${wallet?.user?.id}/me.png`} sx={{width: profileSize, height: profileSize}}/>
+        <Avatar alt="Remy Sharp" src={`${config.BACKEND_ADDR}/${wallet?.user?.profile}`} sx={{width: profileSize, height: profileSize}}/>
         <Box sx={{width: 1, ml:2}}>
             <TextField 
                 id="cheap-addcomment-input" 

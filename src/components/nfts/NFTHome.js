@@ -7,27 +7,7 @@ import NFTDetails from './NFTDetails'
 import Comments from './comments/Comments'
 import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
-import {getChainName, getStandard} from '../../utils/Chain'
-
-const nftData = {
-    id:112,
-    title: 'A baby monkey',
-    price: 12,
-    ipfs: `ipfs://bafkreiftnbrvpu3apwgolxqlpmfea4rwqqxru6ddlcbd2msgbmsrwjcqzi`,  // returned by backned, get by chainId&address&tokenId
-    chainId:1,
-    chain: getChainName(1),  // get by chainId, not need returned by backend
-    address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0',
-    tokenId: 551,  
-    tokenStandard: getStandard(1, '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf0'), // get by chainId &address,not needed returned by backend
-    category: 'Pets',
-    available: true,
-    likes: 100,
-    views: 2000,
-    seller: 111,  // user id, returned by backned, get by chainId&address&tokenId
-    img: 'mk.png',  // get by ipfs and gateway, return full url by backend
-    createdTime: 'Jan 02, 2024',
-    description: 'NFTs can really be anything digital (such as drawings, music, your brain downloaded and turned into an AI), but a lot of the current excitement'
-}
+import {nft as nftClient} from '../../utils/serverClient/'
 
 const NFTHome = ({wallet, openCart, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
     logger.debug("[NFTHome] rendering...")
@@ -39,8 +19,21 @@ const NFTHome = ({wallet, openCart, notifyWalletOpen, notifyNetworkCheckAndBuy})
     useEffect(() => {
       const id = searchParams.get('id')
       logger.debug('[NFTHome] call restful api to get nft details by id = ', id)
-      setNft(nftData)
-    }, [])
+      nftClient.findNFTById(id, wallet?.user?.id)
+      .then((NFT) => {
+        logger.debug('[NFTHome] NFT = ', NFT)
+        setNft(NFT)
+      })
+      .catch ((err) => {
+        let errMsg = ''
+        if (err?.response?.data?.message) {
+            errMsg = err?.response?.data?.message
+        } else {
+            errMsg = err?.message
+        }
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+      })
+    }, [wallet])
 
   return (
     <Box sx={{mb: 8, mx: isSmallScreen ? 0 : 2, width:1}}>

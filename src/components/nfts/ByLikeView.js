@@ -6,32 +6,34 @@ import { CheapIcon } from '../../utils/Svgs'
 import NfterOverview from '../nfters/NfterOverview'
 import CustomPopper from '../../common/CustomPopper'
 import logger from '../../common/Logger'
-
-const sellerData = {
-    id: 111,
-    name: 'JanessaTech lab',
-    login: 'Jan 01 2024 10:31 AM',
-    intro: 'Hi, I\'m JanessaTech a big fan of NFT. Weclome to my lab to check more NFTs on sale',
-    sales: 10,
-    orders: 20
-}
+import {user} from '../../utils/serverClient'
 
 const ByLikeView = ({wallet, nft}) => {
     logger.debug('[ByLikeView] rendering...')
 
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-    const [isLike, setIsLike] = useState(false)
+    const [isLike, setIsLike] = useState(nft?.isLike)
     const [anchorEl, setAnchorEl] = useState(null)
-    const [seller, setSeller] = useState(sellerData)
+    const [ownerOverview, setOwnerOverview] = useState(null)
 
     useEffect(() => {
-        if (nft?.seller) {
-            logger.debug('[ByLikeView] call restful api to get Overview of seller by seller user id =', nft?.seller)
-            setSeller(sellerData)
+        if (nft?.owner?.id) {
+            logger.debug('[ByLikeView] call restful api to get Overview of owner by user id =', nft?.owner.id)
+            user.getOverViewById(nft?.owner.id)
+            .then((overview) => {
+                logger.debug('[ByLikeView] overview =', overview)
+                setOwnerOverview(overview)
+            }).catch((err) => {
+                logger.error('[ByLikeView] Failed to get overview due to ', err)
+            }) 
         }
-    }, [nft?.seller])
-    
+    }, [nft?.owner?.id])
+
+    useEffect(() => {
+        setIsLike(nft?.isLike)
+    }, [nft?.isLike])
+
     const toggleLike = () => {
         if (wallet?.user?.id) {
             logger.debug('[ByLikeView] call restful api to add/remove like for user id=', wallet?.user?.id)
@@ -60,17 +62,17 @@ const ByLikeView = ({wallet, nft}) => {
                 onMouseOver={openOverview}
                 onMouseLeave={closeOverview}
                 >
-                    <Link component={RouterLink} to={`/nfters?id=${seller?.id}`} 
+                    <Link component={RouterLink} to={`/nfters?id=${nft?.owner?.id}`} 
                         sx={{
                             '&:hover':{color:'primary.main'},
                             '&:active':{color:'primary.dark'}
-                           }}>{seller?.name}</Link>
+                           }}>{nft?.owner?.name}</Link>
             </Typography>
             <CustomPopper 
                 idPrefix='nfter-intro-popper' 
                 anchorEl={anchorEl} width={250} 
                 placement={isSmallScreen ? 'bottom' : 'right-end'} 
-                content={<NfterOverview nfter={seller}/>} />
+                content={<NfterOverview overview={ownerOverview}/>} />
         </Box>
         <Box sx={{display:'flex'}}>
             {
@@ -84,7 +86,7 @@ const ByLikeView = ({wallet, nft}) => {
             }
             <Box sx={{display:'flex', alignItems:'center'}}>
                 <CheapIcon name='view' size={25}/>
-                <Typography variant='body2' sx={{ml:1}}>{nft?.views}</Typography>
+                <Typography variant='body2' sx={{ml:1}}>{nft?.view}</Typography>
             </Box>
         </Box>
     </Box>

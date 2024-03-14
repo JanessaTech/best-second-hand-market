@@ -4,7 +4,7 @@ import logger from '../../common/Logger'
 import messageHelper from '../../common/helpers/internationalization/messageHelper'
 
 export const mint = async (data) => {
-    data.tokenId = 2
+    data.tokenId = 0
     logger.debug('[serverClient.nft] mint. data =', data)
     try {
         const response = await axios.post(`${config.BACKEND_ADDR}/apis/v1/nfts/mint`,data)
