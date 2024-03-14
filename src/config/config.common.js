@@ -91,7 +91,7 @@ config.chains = {
         rpcUrl:'https://rpc.sepolia.org',
         contracts:[
           {
-            address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf2', 
+            address: '0x5FbDB2315678afecb367f032d93F642f64180aa3', 
             abi: [
                 'function symbol() public view returns (string)',
                 'function ownerOfToken(uint _tokenId) public view returns (address)',
@@ -109,7 +109,7 @@ config.chains = {
             tokenStandard: 'aaaa'
           },
           {
-            address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf3', 
+            address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', 
             abi: [
                 'function symbol() public view returns (string)',
                 'function ownerOfToken(uint _tokenId) public view returns (address)',

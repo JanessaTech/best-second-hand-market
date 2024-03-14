@@ -137,8 +137,7 @@ const Setting = () => {
     }
     setState({...state, selectedFile: e.target?.files[0]})
   }
-  console.log('state = ', state)
-
+ 
   return (
     <Box component="main" sx={{width:1}}>
       <Box sx={{width:1, height: HeaderHeight}}/>

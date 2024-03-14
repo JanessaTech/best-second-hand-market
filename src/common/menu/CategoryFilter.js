@@ -3,7 +3,7 @@ import { Box, Collapse, List, ListItem, ListItemButton, ListItemText, ListSubhea
 import React, { useEffect, useState } from 'react'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import logger from '../Logger'
-import {CATEGORIES} from '../../common/constant'
+import config from '../../config'
 import {capitalize} from '../../utils/StringUtils'
 
 function getCategoriesFromLocalStorage() {
@@ -73,7 +73,7 @@ const CategoryFilter = ({notify, eventsBus}) => {
         >
             <Collapse in={!expand} timeout="auto" unmountOnExit>
                 {
-                    CATEGORIES.map((category) => {
+                    Object.values(config.CATEGORIES).map((c) => c.description).map((category) => {
                         const labelId = `checkbox-list-category-label-${category}`;
                         return (
                             <ListItem 

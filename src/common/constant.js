@@ -6,7 +6,6 @@ export const MenuUrls = ['/', '/results', '/nfters', '/profile/nfts', '/profile/
 export const PageSizeInGallery=100
 export const BatchSizeInGallery=30
 export const PageSizeInComments=3
-export const CATEGORIES = ['pets', 'clothes', 'cosmetics', 'outfits', 'car', 'devices', 'books']
 export const MaxValueInFilter = 100
 export const MinValueInFilter = 0
 export const NFTSTATUS = ['on', 'off']
