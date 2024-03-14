@@ -6,21 +6,23 @@ import { CheapIcon } from '../../utils/Svgs'
 import NfterOverview from '../nfters/NfterOverview'
 import CustomPopper from '../../common/CustomPopper'
 import logger from '../../common/Logger'
-import {user} from '../../utils/serverClient'
+import {user as userClient, like as likeClient} from '../../utils/serverClient'
+import { set } from 'react-hook-form'
 
-const ByLikeView = ({wallet, nft}) => {
+const ByLikeView = ({wallet, nft, notifyAlertUpdate}) => {
     logger.debug('[ByLikeView] rendering...')
 
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
     const [isLike, setIsLike] = useState(nft?.isLike)
+    const [likes, setLikes] = useState(nft?.likes)
     const [anchorEl, setAnchorEl] = useState(null)
     const [ownerOverview, setOwnerOverview] = useState(null)
 
     useEffect(() => {
         if (nft?.owner?.id) {
             logger.debug('[ByLikeView] call restful api to get Overview of owner by user id =', nft?.owner.id)
-            user.getOverViewById(nft?.owner.id)
+            userClient.getOverViewById(nft?.owner.id)
             .then((overview) => {
                 logger.debug('[ByLikeView] overview =', overview)
                 setOwnerOverview(overview)
@@ -32,12 +34,43 @@ const ByLikeView = ({wallet, nft}) => {
 
     useEffect(() => {
         setIsLike(nft?.isLike)
-    }, [nft?.isLike])
+        setLikes(nft?.likes)
+    }, [nft?.isLike, nft?.likes])
 
     const toggleLike = () => {
         if (wallet?.user?.id) {
             logger.debug('[ByLikeView] call restful api to add/remove like for user id=', wallet?.user?.id)
-            setIsLike(!isLike)
+            if (isLike) {
+                likeClient.unlike(wallet?.user?.id, nft?.id)
+                .then(() => {
+                    setIsLike(false)
+                    setLikes(likes - 1)
+                })
+                .catch((err) => {
+                    let errMsg = ''
+                    if (err?.response?.data?.message) {
+                        errMsg = err?.response?.data?.message
+                    } else {
+                        errMsg = err?.message
+                    }
+                    notifyAlertUpdate([{severity: 'error', message: errMsg}])
+                })
+            } else {
+                likeClient.like(wallet?.user?.id, nft?.id)
+                .then(() => {
+                    setIsLike(true)
+                    setLikes(likes + 1)
+                })
+                .catch((err) => {
+                    let errMsg = ''
+                    if (err?.response?.data?.message) {
+                        errMsg = err?.response?.data?.message
+                    } else {
+                        errMsg = err?.message
+                    }
+                    notifyAlertUpdate([{severity: 'error', message: errMsg}])
+                })
+            }
         }  
     }
 
@@ -81,7 +114,7 @@ const ByLikeView = ({wallet, nft}) => {
                     <IconButton onClick={toggleLike} sx={{p:0}}>
                         <CheapIcon name={isLike ? 'my-favorite-red':'my-favorite'} size={25}/>
                     </IconButton>
-                    <Typography variant='body2'>{nft?.likes}</Typography>
+                    <Typography variant='body2'>{likes}</Typography>
                 </Box> : <Box/>
             }
             <Box sx={{display:'flex', alignItems:'center'}}>

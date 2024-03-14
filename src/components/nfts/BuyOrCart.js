@@ -7,8 +7,7 @@ import { useSearchParams } from 'react-router-dom'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
 import config from '../../config'
 
-
-const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const BuyOrCart = ({nft, wallet, openCart, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[BuyOrCart] rendering...')
   const [searchParams, setSearchParams] = useSearchParams()
   const id = searchParams.get('id')
@@ -32,7 +31,6 @@ const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheckA
     } else {
       notifyWalletOpen()
     }
-    
   }
 
   return (
@@ -44,7 +42,7 @@ const BuyOrCart = ({nft, wallet, openCart, notifyWalletOpen, notifyNetworkCheckA
           src={nft?.url}
         >
         </Box>
-        <ByLikeView wallet={wallet} nft={nft}/>
+        <ByLikeView wallet={wallet} nft={nft} notifyAlertUpdate={notifyAlertUpdate}/>
         <Box>
             {
               nft?.status === config.NFTSTATUS.On.description ? 
