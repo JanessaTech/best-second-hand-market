@@ -2,6 +2,7 @@ import { Avatar, Box, Typography } from '@mui/material'
 import React, { memo } from 'react'
 import logger from '../../common/Logger'
 import config from '../../config'
+import {formatDate} from '../../utils/DateUtils'
 
 const NfterOverview = ({overview}) => {
     logger.debug('[NfterOverview] rendering...')
@@ -12,7 +13,7 @@ const NfterOverview = ({overview}) => {
             <Avatar alt={overview?.name} src={`${config.BACKEND_ADDR}/${overview?.profile}`}/>
             <Box sx={{ml:1}}>
                 <Typography variant='subtitle1'>{overview?.name}</Typography>
-                <Typography color='text.secondary' variant='body2'>Last login: {overview?.loginTime} </Typography>
+                <Typography color='text.secondary' variant='body2'>Last login: {overview?.loginTime ? formatDate(new Date(overview?.loginTime)): ''} </Typography>
             </Box>
         </Box>
         <Box sx={{my:1}}>

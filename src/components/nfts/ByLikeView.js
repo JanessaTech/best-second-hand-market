@@ -7,7 +7,6 @@ import NfterOverview from '../nfters/NfterOverview'
 import CustomPopper from '../../common/CustomPopper'
 import logger from '../../common/Logger'
 import {user as userClient, like as likeClient} from '../../utils/serverClient'
-import { set } from 'react-hook-form'
 
 const ByLikeView = ({wallet, nft, notifyAlertUpdate}) => {
     logger.debug('[ByLikeView] rendering...')
