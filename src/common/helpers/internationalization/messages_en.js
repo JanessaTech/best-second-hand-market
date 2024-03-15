@@ -16,4 +16,11 @@ export default {
     //like
     nft_failed_like: 'Failed to like nft(id={0}) by user(id={1}) due to {2}',
     nft_failed_unlike: 'Failed to dislike nft(id={0}) by user(id={1}) due to {2}',
+    //cart
+    cart_failed_add: 'Failed to add nft(id={0}) to cart by user(id={1}) due to {2}',
+    cart_failed_remove:  'Failed to remove cart item by id {0} due to {1}',
+    cart_failed_queryby_user: 'Failed to query cart items for user(id={0}) due to {1}',
+    //comment
+    comment_failed_create: 'Failed to add a new comment {0} due to {1}',
+    comment_failed_query: 'Failed to query cart items for nft(id={0}) with query parameters: page = {1}, limit = {2}, sortBy ={3} due to {4}'
 }

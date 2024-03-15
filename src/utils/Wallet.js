@@ -1,12 +1,12 @@
 
 import logger from "../common/Logger"
 import {ethers, BrowserProvider} from 'ethers'
-import {user} from '../utils/serverClient'
+import {user as userClient} from '../utils/serverClient'
 
 const getMetaMaskWallet = async () => {
     if (window?.ethereum) {
         try {
-            const accounts = await window?.ethereum.request({ method: 'eth_accounts' })
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' })
             const account = await handleMetaMaskAccounts(accounts)
             const wallet = await getUserByWalletAddress(account)
             return wallet
@@ -26,7 +26,7 @@ const handleMetaMaskAccounts = async (accounts) => {
 
 const getUserByWalletAddress = async (account) => {
     logger.debug('[Utils - wallet] getUserByWalletAddress. call restful api to get user by address =', ethers.getAddress(account))
-    const registedUser = await user.findUserByAddress(ethers.getAddress(account))
+    const registedUser = await userClient.findUserByAddress(ethers.getAddress(account))
     logger.debug('[Utils - wallet] getUserByWalletAddress. registedUser =', registedUser)
     return {address: ethers.getAddress(account), user: registedUser}
 }

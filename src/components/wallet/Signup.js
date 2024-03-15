@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles'
 import logger from '../../common/Logger'
 import {isFileImage} from '../../utils/FileUtils'
 import config from '../../config'
-import {user} from '../../utils/serverClient'
+import {user as userClient} from '../../utils/serverClient'
 
 
   const VisuallyHiddenInput = styled(props => {
@@ -87,7 +87,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
             formData.append('intro', data.intro)
             formData.append('profile', state.selectedFile)
             try {
-                const registeredUser = await user.register(formData)
+                const registeredUser = await userClient.register(formData)
                 login = {...login, user: registeredUser}
                 logger.debug('[Signup] login = ', login)
                 localStorage.removeItem('login')  // remove the outdated data

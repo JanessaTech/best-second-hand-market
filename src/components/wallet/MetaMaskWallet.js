@@ -4,7 +4,7 @@ import logger from '../../common/Logger'
 import { BrowserProvider, ethers } from 'ethers'
 import { SiweMessage } from 'siwe'
 import config from '../../config'
-import {user} from '../../utils/serverClient'
+import {user as userClient} from '../../utils/serverClient'
 import messageHelper from '../../common/helpers/internationalization/messageHelper'
 
 const domain = window.location.host
@@ -109,7 +109,7 @@ export default function MetaMaskWallet({onClose, openSignup, notifyAlertUpdate, 
         }
         if (signIn) {
             logger.debug('[MetaMaskWallet] call restful api to check if there is an account associated with the current wallet address=', address)
-            user.loginByAddress(address)
+            userClient.loginByAddress(address)
             .then((loginedUser) => {
                 if (!loginedUser) {
                     throw new Error('Failed to login. Please try again') // code shouldn't hit here. it is a bug if it did
