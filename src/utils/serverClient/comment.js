@@ -2,6 +2,7 @@ import config from '../../config'
 import axios from 'axios'
 import logger from '../../common/Logger'
 import messageHelper from '../../common/helpers/internationalization/messageHelper'
+import {getQuery} from '../HttpUtils'
 
 export const create = async (comment) => {
     logger.debug('[serverClient.comment] create')
@@ -20,17 +21,12 @@ export const create = async (comment) => {
 export const queryCommentsByNftId = async (nftId, page, limit, sortBy) => {
     logger.debug('[serverClient.comment] queryCommentsByNftId. nftId =', nftId, ' page = ', page, ' limit =', limit, ' sortBy = ', sortBy)
     try {
-        const data = {nftId: nftId}
-        if (page) {
-            data.page = page
+        const query = getQuery({page: page, limit: limit, sortBy: sortBy})
+        let url = `${config.BACKEND_ADDR}/apis/v1/comments/${nftId}`
+        if (query) {
+            url = `${url}?${query}`
         }
-        if (limit) {
-            data.limit = limit
-        }
-        if (sortBy) {
-            data.sortBy = sortBy
-        }
-        const response = await axios.post(`${config.BACKEND_ADDR}/apis/v1/comments`, data)
+        const response = await axios.get(url)
         logger.debug('response =', response)
         return response?.data?.data
     } catch (err) {

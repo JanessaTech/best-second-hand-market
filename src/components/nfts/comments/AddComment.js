@@ -2,8 +2,10 @@ import { Avatar, Box, Button, TextField } from '@mui/material'
 import React, { memo, useState } from 'react'
 import logger from '../../../common/Logger'
 import config from '../../../config'
+import {comment as commentClient} from '../../../utils/serverClient'
+import messageHelper from '../../../common/helpers/internationalization/messageHelper'
 
-const AddComment = ({wallet, isReply, handleCancelReply, handleAfterCommentAdded}) => {
+const AddComment = ({wallet, isReply, nftId, parentId, notifyAlertUpdate, handleCancelReply, handleAfterCommentAdded}) => {
     logger.debug('[AddComment] rendering...')
 
     const [state, setState] = useState({
@@ -30,10 +32,31 @@ const AddComment = ({wallet, isReply, handleCancelReply, handleAfterCommentAdded
         }
     }
 
-    const handleLeaveComment = () => {
+    const handleLeaveComment = async () => {
         logger.info('[AddComment] handleLeaveComment. call restful api to submit comment...:', state.comment)
-        handleAfterCommentAdded(isReply)
-        setState({...state, comment: ''})
+        try {
+            const comment = {
+                content: state.comment,
+                user: wallet?.user?.id
+            }
+            if (nftId) {
+                comment.nftId = nftId
+            }
+            if (parentId) {
+                comment.parentId = parentId
+            }
+            await commentClient.create(comment)
+            handleAfterCommentAdded(isReply)
+            setState({...state, comment: ''})
+        } catch (err) {
+            let errMsg = ''
+            if (err?.response?.data?.message) {
+                errMsg = err?.response?.data?.message
+            } else {
+                errMsg = err?.message
+            }
+            notifyAlertUpdate([{severity: 'error', message: messageHelper.getMessage('comment_failed_add', errMsg)}])
+        }
     }
 
   return (

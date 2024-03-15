@@ -5,40 +5,9 @@ import OneComment from './OneComment'
 import logger from '../../../common/Logger'
 import {PageSizeInComments} from '../../../common/constant'
 import { useSearchParams } from 'react-router-dom'
+import {comment as commentClient} from '../../../utils/serverClient'
 
-const data = [
-  {
-    id : 2, 
-    commenterId:222, 
-    commenterName: 'Lesfiya', 
-    createdTime: '1 day ago', 
-    content: 'Hi, Janessa, are you availble? it looks nice, could you make it cheaper?Hi, Janessa, are you availble? it looks nice, could you make it cheaper?',
-    repliedComments: [
-      {
-        id : 3, 
-        commenterId:333, 
-        commenterName: 'Tony', 
-        createdTime: '1 day ago', 
-        content: 'god'
-      },
-      {
-        id : 4, 
-        commenterId:444, 
-        commenterName: 'Jonha', 
-        createdTime: '1 day ago', 
-        content: 'nice'
-      }
-    ],
-  },
-  {
-    id : 5, 
-    commenterId:555, 
-    commenterName: 'Tooxxx', 
-    createdTime: '4 days ago', 
-    content: 'Hi, JanessaTech lab'
-  }
-]
-const Comments = ({wallet})=> {
+const Comments = ({wallet, nftId, notifyAlertUpdate})=> {
   logger.debug('[Comments] rendering')
   const [searchParams, setSearchParams] = useSearchParams()
   const id = searchParams.get('id')
@@ -56,43 +25,72 @@ const Comments = ({wallet})=> {
     logger.debug('[Comments] nft id=', id)
     logger.debug('[Comments] page=', 1)
     logger.debug('[Comments] pageSize=', pagination.pageSize)
-    const total  = 41
-    logger.debug('page=', 1, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
-    setComments(data)
-    setTotal(total)
-    setPagination({page: 1, pageSize: pagination.pageSize, pages: Math.ceil(total / pagination.pageSize)})
+    
+    commentClient.queryCommentsByNftId(id, 1, pagination.pageSize, undefined)
+    .then((res) => {
+      const {comments, page, limit, totalPages, totalResults} = res
+      logger.debug('page=', 1, ' pageSize=', pagination.pageSize, 'pages=', totalPages, 'total=', totalResults)
+      setComments(comments)
+      setTotal(totalResults)
+      setPagination({page: 1, pageSize: pagination.pageSize, pages: totalPages})
+    })
+    .catch((err) => {
+      logger.error('[Comments] Failed to fetch comments due to', err)
+    }) 
   }, [])
 
-  const handleChange = (e, value) => {
-    logger.info('[Comments] handleChange. call rest api to get comments based on nft id, page, pageSize, return result with how many in total')
+  const handlePageChange = (e, value) => {
+    logger.info('[Comments] handlePageChange. call rest api to get comments based on nft id, page, pageSize, return result with how many in total')
     logger.debug('[Comments] nft id=', id)
     logger.debug('[Comments] page=', value)
     logger.debug('[Comments] pageSize=', pagination.pageSize)
-    const total  = 41
-    logger.debug('page=', value, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
-    setComments(data)
-    setPagination({page:value, pageSize: pagination.pageSize, pages: Math.ceil(total / pagination.pageSize)})
+
+    commentClient.queryCommentsByNftId(id, value, pagination.pageSize, undefined)
+    .then((res) => {
+      const {comments, page, limit, totalPages, totalResults} = res
+      logger.debug('page=', value, ' pageSize=', pagination.pageSize, 'pages=', totalPages, 'total=', totalResults)
+      setComments(comments)
+      setTotal(totalResults)
+      setPagination({page: value, pageSize: pagination.pageSize, pages: totalPages})
+    })
+    .catch((err) => {
+      logger.error('[Comments] Failed to fetch comments due to', err)
+    })
   }
+
   const handleAfterCommentAdded = (isReply) => {
     logger.debug('[Comments] handleAfterCommentAdded. call rest api to get comments based on nft id, page, pageSize, return result with how many in total')
-    const total  = 42
-    const page = 1
+    const toPage = isReply? pagination.page : 1 // which page we should go: 1. For the reply, we stag where it is  2. For adding new comment, got to the first page
     logger.debug('[Comments] nft id=', id)
-    logger.debug('[Comments] page=', isReply? pagination.page : page)
+    logger.debug('[Comments] page=', toPage)
     logger.debug('[Comments] pageSize=', pagination.pageSize)
-    logger.debug('[Comments] page=', page, ' pageSize=', pagination.pageSize, 'pages=', Math.ceil(total / pagination.pageSize), 'total=', total)
     logger.debug('[Comments] isReply=', isReply)
-    setComments(data)
-    setPagination({page: isReply? pagination.page : page, pageSize: pagination.pageSize, pages: Math.ceil(total / pagination.pageSize)})
+    commentClient.queryCommentsByNftId(id, toPage, pagination.pageSize, undefined)
+    .then((res) => {
+      const {comments, page, limit, totalPages, totalResults} = res
+      logger.debug('page=', toPage, ' pageSize=', pagination.pageSize, 'pages=', totalPages, 'total=', totalResults)
+      setComments(comments)
+      setTotal(totalResults)
+      setPagination({page: toPage, pageSize: pagination.pageSize, pages: totalPages})
+    })
+    .catch((err) => {
+      logger.error('[Comments] Failed to fetch comments due to', err)
+    })
   }
 
   return (
     <Box>
         <Typography>{total} comments</Typography>
-        { wallet && <AddComment wallet={wallet} handleAfterCommentAdded={handleAfterCommentAdded}/>}
+        { wallet && <AddComment wallet={wallet} nftId={nftId} 
+                      notifyAlertUpdate={notifyAlertUpdate} 
+                      handleAfterCommentAdded={handleAfterCommentAdded}/>}
         {
-          data.map((c) => (
-          <OneComment key={c.id} deep={1} comment={c} wallet={wallet} handleAfterCommentAdded={handleAfterCommentAdded}/>
+          comments.map((c) => (
+          <OneComment 
+            key={c.id} deep={1} comment={c} 
+            wallet={wallet} 
+            notifyAlertUpdate={notifyAlertUpdate} 
+            handleAfterCommentAdded={handleAfterCommentAdded}/>
           ))
         }
         <Pagination 
@@ -103,7 +101,7 @@ const Comments = ({wallet})=> {
           color="primary"
           boundaryCount={1}
           siblingCount={0}
-          onChange={handleChange}/>
+          onChange={handlePageChange}/>
     </Box>
   )
 }
