@@ -14,6 +14,8 @@ const BuyOrCart = ({nft, wallet, openCart, notifyAlertUpdate, notifyWalletOpen, 
   const id = searchParams.get('id')
   const [inCart, setInCart] = useState(!!nft?.inCart)
 
+  /*
+  don't delete it.Maybe I will need it later on
   useEffect(() => {
     if (wallet?.user?.id && nft?.id) {
       cartClient.isInCart(wallet?.user?.id, nft?.id)
@@ -30,7 +32,11 @@ const BuyOrCart = ({nft, wallet, openCart, notifyAlertUpdate, notifyWalletOpen, 
         notifyAlertUpdate([{severity: 'error', message: errMsg}])
       })
     }
-  })
+  }, [inCart])*/
+
+  useEffect(() => {
+    setInCart(nft?.inCart)
+  }, [nft?.inCart])
 
   const handleCart = async () => {
     if (wallet) {
@@ -40,9 +46,9 @@ const BuyOrCart = ({nft, wallet, openCart, notifyAlertUpdate, notifyWalletOpen, 
           await cartClient.remove(wallet?.user?.id, nft?.id)
         } else { // to add
           await cartClient.add(wallet?.user?.id, nft?.id)
+          openCart()
         }
         setInCart(!inCart)
-        openCart()
       } catch (err) {
         let errMsg = ''
         if (err?.response?.data?.message) {
