@@ -1,11 +1,12 @@
 import { Box, Button, IconButton, Tooltip, Typography } from '@mui/material'
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { CheapIcon } from '../../utils/Svgs'
 import ByLikeView from './ByLikeView'
 import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
 import config from '../../config'
+import {cart as cartClient} from '../../utils/serverClient'
 
 const BuyOrCart = ({nft, wallet, openCart, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[BuyOrCart] rendering...')
@@ -13,11 +14,30 @@ const BuyOrCart = ({nft, wallet, openCart, notifyAlertUpdate, notifyWalletOpen, 
   const id = searchParams.get('id')
   const [inCart, setInCart] = useState(!!nft?.inCart)
 
-  const handleCart = () => {
+  useEffect(() => {
+    setInCart(nft?.inCart)
+  }, [nft?.inCart])
+
+  const handleCart = async () => {
     if (wallet) {
       logger.info('[BuyOrCart] call restful to add to cart then open the cart')
-      setInCart(!inCart)
-      openCart()
+      try {
+        if (inCart) { // to remove
+          await cartClient.remove(wallet?.user?.id, nft?.id)
+        } else { // to add
+          await cartClient.add(wallet?.user?.id, nft?.id)
+        }
+        setInCart(!inCart)
+        openCart()
+      } catch (err) {
+        let errMsg = ''
+        if (err?.response?.data?.message) {
+            errMsg = err?.response?.data?.message
+        } else {
+            errMsg = err?.message
+        }
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+      }
     } else {
       notifyWalletOpen()
     }
