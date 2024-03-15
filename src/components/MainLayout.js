@@ -234,7 +234,12 @@ const MainLayout = (props) => {
                 </Box>
                 
             </GlobalVariables.Provider>
-           <Cart wallet={wallet} toggleCart={toggleCart} open={cartOpen} notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
+           <Cart 
+                wallet={wallet} 
+                toggleCart={toggleCart} 
+                open={cartOpen} 
+                notifyAlertUpdate={notifyAlertUpdate} 
+                notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
             {
                     alerts && alerts.length > 0 && 
                         <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlerts={clearAlerts}/>       

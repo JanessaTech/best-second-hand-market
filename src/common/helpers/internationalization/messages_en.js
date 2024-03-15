@@ -18,7 +18,8 @@ export default {
     nft_failed_unlike: 'Failed to dislike nft(id={0}) by user(id={1}) due to {2}',
     //cart
     cart_failed_add: 'Failed to add nft(id={0}) to cart by user(id={1}) due to {2}',
-    cart_failed_remove:  'Failed to remove cart item by userId {0} and nftId {1} due to {2}',
+    cart_failed_remove: 'Failed to remove cart item by userId {0} and nftId {1} due to {2}',
+    cart_failed_isInCart: 'Failed to check if nft(id={0}) is added by user(id={1})\'s cart due to {2}',
     cart_failed_queryby_user: 'Failed to query cart items for user(id={0}) due to {1}',
     //comment
     comment_failed_create: 'Failed to add a new comment {0} due to {1}',

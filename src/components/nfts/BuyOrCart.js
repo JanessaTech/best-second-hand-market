@@ -15,8 +15,22 @@ const BuyOrCart = ({nft, wallet, openCart, notifyAlertUpdate, notifyWalletOpen, 
   const [inCart, setInCart] = useState(!!nft?.inCart)
 
   useEffect(() => {
-    setInCart(nft?.inCart)
-  }, [nft?.inCart])
+    if (wallet?.user?.id && nft?.id) {
+      cartClient.isInCart(wallet?.user?.id, nft?.id)
+      .then((inCart) => {
+        setInCart(inCart)
+      })
+      .catch((err) => {
+        let errMsg = ''
+        if (err?.response?.data?.message) {
+            errMsg = err?.response?.data?.message
+        } else {
+            errMsg = err?.message
+        }
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+      })
+    }
+  })
 
   const handleCart = async () => {
     if (wallet) {

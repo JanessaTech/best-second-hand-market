@@ -29,6 +29,20 @@ export const remove = async (userId, nftId) => {
     }
 }
 
+export const isInCart = async (userId, nftId) => {
+    logger.debug('[serverClient.cart] isInCart. userId =', userId, ' nftId =', nftId)
+    try {
+        const response = await axios.get(`${config.BACKEND_ADDR}/apis/v1/cart/isInCart?userId=${userId}&nftId=${nftId}`)
+        logger.debug('response =', response)
+        return response?.data?.data?.inCart
+    } catch (err) {
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.cart] isInCart.', messageHelper.getMessage('cart_failed_isInCart', nftId, userId, reason))
+        logger.error(err)
+        throw err
+    }
+}
+
 export const queryByUser = async (userId) => {
     logger.debug('[serverClient.cart] queryByUser. userId =', userId)
     try {

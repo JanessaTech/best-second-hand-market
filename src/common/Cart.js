@@ -7,103 +7,13 @@ import { UnavailableHelpTip } from './TipHelpers'
 import logger from './Logger'
 import {capitalize} from '../utils/StringUtils'
 import {networks} from '../utils/Chain'
-
-const data = [
-  {
-    id: 1,
-    title: 'The most fasionable shoes',
-    img: 'shoes.jpeg',  // full url returned by backend
-    seller: 111, // better to return it if the use in future
-    sellerName: 'Fashion lab',
-    chainId: 1,
-    available: true,
-    price: 12.69
-  },
-  {
-    id: 2,
-    title: 'The most fasionable Phone',
-    img: 'phone.webp',
-    seller: 111,
-    sellerName: 'Phone lab',
-    chainId: 1,
-    available: true,
-    price: 123.6
-  },
-  {
-    id: 3,
-    title: 'A baby monkey',
-    img: 'mk.png',
-    seller: 111,
-    sellerName: 'JanessaTech lab',
-    chainId: 1,
-    available: false,
-    price: 100.3
-  },
-  {
-    id: 4,
-    title: 'test1 for polygon',
-    img: 'mk.png',
-    seller: 111,
-    sellerName: 'Hsddds',
-    chainId: 137,
-    available: true,
-    price: 20.5
-  },
-  {
-    id: 5,
-    title: 'test2 for polygon',
-    img: 'mk.png',
-    seller: 111,
-    sellerName: 'Jniffer',
-    chainId: 137,
-    available: true,
-    price: 201.1
-  },
-  {
-    id: 6,
-    title: 'test1 for avalanche',
-    img: 'mk.png',
-    seller: 111,
-    sellerName: 'aks',
-    chainId: 43114,
-    available: true,
-    price: 50.4
-  },
-  {
-    id: 7,
-    title: 'test2 for avalanche',
-    img: 'mk.png',
-    seller: 111,
-    sellerName: 'laniddd',
-    chainId: 43114,
-    available: true,
-    price: 11.5
-  }, 
-  {
-    id: 8,
-    title: 'test1 for solana',
-    img: 'mk.png',
-    seller: 111,
-    sellerName: 'fffff',
-    chainId: 100,
-    available: true,
-    price: 52.4
-  },
-  {
-    id: 9,
-    title: 'test2 for solana',
-    img: 'mk.png',
-    seller: 111,
-    sellerName: 'xxxxxx',
-    chainId: 100,
-    available: true,
-    price: 22.4}, 
-]
+import {cart as cartClient} from '../utils/serverClient'
+import config from '../config'
 
 function calcPrice(data) {
   let price = 0.0
   for (var i = 0; i < data.length; i++) {
-    if (data[i].available) {
+    if (data[i].status === config.NFTSTATUS.On.description) {
       price += data[i].price
     }
   }
@@ -111,7 +21,7 @@ function calcPrice(data) {
 }
 
 const CartItem = (props) => {
-  const {id, title, img, sellerName, available, price, deleteFromCart} = props
+  const {id, title, url, userId, owner, status, price, deleteFromCart} = props
 
   return (
     <Box sx={{
@@ -128,7 +38,7 @@ const CartItem = (props) => {
                       sx={{width:60, height:60, borderRadius:3}}
                       component='img'
                       alt={title}
-                      src={`/imgs/nfts/${img}`}
+                      src={url}
                   />
                   <Box sx={{ml:1, width:130}}>
                     <Typography 
@@ -139,23 +49,23 @@ const CartItem = (props) => {
                         }}>{title}</Typography>
                     <Box sx={{mt:1}}>
                         {
-                          available ? <Box sx={{display:'flex', alignItems:'center'}}>
+                          status === config.NFTSTATUS.On.description ? <Box sx={{display:'flex', alignItems:'center'}}>
                                           <Typography variant='body2' sx={{mr:1}}>By</Typography>
                                           <Typography variant='body2' color='primary.main' 
                                                 sx={{textOverflow: 'ellipsis', 
                                                     whiteSpace: 'nowrap', 
                                                     overflow: 'hidden'}}
-                                          >{sellerName}</Typography>
+                                          >{owner?.name}</Typography>
                                       </Box> : <UnavailableHelpTip/>
                         } 
                     </Box>
                   </Box>
               </Box>
               <Box>
-                <Typography variant='body2'>{available ? `${price} CH` : ''}</Typography>
+                <Typography variant='body2'>{status === config.NFTSTATUS.On.description ? `${price} CH` : ''}</Typography>
               </Box>
           </Box>
-          <IconButton sx={{position:'absolute', right:20, bottom:5, visibility:'hidden', p:0}} onClick={() => deleteFromCart(id)}>
+          <IconButton sx={{position:'absolute', right:20, bottom:5, visibility:'hidden', p:0}} onClick={() => deleteFromCart(userId, id)}>
                   <DeleteIcon />
           </IconButton>
     </Box>
@@ -194,7 +104,7 @@ const getFilteredNfts = (nfts, chainId) => {
   return nfts.filter((nft) => nft.chainId === chainId)
 }
 
-const Cart = ({wallet, toggleCart, open, notifyNetworkCheckAndBuy}) => {
+const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNetworkCheckAndBuy}) => {
   logger.debug('[Cart] rendering...')
   const [nfts, setNfts] = useState([])
   const [chainId, setChainId] = useState(networks()[0].chainId)
@@ -202,7 +112,19 @@ const Cart = ({wallet, toggleCart, open, notifyNetworkCheckAndBuy}) => {
   useEffect(() => {
     if (wallet?.user.id && open) {
       logger.debug('[Cart] call restful api to get the list of nfts in cart by wallet\'s user id=', wallet?.user.id)
-      setNfts(data)
+      cartClient.queryByUser(wallet?.user.id)
+      .then((nfts) => {
+        setNfts(nfts)
+      })
+      .catch((err) => {
+        let errMsg = ''
+        if (err?.response?.data?.message) {
+            errMsg = err?.response?.data?.message
+        } else {
+            errMsg = err?.message
+        }
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+      })
     }
   }, [wallet, open])
 
@@ -215,10 +137,21 @@ const Cart = ({wallet, toggleCart, open, notifyNetworkCheckAndBuy}) => {
     setNfts(nfts.filter((nft) => nft.chainId !== chainId))
   }
 
-  const deleteFromCart = (id) => {
-    logger.info('[Cart] Cart call restful api to delete a nft by nft id:', id)
-    const newNfts = nfts.filter((nft) => nft.id !== id)
-    setNfts(newNfts)
+  const deleteFromCart = async (userId, nftId) => {
+    logger.info('[Cart] Cart call restful api to delete a cart item by userId', userId, 'and nftId ', nftId)
+    try {
+      await cartClient.remove(userId, nftId)
+      const newNfts = nfts.filter((nft) => nft.id !== nftId)
+      setNfts(newNfts)
+    } catch (err) {
+        let errMsg = ''
+        if (err?.response?.data?.message) {
+            errMsg = err?.response?.data?.message
+        } else {
+            errMsg = err?.message
+        }
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+    }
   }
 
   const getChainId = (tab) => {
@@ -233,7 +166,7 @@ const Cart = ({wallet, toggleCart, open, notifyNetworkCheckAndBuy}) => {
   }
 
   const handleBuy = () => {
-    notifyNetworkCheckAndBuy(chainId, getFilteredNfts(nfts, chainId).filter(nft => nft.available).map(nft => nft.id), getFilteredNfts(nfts, chainId).filter(nft => nft.available).map(nft => nft.price))
+    notifyNetworkCheckAndBuy(chainId, getFilteredNfts(nfts, chainId).filter(nft => nft.status === config.NFTSTATUS.On.description).map(nft => nft.id), getFilteredNfts(nfts, chainId).filter(nft => nft.status === config.NFTSTATUS.On.description).map(nft => nft.price))
   }
 
   logger.debug('[Cart] chainId=', chainId)
@@ -271,7 +204,7 @@ const Cart = ({wallet, toggleCart, open, notifyNetworkCheckAndBuy}) => {
             {getFilteredNfts(nfts, chainId).map((nft) =>
             (
               <Box key={nft.id}>
-                  <CartItem {...nft} deleteFromCart={deleteFromCart}/>
+                  <CartItem {...nft} userId={ wallet?.user.id} deleteFromCart={deleteFromCart}/>
                   <Divider sx={{my: 2}}/>
               </Box>
             ))}
@@ -283,7 +216,7 @@ const Cart = ({wallet, toggleCart, open, notifyNetworkCheckAndBuy}) => {
             <Button 
               color='customBlack' 
               variant='contained' 
-              disabled={getFilteredNfts(nfts, chainId).filter((nft) => nft.available).length === 0}
+              disabled={getFilteredNfts(nfts, chainId).filter((nft) => nft.status === config.NFTSTATUS.On.description).length === 0}
               sx={{textTransform:'none', borderRadius:'50vh', my:3, width:1}}
               onClick={handleBuy}
               >
