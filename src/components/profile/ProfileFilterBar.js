@@ -5,7 +5,7 @@ import {DrawerWidth, HeaderHeight, FilterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 
-export default function ProfileFilterBar({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary}) {
+export default function ProfileFilterBar({menuOpen, toggleMenu, handleSummary}) {
     logger.debug('[ProfileFilterBar] rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -41,7 +41,6 @@ export default function ProfileFilterBar({menuOpen, toggleMenu, notifyFilterUpda
                 
                 {handleSummary()}
             </Box>
-
     </Box>
   )
 }

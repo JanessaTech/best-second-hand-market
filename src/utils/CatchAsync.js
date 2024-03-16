@@ -1,5 +1,7 @@
 
- const catchAsync = async (fn, notifyAlertUpdate) => {
+ import logger from "../common/Logger"
+
+ const catchAsync = async (fn, notifyAlertUpdate, logMessage) => {
     try {
       await fn()
     } catch (err) {
@@ -8,6 +10,9 @@
           errMsg = err?.response?.data?.message
       } else {
           errMsg = err?.message
+      }
+      if (logMessage) {
+        logger.error(logMessage, err)
       }
       if (notifyAlertUpdate) {
         notifyAlertUpdate([{severity: 'error', message: errMsg}])

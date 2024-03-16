@@ -3,7 +3,7 @@ import React, { memo, useState } from 'react'
 import logger from '../../../common/Logger'
 import config from '../../../config'
 import {comment as commentClient} from '../../../utils/serverClient'
-import messageHelper from '../../../common/helpers/internationalization/messageHelper'
+import catchAsync from '../../../utils/CatchAsync'
 
 const AddComment = ({wallet, isReply, nftId, parentId, notifyAlertUpdate, handleCancelReply, handleAfterCommentAdded}) => {
     logger.debug('[AddComment] rendering...')
@@ -34,29 +34,21 @@ const AddComment = ({wallet, isReply, nftId, parentId, notifyAlertUpdate, handle
 
     const handleLeaveComment = async () => {
         logger.info('[AddComment] handleLeaveComment. call restful api to submit comment...:', state.comment)
-        try {
-            const comment = {
-                content: state.comment,
-                user: wallet?.user?.id
-            }
-            if (nftId) {
-                comment.nftId = nftId
-            }
-            if (parentId) {
-                comment.parentId = parentId
-            }
+        const comment = {
+            content: state.comment,
+            user: wallet?.user?.id
+        }
+        if (nftId) {
+            comment.nftId = nftId
+        }
+        if (parentId) {
+            comment.parentId = parentId
+        }
+        await catchAsync(async () => {
             await commentClient.create(comment)
             handleAfterCommentAdded(isReply)
             setState({...state, comment: ''})
-        } catch (err) {
-            let errMsg = ''
-            if (err?.response?.data?.message) {
-                errMsg = err?.response?.data?.message
-            } else {
-                errMsg = err?.message
-            }
-            notifyAlertUpdate([{severity: 'error', message: messageHelper.getMessage('comment_failed_add', errMsg)}])
-        }
+        }, notifyAlertUpdate)
     }
 
   return (

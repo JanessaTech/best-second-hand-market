@@ -11,6 +11,7 @@ import logger from '../../common/Logger'
 import {user as userClient} from '../../utils/serverClient'
 import {isFileImage} from '../../utils/FileUtils'
 import config from '../../config'
+import catchAsync from '../../utils/CatchAsync'
 
 const VisuallyHiddenInput = styled(props => {
   const {type, onChange} = props
@@ -44,25 +45,17 @@ const Setting = () => {
   }) // we must have a default value for gateway
 
   useEffect(() => {
-    logger.debug('[Setting] call notifyHideMenu in useEffect')
-    if (wallet?.address) {
-      logger.debug('[Setting] call restful api to get user by address =', wallet?.address)
-      userClient.findUserByAddress(wallet.address)
-      .then((user) => {
-        reset()  // we need reset before set new state. otherwise the new state cannot be registered to useForm
-        setState({id: user?.id, name: user?.name, address: user.address, intro: user?.intro})
-      })
-      .catch((err) => {
-        // there is a bug we need to fix if codes hit here except network issue
-        let errMsg = ''
-        if (err?.response?.data?.message) {
-            errMsg = err?.response?.data?.message
-        } else {
-            errMsg = err?.message
+    (async () => {
+      await catchAsync(async () => {
+        if (wallet?.address) {
+          logger.debug('[Setting] call restful api to get user by address =', wallet?.address)
+          const user = await userClient.findUserByAddress(wallet.address)
+          reset()  // we need reset before set new state. otherwise the new state cannot be registered to useForm
+          setState({id: user?.id, name: user?.name, address: user.address, intro: user?.intro})
         }
-        notifyAlertUpdate([{severity: 'error', message: errMsg}])
-      })
-    }
+      }, notifyAlertUpdate)
+    })()
+    logger.debug('[Setting] call notifyHideMenu in useEffect')
     notifyHideMenu()
   }, [wallet])
 
@@ -89,7 +82,8 @@ const Setting = () => {
     formData.append('name', data.name)
     formData.append('intro', data.intro)
     formData.append('profile', state.selectedFile)
-    try {
+
+    await catchAsync(async () => {
       const updatedUser  = await userClient.update(formData)
       var login = localStorage.getItem('login') ? JSON.parse(localStorage.getItem('login')) : undefined
       login = {...login, user: updatedUser}
@@ -100,15 +94,7 @@ const Setting = () => {
       logger.debug('[Setting] call notifyWalletUpdate after update is successful')
       notifyWalletUpdate(wallet)
       notifyAlertUpdate([{severity: 'success', message: 'setting was updated successfully'}])
-    } catch(err) {
-      let errMsg = ''
-      if (err?.response?.data?.message) {
-          errMsg = err?.response?.data?.message
-      } else {
-          errMsg = err?.message
-      }
-      notifyAlertUpdate([{severity: 'error', message: errMsg}])
-    }
+    }, notifyAlertUpdate)
   }
 
   const handleInputChanges = (e) => {

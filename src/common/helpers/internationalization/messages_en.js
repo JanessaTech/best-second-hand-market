@@ -25,5 +25,4 @@ export default {
     //comment
     comment_failed_create: 'Failed to add a new comment {0} due to {1}',
     comment_failed_query: 'Failed to query cart items for nft(id={0}) with query parameters: page = {1}, limit = {2}, sortBy ={3} due to {4}',
-    comment_failed_add: 'Failed to leave the comment due to {0}'
 }

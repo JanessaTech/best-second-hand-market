@@ -11,7 +11,7 @@ import logger from '../../common/Logger'
 import config from '../../config'
 import {networks, getChainName} from '../../utils/Chain'
 import {nft as nftClient} from '../../utils/serverClient'
-import messageHelper from '../../common/helpers/internationalization/messageHelper'
+import catchAsync from '../../utils/CatchAsync'
 
 export default function Mint() {
   logger.debug('[Mint] rendering...')
@@ -86,6 +86,15 @@ export default function Mint() {
     logger.info('[Mint] handleMint data =', data)
     notifyNetworkCheckAndBuy(state.chainId)
     logger.debug('[Mint] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
+    
+    await catchAsync(async () => {
+      const savedNFT = await nftClient.mint(data)
+      logger.debug('[Mint] handleMint. savedNFT = ', savedNFT)
+      setState({...state, mintSuccess: true})
+      notifyAlertUpdate([{severity: 'success', message: 'nft_success_mint'}])
+    }, notifyAlertUpdate)
+
+    /*
     try {
       const savedNFT = await nftClient.mint(data)
       logger.debug('[Mint] handleMint. savedNFT = ', savedNFT)
@@ -99,7 +108,7 @@ export default function Mint() {
           errMsg = err?.message
       }
       notifyAlertUpdate([{severity: 'error', message: errMsg}])
-    }
+    }*/
   }
 
   const handleCategoryChange = (value) => {

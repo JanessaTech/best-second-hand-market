@@ -10,7 +10,7 @@ import logger from '../../common/Logger'
 import {isFileImage} from '../../utils/FileUtils'
 import config from '../../config'
 import {user as userClient} from '../../utils/serverClient'
-
+import catchAsync from '../../utils/CatchAsync'
 
   const VisuallyHiddenInput = styled(props => {
     const {type, onChange} = props
@@ -86,7 +86,8 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
             formData.append('address', login?.address)
             formData.append('intro', data.intro)
             formData.append('profile', state.selectedFile)
-            try {
+
+            await catchAsync(async () => {
                 const registeredUser = await userClient.register(formData)
                 login = {...login, user: registeredUser}
                 logger.debug('[Signup] login = ', login)
@@ -96,15 +97,7 @@ const Signup = ({onClose, open, notifyAlertUpdate, notifyWalletUpdate}) => {
                 logger.debug('[Signup] call notifyWalletUpdate after registeration is successful')
                 onClose()
                 notifyWalletUpdate(wallet)
-            } catch (err) {
-                let errMsg = ''
-                if (err?.response?.data?.message) {
-                    errMsg = err?.response?.data?.message
-                } else {
-                    errMsg = err?.message
-                }
-                notifyAlertUpdate([{severity: 'error', message: errMsg}])
-            }
+            }, notifyAlertUpdate)
         }
     }
 
