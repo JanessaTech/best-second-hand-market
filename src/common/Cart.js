@@ -15,7 +15,7 @@ function calcPrice(data) {
   for (var i = 0; i < data.length; i++) {
     price += data[i].price
   }
-  return price  // maybe a bug
+  return price
 }
 
 const CartItem = (props) => {
