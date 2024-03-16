@@ -17,13 +17,14 @@ export const add = async (userId, nftId) => {
     }
 }
 
-export const remove = async (userId, nftId) => {
-    logger.debug('[serverClient.cart] remove. userId =', userId, ' nftId =', nftId)
+export const remove = async (userId, nftIds) => {
+    logger.debug('[serverClient.cart] remove. userId =', userId, ' nftId =', nftIds)
     try {
-        await axios.delete(`${config.BACKEND_ADDR}/apis/v1/cart?userId=${userId}&nftId=${nftId}`)
+        const nftIdQuery = nftIds.map((nftId) => `nftId[]=${nftId}`).join('&')
+        await axios.delete(`${config.BACKEND_ADDR}/apis/v1/cart?userId=${userId}&${nftIdQuery}`)
     } catch (err) {
         const reason = err?.response?.data?.message || err?.message || err
-        logger.error('[serverClient.cart] remove.', messageHelper.getMessage('cart_failed_remove', userId, nftId, reason))
+        logger.error('[serverClient.cart] remove.', messageHelper.getMessage('cart_failed_remove', userId, nftIds, reason))
         logger.error(err)
         throw err
     }

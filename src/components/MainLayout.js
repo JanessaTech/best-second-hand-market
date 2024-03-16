@@ -139,6 +139,13 @@ const MainLayout = (props) => {
         }
     }
 
+    const notifyNFTCartStatusUpdate = (userId, nftIds, isInCart) => {
+        logger.debug('[MainLayout] notifyNFTCartStatusUpdate =', eventsBus)
+        if (eventsBus.handleNFTCartStatus) {
+            eventsBus.handleNFTCartStatus(userId, nftIds, isInCart)
+        }
+    }
+
     const notifyShowMenu = useCallback(() => {
         setShowMenu(true)
     },[])
@@ -238,7 +245,8 @@ const MainLayout = (props) => {
                 wallet={wallet} 
                 toggleCart={toggleCart} 
                 open={cartOpen} 
-                notifyAlertUpdate={notifyAlertUpdate} 
+                notifyAlertUpdate={notifyAlertUpdate}
+                notifyNFTCartStatusUpdate={notifyNFTCartStatusUpdate}
                 notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
             {
                     alerts && alerts.length > 0 && 

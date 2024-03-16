@@ -8,42 +8,38 @@ import { UnavailableHelpTip } from '../../common/TipHelpers'
 import config from '../../config'
 import {cart as cartClient} from '../../utils/serverClient'
 
-const BuyOrCart = ({nft, wallet, openCart, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[BuyOrCart] rendering...')
+  logger.debug('[BuyOrCart] wallet...', wallet)
   const [searchParams, setSearchParams] = useSearchParams()
-  const id = searchParams.get('id')
+  const id = Number(searchParams.get('id'))
   const [inCart, setInCart] = useState(!!nft?.inCart)
 
-  /*
-  don't delete it.Maybe I will need it later on
   useEffect(() => {
-    if (wallet?.user?.id && nft?.id) {
-      cartClient.isInCart(wallet?.user?.id, nft?.id)
-      .then((inCart) => {
-        setInCart(inCart)
-      })
-      .catch((err) => {
-        let errMsg = ''
-        if (err?.response?.data?.message) {
-            errMsg = err?.response?.data?.message
-        } else {
-            errMsg = err?.message
-        }
-        notifyAlertUpdate([{severity: 'error', message: errMsg}])
-      })
-    }
-  }, [inCart])*/
+    logger.debug('[BuyOrCart] add handleNFTCartStatus to eventsBus')
+    eventsBus.handleNFTCartStatus = handleNFTCartStatus
+  }, [])
 
   useEffect(() => {
     setInCart(nft?.inCart)
   }, [nft?.inCart])
+
+  const handleNFTCartStatus = (userId, nftIds, inCart)  => {
+    logger.debug('[BuyOrCart] handleNFTCartStatus. userId =', userId, 'nftIds =', nftIds, 'inCart =', inCart)
+    logger.debug('[BuyOrCart] wallet =', wallet) // to-do: why wallet is undefined sometimes?
+    logger.debug('[BuyOrCart] nft.id =', nft?.id) // to-do: why nft is undefined sometimes?
+    logger.debug('[BuyOrCart] id =', id)
+    if (nftIds.includes(id)) {
+      setInCart(inCart)
+    }
+  }
 
   const handleCart = async () => {
     if (wallet) {
       logger.info('[BuyOrCart] call restful to add to cart then open the cart')
       try {
         if (inCart) { // to remove
-          await cartClient.remove(wallet?.user?.id, nft?.id)
+          await cartClient.remove(wallet?.user?.id, [nft?.id])
         } else { // to add
           await cartClient.add(wallet?.user?.id, nft?.id)
           openCart()

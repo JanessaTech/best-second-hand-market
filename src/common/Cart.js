@@ -104,7 +104,7 @@ const getFilteredNfts = (nfts, chainId) => {
   return nfts.filter((nft) => nft.chainId === chainId)
 }
 
-const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNetworkCheckAndBuy}) => {
+const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNFTCartStatusUpdate, notifyNetworkCheckAndBuy}) => {
   logger.debug('[Cart] rendering...')
   const [nfts, setNfts] = useState([])
   const [chainId, setChainId] = useState(networks()[0].chainId)
@@ -132,17 +132,31 @@ const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNetworkCheckAn
     toggleCart()
   }
 
-  const clearCart = () => {
+  const clearCart = async () => {
     logger.info('[Cart] call restful apis to clear cart by wallet\'s user id', wallet?.user?.id)
-    setNfts(nfts.filter((nft) => nft.chainId !== chainId))
+    try {
+      const nftIds = nfts.filter((nft) => nft.chainId === chainId).map((nft) => nft.id)
+      await cartClient.remove(wallet?.user.id, nftIds)
+      setNfts(nfts.filter((nft) => nft.chainId !== chainId))
+      notifyNFTCartStatusUpdate(wallet?.user.id, nftIds, false)
+    } catch (err) {
+        let errMsg = ''
+        if (err?.response?.data?.message) {
+            errMsg = err?.response?.data?.message
+        } else {
+            errMsg = err?.message
+        }
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+    }
   }
 
   const deleteFromCart = async (userId, nftId) => {
     logger.info('[Cart] Cart call restful api to delete a cart item by userId', userId, 'and nftId ', nftId)
     try {
-      await cartClient.remove(userId, nftId)
+      await cartClient.remove(userId, [nftId])
       const newNfts = nfts.filter((nft) => nft.id !== nftId)
       setNfts(newNfts)
+      notifyNFTCartStatusUpdate(userId, [nftId], false)
     } catch (err) {
         let errMsg = ''
         if (err?.response?.data?.message) {

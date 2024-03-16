@@ -9,7 +9,7 @@ import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 import {nft as nftClient} from '../../utils/serverClient/'
 
-const NFTHome = ({wallet, openCart, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const NFTHome = ({wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
     logger.debug("[NFTHome] rendering...")
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -51,6 +51,7 @@ const NFTHome = ({wallet, openCart, notifyAlertUpdate, notifyWalletOpen, notifyN
                       nft={nft} 
                       wallet={wallet} 
                       openCart={openCart} 
+                      eventsBus={eventsBus}
                       notifyAlertUpdate={notifyAlertUpdate}
                       notifyWalletOpen={notifyWalletOpen} 
                       notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
