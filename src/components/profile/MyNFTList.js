@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
 import {capitalize} from '../../utils/StringUtils'
+import {getFilter} from '../../utils/LocalStorage'
 
 function createData(id, title, img, network, category, sstatus, price, createdTime, views, favorites) {
   return {
@@ -83,17 +84,9 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 }
 
-function getFilter() {
-  let filter = localStorage.getItem('filter')
-  if (filter) {
-    return JSON.parse(filter)
-  }
-  return {}
-}
-
 export default function MyNFTList() {
   logger.debug('[MyNFTList] rendering....')
-  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, eventsBus, toggleMenu, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const headCells = [
@@ -183,16 +176,26 @@ export default function MyNFTList() {
 
   useEffect(() => {
     if (wallet?.user) {
-      logger.debug('[MyNFTList] call restful api to get the list of my nfts by user id=', wallet?.user?.id)
-      const latestFilter = getFilter()
-      logger.debug('[MyNFTList] trigger=', trigger)
-      logger.debug('[MyNFTList] latestFilter=', latestFilter)
-      logger.debug('[MyNFTList] page=', 1)
-      setRowSates(rows)
+      logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
+      eventsBus.handleFilterUpdate = handleFilterUpdate
+      fetchData()
     }
     logger.debug('[MyNFTList] call notifyShowMenu in useEffect')
     notifyShowMenu()
-  }, [wallet, trigger])
+  }, [wallet])
+
+  const handleFilterUpdate = () => {
+    logger.debug('[Setting] handleFilterUpdate')
+    fetchData()
+  }
+
+  const fetchData = () => {
+    logger.debug('[MyNFTList] call restful api to get the new list of nfts by latestFilter for user', wallet?.user?.id)
+    const latestFilter = getFilter()
+    logger.debug('[MyNFTList] latestFilter=', latestFilter)
+    logger.debug('[MyNFTList] page=', 1)
+    setRowSates(rows)
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

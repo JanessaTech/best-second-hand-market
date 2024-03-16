@@ -8,6 +8,7 @@ import OverviewSkeleton from './OverviewSkeleton'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
+import {getFilter} from '../../utils/LocalStorage'
 
 function createData(id, img, title, seller, chainId, network, price, incart) { 
   // 1. incart is always fasle when no one is logined
@@ -25,13 +26,13 @@ function generateData(start, count) {
   return res
 }
 
-function getFilter() {
+/*function getFilter() {
   let filter = localStorage.getItem('filter')
   if (filter) {
     return JSON.parse(filter)
   }
   return {}
-}
+}*/
 
 const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[NFTGallery] rendering ...')
