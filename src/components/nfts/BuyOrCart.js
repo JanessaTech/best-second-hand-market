@@ -7,6 +7,7 @@ import { useSearchParams } from 'react-router-dom'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
 import config from '../../config'
 import {cart as cartClient} from '../../utils/serverClient'
+import catchAsync from '../../utils/CatchAsync'
 
 const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[BuyOrCart] rendering...')
@@ -36,8 +37,8 @@ const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyW
 
   const handleCart = async () => {
     if (wallet) {
-      logger.info('[BuyOrCart] call restful to add to cart then open the cart')
-      try {
+      logger.info('[BuyOrCart] call restful to add to cart then open the cart')    
+      await catchAsync(async () => {
         if (inCart) { // to remove
           await cartClient.remove(wallet?.user?.id, [nft?.id])
         } else { // to add
@@ -45,15 +46,7 @@ const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyW
           openCart()
         }
         setInCart(!inCart)
-      } catch (err) {
-        let errMsg = ''
-        if (err?.response?.data?.message) {
-            errMsg = err?.response?.data?.message
-        } else {
-            errMsg = err?.message
-        }
-        notifyAlertUpdate([{severity: 'error', message: errMsg}])
-      }
+      }, notifyAlertUpdate)
     } else {
       notifyWalletOpen()
     }

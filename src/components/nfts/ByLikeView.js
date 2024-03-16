@@ -7,6 +7,7 @@ import NfterOverview from '../nfters/NfterOverview'
 import CustomPopper from '../../common/CustomPopper'
 import logger from '../../common/Logger'
 import {user as userClient, like as likeClient} from '../../utils/serverClient'
+import catchAsync from '../../utils/CatchAsync'
 
 const ByLikeView = ({wallet, nft, notifyAlertUpdate}) => {
     logger.debug('[ByLikeView] rendering...')
@@ -18,17 +19,17 @@ const ByLikeView = ({wallet, nft, notifyAlertUpdate}) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [ownerOverview, setOwnerOverview] = useState(null)
 
-    useEffect(() => {
-        if (nft?.owner?.id) {
-            logger.debug('[ByLikeView] call restful api to get Overview of owner by user id =', nft?.owner.id)
-            userClient.getOverViewById(nft?.owner.id)
-            .then((overview) => {
-                logger.debug('[ByLikeView] overview =', overview)
-                setOwnerOverview(overview)
-            }).catch((err) => {
-                logger.error('[ByLikeView] Failed to get overview due to ', err)
-            }) 
-        }
+    useEffect(() => {       
+            (async () => {
+                if (nft?.owner?.id) {
+                        logger.debug('[ByLikeView] call restful api to get Overview of owner by user id =', nft?.owner.id)
+                        await catchAsync(async () => {
+                        const overview = await userClient.getOverViewById(nft?.owner.id)
+                        logger.debug('[ByLikeView] overview =', overview)
+                        setOwnerOverview(overview)
+                    }, notifyAlertUpdate)
+                }
+            })()
     }, [nft?.owner?.id])
 
     useEffect(() => {
@@ -36,39 +37,21 @@ const ByLikeView = ({wallet, nft, notifyAlertUpdate}) => {
         setLikes(nft?.likes)
     }, [nft?.isLike, nft?.likes])
 
-    const toggleLike = () => {
+    const toggleLike = async () => {
         if (wallet?.user?.id) {
             logger.debug('[ByLikeView] call restful api to add/remove like for user id=', wallet?.user?.id)
             if (isLike) {
-                likeClient.unlike(wallet?.user?.id, nft?.id)
-                .then(() => {
+                await catchAsync(async () => {
+                    await likeClient.unlike(wallet?.user?.id, nft?.id)
                     setIsLike(false)
                     setLikes(likes - 1)
-                })
-                .catch((err) => {
-                    let errMsg = ''
-                    if (err?.response?.data?.message) {
-                        errMsg = err?.response?.data?.message
-                    } else {
-                        errMsg = err?.message
-                    }
-                    notifyAlertUpdate([{severity: 'error', message: errMsg}])
-                })
+                }, notifyAlertUpdate)
             } else {
-                likeClient.like(wallet?.user?.id, nft?.id)
-                .then(() => {
+                await catchAsync(async () => {
+                    await likeClient.like(wallet?.user?.id, nft?.id)
                     setIsLike(true)
                     setLikes(likes + 1)
-                })
-                .catch((err) => {
-                    let errMsg = ''
-                    if (err?.response?.data?.message) {
-                        errMsg = err?.response?.data?.message
-                    } else {
-                        errMsg = err?.message
-                    }
-                    notifyAlertUpdate([{severity: 'error', message: errMsg}])
-                })
+                }, notifyAlertUpdate)
             }
         }  
     }

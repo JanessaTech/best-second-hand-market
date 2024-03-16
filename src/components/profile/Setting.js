@@ -8,7 +8,7 @@ import {SettingSchema} from '../../common/Schemas'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {GlobalVariables} from '../MainLayout'
 import logger from '../../common/Logger'
-import {user} from '../../utils/serverClient'
+import {user as userClient} from '../../utils/serverClient'
 import {isFileImage} from '../../utils/FileUtils'
 import config from '../../config'
 
@@ -47,7 +47,7 @@ const Setting = () => {
     logger.debug('[Setting] call notifyHideMenu in useEffect')
     if (wallet?.address) {
       logger.debug('[Setting] call restful api to get user by address =', wallet?.address)
-      user.findUserByAddress(wallet.address)
+      userClient.findUserByAddress(wallet.address)
       .then((user) => {
         reset()  // we need reset before set new state. otherwise the new state cannot be registered to useForm
         setState({id: user?.id, name: user?.name, address: user.address, intro: user?.intro})
@@ -90,7 +90,7 @@ const Setting = () => {
     formData.append('intro', data.intro)
     formData.append('profile', state.selectedFile)
     try {
-      const updatedUser  = await user.update(formData)
+      const updatedUser  = await userClient.update(formData)
       var login = localStorage.getItem('login') ? JSON.parse(localStorage.getItem('login')) : undefined
       login = {...login, user: updatedUser}
       logger.debug('[Setting] login = ', login)

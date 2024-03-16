@@ -8,6 +8,7 @@ import Comments from './comments/Comments'
 import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 import {nft as nftClient} from '../../utils/serverClient/'
+import catchAsync from '../../utils/CatchAsync'
 
 const NFTHome = ({wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
     logger.debug("[NFTHome] rendering...")
@@ -17,22 +18,15 @@ const NFTHome = ({wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOp
     const [nft, setNft] = useState({})
 
     useEffect(() => {
-      const id = searchParams.get('id')
-      logger.debug('[NFTHome] call restful api to get nft details by id = ', id)
-      nftClient.findNFTById(id, wallet?.user?.id)
-      .then((NFT) => {
-        logger.debug('[NFTHome] NFT = ', NFT)
-        setNft(NFT)
-      })
-      .catch ((err) => {
-        let errMsg = ''
-        if (err?.response?.data?.message) {
-            errMsg = err?.response?.data?.message
-        } else {
-            errMsg = err?.message
-        }
-        notifyAlertUpdate([{severity: 'error', message: errMsg}])
-      })
+      (async () => {
+        const id = searchParams.get('id')
+        logger.debug('[NFTHome] call restful api to get nft details by id = ', id)
+        await catchAsync(async () => {
+          const NFT = await nftClient.findNFTById(id, wallet?.user?.id)
+          logger.debug('[NFTHome] NFT = ', NFT)
+          setNft(NFT)
+        }, notifyAlertUpdate)
+      })()
     }, [wallet])
 
   return (

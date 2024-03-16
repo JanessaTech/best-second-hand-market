@@ -10,7 +10,7 @@ import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
 import config from '../../config'
 import {networks, getChainName} from '../../utils/Chain'
-import {nft} from '../../utils/serverClient'
+import {nft as nftClient} from '../../utils/serverClient'
 import messageHelper from '../../common/helpers/internationalization/messageHelper'
 
 export default function Mint() {
@@ -87,7 +87,7 @@ export default function Mint() {
     notifyNetworkCheckAndBuy(state.chainId)
     logger.debug('[Mint] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
     try {
-      const savedNFT = await nft.mint(data)
+      const savedNFT = await nftClient.mint(data)
       logger.debug('[Mint] handleMint. savedNFT = ', savedNFT)
       setState({...state, mintSuccess: true})
       notifyAlertUpdate([{severity: 'success', message: 'nft_success_mint'}])
@@ -98,7 +98,7 @@ export default function Mint() {
       } else {
           errMsg = err?.message
       }
-      notifyAlertUpdate([{severity: 'error', message: messageHelper.getMessage('nft_failed_mint', data.title, errMsg)}])
+      notifyAlertUpdate([{severity: 'error', message: errMsg}])
     }
   }
 

@@ -181,7 +181,7 @@ export default function MyNFTList() {
       fetchData()
     }
     logger.debug('[MyNFTList] call notifyShowMenu in useEffect')
-    notifyShowMenu()
+    notifyShowMenu()  // todo: make it configurable rather than setting it in notification
   }, [wallet])
 
   const handleFilterUpdate = () => {
