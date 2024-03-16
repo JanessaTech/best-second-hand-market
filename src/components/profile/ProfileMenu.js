@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 import config from '../../config'
-import {user} from '../../utils/serverClient'
+import {user as userClient} from '../../utils/serverClient'
+import catchAsync from '../../utils/CatchAsync'
 
 const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWalletUpdate, notifyAlertUpdate}) => {
   logger.debug('[ProfileMenu] rendering...')
@@ -16,20 +17,12 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWall
 
     const handleDisconnect = async () => {
       logger.info('[ProfileMenu] handleDisconnect')
-      
-      try {
-        await user.logoutByAddress(wallet?.address)
+
+      await catchAsync(async () => {
+        await userClient.logoutByAddress(wallet?.address)
         notifyAlertUpdate([{severity: 'success', message: 'Logout successfully'}])
-      } catch (err) {
-        // it is a bug if code hits here (except network issue)
-        let errMsg = ''
-        if (err?.response?.data?.message) {
-            errMsg = err?.response?.data?.message
-        } else {
-            errMsg = err?.message
-        }
-        notifyAlertUpdate([{severity: 'error', message: errMsg}])
-      }
+      }, notifyAlertUpdate)
+      
       localStorage.removeItem('login')
       handleProfileMenuClose()
       notifyWalletUpdate(undefined)
