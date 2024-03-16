@@ -11,13 +11,11 @@ import {cart as cartClient} from '../utils/serverClient'
 import config from '../config'
 
 function calcPrice(data) {
-  let price = 0.0
+  let price = 0
   for (var i = 0; i < data.length; i++) {
-    if (data[i].status === config.NFTSTATUS.On.description) {
-      price += data[i].price
-    }
+    price += data[i].price
   }
-  return price.toFixed(3)  // maybe a bug
+  return price  // maybe a bug
 }
 
 const CartItem = (props) => {
@@ -100,8 +98,8 @@ const CartTab = (props) => {
   )
 }
 
-const getFilteredNfts = (nfts, chainId) => {
-  return nfts.filter((nft) => nft.chainId === chainId)
+const getFilteredNfts = (nfts, chainId, status) => {
+  return nfts.filter((nft) => nft.chainId === chainId).filter((nft) => status ? nft.status === status : true)
 }
 
 const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNFTCartStatusUpdate, notifyNetworkCheckAndBuy}) => {
@@ -180,7 +178,8 @@ const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNFTCartStatusU
   }
 
   const handleBuy = () => {
-    notifyNetworkCheckAndBuy(chainId, getFilteredNfts(nfts, chainId).filter(nft => nft.status === config.NFTSTATUS.On.description).map(nft => nft.id), getFilteredNfts(nfts, chainId).filter(nft => nft.status === config.NFTSTATUS.On.description).map(nft => nft.price))
+    const filteredNFTs = getFilteredNfts(nfts, chainId, config.NFTSTATUS.On.description)
+    notifyNetworkCheckAndBuy(chainId, filteredNFTs.map(nft => nft.id), filteredNFTs.map(nft => nft.price))
   }
 
   logger.debug('[Cart] chainId=', chainId)
@@ -225,12 +224,12 @@ const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNFTCartStatusU
             
             <Box sx={{display:'flex', justifyContent:'space-between', mt:3}}>
               <Typography variant='h6'>Total price</Typography>
-              <Typography variant='h6'>{calcPrice(getFilteredNfts(nfts, chainId))} CH</Typography>
+              <Typography variant='h6'>{calcPrice(getFilteredNfts(nfts, chainId, config.NFTSTATUS.On.description))} CH</Typography>
             </Box>
             <Button 
               color='customBlack' 
               variant='contained' 
-              disabled={getFilteredNfts(nfts, chainId).filter((nft) => nft.status === config.NFTSTATUS.On.description).length === 0}
+              disabled={getFilteredNfts(nfts, chainId, config.NFTSTATUS.On.description).length === 0}
               sx={{textTransform:'none', borderRadius:'50vh', my:3, width:1}}
               onClick={handleBuy}
               >
