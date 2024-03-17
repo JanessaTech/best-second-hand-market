@@ -11,6 +11,7 @@ import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
 import {capitalize} from '../../utils/StringUtils'
 import {getFilter} from '../../utils/LocalStorage'
+import catchAsync from '../../utils/CatchAsync'
 
 function createData(id, title, img, network, category, sstatus, price, createdTime, views, favorites) {
   return {
@@ -176,17 +177,19 @@ export default function MyNFTList() {
   const [rowStates, setRowSates] = React.useState([])
 
   useEffect(() => {
-    if (wallet?.user) {
-      logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
-      eventsBus.handleFilterUpdate = handleFilterUpdate
-      fetchData()
-    }
+    (async () => {
+      if (wallet?.user) {
+        logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
+        eventsBus.handleFilterUpdate = handleFilterUpdate
+        fetchData()
+      }
+    })()
     logger.debug('[MyNFTList] call notifyShowMenu in useEffect')
     notifyShowMenu()  // todo: make it configurable rather than setting it in notification
   }, [wallet])
 
   const handleFilterUpdate = () => {
-    logger.debug('[Setting] handleFilterUpdate')
+    logger.debug('[MyNFTList] handleFilterUpdate')
     fetchData()
   }
 
@@ -316,7 +319,7 @@ export default function MyNFTList() {
 
   const handleSummary = () => {
     const total = rowStates.length
-    const sales = rowStates.filter((row) => row.sstatus.value === 'On').length
+    const sales = rowStates.filter((row) => row.sstatus.value === 'on').length
     return (
       <Box sx={{display:'flex'}}>
               <Typography ><strong>{total}</strong> items: </Typography>
