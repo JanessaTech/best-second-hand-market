@@ -74,7 +74,7 @@ const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyW
         <ByLikeView wallet={wallet} nft={nft} notifyAlertUpdate={notifyAlertUpdate}/>
         <Box>
             {
-              nft?.status === config.NFTSTATUS.On.description ? 
+              nft?.status === config.NFTSTATUS.On.description && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id)) ? 
               <Box sx={{mt:1, display: 'flex', justifyContent:'center'}}>
                   <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0, mr:4}} 
                           color='customBlack' 
