@@ -64,7 +64,7 @@ const Comments = ({wallet, nftId, notifyAlertUpdate})=> {
 
     await catchAsync(async () => {
       const res = await commentClient.queryCommentsByNftId(id, toPage, pagination.pageSize, undefined)
-      const {comments, page, limit, totalPages, totalResults} = res
+      const {comments, totalPages, totalResults} = res
       logger.debug('page=', toPage, ' pageSize=', pagination.pageSize, 'pages=', totalPages, 'total=', totalResults)
       setComments(comments)
       setTotal(totalResults)

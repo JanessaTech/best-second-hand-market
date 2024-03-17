@@ -19,8 +19,23 @@ export const mint = async (data) => {
     }
 }
 
-export const update = async () => {
-
+export const update = async (id, price, status) => {
+    logger.debug('[serverClient.nft] update. id =', id, ' price =', price, ' status=', status)
+    const update = {id: id}
+    if (price) {
+        update.price = price
+    }
+    if (status) {
+        update.status = status
+    }
+    try {
+        await axios.post(`${config.BACKEND_ADDR}/apis/v1/nfts/update`, update)
+    } catch (err) {
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.nft] update.', messageHelper.getMessage('nft_failed_update', id, reason))
+        logger.error(err)
+        throw err
+    }
 }
 
 export const findNFTById = async (id, userId) => {
@@ -61,7 +76,7 @@ export const queryNFTsForUser = async  (userId, page, limit, sortBy) => {
         }
         const response = await axios.get(url)
         logger.debug('response =', response)
-        return response?.data?.data?.nfts
+        return response?.data?.data
     } catch (err) {
         const reason = err?.response?.data?.message || err?.message || err
         logger.error('[serverClient.nft] queryNFTsForUser.', messageHelper.getMessage('nft_failed_queryfor_user', userId, pagination, reason))

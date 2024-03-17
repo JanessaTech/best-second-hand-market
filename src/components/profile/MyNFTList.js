@@ -1,5 +1,5 @@
 import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, TableRow, useMediaQuery, TableSortLabel, TablePagination, Button, TextField, Typography, Link } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Link as RouterLink } from "react-router-dom"
 import { useTheme } from '@mui/material/styles'
 import config from '../../config'
@@ -12,8 +12,11 @@ import logger from '../../common/Logger'
 import {capitalize} from '../../utils/StringUtils'
 import {getFilter} from '../../utils/LocalStorage'
 import catchAsync from '../../utils/CatchAsync'
+import {nft as nftClient} from '../../utils/serverClient'
+import {shortFormatDate} from '../../utils/DateUtils'
+import { logoutByAddress } from '../../utils/serverClient/user'
 
-function createData(id, title, img, network, category, sstatus, price, createdTime, views, favorites) {
+function createData(id, title, img, network, category, sstatus, price, createdTime) {
   return {
     id,
     title,
@@ -22,28 +25,26 @@ function createData(id, title, img, network, category, sstatus, price, createdTi
     category,
     sstatus,
     price,
-    createdTime,
-    views,
-    favorites,
+    createdTime
   };
 }
 
 const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'pets', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 221),
-  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 222),
-  createData(3, 'green monkey', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 223),
-  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 224),
-  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 225),
-  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 226),
-  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 227),
-  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 228),
-  createData(9, 'KitKat', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 229),
-  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 230),
-  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 231),
-  createData(12, 'Nougat', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 232),
-  createData(13, 'Oreo', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
-  createData(14, 'Oreo', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
-  createData(15, 'Oreo', 'mk.png', 'ethereum', 'pets', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024', 102, 233),
+  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'pets', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(3, 'green monkey', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(9, 'KitKat', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(12, 'Nougat', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(13, 'Oreo', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(14, 'Oreo', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
+  createData(15, 'Oreo', 'mk.png', 'ethereum', 'pets', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
 ]
 
 function EnhancedTableHead(props) {
@@ -86,9 +87,29 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 }
 
+function convertNFTs(nfts) {
+  const copies = nfts.map((nft) => {
+    const copy = {}
+    for (const [key, value] of Object.entries(nft)) {
+        if (key === 'price' || key === 'status') {
+            copy[key] = {}
+            copy[key].isChanged = false
+            copy[key].backUpValue = undefined
+            copy[key].value = value
+        } else if(key === 'createdAt' || key === 'updatedAt') {
+          copy[key] = shortFormatDate(new Date(value))
+        } else {
+            copy[key] = value
+        }
+    }
+    return copy
+  })
+  return copies
+}
+
 export default function MyNFTList() {
   logger.debug('[MyNFTList] rendering....')
-  const {wallet, menuOpen, eventsBus, toggleMenu, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, eventsBus, toggleMenu, notifyAlertUpdate, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const headCells = [
@@ -117,7 +138,7 @@ export default function MyNFTList() {
       display: isSmallScreen ? false : true
     },
     {
-      id: 'sstatus',
+      id: 'status',
       position: 'left',
       disablePadding: false,
       label: 'Status',
@@ -133,26 +154,10 @@ export default function MyNFTList() {
       display: true
     },
     {
-      id: 'createdTime',
+      id: 'updatedAt',
       position: 'left',
       disablePadding: false,
-      label: 'Created Time',
-      order: true,
-      display: isSmallScreen ? false : true
-    },
-    {
-      id: 'views',
-      position: 'left',
-      disablePadding: false,
-      label: 'Views',
-      order: true,
-      display: isSmallScreen ? false : true
-    },
-    {
-      id: 'favorites',
-      position: 'left',
-      disablePadding: false,
-      label: 'Favorites',
+      label: 'Latest update',
       order: true,
       display: isSmallScreen ? false : true
     },
@@ -170,19 +175,29 @@ export default function MyNFTList() {
     return headCells.find(h => h.id === id)
   }
 
-  const [order, setOrder] = React.useState('desc')
-  const [orderBy, setOrderBy] = React.useState('createdTime')
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
-  const [rowStates, setRowSates] = React.useState([])
+  const [order, setOrder] = useState('desc')
+  const [orderBy, setOrderBy] = useState('updatedAt')
+  const [pageNfts, setPageNfts] = useState([])
+  const [pagination, setPagination] = useState({
+    page: 0,  // the index of the current page
+    pageSize: 5, // how many items are shown in one page
+    pages: 0, // how many pages in total
+    total: 0 // how many items in total
+  })
 
   useEffect(() => {
     (async () => {
-      if (wallet?.user) {
-        logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
-        eventsBus.handleFilterUpdate = handleFilterUpdate
-        fetchData()
-      }
+      await catchAsync(async () => {
+        if (wallet?.user) {
+          logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
+          eventsBus.handleFilterUpdate = handleFilterUpdate
+          const res = await nftClient.queryNFTsForUser(wallet?.user?.id, pagination.page + 1, pagination.pageSize, `${orderBy}:${order}`)
+          const {nfts, totalPages, totalResults} = res
+          logger.debug('[MyNFTList] page=', pagination.page + 1, ' limit =', pagination.pageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+          setPageNfts(convertNFTs(nfts))
+          setPagination({...pagination, pages: totalPages, total: totalResults})
+        }
+      }, notifyAlertUpdate)
     })()
     logger.debug('[MyNFTList] call notifyShowMenu in useEffect')
     notifyShowMenu()  // todo: make it configurable rather than setting it in notification
@@ -198,137 +213,164 @@ export default function MyNFTList() {
     const latestFilter = getFilter()
     logger.debug('[MyNFTList] latestFilter=', latestFilter)
     logger.debug('[MyNFTList] page=', 1)
-    setRowSates(rows)
+    //setRowSates(rows)
   }
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
+  const handleRequestSort = async (event, newOrderBy) => {
+    logger.debug('[MyNFTList] handleRequestSort. newOrderBy =', newOrderBy)
+    const isAsc = orderBy === newOrderBy && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
-    logger.debug('newOrder = ', newOrder, 'property = ', property)
-    setOrder(newOrder);
-    setOrderBy(property);
+    logger.debug('newOrder = ', newOrder, 'newOrderBy = ', newOrderBy)
+    setOrder(newOrder)
+    setOrderBy(newOrderBy)
+    await catchAsync(async () => {
+      const res = await nftClient.queryNFTsForUser(wallet?.user?.id, pagination.page + 1, pagination.pageSize, `${newOrderBy}:${newOrder}`)
+      const {nfts, totalPages, totalResults} = res
+      logger.debug('[MyNFTList] page=', pagination.page + 1, ' limit =', pagination.pageSize, 'sortBy =', `${newOrderBy}:${newOrder}`, 'pages=', totalPages, 'total=', totalResults )
+      setPageNfts(convertNFTs(nfts))
+      setPagination({...pagination, pages: totalPages, total: totalResults})
+    }, notifyAlertUpdate)
   }
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleChangePage = async (event, newPage) => {
+    logger.debug('[MyNFTList] handleChangePage. newPage =', newPage)
+    await catchAsync(async () => {
+      const res = await nftClient.queryNFTsForUser(wallet?.user?.id, newPage + 1, pagination.pageSize, `${orderBy}:${order}`)
+      const {nfts, totalPages, totalResults} = res
+      logger.debug('[MyNFTList] page=', newPage + 1, ' limit =', pagination.pageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+      setPageNfts(convertNFTs(nfts))
+      setPagination({...pagination, page: newPage, pages: totalPages, total: totalResults})
+    }, notifyAlertUpdate)
   }
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleChangeRowsPerPage = async (event) => {
+    logger.debug('[MyNFTList] handleChangeRowsPerPage.')
+    await catchAsync(async () => {
+      const newPageSize = parseInt(event.target.value, 10)
+      const res = await nftClient.queryNFTsForUser(wallet?.user?.id, 1, newPageSize, `${orderBy}:${order}`)
+      const {nfts, totalPages, totalResults} = res
+      logger.debug('[MyNFTList] page=', 1, ' limit =', newPageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+      setPageNfts(convertNFTs(nfts))
+      setPagination({...pagination, page: 0, pageSize: newPageSize, pages: totalPages, total: totalResults})
+    }, notifyAlertUpdate)
   }
 
-  const visibleRows = React.useMemo(
-    () => {
-      return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    }, [order, orderBy, page, rowsPerPage, rowStates]
-  )
-
-  const handleStatusChange = (id) => (status) => {
-    logger.info('[MyNFTList] handleStatusChange id=', id, ' status =', status)
-    const newRowStates = []
-    for (var i = 0; i < rowStates.length; i++) {
-      if (rowStates[i].id === id) {
-        newRowStates.push({
-          id: rowStates[i].id,
-          title: rowStates[i].title,
-          img:  rowStates[i].img,
-          network:  rowStates[i].network,
-          category: rowStates[i].category,
-          sstatus: {
-                value: status, 
-                isChanged: true, 
-                backUpValue: rowStates[i].sstatus.backUpValue ? rowStates[i].sstatus.backUpValue: rowStates[i].sstatus.value
-              },
-          price: rowStates[i].price,
-          createdTime: rowStates[i].createdTime,
-          views: rowStates[i].views,
-          favorites: rowStates[i].favorites
-        })
+  const handleStatusChange = (id) => (newStatus) => {
+    logger.info('[MyNFTList] handleStatusChange id=', id, ' newStatus =', newStatus)
+    const copies = pageNfts.map((nft) => {
+      if (nft.id === id) {
+        const copy = {}
+        for (const [key, value] of Object.entries(nft)) {
+          if (key === 'status') {
+              copy[key] = {}
+              copy[key].isChanged = true
+              copy[key].backUpValue = value?.backUpValue ? value?.backUpValue : value?.value
+              copy[key].value = newStatus
+          } else {
+              copy[key] = value
+          }
+        }
+        return copy
       } else {
-        newRowStates.push(rowStates[i])
+        return nft
       }
-    }
-    setRowSates(newRowStates)
+    })
+    setPageNfts(copies)
   }
 
   const handlePriceChange = (id) => (e) => {
     logger.info('[MyNFTList] handlePriceChange, id =', id, 'value=', e.target.value)
-    const newRowStates = []
-    for (var i = 0; i < rowStates.length; i++) {
-      if (rowStates[i].id === id) {
-        newRowStates.push({
-          id: rowStates[i].id,
-          title: rowStates[i].title,
-          img:  rowStates[i].img,
-          network:  rowStates[i].network,
-          category: rowStates[i].category,
-          sstatus: rowStates[i].sstatus,
-          price: {
-                value: e.target.value, 
-                isChanged: true, 
-                backUpValue: rowStates[i].price.backUpValue ? rowStates[i].price.backUpValue: rowStates[i].price.value
-                },
-          createdTime: rowStates[i].createdTime,
-          views: rowStates[i].views,
-          favorites: rowStates[i].favorites
-        })
+    const copies = pageNfts.map((nft) => {
+      if (nft.id === id) {
+        const copy = {}
+        for (const [key, value] of Object.entries(nft)) {
+          if (key === 'price') {
+              copy[key] = {}
+              copy[key].isChanged = true
+              copy[key].backUpValue = value?.backUpValue ? value?.backUpValue : value?.value
+              copy[key].value = e.target.value
+          } else {
+              copy[key] = value
+          }
+        }
+        return copy
       } else {
-        newRowStates.push(rowStates[i])
+        return nft
       }
-    }
-    setRowSates(newRowStates)
+    })
+    setPageNfts(copies)
   }
 
-  const handleRowChange = (id) => (e) => {
+  const acceptChanges = (id) => {
+    logger.debug('[MyNFTList] acceptChanges. id = ', id)
+    const copies = pageNfts.map((nft) => {
+      if (nft.id === id) {
+        const copy = {}
+        for (const [key, value] of Object.entries(nft)) {
+          if (key === 'price' || key === 'status') {
+              copy[key] = {}
+              copy[key].isChanged = false
+              copy[key].backUpValue = undefined
+              copy[key].value = value?.value
+          } else {
+              copy[key] = value
+          }
+        }
+        return copy
+      } else {
+        return nft
+      }
+    })
+    setPageNfts(copies)
+  }
+
+  const handleRowChange = (id) => async (e) => {
     logger.info('[MyNFTList] handleRowChange, id =', id)
     logger.info('[MyNFTList] call rest api to save changes in row')
+    const toUpdate = pageNfts.filter((nft) => nft.id === id)[0]
+
+    const price = toUpdate.price.value
+    const status = toUpdate.status.value
+
+    await catchAsync(async () => {
+      await nftClient.update(id, price, status)
+      acceptChanges(id)
+    }, notifyAlertUpdate)
   }
 
   const handleUndoChange = (id) => (e) => {
     logger.info('[MyNFTList] handleUndoPriceChange, id =', id)
-    const newRowStates = []
-    for (var i = 0; i < rowStates.length; i++) {
-      if (rowStates[i].id === id) {
-        newRowStates.push({
-          id: rowStates[i].id,
-          title: rowStates[i].title,
-          img:  rowStates[i].img,
-          network:  rowStates[i].network,
-          category: rowStates[i].category,
-          sstatus: {
-              value: rowStates[i].sstatus.isChanged ? rowStates[i].sstatus.backUpValue : rowStates[i].sstatus.value, 
-              isChanged: false, 
-              backUpValue: undefined
-              },
-          price: {
-              value: rowStates[i].price.isChanged ? rowStates[i].price.backUpValue : rowStates[i].price.value, 
-              isChanged: false, 
-              backUpValue: undefined
-              },
-          createdTime: rowStates[i].createdTime,
-          views: rowStates[i].views,
-          favorites: rowStates[i].favorites
-        })
+    const copies = pageNfts.map((nft) => {
+      if (nft.id === id) {
+        const copy = {}
+        for (const [key, value] of Object.entries(nft)) {
+          if (key === 'price' || key === 'status') {
+              copy[key] = {}
+              copy[key].value = value?.isChanged ? value?.backUpValue : value?.value
+              copy[key].isChanged = false
+              copy[key].backUpValue = undefined
+          } else {
+              copy[key] = value
+          }
+        }
+        return copy
       } else {
-        newRowStates.push(rowStates[i])
+        return nft
       }
-    }
-    setRowSates(newRowStates)
+    })
+    setPageNfts(copies)
   }
 
   const handleSummary = () => {
-    const total = rowStates.length
-    const sales = rowStates.filter((row) => row.sstatus.value === 'on').length
+    const total = pagination.total
     return (
       <Box sx={{display:'flex'}}>
               <Typography ><strong>{total}</strong> items: </Typography>
-              <Typography><strong>{sales}</strong> on sales</Typography>
       </Box>
     )
   }
 
-  logger.debug('[MyNFTList] rowStates :', rowStates)
+  logger.debug('[MyNFTList] pageNfts :', pageNfts)
   logger.debug('[MyNFTList] wallet:', wallet)
   
   return (
@@ -352,7 +394,7 @@ export default function MyNFTList() {
               />
               <TableBody>
                 {
-                  visibleRows.map((row, index) => {
+                  pageNfts.map((row, index) => {
                     const labelId = `nft-list-table-index-${index}`
                     return (
                       <TableRow
@@ -375,23 +417,23 @@ export default function MyNFTList() {
                                         component='img'
                                         sx={{width: 70, borderRadius:2, height:70, mr:1}}
                                         alt={row.title}
-                                        src={`/imgs/nfts/${row.img}`}
+                                        src={row?.url}
                                     >
                                     </Box>
                                     <Box sx={{width:100, display:'flex', flexDirection:'column'}}>
                                         <Typography variant='body1' 
                                           sx={{fontWeight:'bold', whiteSpace: 'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.title}</Typography>
-                                        <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.network}.svg`}/>
+                                        <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.chainName}.svg`}/>
                                     </Box>
                                 </Box>
                             </Link>
                           </TableCell>
                           <TableCell align="left" sx={{display: getHeadById('category').display ?'table-cell': 'none', px:1}}>{capitalize(row.category)}</TableCell>
-                          <TableCell align="left" sx={{display: getHeadById('sstatus').display ?'table-cell': 'none', px:1}}>
+                          <TableCell align="left" sx={{display: getHeadById('status').display ?'table-cell': 'none', px:1}}>
                             <CustomSelect 
                               label={'status'} 
                               showInputLabel={false} 
-                              value={row.sstatus.value} 
+                              value={row.status.value} 
                               handleChange={handleStatusChange(row.id)} 
                               options={Object.values(config.NFTSTATUS).map((s) => s.description)} 
                               width={70}
@@ -417,11 +459,9 @@ export default function MyNFTList() {
                             </Box>
                             
                           </TableCell>
-                          <TableCell align="left" sx={{display: getHeadById('createdTime').display ?'table-cell': 'none', px:1}}>{row.createdTime}</TableCell>
-                          <TableCell align="left" sx={{display: getHeadById('views').display ?'table-cell': 'none', px:1}}>{row.views}</TableCell>
-                          <TableCell align="left" sx={{display: getHeadById('favorites').display ?'table-cell': 'none', px:1}}>{row.favorites}</TableCell>
+                          <TableCell align="left" sx={{display: getHeadById('updatedAt').display ?'table-cell': 'none', px:1}}>{row.updatedAt}</TableCell>
                           <TableCell align="center" sx={{display: getHeadById('update').display ?'table-cell': 'none', px:1}}>
-                            {(row.price.isChanged || row.sstatus.isChanged) &&
+                            {(row.price.isChanged || row.status.isChanged) &&
                             <Box sx={{display:'flex'}}>
                                   <Button sx={{textTransform:'none'}} 
                                       color='customBlack' 
@@ -447,9 +487,9 @@ export default function MyNFTList() {
           <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
+              count={pagination.total}
+              rowsPerPage={pagination.pageSize}
+              page={pagination.page}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
           />
