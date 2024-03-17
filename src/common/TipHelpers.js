@@ -6,7 +6,7 @@ import CustomPopper from "./CustomPopper"
 const NotAvailableNFTHelpContent = () => {
     return (
       <Box>
-        <Typography variant='body2'>The item is unavailable because it has been purchased by someone else, the seller has removed the listing or the order has expired </Typography>
+        <Typography variant='body2'>The item is unavailable because: 1. It has been purchased by someone else 2.The nft is removed from the listing 3.It has expired 4.The nft belongs to the logined user </Typography>
       </Box>
     )
 }
