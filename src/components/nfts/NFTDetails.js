@@ -2,6 +2,7 @@ import { Box, Divider, Typography } from '@mui/material'
 import React, { memo} from 'react'
 import logger from '../../common/Logger'
 import {capitalize} from '../../utils/StringUtils'
+import {formatDate} from '../../utils/DateUtils'
 
 const Space = () => (<Box sx={{width:1, height:10}}></Box>)
 
@@ -40,7 +41,7 @@ const NFTDetails = ({nft}) => {
           <DetailRow key='Token ID' name='Token ID' value={nft?.tokenId}/>
           <DetailRow key='Token standard' name='Token standard' value={nft?.tokenStandard}/>
           <DetailRow key='Category' name='Category' value={nft?.category}/>
-          <DetailRow key='Created time' name='Created time' value={nft?.createdAt}/>
+          <DetailRow key='Created time' name='Created time' value={formatDate(new Date(nft?.createdAt))}/>
           <DetailRow key='Description' name='Description' value={nft?.description}/>
         <Space/>
         <Divider/>

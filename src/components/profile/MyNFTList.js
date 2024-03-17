@@ -2,7 +2,8 @@ import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, Ta
 import React, { useEffect } from 'react'
 import {Link as RouterLink } from "react-router-dom"
 import { useTheme } from '@mui/material/styles'
-import {HeaderHeight, FilterBarHeight, NFTSTATUS} from '../../common/constant'
+import config from '../../config'
+import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import {GlobalVariables} from '../MainLayout'
 import ProfileFilterBar from './ProfileFilterBar'
 import PropTypes from 'prop-types'
@@ -389,7 +390,7 @@ export default function MyNFTList() {
                               showInputLabel={false} 
                               value={row.sstatus.value} 
                               handleChange={handleStatusChange(row.id)} 
-                              options={NFTSTATUS} 
+                              options={Object.values(config.NFTSTATUS).map((s) => s.description)} 
                               width={70}
                               cap={true}
                               />

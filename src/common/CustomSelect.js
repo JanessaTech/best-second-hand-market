@@ -2,7 +2,6 @@ import React from 'react'
 import { useTheme } from '@mui/material/styles'
 import { FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material'
 import {capitalize} from '../utils/StringUtils'
-import logger from './Logger';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

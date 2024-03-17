@@ -31,7 +31,7 @@ const OneComment = ({deep, comment, wallet, notifyAlertUpdate, handleAfterCommen
                   </Box>
                   <Box sx={{mt:1}}>
                     <Typography>{comment?.content}
-                      {deep === 1 && wallet && <Button sx={{ml:2, borderRadius:'50vh', textTransform:'none'}} 
+                      {deep === 1 && wallet && comment?.user?.id !== wallet?.user?.id &&<Button sx={{ml:2, borderRadius:'50vh', textTransform:'none'}} 
                                              color='customBlack' variant='contained'
                                              onClick={toggleReply}>
                                         <Typography variant='body2'>{state.cancelReply ? 'Reply' : 'Cancel reply'}</Typography>

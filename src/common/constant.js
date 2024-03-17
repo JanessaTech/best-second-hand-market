@@ -8,5 +8,4 @@ export const BatchSizeInGallery=30
 export const PageSizeInComments=3
 export const MaxValueInFilter = 100
 export const MinValueInFilter = 0
-export const NFTSTATUS = ['on', 'off']
 export const SYSSYMBOL = 'CH'
