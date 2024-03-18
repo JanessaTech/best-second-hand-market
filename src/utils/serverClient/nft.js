@@ -52,8 +52,24 @@ export const findNFTById = async (id, userId) => {
     }
 }
 
-export const queryNFTs = async () => {
-
+export const queryNFTs = async (userId, page, limit, sortBy, chainId, category, prices) => {
+    logger.debug('[serverClient.nft] queryNFTs. userId =', userId, ' page = ', page, ' limit =', limit, ' sortBy = ', sortBy, ' chainId =', chainId, ' category =', category, ' prices =', prices)
+    const pageQuery = getQuery({userId: userId, page: page, limit: limit, sortBy: sortBy, chainId: chainId, category: category, prices: prices})
+    try {
+        let url = `${config.BACKEND_ADDR}/apis/v1/nfts`
+        if (pageQuery) {
+            url = `${url}?${pageQuery}`
+        }
+        logger.debug('[serverClient.nft] queryNFTs. url =', url)
+        const response = await axios.get(url)
+        logger.debug('response =', response)
+        return response?.data?.data
+    } catch (err) {
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.nft] queryNFTs.', messageHelper.getMessage('nft_failed_query_all', userId, pageQuery, reason))
+        logger.error(err)
+        throw err
+    }
 }
 
 export const queryNFTsForUser = async  (userId, page, limit, sortBy, chainId, category, prices) => {

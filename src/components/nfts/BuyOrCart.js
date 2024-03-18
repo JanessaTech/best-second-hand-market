@@ -9,6 +9,25 @@ import config from '../../config'
 import {cart as cartClient} from '../../utils/serverClient'
 import catchAsync from '../../utils/CatchAsync'
 
+const ShowBuyOrCart = ({handleBuy, handleCart}) => {
+  return (
+    <Box sx={{mt:1, display: 'flex', justifyContent:'center'}}>
+          <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0, mr:4}} 
+                  color='customBlack' 
+                  variant='contained'
+                  onClick={handleBuy}
+                  >
+                    <Typography variant='h6'>Buy now</Typography>
+          </Button>
+          <IconButton sx={{p:0, position:'relative'}} onClick={handleCart}>
+              <Tooltip title={inCart ? 'Remove from cart' : 'Add to cart'}>
+                <Box><CheapIcon name='cart-black' size={50}/></Box>
+              </Tooltip>
+              {inCart && <CheapIcon name='minus' size={20} sx={{position:'absolute', top:0, right:0}}/>}
+          </IconButton> 
+    </Box>
+  )
+}
 const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[BuyOrCart] rendering...')
   logger.debug('[BuyOrCart] wallet...', wallet)
@@ -74,22 +93,9 @@ const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyW
         <ByLikeView wallet={wallet} nft={nft} notifyAlertUpdate={notifyAlertUpdate}/>
         <Box>
             {
-              nft?.status === config.NFTSTATUS.On.description && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id)) ? 
-              <Box sx={{mt:1, display: 'flex', justifyContent:'center'}}>
-                  <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0, mr:4}} 
-                          color='customBlack' 
-                          variant='contained'
-                          onClick={handleBuy}
-                          >
-                            <Typography variant='h6'>Buy now</Typography>
-                  </Button>
-                  <IconButton sx={{p:0, position:'relative'}} onClick={handleCart}>
-                      <Tooltip title={inCart ? 'Remove from cart' : 'Add to cart'}>
-                        <Box><CheapIcon name='cart-black' size={50}/></Box>
-                      </Tooltip>
-                      {inCart && <CheapIcon name='minus' size={20} sx={{position:'absolute', top:0, right:0}}/>}
-                  </IconButton> 
-              </Box> : <UnavailableHelpTip/>
+              !wallet || (nft?.status === config.NFTSTATUS.On.description 
+              && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id))) ? 
+              <ShowBuyOrCart handleBuy={handleBuy} handleCart={handleCart}/>: <UnavailableHelpTip/>
             }
         </Box>
         

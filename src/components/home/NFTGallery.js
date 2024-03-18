@@ -9,6 +9,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 import {getFilter} from '../../utils/LocalStorage'
+import catchAsync from '../../utils/CatchAsync'
+import {nft as nftClient} from '../../utils/serverClient'
 
 function createData(id, img, title, seller, chainId, network, price, incart) { 
   // 1. incart is always fasle when no one is logined
@@ -45,35 +47,42 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
   const [total, setTotal] = useState(0)
   
   useEffect(() => {
-    logger.debug('[NFTGallery] add handleFilterUpdate to eventsBus')
-    eventsBus.handleFilterUpdate = handleFilterUpdate
-    fetchData()
-  }, [searchParams])
+    (async () => {
+      logger.debug('[NFTGallery] add handleFilterUpdate to eventsBus')
+      eventsBus.handleFilterUpdate = handleFilterUpdate
+      await fetchData()
+    })()
+  }, [searchParams, wallet])
 
-  const handleFilterUpdate = () => {
+  const handleFilterUpdate = async () => {
     logger.debug('[NFTGallery] handleFilterUpdate')
-    fetchData()
+    await fetchData()
   }
 
-  const fetchData = () => {
-    const latestFilter = getFilter()
-    const search = searchParams.get('search')
-    logger.debug('[NFTGallery] call restful api to get the new list of nfts by latestFilter or search')
-    logger.debug('[NFTGallery] search=', search)
-    logger.debug('[NFTGallery] latestFilter=', latestFilter)
-    logger.debug('[NFTGallery] page=', 1)
-    const total = 403
-    const nftsInOnePage = generateData(0, pagination.pageSize)  // assume we get back the first 100 nft for the first page
-    logger.debug('[NFTGallery] nftsInOnePage length', nftsInOnePage.length)
-    setBufferedNfts(nftsInOnePage)
-    logger.debug('[NFTGallery] nftsInOnePage.slice(0, BatchSizeInGallery).length', nftsInOnePage.slice(0, BatchSizeInGallery).length)
-    setNfts(nftsInOnePage.slice(0, BatchSizeInGallery))
-    setHasMore(true)
-    setTotal(total)
-    setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: 1})
-    setIsLoading(false)
-    window.scrollTo(0, 0)
-
+  const fetchData = async () => {
+    await catchAsync(async () => {
+      logger.debug('[NFTGallery] call restful api to get the new list of nfts by latestFilter or search')
+      const latestFilter = getFilter()
+      const search = searchParams.get('search')
+      const toPage = 1
+      logger.debug('[NFTGallery] search=', search)
+      logger.debug('[NFTGallery] latestFilter=', latestFilter)
+      logger.debug('[NFTGallery] page=', toPage)
+      const chainId = latestFilter?.chainId
+      const category = latestFilter?.categories
+      const prices = latestFilter?.prices
+      const userId = wallet?.user?.id
+      const res = await nftClient.queryNFTs(userId, toPage, pagination.pageSize, undefined, chainId, category, prices)
+      const {nfts, totalPages, totalResults} = res
+      setBufferedNfts(nfts)
+      setNfts(nfts.slice(0, BatchSizeInGallery))
+      setHasMore(true)
+      setTotal(totalResults)
+      setPagination({...pagination, pages: totalPages, page: toPage})
+      setIsLoading(false)
+      logger.debug('[NFTGallery] page=', toPage, ' limit =', pagination.pageSize, 'sortBy =', 'pages=', totalPages, 'total=', totalResults )
+      window.scrollTo(0, 0)
+    }, notifyAlertUpdate)
   }
 
   const fetchMoreData  = () => {

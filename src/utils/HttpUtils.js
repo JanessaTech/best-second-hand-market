@@ -1,5 +1,8 @@
-export function getQuery({page, limit, sortBy, chainId, category, prices}) {
+export function getQuery({userId, page, limit, sortBy, chainId, category, prices}) {
     let queryOptions = {}
+    if (userId) {
+        queryOptions.userId = userId
+    }
     if (page) {
         queryOptions.page = page
     }

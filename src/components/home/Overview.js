@@ -1,27 +1,61 @@
 import { Box, Link, Tooltip, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import {Link as RouterLink } from "react-router-dom"
 import logger from '../../common/Logger'
+import config from '../../config'
+
+const BuyOrPutCart = ({handleBuyNow, toggleCart}) => {
+  return (
+    <Box sx={{position:'absolute', width: 1, height: 70, bottom:0,
+                          borderRadius:'0 0 16px 16px',
+                          visibility: 'hidden',
+                          display:'flex'
+                          }}>
+                <Box sx={{width:0.4, height:1, px:1, borderRadius:'0 0 0 16px', 
+                          borderRight:'1px solid #fff',
+                          boxSizing:'border-box',
+                          '&:hover':{ backgroundColor:'#424242'},
+                          display:'flex',
+                          justifyContent:'center',
+                          alignItems:'center',
+                          backgroundColor:'rgba(0, 0, 0, 1)'}} onClick={handleBuyNow}>
+                      <Typography color='white' variant='body2'>Buy</Typography>
+                </Box>
+                <Box sx={{width:0.6, height:1, px:1, borderRadius:'0 0 16px 0', 
+                          '&:hover':{ backgroundColor:'#424242'},
+                          display:'flex',
+                          justifyContent:'center',
+                          alignItems:'center',
+                          backgroundColor:'rgba(0, 0, 0, 1)'}} onClick={toggleCart}>
+                            <Typography color='white' variant='body2'>{inCart ? 'Remove from cart': 'Add to cart'}</Typography>
+                </Box>
+      </Box>
+  )
+}
 
 const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[Overview] rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
-  const [incart, setIncart] = useState(nft.incart)
+  const [inCart, setInCart] = useState(!!nft?.inCart)
+
+  useEffect(() => {
+    setInCart(nft?.inCart)
+  }, [nft?.inCart])
 
   const putToCart = () => {
     logger.info('[Overview] putToCart')
     logger.info('[Overview] call restful api to put nft id=', nft.id, ' to cart')
-    setIncart(true)
+    setInCart(true)
     notifyAlertUpdate([{severity: 'success', message: 'Added to shopping cart'}]) // when successful
   }
 
   const removeFromCart = () => {
     logger.info('[Overview] removeFromCart')
     logger.info('[Overview] call restful api to remove nft id=', nft.id, ' from cart')
-    setIncart(false)
+    setInCart(false)
     notifyAlertUpdate([{severity: 'success', message: 'Removed from shopping cart'}]) // when successful
   }
 
@@ -30,7 +64,7 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
     if (!wallet) {
       notifyWalletOpen()
     } else {
-      if(!incart){
+      if(!inCart){
         putToCart()
       } else{
         removeFromCart()
@@ -59,14 +93,14 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
                       component='img'
                       sx={{width: 1, borderRadius:'16px 16px 0 0'}}
                       alt={nft?.title}
-                      src={`/imgs/nfts/${nft?.img}`}
+                      src={nft?.url}
                     />
                     <Box sx={{mx: isSmallScreen ? 1 : 2, mb:1, }}>
-                        <Typography variant='h6'>A baby monkey</Typography>
-                        <Typography color='text.secondary' variant='subtitle2'>{nft?.seller}</Typography>
+                        <Typography variant='h6'>{nft?.title}</Typography>
+                        <Typography color='text.secondary' variant='subtitle2'>{nft?.owner?.name}</Typography>
                         <Box sx={{display: 'flex', mt:1}}>
                           <Tooltip title='Ethereum'>
-                            <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${nft?.network}.svg`}/>
+                            <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${nft?.chainName}.svg`}/>
                           </Tooltip>
                           <Box sx={{display:'flex', alignItems:'center'}}>
                             <Typography variant='h6'>{nft?.price}</Typography>
@@ -76,30 +110,11 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
                     </Box>
                     
                 </Box>
-                <Box sx={{position:'absolute', width: 1, height: 70, bottom:0,
-                          borderRadius:'0 0 16px 16px',
-                          visibility: 'hidden',
-                          display:'flex'
-                          }}>
-                            <Box sx={{width:0.4, height:1, px:1, borderRadius:'0 0 0 16px', 
-                                      borderRight:'1px solid #fff',
-                                      boxSizing:'border-box',
-                                      '&:hover':{ backgroundColor:'#424242'},
-                                      display:'flex',
-                                      justifyContent:'center',
-                                      alignItems:'center',
-                                      backgroundColor:'rgba(0, 0, 0, 1)'}} onClick={handleBuyNow}>
-                                  <Typography color='white' variant='body2'>Buy</Typography>
-                            </Box>
-                            <Box sx={{width:0.6, height:1, px:1, borderRadius:'0 0 16px 0', 
-                                      '&:hover':{ backgroundColor:'#424242'},
-                                      display:'flex',
-                                      justifyContent:'center',
-                                      alignItems:'center',
-                                      backgroundColor:'rgba(0, 0, 0, 1)'}} onClick={toggleCart}>
-                                        <Typography color='white' variant='body2'>{incart ? 'Remove from cart': 'Add to cart'}</Typography>
-                            </Box>
-                </Box>
+                {
+                !wallet || (nft?.status === config.NFTSTATUS.On.description 
+                  && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id))) && 
+                  <BuyOrPutCart handleBuyNow={handleBuyNow} toggleCart={toggleCart}/>
+                }
             </Box> 
       </Link>
   )

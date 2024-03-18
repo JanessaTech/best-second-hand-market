@@ -13,6 +13,7 @@ export default {
     nft_failed_mint: 'Failed to save a record for the newly created nft {0} due to {1}. Please ask admin for help',
     nft_success_mint : 'A new NFT is minted successfully',
     nft_failed_findby_id: 'Failed to find the NFT by id {0}',
+    nft_failed_query_all: 'Failed to query all NFTs for user(id={0}) with pageQuery {1} due to {2}',
     nft_failed_queryfor_user: 'Failed to query NFTs for user(id={0}) with pageQuery {1} due to {2}',
     nft_failed_update:'Failed to update nft(id={0}) due to {1}',
     //like
