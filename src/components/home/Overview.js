@@ -4,6 +4,8 @@ import React, { memo, useEffect, useState } from 'react'
 import {Link as RouterLink } from "react-router-dom"
 import logger from '../../common/Logger'
 import config from '../../config'
+import catchAsync from '../../utils/CatchAsync'
+import {cart as cartClient} from '../../utils/serverClient'
 
 const BuyOrPutCart = ({handleBuyNow, toggleCart, inCart}) => {
   return (
@@ -48,6 +50,7 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
   const putToCart = () => {
     logger.info('[Overview] putToCart')
     logger.info('[Overview] call restful api to put nft id=', nft.id, ' to cart')
+    
     setInCart(true)
     notifyAlertUpdate([{severity: 'success', message: 'Added to cart'}]) // when successful
   }
@@ -59,16 +62,25 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
     notifyAlertUpdate([{severity: 'success', message: 'Removed from cart'}]) // when successful
   }
 
-  const toggleCart = (e) => {
+  const toggleCart = async (e) => {
     e.preventDefault()
     if (!wallet) {
       notifyWalletOpen()
     } else {
-      if(!inCart){
-        putToCart()
-      } else{
-        removeFromCart()
-      }
+      await catchAsync(async () => {
+        if(!inCart){ //add
+          logger.info('[Overview] putToCart')
+          logger.info('[Overview] call restful api to put nft id=', nft.id, ' to cart')
+          await cartClient.add(wallet?.user?.id, nft?.id)
+          notifyAlertUpdate([{severity: 'success', message: 'Added to cart'}]) // when successful
+        } else { //remove
+          logger.info('[Overview] removeFromCart')
+          logger.info('[Overview] call restful api to remove nft id=', nft.id, ' from cart')
+          await cartClient.remove(wallet?.user?.id, [nft?.id])
+          notifyAlertUpdate([{severity: 'success', message: 'Removed from cart'}]) // when successful
+        }
+        setInCart(!inCart)
+      }, notifyAlertUpdate)
     } 
   }
 
