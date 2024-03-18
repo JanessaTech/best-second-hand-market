@@ -60,11 +60,11 @@ const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyW
       await catchAsync(async () => {
         if (inCart) { // to remove
           await cartClient.remove(wallet?.user?.id, [nft?.id])
-          notifyAlertUpdate([{severity: 'success', message: 'Removed from cart successfully'}])
+          notifyAlertUpdate([{severity: 'success', message: 'Removed from cart'}])
         } else { // to add
           await cartClient.add(wallet?.user?.id, nft?.id)
           openCart()
-          notifyAlertUpdate([{severity: 'success', message: 'Added to cart successfully'}])
+          notifyAlertUpdate([{severity: 'success', message: 'Added to cart'}])
         }
         setInCart(!inCart)
       }, notifyAlertUpdate)
@@ -95,8 +95,8 @@ const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyW
         <ByLikeView wallet={wallet} nft={nft} notifyAlertUpdate={notifyAlertUpdate}/>
         <Box>
             {
-              !wallet || (nft?.status === config.NFTSTATUS.On.description 
-              && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id))) ? 
+              (!wallet || (nft?.status === config.NFTSTATUS.On.description 
+              && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id)))) ? 
               <ShowBuyOrCart handleBuy={handleBuy} handleCart={handleCart} inCart={inCart}/>: <UnavailableHelpTip/>
             }
         </Box>

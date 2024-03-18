@@ -49,14 +49,14 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
     logger.info('[Overview] putToCart')
     logger.info('[Overview] call restful api to put nft id=', nft.id, ' to cart')
     setInCart(true)
-    notifyAlertUpdate([{severity: 'success', message: 'Added to shopping cart'}]) // when successful
+    notifyAlertUpdate([{severity: 'success', message: 'Added to cart'}]) // when successful
   }
 
   const removeFromCart = () => {
     logger.info('[Overview] removeFromCart')
     logger.info('[Overview] call restful api to remove nft id=', nft.id, ' from cart')
     setInCart(false)
-    notifyAlertUpdate([{severity: 'success', message: 'Removed from shopping cart'}]) // when successful
+    notifyAlertUpdate([{severity: 'success', message: 'Removed from cart'}]) // when successful
   }
 
   const toggleCart = (e) => {
@@ -111,8 +111,8 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
                     
                 </Box>
                 {
-                !wallet || (nft?.status === config.NFTSTATUS.On.description 
-                  && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id))) && 
+                (!wallet || (nft?.status === config.NFTSTATUS.On.description 
+                  && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id)))) && 
                   <BuyOrPutCart handleBuyNow={handleBuyNow} toggleCart={toggleCart} inCart={inCart}/>
                 }
             </Box> 
