@@ -36,7 +36,7 @@ const BuyOrPutCart = ({handleBuyNow, toggleCart, inCart}) => {
   )
 }
 
-const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const Overview = ({wallet, nft, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[Overview] rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -44,22 +44,32 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
   const [inCart, setInCart] = useState(!!nft?.inCart)
 
   useEffect(() => {
+    if (wallet) {
+      logger.debug('[Overview] add handleNFTCartStatus to eventsBus')
+      if (!eventsBus.overview) {
+        eventsBus.overview = new Map([])
+      }
+      eventsBus.overview.set(nft.id, handleNFTCartStatus)
+    }
+    
+  }, [wallet])
+
+  useEffect(() => {
     setInCart(nft?.inCart)
   }, [nft?.inCart])
 
-  const putToCart = () => {
-    logger.info('[Overview] putToCart')
-    logger.info('[Overview] call restful api to put nft id=', nft.id, ' to cart')
-    
-    setInCart(true)
-    notifyAlertUpdate([{severity: 'success', message: 'Added to cart'}]) // when successful
-  }
-
-  const removeFromCart = () => {
-    logger.info('[Overview] removeFromCart')
-    logger.info('[Overview] call restful api to remove nft id=', nft.id, ' from cart')
-    setInCart(false)
-    notifyAlertUpdate([{severity: 'success', message: 'Removed from cart'}]) // when successful
+  const handleNFTCartStatus = (userId, nftIds, inCart)  => {
+    //logger.debug('[Overview] handleNFTCartStatus. userId =', userId, 'nftIds =', nftIds, 'inCart =', inCart)
+    //logger.debug('[Overview] wallet =', wallet) // 
+    //logger.debug('[Overview] nft.id =', nft?.id) //
+    if (nftIds.includes(nft?.id)) {
+      if (inCart) {
+        logger.debug('[Overview] nft ', nft?.id, ' is added from cart')
+      } else {
+        logger.debug('[Overview] nft ', nft?.id, ' is removed from cart')
+      }
+      setInCart(inCart)
+    }
   }
 
   const toggleCart = async (e) => {

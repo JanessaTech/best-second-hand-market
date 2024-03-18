@@ -144,6 +144,11 @@ const MainLayout = (props) => {
         if (eventsBus.handleNFTCartStatus) {
             eventsBus.handleNFTCartStatus(userId, nftIds, isInCart)
         }
+        if (eventsBus.overview) {
+            for (const [, fn] of eventsBus.overview ) {
+                fn(userId, nftIds, isInCart)
+            }
+        }
     }
 
     const notifyShowMenu = useCallback(() => {
