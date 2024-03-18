@@ -2,11 +2,11 @@ import { Box, Paper, Table, TableCell, TableBody , TableContainer, TableHead, Ta
 import React, { useEffect, useState } from 'react'
 import {Link as RouterLink } from "react-router-dom"
 import { useTheme } from '@mui/material/styles'
+import PropTypes from 'prop-types'
 import config from '../../config'
 import {HeaderHeight, FilterBarHeight} from '../../common/constant'
 import {GlobalVariables} from '../MainLayout'
 import ProfileFilterBar from './ProfileFilterBar'
-import PropTypes from 'prop-types'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
 import {capitalize} from '../../utils/StringUtils'
@@ -14,38 +14,7 @@ import {getFilter} from '../../utils/LocalStorage'
 import catchAsync from '../../utils/CatchAsync'
 import {nft as nftClient} from '../../utils/serverClient'
 import {shortFormatDate} from '../../utils/DateUtils'
-import { logoutByAddress } from '../../utils/serverClient/user'
 
-function createData(id, title, img, network, category, sstatus, price, createdTime) {
-  return {
-    id,
-    title,
-    img, 
-    network, 
-    category,
-    sstatus,
-    price,
-    createdTime
-  };
-}
-
-const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'pets', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 61, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 62, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(3, 'green monkey', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 63, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 64, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 65, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 66, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 67, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 68, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(9, 'KitKat', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 69, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 70, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 71, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(12, 'Nougat', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 72, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(13, 'Oreo', 'mk.png', 'ethereum', 'clothes', {value: 'off', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(14, 'Oreo', 'mk.png', 'ethereum', 'clothes', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-  createData(15, 'Oreo', 'mk.png', 'ethereum', 'pets', {value: 'on', isChanged: false, backUpValue: undefined }, {value: 73, isChanged: false, backUpValue: undefined}, 'Jan 2th, 2024'),
-]
 
 function EnhancedTableHead(props) {
   const { headCells, order, orderBy, onRequestSort} = props
@@ -185,35 +154,40 @@ export default function MyNFTList() {
     total: 0 // how many items in total
   })
 
+  const fetchData = async (toPage, orderBy, order) => {
+    await catchAsync(async () => {
+      if (wallet?.user) {
+        logger.debug('[MyNFTList] call restful api to get the new list of nfts by latestFilter for user', wallet?.user?.id)
+        const latestFilter = getFilter()
+        logger.debug('[MyNFTList] latestFilter=', latestFilter)
+        logger.debug('[MyNFTList] toPage =', toPage)
+        const chainId = latestFilter?.chainId
+        const category = latestFilter?.categories
+        const prices = latestFilter?.prices
+        const res = await nftClient.queryNFTsForUser(wallet?.user?.id, toPage + 1, pagination.pageSize, `${orderBy}:${order}`, chainId, category, prices)
+        const {nfts, totalPages, totalResults} = res
+        logger.debug('[MyNFTList] page=', toPage + 1, ' limit =', pagination.pageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+        setPageNfts(convertNFTs(nfts))
+        setPagination({...pagination, page: toPage, pages: totalPages, total: totalResults})
+      }
+    }, notifyAlertUpdate)
+  }
+
   useEffect(() => {
     (async () => {
-      await catchAsync(async () => {
-        if (wallet?.user) {
-          logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
-          eventsBus.handleFilterUpdate = handleFilterUpdate
-          const res = await nftClient.queryNFTsForUser(wallet?.user?.id, pagination.page + 1, pagination.pageSize, `${orderBy}:${order}`)
-          const {nfts, totalPages, totalResults} = res
-          logger.debug('[MyNFTList] page=', pagination.page + 1, ' limit =', pagination.pageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
-          setPageNfts(convertNFTs(nfts))
-          setPagination({...pagination, pages: totalPages, total: totalResults})
-        }
-      }, notifyAlertUpdate)
+      logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
+      eventsBus.handleFilterUpdate = handleFilterUpdate
+      const toPage = pagination.page
+      await fetchData(toPage, orderBy, order)
     })()
     logger.debug('[MyNFTList] call notifyShowMenu in useEffect')
     notifyShowMenu()  // todo: make it configurable rather than setting it in notification
   }, [wallet])
 
-  const handleFilterUpdate = () => {
+  const handleFilterUpdate = async () => {
     logger.debug('[MyNFTList] handleFilterUpdate')
-    fetchData()
-  }
-
-  const fetchData = () => {
-    logger.debug('[MyNFTList] call restful api to get the new list of nfts by latestFilter for user', wallet?.user?.id)
-    const latestFilter = getFilter()
-    logger.debug('[MyNFTList] latestFilter=', latestFilter)
-    logger.debug('[MyNFTList] page=', 1)
-    //setRowSates(rows)
+    const toPage = 0
+    await fetchData(toPage, orderBy, order)
   }
 
   const handleRequestSort = async (event, newOrderBy) => {
@@ -221,38 +195,23 @@ export default function MyNFTList() {
     const isAsc = orderBy === newOrderBy && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
     logger.debug('newOrder = ', newOrder, 'newOrderBy = ', newOrderBy)
+    const toPage = pagination.page
+    logger.debug('[MyNFTList] handleRequestSort toPage=', toPage)
+    await fetchData(toPage, newOrderBy, newOrder)
     setOrder(newOrder)
     setOrderBy(newOrderBy)
-    await catchAsync(async () => {
-      const res = await nftClient.queryNFTsForUser(wallet?.user?.id, pagination.page + 1, pagination.pageSize, `${newOrderBy}:${newOrder}`)
-      const {nfts, totalPages, totalResults} = res
-      logger.debug('[MyNFTList] page=', pagination.page + 1, ' limit =', pagination.pageSize, 'sortBy =', `${newOrderBy}:${newOrder}`, 'pages=', totalPages, 'total=', totalResults )
-      setPageNfts(convertNFTs(nfts))
-      setPagination({...pagination, pages: totalPages, total: totalResults})
-    }, notifyAlertUpdate)
   }
 
   const handleChangePage = async (event, newPage) => {
     logger.debug('[MyNFTList] handleChangePage. newPage =', newPage)
-    await catchAsync(async () => {
-      const res = await nftClient.queryNFTsForUser(wallet?.user?.id, newPage + 1, pagination.pageSize, `${orderBy}:${order}`)
-      const {nfts, totalPages, totalResults} = res
-      logger.debug('[MyNFTList] page=', newPage + 1, ' limit =', pagination.pageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
-      setPageNfts(convertNFTs(nfts))
-      setPagination({...pagination, page: newPage, pages: totalPages, total: totalResults})
-    }, notifyAlertUpdate)
+    const toPage = newPage
+    await fetchData(toPage, orderBy, order)
   }
 
   const handleChangeRowsPerPage = async (event) => {
     logger.debug('[MyNFTList] handleChangeRowsPerPage.')
-    await catchAsync(async () => {
-      const newPageSize = parseInt(event.target.value, 10)
-      const res = await nftClient.queryNFTsForUser(wallet?.user?.id, 1, newPageSize, `${orderBy}:${order}`)
-      const {nfts, totalPages, totalResults} = res
-      logger.debug('[MyNFTList] page=', 1, ' limit =', newPageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
-      setPageNfts(convertNFTs(nfts))
-      setPagination({...pagination, page: 0, pageSize: newPageSize, pages: totalPages, total: totalResults})
-    }, notifyAlertUpdate)
+    const toPage = 0
+    await fetchData(toPage, orderBy, order)
   }
 
   const handleStatusChange = (id) => (newStatus) => {

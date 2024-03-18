@@ -167,6 +167,7 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, noti
                             anchorEl={anchorEl} 
                             open={Boolean(anchorEl)} 
                             handleProfileMenuClose={handleProfileMenuClose}
+                            notifyFilterMenuReset={notifyFilterMenuReset}
                             notifyWalletUpdate={notifyWalletUpdate}
                             notifyAlertUpdate={notifyAlertUpdate}
                             />

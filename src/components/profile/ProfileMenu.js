@@ -7,7 +7,7 @@ import config from '../../config'
 import {user as userClient} from '../../utils/serverClient'
 import catchAsync from '../../utils/CatchAsync'
 
-const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWalletUpdate, notifyAlertUpdate}) => {
+const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyFilterMenuReset, notifyWalletUpdate, notifyAlertUpdate}) => {
   logger.debug('[ProfileMenu] rendering...')
   const navigate = useNavigate()
 
@@ -34,6 +34,8 @@ const ProfileMenu = ({wallet, anchorEl, open, handleProfileMenuClose, notifyWall
 
     const handleClick = (url) => {
       handleProfileMenuClose()
+      localStorage.removeItem('filter')
+      notifyFilterMenuReset()
       navigate(url)
     }
 

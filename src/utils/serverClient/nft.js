@@ -56,30 +56,21 @@ export const queryNFTs = async () => {
 
 }
 
-export const queryNFTsForUser = async  (userId, page, limit, sortBy) => {
-    logger.debug('[serverClient.nft] queryNFTsForUser. userId =', userId, ' page = ', page, ' limit =', limit, ' sortBy = ', sortBy)
-    const pagination = {}
-    if (page) {
-        pagination.page = page
-    }
-    if (limit) {
-        pagination.limit = limit
-    }
-    if (sortBy) {
-        pagination.sortBy = sortBy
-    }
+export const queryNFTsForUser = async  (userId, page, limit, sortBy, chainId, category, prices) => {
+    logger.debug('[serverClient.nft] queryNFTsForUser. userId =', userId, ' page = ', page, ' limit =', limit, ' sortBy = ', sortBy, ' chainId =', chainId, ' category =', category, ' prices =', prices)
+    const pageQuery = getQuery({page: page, limit: limit, sortBy: sortBy, chainId: chainId, category: category, prices: prices})
     try {
-        const pageQuery = getQuery(pagination)
         let url = `${config.BACKEND_ADDR}/apis/v1/nfts/users/${userId}`
         if (pageQuery) {
             url = `${url}?${pageQuery}`
         }
+        logger.debug('[serverClient.nft] queryNFTsForUser. url =', url)
         const response = await axios.get(url)
         logger.debug('response =', response)
         return response?.data?.data
     } catch (err) {
         const reason = err?.response?.data?.message || err?.message || err
-        logger.error('[serverClient.nft] queryNFTsForUser.', messageHelper.getMessage('nft_failed_queryfor_user', userId, pagination, reason))
+        logger.error('[serverClient.nft] queryNFTsForUser.', messageHelper.getMessage('nft_failed_queryfor_user', userId, pageQuery, reason))
         logger.error(err)
         throw err
     }
