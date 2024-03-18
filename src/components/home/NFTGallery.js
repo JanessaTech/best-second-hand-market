@@ -12,22 +12,6 @@ import {getFilter} from '../../utils/LocalStorage'
 import catchAsync from '../../utils/CatchAsync'
 import {nft as nftClient} from '../../utils/serverClient'
 
-function createData(id, img, title, seller, chainId, network, price, incart) { 
-  // 1. incart is always fasle when no one is logined
-  // 2. we need return chainId which is used to get chainName(network here)
-  // 3. There should be a wallet in backend to get the owner of nft. owner is seller
-  return {id, img, title, seller, chainId, network, price, incart}
-}
-
-function generateData(start, count) {
-  var res = []
-  for (var i = start; i < start + count; i++) {
-    const data = createData(i, 'mk.png', `A baby money${i}`, `JanessaTech lab${i}`, 1, 'ethereum', i, true)
-    res.push(data)
-  }
-  return res
-}
-
 const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[NFTGallery] rendering ...')
 
@@ -50,21 +34,22 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
     (async () => {
       logger.debug('[NFTGallery] add handleFilterUpdate to eventsBus')
       eventsBus.handleFilterUpdate = handleFilterUpdate
-      await fetchData()
+      const toPage = 1
+      await fetchData(toPage)
     })()
   }, [searchParams, wallet])
 
   const handleFilterUpdate = async () => {
     logger.debug('[NFTGallery] handleFilterUpdate')
-    await fetchData()
+    const toPage = 1
+    await fetchData(toPage)
   }
 
-  const fetchData = async () => {
+  const fetchData = async (toPage) => {
     await catchAsync(async () => {
       logger.debug('[NFTGallery] call restful api to get the new list of nfts by latestFilter or search')
       const latestFilter = getFilter()
       const search = searchParams.get('search')
-      const toPage = 1
       logger.debug('[NFTGallery] search=', search)
       logger.debug('[NFTGallery] latestFilter=', latestFilter)
       logger.debug('[NFTGallery] page=', toPage)
@@ -96,18 +81,10 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
     }
   }
 
-  const handlePageChange = (e, page) => {
+  const handlePageChange = async (e, page) => {
     logger.debug('[NFTGallery] handlePageChange page=', page)
-    setPagination({...pagination, page: page})
-    const latestFilter = getFilter()
-    logger.debug('[NFTGallery] call restful api to get new list of nfts based on page and latestFilter', latestFilter, ' and page=', page)
-    logger.debug('[NFTGallery] generateData from ', (page - 1) * pagination.pageSize, ' by count =', Math.min(pagination.pageSize, total - (page - 1) * pagination.pageSize))
-    const nftsInOnePage = generateData((page - 1) * pagination.pageSize, Math.min(100, total - (page - 1) * pagination.pageSize))
-
-    setBufferedNfts(nftsInOnePage)
-    setNfts(nftsInOnePage.slice(0, BatchSizeInGallery))
-    setHasMore(true)
-    window.scrollTo(0, 0)
+    const toPage = Number(page)
+    await fetchData(toPage)
   }
 
   const handleSummary = useCallback(() => {
@@ -118,19 +95,11 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
     )
   }, [total])
 
-  const handleUpdate = useCallback(() => {
+  const handleUpdate = useCallback(async () => {
     logger.debug('[NFTGallery] handleUpdate...')
-    const latestFilter = getFilter()
-    logger.debug('[NFTGallery] call restful api to get the new list of nfts based on latestFilter', latestFilter, ' and wallet=', wallet, ' and page=', 1)
-    const total = 504
-    const nftsInOnePage = generateData((pagination.page - 1) * pagination.pageSize, Math.min(100, total - (pagination.page - 1) * pagination.pageSize))
-    setBufferedNfts(nftsInOnePage)
-    setNfts(nftsInOnePage.slice(0, BatchSizeInGallery))
-    setHasMore(true)
-    setTotal(total)
-    setPagination({...pagination, pages: Math.ceil(total / pagination.pageSize), page: 1})
-    window.scrollTo(0, 0)
-    localStorage.removeItem('filter')
+    const toPage = 1
+    await fetchData(toPage)
+    //localStorage.removeItem('filter')  // for test purpose
   }, [pagination])
 
   logger.debug('nfts', nfts)
