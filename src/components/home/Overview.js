@@ -5,7 +5,7 @@ import {Link as RouterLink } from "react-router-dom"
 import logger from '../../common/Logger'
 import config from '../../config'
 
-const BuyOrPutCart = ({handleBuyNow, toggleCart}) => {
+const BuyOrPutCart = ({handleBuyNow, toggleCart, inCart}) => {
   return (
     <Box sx={{position:'absolute', width: 1, height: 70, bottom:0,
                           borderRadius:'0 0 16px 16px',
@@ -113,7 +113,7 @@ const Overview = ({wallet, nft, notifyAlertUpdate, notifyWalletOpen, notifyNetwo
                 {
                 !wallet || (nft?.status === config.NFTSTATUS.On.description 
                   && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id))) && 
-                  <BuyOrPutCart handleBuyNow={handleBuyNow} toggleCart={toggleCart}/>
+                  <BuyOrPutCart handleBuyNow={handleBuyNow} toggleCart={toggleCart} inCart={inCart}/>
                 }
             </Box> 
       </Link>

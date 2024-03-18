@@ -9,7 +9,7 @@ import config from '../../config'
 import {cart as cartClient} from '../../utils/serverClient'
 import catchAsync from '../../utils/CatchAsync'
 
-const ShowBuyOrCart = ({handleBuy, handleCart}) => {
+const ShowBuyOrCart = ({handleBuy, handleCart, inCart}) => {
   return (
     <Box sx={{mt:1, display: 'flex', justifyContent:'center'}}>
           <Button sx={{textTransform:'none', borderRadius:'50vh', width:150, py:0, mr:4}} 
@@ -60,9 +60,11 @@ const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyW
       await catchAsync(async () => {
         if (inCart) { // to remove
           await cartClient.remove(wallet?.user?.id, [nft?.id])
+          notifyAlertUpdate([{severity: 'success', message: 'Removed from cart successfully'}])
         } else { // to add
           await cartClient.add(wallet?.user?.id, nft?.id)
           openCart()
+          notifyAlertUpdate([{severity: 'success', message: 'Added to cart successfully'}])
         }
         setInCart(!inCart)
       }, notifyAlertUpdate)
@@ -95,7 +97,7 @@ const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyW
             {
               !wallet || (nft?.status === config.NFTSTATUS.On.description 
               && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id))) ? 
-              <ShowBuyOrCart handleBuy={handleBuy} handleCart={handleCart}/>: <UnavailableHelpTip/>
+              <ShowBuyOrCart handleBuy={handleBuy} handleCart={handleCart} inCart={inCart}/>: <UnavailableHelpTip/>
             }
         </Box>
         
