@@ -210,6 +210,7 @@ const MainLayout = (props) => {
             <Header 
                  openCart={openCart} 
                  wallet={wallet}
+                 notifyFilterUpdate={notifyFilterUpdate}
                  notifyWalletOpen={notifyWalletOpen}
                  notifyFilterMenuReset={notifyFilterMenuReset}
                  notifyWalletUpdate={notifyWalletUpdate}

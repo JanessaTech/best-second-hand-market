@@ -17,10 +17,6 @@ const FilterMenu = ({width, menuOpen, closeMenu, eventsBus, notifyFilterUpdate, 
   useEffect(() => {
     setDrawerType(isMediumScreen ? 'temporary': 'persistent')
   }, [isMediumScreen])
-
-  const notify = useCallback((trigger) => {
-    notifyFilterUpdate(trigger)
-  }, [])
   
   return (
     <Drawer variant={drawerType} sx={{
@@ -46,11 +42,11 @@ const FilterMenu = ({width, menuOpen, closeMenu, eventsBus, notifyFilterUpdate, 
               </Tooltip>             
             </Box>
             <Box sx={{mx:3}}>
-                <NetworkFilter notify={notify} eventsBus={eventsBus}/>
+                <NetworkFilter notifyFilterUpdate={notifyFilterUpdate} eventsBus={eventsBus}/>
                 <Divider />
-                <CategoryFilter notify={notify} eventsBus={eventsBus}/>
+                <CategoryFilter notifyFilterUpdate={notifyFilterUpdate} eventsBus={eventsBus}/>
                 <Divider />
-                <PriceFilter notify={notify} notifyAlertUpdate={notifyAlertUpdate} eventsBus={eventsBus}/>
+                <PriceFilter notifyFilterUpdate={notifyFilterUpdate} notifyAlertUpdate={notifyAlertUpdate} eventsBus={eventsBus}/>
             </Box>    
     </Drawer>
   )

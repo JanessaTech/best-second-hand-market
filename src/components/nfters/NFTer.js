@@ -12,6 +12,7 @@ import {Link as RouterLink } from "react-router-dom"
 import catchAsync from '../../utils/CatchAsync'
 import {nft as nftClient} from '../../utils/serverClient'
 import config from '../../config'
+import {getFilter} from '../../utils/LocalStorage'
 
 const headCells = [
   {
@@ -81,17 +82,9 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 }
 
-function getFilter() {
-  let filter = localStorage.getItem('filter')
-  if (filter) {
-    return JSON.parse(filter)
-  }
-  return {}
-}
-
 export default function NFTer() {
   logger.debug('[NFTer] rendering...')
-  const {menuOpen, toggleMenu, trigger, eventsBus, notifyAlertUpdate, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {menuOpen, toggleMenu, eventsBus, notifyAlertUpdate, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const [searchParams, setSearchParams] = useSearchParams()
@@ -107,22 +100,24 @@ export default function NFTer() {
     total: 0 // how many items in total
   })
 
-  const fetchData = async (toPage, orderBy, order) => {
+  const fetchData = async (toPage, pageSize, orderBy, order) => {
     await catchAsync(async () => {
       if (id) {
         logger.debug('[NFTer] call restful api to get the new list of nfts by latestFilter for user', id)
         const latestFilter = getFilter()
+        const newPageSize = pageSize ? pageSize : pagination.pageSize
         logger.debug('[NFTer] latestFilter=', latestFilter)
         logger.debug('[NFTer] toPage =', toPage)
+        logger.debug('[NFTer] newPageSize =', newPageSize)
         const chainId = latestFilter?.chainId
         const status = config.NFTSTATUS.On.description
         const category = latestFilter?.categories
         const prices = latestFilter?.prices
-        const res = await nftClient.queryNFTsForUser(id, toPage + 1, pagination.pageSize, `${orderBy}:${order}`, chainId, status, category, prices)
+        const res = await nftClient.queryNFTsForUser(id, toPage + 1, newPageSize, `${orderBy}:${order}`, chainId, status, category, prices)
         const {nfts, totalPages, totalResults} = res
-        logger.debug('[NFTer] page=', toPage + 1, ' limit =', pagination.pageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+        logger.debug('[NFTer] page=', toPage + 1, ' limit =', newPageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
         setPageNfts(nfts)
-        setPagination({...pagination, page: toPage, pages: totalPages, total: totalResults})
+        setPagination({...pagination, pageSize: newPageSize, page: toPage, pages: totalPages, total: totalResults})
       }
     }, notifyAlertUpdate)
   }
@@ -133,18 +128,10 @@ export default function NFTer() {
       eventsBus.handleFilterUpdate = handleFilterUpdate
       if (id) {
         const toPage = pagination.page
-        await fetchData(toPage, orderBy, order)
+        const pageSize = pagination.pageSize
+        await fetchData(toPage, pageSize, orderBy, order)
       }
     })()
-    /*
-    if (id) {
-      logger.debug('[NFTer] call restful api to get the new list of nfts by nfter id=', id)
-      const latestFilter = getFilter()
-      logger.debug('[NFTer] trigger=', trigger)
-      logger.debug('[NFTer] latestFilter=', latestFilter)
-      logger.debug('[NFTer] page=', 1)
-      setRowSates(rows)
-    }*/
     logger.debug('[NFTer] call notifyShowMenu in useEffect')
     notifyShowMenu()
   }, [])
@@ -152,38 +139,35 @@ export default function NFTer() {
   const handleFilterUpdate = async () => {
     logger.debug('[NFTer] handleFilterUpdate')
     const toPage = 0
-    await fetchData(toPage, orderBy, order)
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, orderBy, order)
   }
 
   const handleRequestSort = async (event, newOrderBy) => {
-    logger.debug('[MyNFTList] handleRequestSort. newOrderBy =', newOrderBy)
+    logger.debug('[NFTer] handleRequestSort. newOrderBy =', newOrderBy)
     const isAsc = orderBy === newOrderBy && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
     logger.debug('newOrder = ', newOrder, 'newOrderBy = ', newOrderBy)
     const toPage = pagination.page
-    logger.debug('[MyNFTList] handleRequestSort toPage=', toPage)
-    await fetchData(toPage, newOrderBy, newOrder)
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, newOrderBy, newOrder)
     setOrder(newOrder)
     setOrderBy(newOrderBy)
   }
 
-  const handleChangeRowsPerPage = async (event) => {
-    logger.debug('[MyNFTList] handleChangeRowsPerPage.')
-    const toPage = 0
-    await fetchData(toPage, orderBy, order)
-  }
-
   const handleChangePage = async (event, newPage) => {
-    logger.debug('[MyNFTList] handleChangePage. newPage =', newPage)
+    logger.debug('[NFTer] handleChangePage. newPage =', newPage)
     const toPage = newPage
-    await fetchData(toPage, orderBy, order)
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, orderBy, order)
   }
 
-  // const visibleRows = React.useMemo(
-  //   () => {
-  //     return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-  //   }, [order, orderBy, page, rowsPerPage, rowStates]
-  // )
+  const handleChangeRowsPerPage = async (event) => {
+    logger.debug('[NFTer] handleChangeRowsPerPage.')
+    const toPage = 0
+    const pageSize = parseInt(event.target.value, 10)
+    await fetchData(toPage, pageSize, orderBy, order)
+  }
 
   const handleSummary = () => {
     const total = pagination.total
@@ -268,8 +252,6 @@ export default function NFTer() {
               />
           </Paper>
         </Box>
-
-
       </Box>
   )
 }

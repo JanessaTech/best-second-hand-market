@@ -67,7 +67,7 @@ const ByLikeView = ({wallet, nft, notifyAlertUpdate}) => {
   return (
     <Box sx={{display: 'flex', justifyContent:'space-between', alignItems:'center'}}>
         <Box sx={{display:'flex', alignItems:'center', flex:'1 1 50px', minWidth:50}}>
-            <Typography sx={{mr:1}} variant='body2'>Sold by</Typography>
+            <Typography sx={{mr:1}} variant='body2'>Owner:</Typography>
             <Typography variant='body2' color='text.secondary' 
                 sx={{textOverflow: 'ellipsis', 
                     whiteSpace: 'nowrap', 

@@ -92,3 +92,23 @@ export const queryNFTsForUser = async  (userId, page, limit, sortBy, chainId, st
     }
 }
 
+export const queryFavoriteNFTsForUser = async  (userId, page, limit, sortBy, chainId, status, category, prices) => {
+    logger.debug('[serverClient.nft] queryFavoriteNFTsForUser. userId =', userId, ' page = ', page, ' limit =', limit, ' sortBy = ', sortBy, ' chainId =', chainId, ' status =', status, ' category =', category, ' prices =', prices)
+    const pageQuery = getQuery({page: page, limit: limit, sortBy: sortBy, chainId: chainId, status: status, category: category, prices: prices})
+    try {
+        let url = `${config.BACKEND_ADDR}/apis/v1/nfts/favorite/${userId}`
+        if (pageQuery) {
+            url = `${url}?${pageQuery}`
+        }
+        logger.debug('[serverClient.nft] queryFavoriteNFTsForUser. url =', url)
+        const response = await axios.get(url)
+        logger.debug('response =', response)
+        return response?.data?.data
+    } catch (err) {
+        const reason = err?.response?.data?.message || err?.message || err
+        logger.error('[serverClient.nft] queryFavoriteNFTsForUser.', messageHelper.getMessage('nft_failed_favorite_queryfor_user', userId, pageQuery, reason))
+        logger.error(err)
+        throw err
+    }
+}
+

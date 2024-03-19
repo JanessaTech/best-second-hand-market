@@ -153,31 +153,36 @@ export default function MyNFTList() {
     total: 0 // how many items in total
   })
 
-  const fetchData = async (toPage, orderBy, order) => {
+  const fetchData = async (toPage, pageSize, orderBy, order) => {
     await catchAsync(async () => {
       if (wallet?.user) {
         logger.debug('[MyNFTList] call restful api to get the new list of nfts by latestFilter for user', wallet?.user?.id)
         const latestFilter = getFilter()
+        const newPageSize = pageSize ? pageSize : pagination.pageSize
         logger.debug('[MyNFTList] latestFilter=', latestFilter)
         logger.debug('[MyNFTList] toPage =', toPage)
+        logger.debug('[NFTer] newPageSize =', newPageSize)
         const chainId = latestFilter?.chainId
         const category = latestFilter?.categories
         const prices = latestFilter?.prices
-        const res = await nftClient.queryNFTsForUser(wallet?.user?.id, toPage + 1, pagination.pageSize, `${orderBy}:${order}`, chainId, undefined, category, prices)
+        const res = await nftClient.queryNFTsForUser(wallet?.user?.id, toPage + 1, newPageSize, `${orderBy}:${order}`, chainId, undefined, category, prices)
         const {nfts, totalPages, totalResults} = res
-        logger.debug('[MyNFTList] page=', toPage + 1, ' limit =', pagination.pageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+        logger.debug('[MyNFTList] page=', toPage + 1, ' limit =', newPageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
         setPageNfts(convertNFTs(nfts))
-        setPagination({...pagination, page: toPage, pages: totalPages, total: totalResults})
+        setPagination({...pagination, pageSize: newPageSize, page: toPage, pages: totalPages, total: totalResults})
       }
     }, notifyAlertUpdate)
   }
 
   useEffect(() => {
     (async () => {
-      logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
-      eventsBus.handleFilterUpdate = handleFilterUpdate
-      const toPage = pagination.page
-      await fetchData(toPage, orderBy, order)
+      if (wallet?.user) {
+        logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
+        eventsBus.handleFilterUpdate = handleFilterUpdate
+        const toPage = pagination.page
+        const pageSize = pagination.pageSize
+        await fetchData(toPage, pageSize, orderBy, order)
+      }
     })()
     logger.debug('[MyNFTList] call notifyShowMenu in useEffect')
     notifyShowMenu()  // todo: make it configurable rather than setting it in notification
@@ -186,7 +191,8 @@ export default function MyNFTList() {
   const handleFilterUpdate = async () => {
     logger.debug('[MyNFTList] handleFilterUpdate')
     const toPage = 0
-    await fetchData(toPage, orderBy, order)
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, orderBy, order)
   }
 
   const handleRequestSort = async (event, newOrderBy) => {
@@ -194,9 +200,11 @@ export default function MyNFTList() {
     const isAsc = orderBy === newOrderBy && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
     logger.debug('newOrder = ', newOrder, 'newOrderBy = ', newOrderBy)
+
     const toPage = pagination.page
-    logger.debug('[MyNFTList] handleRequestSort toPage=', toPage)
-    await fetchData(toPage, newOrderBy, newOrder)
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, newOrderBy, newOrder)
+
     setOrder(newOrder)
     setOrderBy(newOrderBy)
   }
@@ -204,13 +212,15 @@ export default function MyNFTList() {
   const handleChangePage = async (event, newPage) => {
     logger.debug('[MyNFTList] handleChangePage. newPage =', newPage)
     const toPage = newPage
-    await fetchData(toPage, orderBy, order)
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, orderBy, order)
   }
 
   const handleChangeRowsPerPage = async (event) => {
     logger.debug('[MyNFTList] handleChangeRowsPerPage.')
     const toPage = 0
-    await fetchData(toPage, orderBy, order)
+    const pageSize = parseInt(event.target.value, 10)
+    await fetchData(toPage, pageSize, orderBy, order)
   }
 
   const handleStatusChange = (id) => (newStatus) => {

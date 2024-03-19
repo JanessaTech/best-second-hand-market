@@ -56,7 +56,7 @@ function getPricesFromLocalStorage() {
     return {min: MinValueInFilter, max: MaxValueInFilter}
   }
 
-const PriceFilter = ({notify, notifyAlertUpdate, eventsBus}) => {
+const PriceFilter = ({notifyFilterUpdate, notifyAlertUpdate, eventsBus}) => {
     logger.debug('[PriceFilter] rendering...')
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(PriceFilterSchema)
@@ -98,7 +98,7 @@ const PriceFilter = ({notify, notifyAlertUpdate, eventsBus}) => {
         }
         localStorage.setItem('filter', JSON.stringify(filter))
         logger.info('[PriceFilter] handleApply. store filter:', filter)
-        notify(Math.random())
+        notifyFilterUpdate()
     }
 
     useEffect(() => {

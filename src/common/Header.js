@@ -5,11 +5,11 @@ import {HeaderHeight} from './constant'
 import { CheapIcon } from '../utils/Svgs'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import ProfileMenu from '../components/profile/ProfileMenu'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import logger from './Logger'
 import config from '../config'
 
-const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, notifyWalletUpdate, notifyAlertUpdate}) => {
+const Header = ({openCart, wallet, notifyFilterUpdate, notifyWalletOpen, notifyFilterMenuReset, notifyWalletUpdate, notifyAlertUpdate}) => {
     logger.debug('[Header] rendering...')
     logger.debug('[Header] wallet:', wallet)
     const theme = useTheme()
@@ -42,6 +42,7 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, noti
         if (search && search.length > 0) {
             localStorage.removeItem('filter')
             notifyFilterMenuReset()
+            notifyFilterUpdate()
             navigate(`/results?search=${search}`)
         }
     }
@@ -78,6 +79,7 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, noti
     const goHome = () => {
         localStorage.removeItem('filter')
         notifyFilterMenuReset()
+        notifyFilterUpdate()
         navigate('/')
     }
 

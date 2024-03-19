@@ -1,5 +1,5 @@
 import { Box, IconButton, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, Tooltip, Typography, useMediaQuery } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Link as RouterLink } from "react-router-dom"
 import PropTypes from 'prop-types'
 import { useTheme } from '@mui/material/styles'
@@ -9,39 +9,11 @@ import {GlobalVariables} from '../MainLayout'
 import ProfileFilterBar from './ProfileFilterBar'
 import { UnavailableHelpTip } from '../../common/TipHelpers'
 import logger from '../../common/Logger'
-
-function createData(id, title, img, network, sellerName, category, price, views, favorites, available) {
-  return {
-    id,
-    title,
-    img, 
-    network, 
-    sellerName,
-    category,
-    price,
-    views,
-    favorites,
-    available
-  };
-}
-
-const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'JanessaTech lab', 'Pets', 61, 102, 221),
-  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 62, 102, 222, true),
-  createData(3, 'green monkey', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 63, 102, 223, true),
-  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 64, 102, 224, true),
-  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 65, 102, 225, true),
-  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 66, 102, 226, true),
-  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 67, 102, 227, true),
-  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 68, 102, 228, true),
-  createData(9, 'KitKat', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 69, 102, 229, true),
-  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 70, 102, 230, true),
-  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 71, 102, 231, true),
-  createData(12, 'Nougat', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 72, 102, 232, true),
-  createData(13, 'Oreo', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 73, 102, 233, true),
-  createData(14, 'Oreo', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 74, 102, 233, true),
-  createData(15, 'Oreo', 'mk.png', 'ethereum', 'JanessaTech lab', 'Clothes', 75, 102, 233, true),
-];
+import {getFilter} from '../../utils/LocalStorage'
+import catchAsync from '../../utils/CatchAsync'
+import {nft as nftClient} from '../../utils/serverClient'
+import {like as likeClient} from '../../utils/serverClient'
+import config from '../../config'
 
 const headCells = [
   {
@@ -69,16 +41,10 @@ const headCells = [
     label: 'Price(CH)',
   },
   {
-    id: 'views',
+    id: 'view',
     position: 'left',
     disablePadding: false,
     label: 'Views',
-  },
-  {
-    id: 'favorites',
-    position: 'left',
-    disablePadding: false,
-    label: 'Favorites',
   },
   {
     id: 'detete',
@@ -129,84 +95,113 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 }
 
-function getFilter() {
-  let filter = localStorage.getItem('filter')
-  if (filter) {
-    return JSON.parse(filter)
-  }
-  return {}
-}
-
 export default function Favorites() {
   logger.debug('[Favorites] rendering...')
-  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, toggleMenu, eventsBus, notifyAlertUpdate, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   
-  const [order, setOrder] = React.useState('desc')
-  const [orderBy, setOrderBy] = React.useState('price')
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
-  const [rowStates, setRowSates] = React.useState([])
+  const [order, setOrder] = useState('desc')
+  const [orderBy, setOrderBy] = useState('price')
+  const [pageNfts, setPageNfts] = useState([])
+  const [pagination, setPagination] = useState({
+    page: 0,  // the index of the current page
+    pageSize: 5, // how many items are shown in one page
+    pages: 0, // how many pages in total
+    total: 0 // how many items in total
+  })
+
+  const fetchData = async (toPage, pageSize, orderBy, order) => {
+    await catchAsync(async () => {
+      if (wallet?.user) {
+        logger.debug('[NFTer] call restful api to get the new list of nfts by latestFilter for user', wallet?.user?.id)
+        const latestFilter = getFilter()
+        const newPageSize = pageSize ? pageSize : pagination.pageSize
+        logger.debug('[NFTer] latestFilter=', latestFilter)
+        logger.debug('[NFTer] toPage =', toPage)
+        logger.debug('[NFTer] newPageSize =', newPageSize)
+        const chainId = latestFilter?.chainId
+        const status = undefined
+        const category = latestFilter?.categories
+        const prices = latestFilter?.prices
+        const res = await nftClient.queryFavoriteNFTsForUser(wallet?.user?.id, toPage + 1, newPageSize, `${orderBy}:${order}`, chainId, status, category, prices)
+        const {nfts, totalPages, totalResults} = res
+        logger.debug('[NFTer] page=', toPage + 1, ' limit =', newPageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+        setPageNfts(nfts)
+        setPagination({...pagination, pageSize: newPageSize, page: toPage, pages: totalPages, total: totalResults})
+      }
+    }, notifyAlertUpdate)
+  }
 
   useEffect(() => {
-    if (wallet?.user) {
-      logger.debug('[Favorites] call restful api to get the new list of favorites by user id=', wallet?.user?.id)
-      const latestFilter = getFilter()
-      logger.debug('[Favorites] trigger=', trigger)
-      logger.debug('[Favorites] latestFilter=', latestFilter)
-      logger.debug('[Favorites] page=', 1)
-      setRowSates(rows)
-    }
+    (async () => {
+      if (wallet?.user) {
+        logger.debug('[Favorites] add handleFilterUpdate to eventsBus')
+        eventsBus.handleFilterUpdate = handleFilterUpdate
+        const toPage = pagination.page
+        const pageSize = pagination.pageSize
+        await fetchData(toPage, pageSize, orderBy, order)
+      }
+    })()
     logger.debug('[Favorites] call notifyShowMenu in useEffect')
     notifyShowMenu()
-  }, [wallet, trigger])
+  }, [wallet])
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
+  const handleFilterUpdate = async () => {
+    logger.debug('[Favorites] handleFilterUpdate')
+    const toPage = 0
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, orderBy, order)
+  }
+
+  const handleRequestSort = async (event, newOrderBy) => {
+    logger.debug('[Favorites] handleRequestSort. newOrderBy =', newOrderBy)
+    const isAsc = orderBy === newOrderBy && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
-    logger.info('[Favorites] newOrder = ', newOrder, 'property = ', property)
-    setOrder(newOrder);
-    setOrderBy(property);
+    logger.debug('newOrder = ', newOrder, 'newOrderBy = ', newOrderBy)
+
+    const toPage = pagination.page
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, newOrderBy, newOrder)
+
+    setOrder(newOrder)
+    setOrderBy(newOrderBy)
   }
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleChangePage = async (event, newPage) => {
+    logger.debug('[MyNFTList] handleChangePage. newPage =', newPage)
+    const toPage = newPage
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, orderBy, order)
   }
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleChangeRowsPerPage = async (event) => {
+    const toPage = 0
+    const pageSize = parseInt(event.target.value, 10)
+    await fetchData(toPage, pageSize, orderBy, order)
   }
 
-  const handleDelete = (id) => (e) => {
-    logger.info('[Favorites] handleDelete id=', id)
-    logger.info('[Favorites] call restful api to delete a favorite by id=', id)
-    
-    var newRowStates = []
-    for (var i = 0; i < rowStates.length; i++) {
-      if (rowStates[i].id !== id) {
-        newRowStates.push(rowStates[i])
-      }
-    }
-    setRowSates(newRowStates)
+  const handleDelete = (nftId) => async (e) => {
+    logger.info('[Favorites] handleDelete nftId=', nftId)
+    logger.info('[Favorites] call restful api to delete a favorite by nftId ', nftId, ' for user ', wallet?.user?.id)
+    await catchAsync(async () => {
+      await likeClient.unlike(wallet?.user?.id, nftId)
+      logger.debug('pagination.total = ', pagination.total)
+      const lastPage = Math.floor((pagination.total - 2) / pagination.pageSize) // get the last page index after deletion
+      logger.debug('lastPage=', lastPage, 'pagination.page=', pagination.page, 'Math.min(lastPage, pagination.page)=', Math.min(lastPage, pagination.page))
+      setPageNfts(pageNfts.filter((nft) => nft.id !== nftId))
+      setPagination({...pagination, page: Math.min(lastPage, pagination.page), pages: (pagination.total - 1) / pagination.pageSize, total: pagination.total - 1})
+    }, notifyAlertUpdate)
   }
-
-  const visibleRows = React.useMemo(
-    () => {
-      return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    }, [order, orderBy, page, rowsPerPage, rowStates]
-  )
 
   const handleSummary = () => {
-    const total = rowStates.length
+    const total = pagination.total
     return (
       <Box>
               <Typography><strong>{total}</strong> items in favorites </Typography>
       </Box>
     )
   }
-
 
   return (
     <Box component="main" sx={{width:1}}>
@@ -227,7 +222,7 @@ export default function Favorites() {
                   />
                   <TableBody>
                     {
-                      visibleRows.map((row, index) => {
+                      pageNfts.map((row, index) => {
                         const labelId = `favorite-list-table-index-${index}`
                         return (
                           <TableRow
@@ -250,7 +245,7 @@ export default function Favorites() {
                                           component='img'
                                           sx={{width: 70, borderRadius:2, height:70, mr:1}}
                                           alt={row.title}
-                                          src={`/imgs/nfts/${row.img}`}
+                                          src={row?.url}
                                         >
                                         </Box>
                                         <Box sx={{width:100, display:'flex', flexDirection:'column'}}>
@@ -258,17 +253,16 @@ export default function Favorites() {
                                               sx={{fontWeight:'bold', whiteSpace: 'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.title}</Typography>
                                             <Typography variant='body2' 
                                               sx={{whiteSpace: 'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}} color='text.seconadry'>{row.sellerName}</Typography>
-                                            <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.network}.svg`}/>
+                                            <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.chainName}.svg`}/>
                                         </Box>
                                     </Box>
                                 </Link>
                             </TableCell>
                             <TableCell align="left" sx={{px:1}}>{row.category}</TableCell>
                             <TableCell align="left" sx={{px:1}}>
-                            {row.available ? row.price : <UnavailableHelpTip/>}
+                            {row?.status === config.NFTSTATUS.On.description ? row.price : <UnavailableHelpTip/>}
                             </TableCell>
-                            <TableCell align="left" sx={{px:1}}>{row.views}</TableCell>
-                            <TableCell align="left" sx={{px:1}}>{row.favorites}</TableCell>
+                            <TableCell align="left" sx={{px:1}}>{row.view}</TableCell>
                             <TableCell align="left" sx={{px:1}}>
                               <Tooltip title="Delete favorite" placement="right">
                                   <IconButton onClick={handleDelete(row.id)}>
@@ -286,9 +280,9 @@ export default function Favorites() {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={rowStates.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
+                count={pagination.total}
+                rowsPerPage={pagination.pageSize}
+                page={pagination.page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />

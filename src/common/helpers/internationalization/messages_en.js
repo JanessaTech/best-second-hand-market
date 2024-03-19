@@ -15,6 +15,7 @@ export default {
     nft_failed_findby_id: 'Failed to find the NFT by id {0}',
     nft_failed_query_all: 'Failed to query all NFTs for user(id={0}) with pageQuery {1} due to {2}',
     nft_failed_queryfor_user: 'Failed to query NFTs for user(id={0}) with pageQuery {1} due to {2}',
+    nft_failed_favorite_queryfor_user: 'Failed to query favorite NFTs for user(id={0}) with pageQuery {1} due to {2}',
     nft_failed_update:'Failed to update nft(id={0}) due to {1}',
     //like
     nft_failed_like: 'Failed to like nft(id={0}) by user(id={1}) due to {2}',

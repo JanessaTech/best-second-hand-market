@@ -15,7 +15,7 @@ function getCategoriesFromLocalStorage() {
     return []
   }
 
-const CategoryFilter = ({notify, eventsBus}) => {
+const CategoryFilter = ({notifyFilterUpdate, eventsBus}) => {
     logger.debug('[CategoryFilter] rendering...')
     const [checked, setChecked] = useState(getCategoriesFromLocalStorage())
     const [expand, setExpand] = useState(true)
@@ -49,7 +49,7 @@ const CategoryFilter = ({notify, eventsBus}) => {
         }
         localStorage.setItem('filter', JSON.stringify(filter))
         logger.info('[NetworkFilter] store filter:', filter)
-        notify(Math.random())
+        notifyFilterUpdate()
     }
 
     const toggleCategory = () => {
