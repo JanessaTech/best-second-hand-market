@@ -1,5 +1,5 @@
 import { Box, Button, Tooltip, useMediaQuery } from '@mui/material'
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useTheme } from '@mui/material/styles'
 import {HeaderHeight, DrawerWidth, FilterBarHeight} from '../../common/constant'
 import { CheapIcon } from '../../utils/Svgs'
@@ -7,20 +7,26 @@ import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
 
 const sortByLabels = new Map([['updatedAt:desc', 'Recent activity'], ['price:desc', 'Price:hight to low'], ['price:asc', 'Price:low to high']])
+
 function getSortByFromLocalStorage() {
     let filter = localStorage.getItem('filter')
     if (filter) {
       filter = JSON.parse(filter)
-      if (filter.sortBy) return filter.sortBy
+      if (!filter.sortBy) {
+        filter.sortBy = 'updatedAt:desc'
+      } 
+    } else {
+        filter = {sortBy: 'updatedAt:desc'}
     }
-    return 'updatedAt:desc'
+    localStorage.setItem('filter', JSON.stringify(filter))
+    return filter.sortBy
   }
 
 function getSortByLabel(key) {
     return sortByLabels.get(key)
 }
 
-const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary, handleUpdate}) => {
+const FilterBar = ({menuOpen, toggleMenu, eventsBus, notifyFilterUpdate, handleSummary, handleUpdate}) => {
     logger.debug('[FilterBar] rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -29,6 +35,11 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary, han
     const width = menuOpen && !isMediumScreen? `calc(100% - ${DrawerWidth + margin}px)` :`calc(100% - ${margin}px)`
     const sortOptions = ['updatedAt:desc', 'price:desc','price:asc']
     const [sortBy, setSortBy] = useState(getSortByFromLocalStorage())
+
+    useEffect(() => {
+        logger.debug('[FilterBar] add handleSortByReset to eventsBus')
+        eventsBus.handleSortByReset = handleSortByReset
+    }, [])
 
     const handleSortChange = (sort) => {
         setSortBy(sort)
@@ -41,8 +52,13 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary, han
         }
         localStorage.setItem('filter', JSON.stringify(filter))
         logger.info('[FilterBar] store filter:', filter)
-        notifyFilterUpdate(Math.random())
+        notifyFilterUpdate()
     }
+
+    const handleSortByReset = () => {
+        logger.debug('[FilterBar] handleSortByReset')
+        setSortBy(getSortByFromLocalStorage())
+      }
     
   return (
     <Box sx={{position:'fixed', top: HeaderHeight,

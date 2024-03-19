@@ -121,6 +121,9 @@ const MainLayout = (props) => {
         if (eventsBus?.handlePriceFilterReset) {
             eventsBus.handlePriceFilterReset()
         }
+        if (eventsBus?.handleSortByReset) {
+            eventsBus.handleSortByReset()
+        }
     }
 
     /**

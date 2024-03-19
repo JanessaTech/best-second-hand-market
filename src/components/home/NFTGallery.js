@@ -111,6 +111,7 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
         <FilterBar
            menuOpen={menuOpen} 
            toggleMenu={toggleMenu} 
+           eventsBus={eventsBus}
            notifyFilterUpdate={notifyFilterUpdate} 
            handleSummary={handleSummary} 
            handleUpdate={handleUpdate}/>

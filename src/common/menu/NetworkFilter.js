@@ -31,7 +31,7 @@ function getNetworkFromLocalStorage() {
   let filter = localStorage.getItem('filter')
   if (filter) {
     filter = JSON.parse(filter)
-    if (!filter.chainId){
+    if (!filter.chainId) {
       filter.chainId = networks()[0].chainId  // choose the chainId of the first network by default
     }
   } else {
