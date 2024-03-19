@@ -15,7 +15,6 @@ import catchAsync from '../../utils/CatchAsync'
 import {nft as nftClient} from '../../utils/serverClient'
 import {shortFormatDate} from '../../utils/DateUtils'
 
-
 function EnhancedTableHead(props) {
   const { headCells, order, orderBy, onRequestSort} = props
 
@@ -164,7 +163,7 @@ export default function MyNFTList() {
         const chainId = latestFilter?.chainId
         const category = latestFilter?.categories
         const prices = latestFilter?.prices
-        const res = await nftClient.queryNFTsForUser(wallet?.user?.id, toPage + 1, pagination.pageSize, `${orderBy}:${order}`, chainId, category, prices)
+        const res = await nftClient.queryNFTsForUser(wallet?.user?.id, toPage + 1, pagination.pageSize, `${orderBy}:${order}`, chainId, undefined, category, prices)
         const {nfts, totalPages, totalResults} = res
         logger.debug('[MyNFTList] page=', toPage + 1, ' limit =', pagination.pageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
         setPageNfts(convertNFTs(nfts))

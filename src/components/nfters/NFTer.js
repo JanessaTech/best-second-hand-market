@@ -9,35 +9,9 @@ import ProfileFilterBar from '../profile/ProfileFilterBar'
 import { useSearchParams } from 'react-router-dom'
 import {capitalize} from '../../utils/StringUtils'
 import {Link as RouterLink } from "react-router-dom"
-
-function createData(id, title, img, network, category, price) {
-  return {
-    id,
-    title,
-    img, 
-    network, 
-    category,
-    price
-  }
-}
-
-const rows = [
-  createData(1, 'green monkey yyyyyyyy', 'mk.png', 'ethereum', 'pets', 61),
-  createData(2, 'Cute dress', 'mk.png', 'ethereum', 'clothes', 62),
-  createData(3, 'green monkey', 'mk.png', 'ethereum', 'clothes', 63),
-  createData(4, 'Frozen yoghurt', 'mk.png', 'ethereum', 'clothes', 64),
-  createData(5, 'Gingerbread', 'mk.png', 'ethereum', 'clothes', 65),
-  createData(6, 'Honeycomb', 'mk.png', 'ethereum', 'clothes', 66),
-  createData(7, 'Ice cream sandwich', 'mk.png', 'ethereum', 'clothes', 67),
-  createData(8, 'Jelly Bean', 'mk.png', 'ethereum', 'clothes', 68),
-  createData(9, 'KitKat', 'mk.png', 'ethereum', 'clothes', 69),
-  createData(10, 'Lollipop', 'mk.png', 'ethereum', 'clothes', 70),
-  createData(11, 'Marshmallow', 'mk.png', 'ethereum', 'clothes', 71),
-  createData(12, 'Nougat', 'mk.png', 'ethereum', 'clothes', 72),
-  createData(13, 'Oreo', 'mk.png', 'ethereum', 'clothes', 73),
-  createData(14, 'Oreo', 'mk.png', 'ethereum', 'clothes', 74),
-  createData(15, 'Oreo', 'mk.png', 'ethereum', 'clothes', 75),
-];
+import catchAsync from '../../utils/CatchAsync'
+import {nft as nftClient} from '../../utils/serverClient'
+import config from '../../config'
 
 const headCells = [
   {
@@ -117,7 +91,7 @@ function getFilter() {
 
 export default function NFTer() {
   logger.debug('[NFTer] rendering...')
-  const {menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {menuOpen, toggleMenu, trigger, eventsBus, notifyAlertUpdate, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const [searchParams, setSearchParams] = useSearchParams()
@@ -125,11 +99,44 @@ export default function NFTer() {
 
   const [order, setOrder] = useState('desc')
   const [orderBy, setOrderBy] = useState('price')
-  const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [rowStates, setRowSates] = useState([])
+  const [pageNfts, setPageNfts] = useState([])
+  const [pagination, setPagination] = useState({
+    page: 0,  // the index of the current page
+    pageSize: 5, // how many items are shown in one page
+    pages: 0, // how many pages in total
+    total: 0 // how many items in total
+  })
+
+  const fetchData = async (toPage, orderBy, order) => {
+    await catchAsync(async () => {
+      if (id) {
+        logger.debug('[NFTer] call restful api to get the new list of nfts by latestFilter for user', id)
+        const latestFilter = getFilter()
+        logger.debug('[NFTer] latestFilter=', latestFilter)
+        logger.debug('[NFTer] toPage =', toPage)
+        const chainId = latestFilter?.chainId
+        const status = config.NFTSTATUS.On.description
+        const category = latestFilter?.categories
+        const prices = latestFilter?.prices
+        const res = await nftClient.queryNFTsForUser(id, toPage + 1, pagination.pageSize, `${orderBy}:${order}`, chainId, status, category, prices)
+        const {nfts, totalPages, totalResults} = res
+        logger.debug('[NFTer] page=', toPage + 1, ' limit =', pagination.pageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+        setPageNfts(nfts)
+        setPagination({...pagination, page: toPage, pages: totalPages, total: totalResults})
+      }
+    }, notifyAlertUpdate)
+  }
 
   useEffect(() => {
+    (async () => {
+      logger.debug('[NFTer] add handleFilterUpdate to eventsBus')
+      eventsBus.handleFilterUpdate = handleFilterUpdate
+      if (id) {
+        const toPage = pagination.page
+        await fetchData(toPage, orderBy, order)
+      }
+    })()
+    /*
     if (id) {
       logger.debug('[NFTer] call restful api to get the new list of nfts by nfter id=', id)
       const latestFilter = getFilter()
@@ -137,36 +144,49 @@ export default function NFTer() {
       logger.debug('[NFTer] latestFilter=', latestFilter)
       logger.debug('[NFTer] page=', 1)
       setRowSates(rows)
-    }
+    }*/
     logger.debug('[NFTer] call notifyShowMenu in useEffect')
     notifyShowMenu()
-  }, [trigger])
+  }, [])
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
+  const handleFilterUpdate = async () => {
+    logger.debug('[NFTer] handleFilterUpdate')
+    const toPage = 0
+    await fetchData(toPage, orderBy, order)
+  }
+
+  const handleRequestSort = async (event, newOrderBy) => {
+    logger.debug('[MyNFTList] handleRequestSort. newOrderBy =', newOrderBy)
+    const isAsc = orderBy === newOrderBy && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
-    logger.info('[NFTer] newOrder = ', newOrder, 'property = ', property)
-    setOrder(newOrder);
-    setOrderBy(property);
+    logger.debug('newOrder = ', newOrder, 'newOrderBy = ', newOrderBy)
+    const toPage = pagination.page
+    logger.debug('[MyNFTList] handleRequestSort toPage=', toPage)
+    await fetchData(toPage, newOrderBy, newOrder)
+    setOrder(newOrder)
+    setOrderBy(newOrderBy)
   }
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleChangeRowsPerPage = async (event) => {
+    logger.debug('[MyNFTList] handleChangeRowsPerPage.')
+    const toPage = 0
+    await fetchData(toPage, orderBy, order)
   }
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleChangePage = async (event, newPage) => {
+    logger.debug('[MyNFTList] handleChangePage. newPage =', newPage)
+    const toPage = newPage
+    await fetchData(toPage, orderBy, order)
   }
 
-  const visibleRows = React.useMemo(
-    () => {
-      return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    }, [order, orderBy, page, rowsPerPage, rowStates]
-  )
+  // const visibleRows = React.useMemo(
+  //   () => {
+  //     return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  //   }, [order, orderBy, page, rowsPerPage, rowStates]
+  // )
 
   const handleSummary = () => {
-    const total = rowStates.length
+    const total = pagination.total
     return (
       <Box>
               <Typography><strong>{total}</strong> items</Typography>
@@ -193,7 +213,7 @@ export default function NFTer() {
                     />
                     <TableBody>
                       {
-                        visibleRows.map((row, index) => {
+                        pageNfts.map((row, index) => {
                           const labelId = `user-nft-list-table-index-${index}`
                           return (
                             <TableRow
@@ -216,13 +236,13 @@ export default function NFTer() {
                                               component='img'
                                               sx={{width: 70, borderRadius:2, height:70, mr:1}}
                                               alt={row.title}
-                                              src={`/imgs/nfts/${row.img}`}
+                                              src={row?.url}
                                             >
                                             </Box>
                                             <Box sx={{width:100, display:'flex', flexDirection:'column'}}>
                                                 <Typography variant='body1' 
                                                   sx={{fontWeight:'bold', whiteSpace: 'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.title}</Typography>
-                                                <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.network}.svg`}/>
+                                                <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.chainName}.svg`}/>
                                             </Box>
                                         </Box>
                                     </Link>
@@ -240,9 +260,9 @@ export default function NFTer() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={rowStates.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
+                count={pagination.total}
+                rowsPerPage={pagination.pageSize}
+                page={pagination.page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />

@@ -1,4 +1,4 @@
-export function getQuery({userId, page, limit, sortBy, chainId, category, prices}) {
+export function getQuery({userId, page, limit, sortBy, chainId, status, category, prices}) {
     let queryOptions = {}
     if (userId) {
         queryOptions.userId = userId
@@ -14,6 +14,9 @@ export function getQuery({userId, page, limit, sortBy, chainId, category, prices
     }
     if (chainId) {
         queryOptions.chainId = chainId
+    }
+    if (status) {
+        queryOptions.status = status
     }
     if (category && category.length > 0) {
         queryOptions.category = category
