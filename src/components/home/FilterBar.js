@@ -6,14 +6,19 @@ import { CheapIcon } from '../../utils/Svgs'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
 
+const sortByLabels = new Map([['updatedAt:desc', 'Recent activity'], ['price:desc', 'Price:hight to low'], ['price:asc', 'Price:low to high']])
 function getSortByFromLocalStorage() {
     let filter = localStorage.getItem('filter')
     if (filter) {
       filter = JSON.parse(filter)
       if (filter.sortBy) return filter.sortBy
     }
-    return 'Recent activity'
+    return 'updatedAt:desc'
   }
+
+function getSortByLabel(key) {
+    return sortByLabels.get(key)
+}
 
 const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary, handleUpdate}) => {
     logger.debug('[FilterBar] rendering ...')
@@ -22,7 +27,7 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary, han
     const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
     const margin = isSmallScreen ? 32 : 48
     const width = menuOpen && !isMediumScreen? `calc(100% - ${DrawerWidth + margin}px)` :`calc(100% - ${margin}px)`
-    const sortOptions = ['Recent activity', 'aa','bb','ccc', 'ddddd','eeee','ffff', 'gggg','hhhhh']
+    const sortOptions = ['updatedAt:desc', 'price:desc','price:asc']
     const [sortBy, setSortBy] = useState(getSortByFromLocalStorage())
 
     const handleSortChange = (sort) => {
@@ -86,7 +91,10 @@ const FilterBar = ({menuOpen, toggleMenu, notifyFilterUpdate, handleSummary, han
                     value={sortBy} 
                     handleChange={handleSortChange} 
                     options={sortOptions} 
-                    width={200}/>
+                    width={200}
+                    cap={true}
+                    renderFun={(sortBy) => `${getSortByLabel(sortBy)}`}
+                    />
             </Box>     
     </Box>
   )

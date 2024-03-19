@@ -56,8 +56,9 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
       const chainId = latestFilter?.chainId
       const category = latestFilter?.categories
       const prices = latestFilter?.prices
+      const sortBy = latestFilter?.sortBy
       const userId = wallet?.user?.id
-      const res = await nftClient.queryNFTs(userId, toPage, pagination.pageSize, undefined, chainId, category, prices)
+      const res = await nftClient.queryNFTs(userId, toPage, pagination.pageSize, sortBy, chainId, category, prices)
       const {nfts, totalPages, totalResults} = res
       setBufferedNfts(nfts)
       setNfts(nfts.slice(0, BatchSizeInGallery))
@@ -65,7 +66,7 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
       setTotal(totalResults)
       setPagination({...pagination, pages: totalPages, page: toPage})
       setIsLoading(false)
-      logger.debug('[NFTGallery] page=', toPage, ' limit =', pagination.pageSize, 'sortBy =', 'pages=', totalPages, 'total=', totalResults )
+      logger.debug('[NFTGallery] page=', toPage, ' limit =', pagination.pageSize, 'sortBy =', sortBy, 'pages=', totalPages, 'total=', totalResults )
       window.scrollTo(0, 0)
     }, notifyAlertUpdate)
   }
