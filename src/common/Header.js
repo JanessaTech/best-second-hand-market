@@ -75,6 +75,12 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, noti
         }
     }
 
+    const goHome = () => {
+        localStorage.removeItem('filter')
+        notifyFilterMenuReset()
+        navigate('/')
+    }
+
    return (
      <Box sx={{
         width: 1, height: HeaderHeight, 
@@ -85,7 +91,7 @@ const Header = ({openCart, wallet, notifyWalletOpen, notifyFilterMenuReset, noti
         zIndex: (theme) => theme.zIndex.drawer + 1}}> 
          <Box sx={{display: 'flex', alignItems: 'center', justifyContent:'space-between'}}>
              <Box sx={{display: 'flex', alignItems: 'center'}}>
-                 <IconButton sx={{pl:0}} component={Link} to='/'>
+                 <IconButton sx={{pl:0}} onClick={goHome}>
                      <Avatar alt='Cheap' src='/imgs/header/handshake.svg' sx={{ width:60, height:60}}/>
                  </IconButton>
                  <Typography variant='h4' color='white' sx={{[theme.breakpoints.down('md')]:{display:'none'}}}>Cheap</Typography>
