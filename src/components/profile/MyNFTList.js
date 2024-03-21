@@ -161,7 +161,7 @@ export default function MyNFTList() {
         const newPageSize = pageSize ? pageSize : pagination.pageSize
         logger.debug('[MyNFTList] latestFilter=', latestFilter)
         logger.debug('[MyNFTList] toPage =', toPage)
-        logger.debug('[NFTer] newPageSize =', newPageSize)
+        logger.debug('[MyNFTList] newPageSize =', newPageSize)
         const chainId = latestFilter?.chainId
         const category = latestFilter?.categories
         const prices = latestFilter?.prices

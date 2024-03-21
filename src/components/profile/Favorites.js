@@ -117,16 +117,16 @@ export default function Favorites() {
         logger.debug('[NFTer] call restful api to get the new list of nfts by latestFilter for user', wallet?.user?.id)
         const latestFilter = getFilter()
         const newPageSize = pageSize ? pageSize : pagination.pageSize
-        logger.debug('[NFTer] latestFilter=', latestFilter)
-        logger.debug('[NFTer] toPage =', toPage)
-        logger.debug('[NFTer] newPageSize =', newPageSize)
+        logger.debug('[Favorites] latestFilter=', latestFilter)
+        logger.debug('[Favorites] toPage =', toPage)
+        logger.debug('[Favorites] newPageSize =', newPageSize)
         const chainId = latestFilter?.chainId
         const status = undefined
         const category = latestFilter?.categories
         const prices = latestFilter?.prices
         const res = await nftClient.queryFavoriteNFTsForUser(wallet?.user?.id, toPage + 1, newPageSize, `${orderBy}:${order}`, chainId, status, category, prices)
         const {nfts, totalPages, totalResults} = res
-        logger.debug('[NFTer] page=', toPage + 1, ' limit =', newPageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+        logger.debug('[Favorites] page=', toPage + 1, ' limit =', newPageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
         setPageNfts(nfts)
         setPagination({...pagination, pageSize: newPageSize, page: toPage, pages: totalPages, total: totalResults})
       }
@@ -169,7 +169,7 @@ export default function Favorites() {
   }
 
   const handleChangePage = async (event, newPage) => {
-    logger.debug('[MyNFTList] handleChangePage. newPage =', newPage)
+    logger.debug('[Favorites] handleChangePage. newPage =', newPage)
     const toPage = newPage
     const pageSize = pagination.pageSize
     await fetchData(toPage, pageSize, orderBy, order)

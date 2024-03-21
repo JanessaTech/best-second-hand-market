@@ -8,6 +8,7 @@ import ProfileFilterBar from './ProfileFilterBar'
 import {GlobalVariables} from '../MainLayout'
 import logger from '../../common/Logger'
 import {capitalize} from '../../utils/StringUtils'
+import {getFilter} from '../../utils/LocalStorage'
 
 function createData(id, title, img, network, category, price, orderedTime, seller) {
   return {
@@ -67,13 +68,13 @@ const headCells = [
     label: 'Price(CH)',
   },
   {
-    id: 'orderedTime',
+    id: 'createdAt',
     position: 'left',
     disablePadding: false,
-    label: 'Ordered Time',
+    label: 'Created time',
   },
   {
-    id: 'seller',
+    id: 'from',
     position: 'left',
     disablePadding: false,
     label: 'Seller',
@@ -119,22 +120,43 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
-function getFilter() {
-  let filter = localStorage.getItem('filter')
-  if (filter) {
-    return JSON.parse(filter)
-  }
-  return {}
-}
-
 export default function Orders() {
   logger.debug('[Orders] rendering...')
-  const {wallet, menuOpen, toggleMenu, trigger, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, eventsBus, toggleMenu, trigger, notifyAlertUpdate, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
   const [order, setOrder] = useState('desc')
-  const [orderBy, setOrderBy] = useState('orderedTime')
+  const [orderBy, setOrderBy] = useState('createdAt')
+  const [pageNfts, setPageNfts] = useState([])
+  const [pagination, setPagination] = useState({
+    page: 0,  // the index of the current page
+    pageSize: 5, // how many items are shown in one page
+    pages: 0, // how many pages in total
+    total: 0 // how many items in total
+  })
+
+  const fetchData = async (toPage, pageSize, orderBy, order) => {
+    await catchAsync(async () => {
+      if (wallet?.user) {
+        logger.debug('[Orders] call restful api to get the new list of nfts by latestFilter for user', wallet?.user?.id)
+        const latestFilter = getFilter()
+        const newPageSize = pageSize ? pageSize : pagination.pageSize
+        logger.debug('[Orders] latestFilter=', latestFilter)
+        logger.debug('[Orders] toPage =', toPage)
+        logger.debug('[Orders] newPageSize =', newPageSize)
+        const chainId = latestFilter?.chainId
+        const category = latestFilter?.categories
+        const prices = latestFilter?.prices
+        const res = await nftClient.queryNFTsForUser(wallet?.user?.id, toPage + 1, newPageSize, `${orderBy}:${order}`, chainId, undefined, category, prices)
+        const {nfts, totalPages, totalResults} = res
+        logger.debug('[Orders] page=', toPage + 1, ' limit =', newPageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
+        setPageNfts(nfts)
+        setPagination({...pagination, pageSize: newPageSize, page: toPage, pages: totalPages, total: totalResults})
+      }
+    }, notifyAlertUpdate)
+  }
+
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [rowStates, setRowStates] = useState([])
