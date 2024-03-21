@@ -40,7 +40,7 @@ const NFTDetails = ({nft}) => {
           <DetailRow key='Contract address' name='Contract address' value={nft?.address}/>
           <DetailRow key='Token ID' name='Token ID' value={nft?.tokenId}/>
           <DetailRow key='Token standard' name='Token standard' value={nft?.tokenStandard}/>
-          <DetailRow key='Category' name='Category' value={nft?.category}/>
+          <DetailRow key='Category' name='Category' value={capitalize(nft?.category)}/>
           <DetailRow key='Created time' name='Created time' value={formatDate(new Date(nft?.createdAt))}/>
           <DetailRow key='Description' name='Description' value={nft?.description}/>
         <Space/>

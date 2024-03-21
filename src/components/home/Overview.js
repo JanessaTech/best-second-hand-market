@@ -6,6 +6,7 @@ import logger from '../../common/Logger'
 import config from '../../config'
 import catchAsync from '../../utils/CatchAsync'
 import {cart as cartClient} from '../../utils/serverClient'
+import { capitalize } from '../../utils/StringUtils'
 
 const BuyOrPutCart = ({handleBuyNow, toggleCart, inCart}) => {
   return (
@@ -121,7 +122,7 @@ const Overview = ({wallet, nft, eventsBus, notifyAlertUpdate, notifyWalletOpen, 
                         <Typography variant='h6'>{nft?.title}</Typography>
                         <Typography color='text.secondary' variant='subtitle2'>{nft?.owner?.name}</Typography>
                         <Box sx={{display: 'flex', mt:1}}>
-                          <Tooltip title='Ethereum'>
+                          <Tooltip title={`${capitalize(nft?.chainName)}`}>
                             <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${nft?.chainName}.svg`}/>
                           </Tooltip>
                           <Box sx={{display:'flex', alignItems:'center'}}>

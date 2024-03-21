@@ -52,9 +52,9 @@ export const findNFTById = async (id, userId) => {
     }
 }
 
-export const queryNFTs = async (userId, page, limit, sortBy, chainId, category, prices, title) => {
-    logger.debug('[serverClient.nft] queryNFTs. userId =', userId, ' page = ', page, ' limit =', limit, ' sortBy = ', sortBy, ' chainId =', chainId, ' category =', category, ' prices =', prices, ' title =', title)
-    const pageQuery = getQuery({userId: userId, page: page, limit: limit, sortBy: sortBy, chainId: chainId, category: category, prices: prices, title})
+export const queryNFTs = async ({userId, page, limit, sortBy, chainId, category, prices, title, status}) => {
+    logger.debug('[serverClient.nft] queryNFTs. userId =', userId, ' page = ', page, ' limit =', limit, ' sortBy = ', sortBy, ' chainId =', chainId, ' category =', category, ' prices =', prices, ' title =', title, ' status =', status)
+    const pageQuery = getQuery({userId: userId, page: page, limit: limit, sortBy: sortBy, chainId: chainId, category: category, prices: prices, title, status})
     try {
         let url = `${config.BACKEND_ADDR}/apis/v1/nfts`
         if (pageQuery) {

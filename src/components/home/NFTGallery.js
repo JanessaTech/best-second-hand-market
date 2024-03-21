@@ -11,6 +11,7 @@ import { useSearchParams } from 'react-router-dom'
 import {getFilter} from '../../utils/LocalStorage'
 import catchAsync from '../../utils/CatchAsync'
 import {nft as nftClient} from '../../utils/serverClient'
+import config from '../../config'
 
 const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[NFTGallery] rendering ...')
@@ -57,9 +58,10 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
       const category = latestFilter?.categories
       const prices = latestFilter?.prices
       const sortBy = latestFilter?.sortBy
+      const status = config.NFTSTATUS.On.description
       const title = search
       const userId = wallet?.user?.id
-      const res = await nftClient.queryNFTs(userId, toPage, pagination.pageSize, sortBy, chainId, category, prices, title)
+      const res = await nftClient.queryNFTs({userId, toPage, limit: pagination.pageSize, sortBy, chainId, category, prices, title, status})
       const {nfts, totalPages, totalResults} = res
       setBufferedNfts(nfts)
       setNfts(nfts.slice(0, BatchSizeInGallery))
