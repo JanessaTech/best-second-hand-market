@@ -1,3 +1,5 @@
+import config from '../../config'
+import axios from 'axios'
 import {getQuery} from '../HttpUtils'
 import logger from '../../common/Logger'
 import messageHelper from '../../common/helpers/internationalization/messageHelper'

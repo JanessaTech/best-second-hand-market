@@ -9,6 +9,8 @@ import {GlobalVariables} from '../MainLayout'
 import logger from '../../common/Logger'
 import {capitalize} from '../../utils/StringUtils'
 import {getFilter} from '../../utils/LocalStorage'
+import {order as orderClient} from '../../utils/serverClient'
+import catchAsync from '../../utils/CatchAsync'
 
 function createData(id, title, img, network, category, price, orderedTime, seller) {
   return {
@@ -77,7 +79,7 @@ const headCells = [
     id: 'from',
     position: 'left',
     disablePadding: false,
-    label: 'Seller',
+    label: 'From',
   }
 ];
 
@@ -148,59 +150,81 @@ export default function Orders() {
         const chainId = latestFilter?.chainId
         const category = latestFilter?.categories
         const prices = latestFilter?.prices
-        const res = await nftClient.queryNFTsForUser(wallet?.user?.id, toPage + 1, newPageSize, `${orderBy}:${order}`, chainId, undefined, category, prices)
-        const {nfts, totalPages, totalResults} = res
+        const res = await orderClient.queryOrdersByUserId(wallet?.user?.id, toPage + 1, newPageSize, `${orderBy}:${order}`, chainId, category, prices)
+        const {orders, totalPages, totalResults} = res
         logger.debug('[Orders] page=', toPage + 1, ' limit =', newPageSize, 'sortBy =', `${orderBy}:${order}`, 'pages=', totalPages, 'total=', totalResults )
-        setPageNfts(nfts)
+        setPageNfts(orders)
         setPagination({...pagination, pageSize: newPageSize, page: toPage, pages: totalPages, total: totalResults})
       }
     }, notifyAlertUpdate)
   }
 
-  const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [rowStates, setRowStates] = useState([])
-
   useEffect(() => {
-    if (wallet?.user) {
-      logger.debug('[Orders] call restful api to get the new list of orders by user id=', wallet?.user?.id)
-      const latestFilter = getFilter()
-      logger.debug('[Orders] trigger=', trigger)
-      logger.debug('[Orders] latestFilter=', latestFilter)
-      logger.debug('[Orders] page=', 1)
-      setRowStates(rows)
-    }
+    (async () => {
+      if (wallet?.user) {
+        logger.debug('[Orders] add handleFilterUpdate to eventsBus')
+        eventsBus.handleFilterUpdate = handleFilterUpdate
+        const toPage = pagination.page
+        const pageSize = pagination.pageSize
+        await fetchData(toPage, pageSize, orderBy, order)
+      }
+    })()
+    // if (wallet?.user) {
+    //   logger.debug('[Orders] call restful api to get the new list of orders by user id=', wallet?.user?.id)
+    //   const latestFilter = getFilter()
+    //   logger.debug('[Orders] trigger=', trigger)
+    //   logger.debug('[Orders] latestFilter=', latestFilter)
+    //   logger.debug('[Orders] page=', 1)
+    //   setRowStates(rows)
+    // }
     logger.debug('[Orders] call notifyShowMenu in useEffect')
     notifyShowMenu()
   }, [wallet, trigger])
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
+  const handleFilterUpdate = async () => {
+    logger.debug('[Orders] handleFilterUpdate')
+    const toPage = 0
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, orderBy, order)
+  }
+
+  const handleRequestSort = async (event, newOrderBy) => {
+    logger.debug('[Orders] handleRequestSort. newOrderBy =', newOrderBy)
+    const isAsc = orderBy === newOrderBy && order === 'asc';
     const newOrder = isAsc ? 'desc' : 'asc'
-    logger.debug('[Orders] newOrder = ', newOrder, 'property = ', property)
-    setOrder(newOrder);
-    setOrderBy(property);
+    logger.debug('newOrder = ', newOrder, 'newOrderBy = ', newOrderBy)
+
+    const toPage = pagination.page
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, newOrderBy, newOrder)
+
+    setOrder(newOrder)
+    setOrderBy(newOrderBy)
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleChangePage = async (event, newPage) => {
+    logger.debug('[Favorites] handleChangePage. newPage =', newPage)
+    const toPage = newPage
+    const pageSize = pagination.pageSize
+    await fetchData(toPage, pageSize, orderBy, order)
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleChangeRowsPerPage = async (event) => {
+    const toPage = 0
+    const pageSize = parseInt(event.target.value, 10)
+    await fetchData(toPage, pageSize, orderBy, order)
   };
 
-  const visibleRows = React.useMemo(
-    () => {
-      return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    }, [order, orderBy, page, rowsPerPage, rowStates]
-  )
+  // const visibleRows = React.useMemo(
+  //   () => {
+  //     return rowStates.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  //   }, [order, orderBy, page, rowsPerPage, rowStates]
+  // )
 
   
 
   const handleSummary = () => {
-    const total = rowStates.length
+    const total = pagination.total
     return (
       <Box>
             <Typography ><strong>{total}</strong> items ordered</Typography>
@@ -227,7 +251,7 @@ export default function Orders() {
                 />
                 <TableBody>
                   {
-                    visibleRows.map((row, index) => {
+                    pageNfts.map((row, index) => {
                       const labelId = `nft-list-table-index-${index}`
                       return (
                         <TableRow
@@ -244,27 +268,27 @@ export default function Orders() {
                             {row.id}
                           </TableCell>
                           <TableCell align="center" sx={{px:1}}>
-                            <Link component={RouterLink} to={`/nft?id=${row.id}`}>
+                            <Link component={RouterLink} to={`/nft?id=${row.nftId}`}>
                                 <Box sx={{display:'flex'}}>
                                     <Box
                                       component='img'
                                       sx={{width: 70, borderRadius:2, height:70, mr:1}}
                                       alt={row.title}
-                                      src={`/imgs/nfts/${row.img}`}
+                                      src={row.url}
                                     >
                                     </Box>
                                     <Box sx={{width:100, display:'flex', flexDirection:'column'}}>
                                         <Typography variant='body1' 
                                           sx={{fontWeight:'bold', whiteSpace: 'nowrap', overflow:'hidden', textOverflow:'ellipsis', textAlign:'left'}}>{row.title}</Typography>
-                                        <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.network}.svg`}/>
+                                        <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${row.chainName}.svg`}/>
                                     </Box>
                                 </Box>
                             </Link>
                           </TableCell>
                           <TableCell align="left" sx={{px:1}}>{capitalize(row.category)}</TableCell>
                           <TableCell align="left" sx={{px:1}}>{row.price}</TableCell>
-                          <TableCell align="left" sx={{px:1}}>{row.orderedTime}</TableCell>
-                          <TableCell align="left" sx={{px:1}}>{row.seller}</TableCell>
+                          <TableCell align="left" sx={{px:1}}>{row.createdAt}</TableCell>
+                          <TableCell align="left" sx={{px:1}}>{row.from}</TableCell>
                         </TableRow>
                       )
                     })
@@ -275,9 +299,9 @@ export default function Orders() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
+              count={pagination.total}
+              rowsPerPage={pagination.pageSize}
+              page={pagination.page}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
           />
