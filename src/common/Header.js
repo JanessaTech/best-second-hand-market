@@ -42,7 +42,6 @@ const Header = ({openCart, wallet, notifyFilterUpdate, notifyWalletOpen, notifyF
         if (search && search.length > 0) {
             localStorage.removeItem('filter')
             notifyFilterMenuReset()
-            notifyFilterUpdate()
             navigate(`/results?search=${search}`)
         }
     }
@@ -79,8 +78,8 @@ const Header = ({openCart, wallet, notifyFilterUpdate, notifyWalletOpen, notifyF
     const goHome = () => {
         localStorage.removeItem('filter')
         notifyFilterMenuReset()
-        notifyFilterUpdate()
         navigate('/')
+        notifyFilterUpdate()
     }
 
    return (

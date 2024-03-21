@@ -1,4 +1,4 @@
-export function getQuery({userId, page, limit, sortBy, chainId, status, category, prices}) {
+export function getQuery({userId, page, limit, sortBy, chainId, status, category, prices, title}) {
     let queryOptions = {}
     if (userId) {
         queryOptions.userId = userId
@@ -23,6 +23,9 @@ export function getQuery({userId, page, limit, sortBy, chainId, status, category
     }
     if (prices) {
         queryOptions.prices = prices
+    }
+    if (title) {
+        queryOptions.title = title
     }
     return Object.entries(queryOptions).map((q) => {
         const [key, value] = q
