@@ -9,6 +9,7 @@ import logger from '../../common/Logger'
 import { useSearchParams } from 'react-router-dom'
 import {nft as nftClient} from '../../utils/serverClient/'
 import catchAsync from '../../utils/CatchAsync'
+import { NFTDetailsSkeleton } from './NFTDetailsSkeleton'
 
 const NFTHome = ({wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
     logger.debug("[NFTHome] rendering...")
@@ -36,7 +37,7 @@ const NFTHome = ({wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOp
             <Grid container spacing={2}>
                 <Grid item xs={isSmallScreen ? 12 : 7}>
                     <Box sx={{mr:5}}>
-                        <NFTDetails nft={nft}/>
+                        {Object.keys(nft).length === 0 ? <NFTDetailsSkeleton /> : <NFTDetails nft={nft}/>}
                         <Comments wallet={wallet} nftId={nft?.id} notifyAlertUpdate={notifyAlertUpdate}/>
                     </Box>
                 </Grid>
