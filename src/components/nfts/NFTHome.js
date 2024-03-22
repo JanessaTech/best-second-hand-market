@@ -37,7 +37,7 @@ const NFTHome = ({wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOp
             <Grid container spacing={2}>
                 <Grid item xs={isSmallScreen ? 12 : 7}>
                     <Box sx={{mr:5}}>
-                        {Object.keys(nft).length === 0 ? <NFTDetailsSkeleton /> : <NFTDetails nft={nft}/>}
+                        {!nft || Object.keys(nft).length === 0 ? <NFTDetailsSkeleton /> : <NFTDetails nft={nft}/>}
                         <Comments wallet={wallet} nftId={nft?.id} notifyAlertUpdate={notifyAlertUpdate}/>
                     </Box>
                 </Grid>
