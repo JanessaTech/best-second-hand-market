@@ -46,8 +46,8 @@ config.chains = {
                 'function doSafeBuy(address from, address to, uint[] ids) public',
                 'function buyBatch(address[] froms, address to, uint[][] idss) public',
                 'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public',
-                'event mint_tracer(address indexed to, string uri)',
-                'event mintBatch_tracer(address indexed to, string[] uris)',
+                'event mint_tracer(address indexed to, uint indexed tokenId, string uri)',
+                'event mintBatch_tracer(address indexed to, uint[] tokenIds, string[] uris)',
                 'event buy_tracer(address indexed from, address indexed to, uint[] ids)',
                 'event doSafeBuy_tracer(address indexed from, address indexed to, uint[] ids)',
                 'event buyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)',
@@ -70,8 +70,8 @@ config.chains = {
                 'function doSafeBuy(address from, address to, uint[] ids) public',
                 'function buyBatch(address[] froms, address to, uint[][] idss) public',
                 'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public',
-                'event mint_tracer(address indexed to, string uri)',
-                'event mintBatch_tracer(address indexed to, string[] uris)',
+                'event mint_tracer(address indexed to, uint indexed tokenId, string uri)',
+                'event mintBatch_tracer(address indexed to, uint[] tokenIds, string[] uris)',
                 'event buy_tracer(address indexed from, address indexed to, uint[] ids)',
                 'event doSafeBuy_tracer(address indexed from, address indexed to, uint[] ids)',
                 'event buyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)',
@@ -104,7 +104,13 @@ config.chains = {
                 'function buy(address from, address to, uint[] ids) public',
                 'function doSafeBuy(address from, address to, uint[] ids) public',
                 'function buyBatch(address[] froms, address to, uint[][] idss) public',
-                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public'
+                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public',
+                'event mint_tracer(address indexed to, uint indexed tokenId, string uri)',
+                'event mintBatch_tracer(address indexed to, uint[] tokenIds, string[] uris)',
+                'event buy_tracer(address indexed from, address indexed to, uint[] ids)',
+                'event doSafeBuy_tracer(address indexed from, address indexed to, uint[] ids)',
+                'event buyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)',
+                'event doSafeBuyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)'
             ],
             tokenStandard: 'aaaa'
           },
@@ -122,7 +128,13 @@ config.chains = {
                 'function buy(address from, address to, uint[] ids) public',
                 'function doSafeBuy(address from, address to, uint[] ids) public',
                 'function buyBatch(address[] froms, address to, uint[][] idss) public',
-                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public'
+                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public',
+                'event mint_tracer(address indexed to, uint indexed tokenId, string uri)',
+                'event mintBatch_tracer(address indexed to, uint[] tokenIds, string[] uris)',
+                'event buy_tracer(address indexed from, address indexed to, uint[] ids)',
+                'event doSafeBuy_tracer(address indexed from, address indexed to, uint[] ids)',
+                'event buyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)',
+                'event doSafeBuyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)'
             ],
             tokenStandard: 'bbbb'
           },
@@ -208,7 +220,13 @@ config.chains = {
                 'function buy(address from, address to, uint[] ids) public',
                 'function doSafeBuy(address from, address to, uint[] ids) public',
                 'function buyBatch(address[] froms, address to, uint[][] idss) public',
-                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public'
+                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public',
+                'event mint_tracer(address indexed to, uint indexed tokenId, string uri)',
+                'event mintBatch_tracer(address indexed to, uint[] tokenIds, string[] uris)',
+                'event buy_tracer(address indexed from, address indexed to, uint[] ids)',
+                'event doSafeBuy_tracer(address indexed from, address indexed to, uint[] ids)',
+                'event buyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)',
+                'event doSafeBuyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)'
             ],
             tokenStandard: 'iiii'
           },
@@ -226,7 +244,13 @@ config.chains = {
                 'function buy(address from, address to, uint[] ids) public',
                 'function doSafeBuy(address from, address to, uint[] ids) public',
                 'function buyBatch(address[] froms, address to, uint[][] idss) public',
-                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public'
+                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public',
+                'event mint_tracer(address indexed to, uint indexed tokenId, string uri)',
+                'event mintBatch_tracer(address indexed to, uint[] tokenIds, string[] uris)',
+                'event buy_tracer(address indexed from, address indexed to, uint[] ids)',
+                'event doSafeBuy_tracer(address indexed from, address indexed to, uint[] ids)',
+                'event buyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)',
+                'event doSafeBuyBatch_tracer(address[] indexed froms, address indexed to, uint[][] idss)'
             ],
             tokenStandard: 'jjjj'
           },
