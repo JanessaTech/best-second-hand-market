@@ -29,5 +29,9 @@ export default {
     comment_failed_create: 'Failed to add a new comment {0} due to {1}',
     comment_failed_query: 'Failed to query cart items for nft(id={0}) with query parameters: page = {1}, limit = {2}, sortBy ={3} due to {4}',
     //order
-    order_failed_queryfor_user: 'Failed to query orders for user(id={0}) with pageQuery {1} due to {2}'
+    order_failed_queryfor_user: 'Failed to query orders for user(id={0}) with pageQuery {1} due to {2}',
+    //ipfs
+    ipfs_failed_upload: 'Failed to upload file due to {0}',
+    ipfs_url_not_found: 'The ipfs url of the file uploaded is not found in metadata.Please upload the file again'
+
 }

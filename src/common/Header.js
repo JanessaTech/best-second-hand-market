@@ -69,7 +69,7 @@ const Header = ({openCart, wallet, notifyFilterUpdate, notifyWalletOpen, notifyF
     const handleMintBut = () => {
         if (wallet) {
         logger.info('[Header] handleMintBut. go to to /profile/mint')
-            navigate('/profile/mint')
+            navigate('/profile/mint2')
         } else {
             notifyWalletOpen()
         }

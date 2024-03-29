@@ -19,6 +19,7 @@ import Mint from './components/profile/Mint';
 import Balance from './components/profile/Balance';
 import Notification from './components/profile/Notification';
 import ProtectedRoutes from './components/ProtectedRoutes';
+import Mint2 from './components/profile/mint/Mint2';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                           <Route path="profile/orders" element={<Orders/>}/>
                           <Route path="profile/favorites" element={<Favorites/>}/>
                           <Route path="profile/mint" element={<Mint/>}/>
+                          <Route path="profile/mint2" element={<Mint2/>}/>
                           <Route path="profile/notifications" element={<Notification/>}/>
                           <Route path="profile/setting" element={<Setting/>}/>
                           <Route path="profile/balance" element={<Balance/>}/>

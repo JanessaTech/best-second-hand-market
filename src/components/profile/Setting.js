@@ -16,8 +16,8 @@ import catchAsync from '../../utils/CatchAsync'
 const VisuallyHiddenInput = styled(props => {
   const {type, onChange} = props
   return <input
-      id='profile' 
-      name='profile'
+      id={config.multer.profileFieldPrefix} 
+      name={config.multer.profileFieldPrefix}
       type={type} 
       onChange={onChange}/>
 })({
@@ -81,7 +81,7 @@ const Setting = () => {
     formData.append('id', state.id)
     formData.append('name', data.name)
     formData.append('intro', data.intro)
-    formData.append('profile', state.selectedFile)
+    formData.append(config.multer.profileFieldPrefix, state.selectedFile)
 
     await catchAsync(async () => {
       const updatedUser  = await userClient.update(formData)
@@ -93,7 +93,7 @@ const Setting = () => {
       const wallet = {address: login?.address, user: updatedUser}
       logger.debug('[Setting] call notifyWalletUpdate after update is successful')
       notifyWalletUpdate(wallet)
-      notifyAlertUpdate([{severity: 'success', message: 'setting was updated successfully'}])
+      notifyAlertUpdate([{severity: 'success', message: 'setting was updated'}])
     }, notifyAlertUpdate)
   }
 
@@ -117,7 +117,7 @@ const Setting = () => {
         notifyAlertUpdate([{severity: 'error', message: 'Please choose an image. We support png, jpg and gif only'}])
         return
     }
-    if (file && file.size > config.multer.fileSize) {
+    if (file && file.size > config.multer.profileSize) {
         notifyAlertUpdate([{severity: 'error', message: 'The file chosen should be less than 1M '}]) 
         return
     }

@@ -5,9 +5,12 @@ config.limits = {
   cartlimit: 20
 }
 config.multer = {
-  fileSize: 1048576, // less than 1M
+  profileSize: 1048576, // less than 1M
+  productSize: 104857600, // less than 100M
   fileTypes: /jpeg|jpg|png|gif/,  // file types accepted
-  acceptedImageTypes: ['image/gif', 'image/jpeg', 'image/png']
+  acceptedImageTypes: ['image/gif', 'image/jpeg', 'image/png'],
+  profileFieldPrefix:'profile',
+  productFieldPrefix:'product',
 }
 config.CATEGORIES = Object.freeze({
   Pets: Symbol("pets"),
