@@ -14,6 +14,7 @@ export default function CreateNFT({ipfsURL, handleNext, notifyAlertUpdate, notif
     const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(MintCreateNFTSchema)})
 
     const [state, setState] = useState({
+        ipfsURL: 'ipfs://bafybeic5fb5atjhrw2fefp3cf5zdds2osaszrtjohttbt4hylp2o2txobq/product__1711700544940.jpg',
         chainId: '',
         address: '',
         addressOptions: []
@@ -53,7 +54,7 @@ export default function CreateNFT({ipfsURL, handleNext, notifyAlertUpdate, notif
         setState({...state, address: value})
     }
 
-    const handleCreate = (data) => {
+    const handleCreate = async (data) => {
         logger.info('[Mint-CreateNFT] handleCreate data =', data)
         notifyNetworkCheckAndBuy(state.chainId)
         logger.debug('[Mint] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
@@ -80,10 +81,11 @@ export default function CreateNFT({ipfsURL, handleNext, notifyAlertUpdate, notif
                 }}
                 onSubmit={handleSubmit(handleCreate)}
                 noValidate
-                autoComplete="off">
+                autoComplete="off"
+                >
 
                 <Box sx={{width:1, mt:1}}>
-                    <strong>IPFS URL:</strong> <Typography sx={{wordBreak:'break-word'}}>{ipfsURL}</Typography>
+                    <strong>IPFS URL:</strong> <Typography sx={{wordBreak:'break-word'}}>{state.ipfsURL}</Typography>
                 </Box>
                 <CustomSelect
                     name={'chainId'}

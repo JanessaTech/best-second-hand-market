@@ -205,7 +205,6 @@ export default function Upload({handleNext, notifyAlertUpdate}) {
                                 sx={{textTransform:'none', ml:2}} 
                                 disabled={state.isloading}>Upload</Button>
                         </Box>
-                        
                     </Box>
             </Box>
             <Button variant='contained' onClick={handleNext}>click</Button>

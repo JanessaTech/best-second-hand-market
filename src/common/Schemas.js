@@ -36,7 +36,7 @@ export const MintUploadSchema = yup.object().shape({
 })
 
 export const MintCreateNFTSchema = yup.object().shape({
-    ipfs: yup.string().required('IPFS URL is required').matches(/^ipfs:\/\/(Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[A-Za-z2-7]{58,}|B[A-Z2-7]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[0-9A-F]{50,})$/, 'You must provide valid IPFS URL'),
+    //ipfs: yup.string().required('IPFS URL is required').matches(/^ipfs:\/\/(Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[A-Za-z2-7]{58,}|B[A-Z2-7]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[0-9A-F]{50,})$/, 'You must provide valid IPFS URL'),
     chainId: yup.number().typeError('Chain is required').required(),
     address: yup.string().required('Contract address is required').matches(/^0x[a-fA-F0-9]{40}$/, 'You must provide valid Contract address'),
 })
