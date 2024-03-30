@@ -28,8 +28,8 @@ const steps = [
 
 export default function Mint2() {
     logger.debug('[Mint] rendering...')
-    const {notifyAlertUpdate, notifyHideMenu, notifyNetworkCheckAndBuy} = React.useContext(GlobalVariables)
-    const [activeStep, setActiveStep] = useState(0)
+    const {eventsBus, notifyAlertUpdate, notifyHideMenu, notifyNetworkCheckAndBuy, notityMintCall} = React.useContext(GlobalVariables)
+    const [activeStep, setActiveStep] = useState(1)
     const [ipfsURL, setIpfsURL] = useState('')
 
     useEffect(() => {
@@ -67,9 +67,12 @@ export default function Mint2() {
                                 <Typography>{steps[1].description}</Typography>
                                 <CreateNFT 
                                     ipfsURL={ipfsURL} 
+                                    eventsBus={eventsBus}
                                     handleNext={handleNext} 
                                     notifyAlertUpdate={notifyAlertUpdate} 
-                                    notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
+                                    notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}
+                                    notityMintCall={notityMintCall}
+                                    />
                             </StepContent>
                         </Step>
                         <Step key={steps[2].label}>

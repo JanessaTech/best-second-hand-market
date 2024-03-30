@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button'
-import { Box, TextField, Typography } from "@mui/material"
+import { Box, Checkbox, FormControlLabel, TextField, Typography } from "@mui/material"
 import logger from "../../../common/Logger"
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -9,16 +9,23 @@ import { getChainName, networks } from '../../../utils/Chain'
 import { useEffect, useState } from 'react'
 
 
-export default function CreateNFT({ipfsURL, handleNext, notifyAlertUpdate, notifyNetworkCheckAndBuy}) {
+export default function CreateNFT({ipfsURL, eventsBus, handleNext, notifyAlertUpdate, notifyNetworkCheckAndBuy, notityMintCall}) {
     logger.debug('[Mint-CreateNFT] rendering...')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(MintCreateNFTSchema)})
 
     const [state, setState] = useState({
-        ipfsURL: 'ipfs://bafybeic5fb5atjhrw2fefp3cf5zdds2osaszrtjohttbt4hylp2o2txobq/product__1711700544940.jpg',
+        ipfsURL: 'ipfs://bafybeiauzaak4zwgqgtodd37yxfmicjt4rnkxw2agwnoi67lfqa2myrc7y/product__1711695812664.png',
         chainId: '',
         address: '',
         addressOptions: []
     })
+
+    const [mintData, setMintData] = useState(undefined)
+
+    useEffect(() => {
+      eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
+
+    }, [mintData])
 
     useEffect(() => {
         let alerts = []
@@ -50,14 +57,21 @@ export default function CreateNFT({ipfsURL, handleNext, notifyAlertUpdate, notif
         }
     }
 
+    const handleNetworkChangeDone = () => {
+      logger.debug('[Mint-CreateNFT] handleNetworkChangeDone')
+      logger.debug('[Mint-CreateNFT] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
+      logger.debug('mintData:', mintData)
+      notityMintCall(mintData)
+    }
+
     const handleAddressChange = (value) => {
         setState({...state, address: value})
     }
 
     const handleCreate = async (data) => {
         logger.info('[Mint-CreateNFT] handleCreate data =', data)
-        notifyNetworkCheckAndBuy(state.chainId)
-        logger.debug('[Mint] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
+        await notifyNetworkCheckAndBuy(state.chainId)
+        setMintData(data)
     }
 
     const handleReset = () => {
@@ -115,7 +129,23 @@ export default function CreateNFT({ipfsURL, handleNext, notifyAlertUpdate, notif
                   />
                 <Box sx={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
                         <Button variant='outlined' color='customBlack' sx={{textTransform:'none'}} onClick={handleReset}>Reset</Button>
-                        <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none', ml:2}}>Mint</Button>
+                        <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none', m:1}}>Mint</Button>
+                        <Box>
+                          <FormControlLabel sx={{mx:0}} control={<Checkbox defaultChecked sx={{ '& .MuiInputBase-root.': { fontSize: 20 } }} />}/>
+                          <TextField id="mint-gaslimt" 
+                            label="Gas limit" 
+                            variant="outlined" 
+                            size="small" 
+                            type="number"
+                            sx={{width:85}} 
+                            inputProps={{min: 0}}
+                            onKeyPress={(event) => {
+                              if (event?.key === '-' || event?.key === '+') {
+                                event.preventDefault();
+                              }
+                          }}
+                            />
+                        </Box>
                 </Box>
             </Box>
             <Button variant='contained' onClick={handleNext}>click</Button>

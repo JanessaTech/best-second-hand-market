@@ -83,6 +83,13 @@ const MainLayout = (props) => {
         setNewNetwork(chainId)
     }, [])
 
+    const notifyWalletNetworkChangeDone = () => {
+        logger.debug('[MainLayout] notifyWalletNetworkChangeDone', eventsBus)
+        if (eventsBus?.handleNetworkChangeDone) {
+            eventsBus.handleNetworkChangeDone()
+        }
+    }
+
     const onCloseWalletNetworkChange = useCallback(() => {
         setWalletNetworkChange(false)
         setNewNetwork(undefined)
@@ -107,6 +114,13 @@ const MainLayout = (props) => {
         logger.debug('[MainLayout] notifyFilterUpdate', eventsBus)
         if (eventsBus?.handleFilterUpdate) {
             eventsBus.handleFilterUpdate()
+        }
+    }
+
+    const notityMintCall = (mintData) => {
+        logger.debug('[MainLayout] notifyFilterUpdate', eventsBus)
+        if (eventsBus?.handleMintCall) {
+            eventsBus?.handleMintCall(mintData)
         }
     }
 
@@ -232,7 +246,8 @@ const MainLayout = (props) => {
                     notifyWalletOpen: notifyWalletOpen,
                     notifyShowMenu: notifyShowMenu,
                     notifyHideMenu: notifyHideMenu,
-                    notifyNetworkCheckAndBuy: notifyNetworkCheckAndBuy
+                    notifyNetworkCheckAndBuy: notifyNetworkCheckAndBuy,
+                    notityMintCall: notityMintCall
                     }}>
                 <Box sx={{display: 'flex'}}>
                     {
@@ -265,12 +280,13 @@ const MainLayout = (props) => {
                 onClose={onCloseWallet} 
                 open={walletOpen} 
                 wallet={wallet}
+                eventsBus={eventsBus} 
                 openSignup={openSignup} 
                 notifyAlertUpdate={notifyAlertUpdate}
                 notifyWalletUpdate={notifyWalletUpdate}
                 notifyWalletAddressChange={notifyWalletAddressChange}
                 notifyWalletNetworkChange={notifyWalletNetworkChange}
-                eventsBus={eventsBus}
+                notifyWalletNetworkChangeDone={notifyWalletNetworkChangeDone}
             />  
             <DisconnectWallet 
                 onClose={onCloseWalletChange}
@@ -282,6 +298,7 @@ const MainLayout = (props) => {
                 onClose={onCloseWalletNetworkChange}
                 open={walletNetworkChange}
                 notifyAlertUpdate={notifyAlertUpdate}
+                notifyWalletNetworkChangeDone={notifyWalletNetworkChangeDone}
             />
            
             <Signup

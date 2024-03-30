@@ -8,7 +8,7 @@ import WalletItem from './WalletItem'
 import MetaMaskWallet from './MetaMaskWallet'
 import {GetCurrentWalletProvider} from '../../utils/Wallet'
 
-const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, notifyWalletNetworkChange, eventsBus}) => {
+const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, notifyWalletNetworkChange, notifyWalletNetworkChangeDone}) => {
     logger.debug('[ConnectWallet] rendering ')
     logger.debug('[ConnectWallet] wallet=',wallet)
     const theme = useTheme()
@@ -66,9 +66,10 @@ const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, no
                 if (chainId !== currentChainId) {
                     notifyWalletNetworkChange(chainId)
                 } else {
-                    if (nftIds && prices && nftIds.length > 0 && prices.length > 0) {
-                        handleBuy(chainId, nftIds, prices)
-                    }
+                    notifyWalletNetworkChangeDone()
+                    // if (nftIds && prices && nftIds.length > 0 && prices.length > 0) {
+                    //     handleBuy(chainId, nftIds, prices)
+                    // }
                 }
             } catch(e) {
                 logger.debug('[ConnectWallet] failed to send eth_chainId due to', e)
@@ -97,6 +98,7 @@ const ConnectWallet = ({onClose, open, wallet, openSignup, notifyAlertUpdate, no
                     <MetaMaskWallet 
                         onClose={onClose} 
                         openSignup={openSignup} 
+                        eventsBus={eventsBus}
                         notifyAlertUpdate={notifyAlertUpdate} 
                         notifyWalletUpdate={notifyWalletUpdate}
                         setWalletProvider={setWalletProvider}
