@@ -11,18 +11,18 @@ import Done from './Done'
 
 const steps = [
     {
-        label: 'Upload a file to ipfs',
+        label: 'Upload a file to IPFS',
         description: `The file is the one you want to show others how your product looks like.`
     },
     {
-        label: 'Mint a nft',
+        label: 'Mint a NFT',
         description: 'Choose the chain and smart contract address you want to mint a nft with'
     },
     {
         label: 'Congratulation! A new NFT is created',
         description: `Check out My NFTs to edit the new NFT you have created above. 
                       You may not see it immediately, because the time you see it in My NFTs depends on
-                      when you data is mined into chain. Please keep patient. Ask admin if you don't see it after 1 hour`
+                      when your data is mined into chain. Please keep patient. Ask admin for help if you don't see it after 10mins`
     }
 ]
 

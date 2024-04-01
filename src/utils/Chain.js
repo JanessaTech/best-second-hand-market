@@ -1,6 +1,8 @@
 import config from '../config/index'
 import logger from '../common/Logger'
+import messageHelper from '../common/helpers/internationalization/messageHelper'
 
+// to-do: refactor the file
 function getEnv() {
   var env = config?.env
   if (!env || ['local', 'testnet', 'mainnet'].indexOf(env) === -1) {
@@ -59,13 +61,31 @@ export function getChainCurrency(chainId) {
   return nks.find( n => n.chainId === chainId)?.currency
 }
 
+export function getABI(chainId, address) {
+  const nks = networks()
+  var chain = nks.find( n => n.chainId === chainId)
+  if (!chain) {
+    throw new Error(messageHelper.getMessage('chain_not_found', chainId))
+  } else {
+    var contract = chain.contracts.find((contract) => contract.address === address)
+    if (!contract) {
+      throw new Error(messageHelper.getMessage('contract_not_found', chainId, address))
+    }
+    const abi = contract?.abi
+    if (!abi) {
+      throw new Error(messageHelper.getMessage('abi_not_found', chainId, address))
+    }
+    return abi
+  }
+}
+
 export function getStandard(chainId, address) {
   const nks = networks()
   var chain = nks.find( n => n.chainId === chainId)
   if (!chain) {
     logger.error('[Utils - Chain] getStandard. cannot find chain by chainId=', chainId)
     chain = nks[0]
-    var contract = chain.contracts.find(addr => addr === address)
+    var contract = chain.contracts.find((contract) => contract.address === address)
     if (!contract) {
       logger.error('[Utils - Chain] getStandard. cannot find standard by chainId=', chainId , ' and address=', address)
       return chain.contracts[0].tokenStandard

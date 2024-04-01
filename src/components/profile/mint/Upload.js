@@ -100,7 +100,7 @@ export default function Upload({handleNext, notifyAlertUpdate}) {
     }
 
     const handleReset = () => {
-        setState({...state, title: '', category: '', description: '', selectedFile: undefined})
+        setState({...state, title: '', category: '', description: '', selectedFile: undefined, isloading: false})
         reset()
     }
 

@@ -7,8 +7,10 @@ import logger from '../../common/Logger'
 import WalletItem from './WalletItem'
 import MetaMaskWallet from './MetaMaskWallet'
 import {GetCurrentWalletProvider} from '../../utils/Wallet'
+import { getABI } from '../../utils/Chain'
+import { ethers } from 'ethers'
 
-const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, notifyWalletNetworkChange, notifyWalletNetworkChangeDone}) => {
+const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, notifyWalletNetworkChange, notifyWalletNetworkChangeDone, notifyMintDone}) => {
     logger.debug('[ConnectWallet] rendering ')
     logger.debug('[ConnectWallet] wallet=',wallet)
     const theme = useTheme()
@@ -37,8 +39,9 @@ const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAler
     
     useEffect(() => {
         if (walletProvider) {
-            logger.debug('[ConnectWallet] add networkCheckAndBuy to eventsBus')
+            logger.debug('[ConnectWallet] add networkCheckAndBuy and handleMintCall to eventsBus')
             eventsBus.networkCheckAndBuy = networkCheckAndBuy
+            eventsBus.handleMintCall = handleMintCall
         }
     }, [walletProvider])
 
@@ -77,6 +80,24 @@ const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAler
         }
     }
 
+    const handleMintCall = async (mintData) => {
+        logger.debug('[ConnectWallet] handleMintCall. mintData =', mintData)
+        const {chainId, address, ipfsURL} = mintData
+        if (walletProvider) {
+            const signer = await walletProvider.getSigner()
+            const from = await signer.getAddress()
+            logger.debug("MetaMask is connected at ", ethers.getAddress(from))
+            const abi = getABI(chainId, address)
+            const contract = new ethers.Contract(address, abi, signer)
+            const tx = await contract.mint(ethers.getAddress(from), ipfsURL)
+            await tx.wait() //waiting for receipt 
+            logger.info('Tx after mint:', tx)
+            notifyMintDone()
+        } else {
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle mint call')
+            notifyAlertUpdate([{severity: 'error', message: 'No walletProvider. Please refresh page and try again'}])
+        }
+    }
     
   return (
     <Dialog
@@ -95,10 +116,9 @@ const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAler
         <Box sx={{p:3,pt:0}}>
             <Grid container spacing={2} >
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-                    <MetaMaskWallet 
+                    <MetaMaskWallet
                         onClose={onClose} 
                         openSignup={openSignup} 
-                        eventsBus={eventsBus}
                         notifyAlertUpdate={notifyAlertUpdate} 
                         notifyWalletUpdate={notifyWalletUpdate}
                         setWalletProvider={setWalletProvider}

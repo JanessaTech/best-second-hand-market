@@ -117,11 +117,23 @@ const MainLayout = (props) => {
         }
     }
 
-    const notityMintCall = (mintData) => {
-        logger.debug('[MainLayout] notifyFilterUpdate', eventsBus)
+    const notityMintCall = async (mintData) => {
+        logger.debug('[MainLayout] notityMintCall', eventsBus)
         if (eventsBus?.handleMintCall) {
-            eventsBus?.handleMintCall(mintData)
+            try {
+                await eventsBus?.handleMintCall(mintData)
+            } catch (err) {
+                logger.error('[MainLayout] Failed to call mint due to ', err)
+            }
         }
+    }
+
+    
+    const notifyMintDone = () => {
+        logger.debug('[MainLayout] notifyMintDone', eventsBus)
+        if (eventsBus?.handleMintDone) {
+            eventsBus?.handleMintDone()
+        } 
     }
 
     const notifyFilterMenuReset = () => {
@@ -287,6 +299,7 @@ const MainLayout = (props) => {
                 notifyWalletAddressChange={notifyWalletAddressChange}
                 notifyWalletNetworkChange={notifyWalletNetworkChange}
                 notifyWalletNetworkChangeDone={notifyWalletNetworkChangeDone}
+                notifyMintDone={notifyMintDone}
             />  
             <DisconnectWallet 
                 onClose={onCloseWalletChange}

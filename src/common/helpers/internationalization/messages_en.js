@@ -32,6 +32,9 @@ export default {
     order_failed_queryfor_user: 'Failed to query orders for user(id={0}) with pageQuery {1} due to {2}',
     //ipfs
     ipfs_failed_upload: 'Failed to upload file due to {0}',
-    ipfs_url_not_found: 'The ipfs url of the file uploaded is not found in metadata.Please upload the file again'
-
+    ipfs_url_not_found: 'The ipfs url of the file uploaded is not found in metadata.Please upload the file again',
+    //utils-chain
+    chain_not_found: 'The chain by chainId {0} is not found. Please check the correctness of config.common.js',
+    contract_not_found: 'The contract by chainId {0} and address {1} is not found. Please check the correctness of config.common.js',
+    abi_not_found: 'The abi by chainId {0} and address {1} is not found. Please check the correctness of config.common.js'
 }
