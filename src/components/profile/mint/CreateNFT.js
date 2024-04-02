@@ -14,7 +14,7 @@ export default function CreateNFT({ipfsURL, eventsBus, handleNext, notifyAlertUp
     const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(MintCreateNFTSchema)})
 
     const [state, setState] = useState({
-        ipfsURL: 'ipfs://bafybeihqwjfmqsukrvbfyzdqclvk5smz4yrul6jwim2qgtvximxsshk46e/product__1711610721236.jpg',
+        ipfsURL: ipfsURL,
         chainId: '',
         address: '',
         addressOptions: [],
@@ -70,11 +70,15 @@ export default function CreateNFT({ipfsURL, eventsBus, handleNext, notifyAlertUp
         setState({...state, address: value})
     }
 
-    const handleMintDone = () => {
+    const handleMintDone = ({success, reason}) => {
       logger.debug('[Mint-CreateNFT] handleMintDone')
       setState({...state, isloading: false})
-      notifyAlertUpdate([{severity: 'success', message: 'A new NFT is minted successfully'}])
-      handleNext()
+      if (success) {
+        notifyAlertUpdate([{severity: 'success', message: 'A new NFT is minted successfully'}])
+        handleNext()
+      } else {
+        notifyAlertUpdate([{severity: 'error', message: reason}])
+      }
     }
 
     const handleCreate = async (data) => {
@@ -156,23 +160,6 @@ export default function CreateNFT({ipfsURL, eventsBus, handleNext, notifyAlertUp
                             disabled={state.isloading}
                             >Mint</Button>
                         </Box>
-                        
-                        {/* <Box>
-                          <FormControlLabel sx={{mx:0}} control={<Checkbox defaultChecked sx={{ '& .MuiInputBase-root.': { fontSize: 20 } }} />}/>
-                          <TextField id="mint-gaslimt" 
-                            label="Gas limit" 
-                            variant="outlined" 
-                            size="small" 
-                            type="number"
-                            sx={{width:85}} 
-                            inputProps={{min: 0}}
-                            onKeyPress={(event) => {
-                              if (event?.key === '-' || event?.key === '+') {
-                                event.preventDefault();
-                              }
-                          }}
-                            />
-                        </Box> */}
                 </Box>
             </Box>
             <Button variant='contained' onClick={handleNext}>click</Button>

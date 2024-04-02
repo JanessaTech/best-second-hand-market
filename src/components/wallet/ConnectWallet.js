@@ -92,10 +92,9 @@ const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAler
             const tx = await contract.mint(ethers.getAddress(from), ipfsURL)
             await tx.wait() //waiting for receipt 
             logger.info('Tx after mint:', tx)
-            notifyMintDone()
         } else {
             logger.error('[ConnectWallet] walletProvider is not found when we are about to handle mint call')
-            notifyAlertUpdate([{severity: 'error', message: 'No walletProvider. Please refresh page and try again'}])
+            throw new Error('walletProvider is not found')
         }
     }
     

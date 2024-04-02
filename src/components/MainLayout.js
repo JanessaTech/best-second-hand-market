@@ -122,17 +122,20 @@ const MainLayout = (props) => {
         if (eventsBus?.handleMintCall) {
             try {
                 await eventsBus?.handleMintCall(mintData)
+                notifyMintDone({success: true})
             } catch (err) {
+                notifyMintDone({success: false, reason: err?.message})
                 logger.error('[MainLayout] Failed to call mint due to ', err)
             }
+            
         }
     }
 
     
-    const notifyMintDone = () => {
+    const notifyMintDone = (props) => {
         logger.debug('[MainLayout] notifyMintDone', eventsBus)
         if (eventsBus?.handleMintDone) {
-            eventsBus?.handleMintDone()
+            eventsBus?.handleMintDone(props)
         } 
     }
 

@@ -29,7 +29,7 @@ const steps = [
 export default function Mint2() {
     logger.debug('[Mint] rendering...')
     const {eventsBus, notifyAlertUpdate, notifyHideMenu, notifyNetworkCheckAndBuy, notityMintCall} = React.useContext(GlobalVariables)
-    const [activeStep, setActiveStep] = useState(1)
+    const [activeStep, setActiveStep] = useState(0)
     const [ipfsURL, setIpfsURL] = useState('')
 
     useEffect(() => {

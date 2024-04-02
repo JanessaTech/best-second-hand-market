@@ -95,7 +95,7 @@ export default function Upload({handleNext, notifyAlertUpdate}) {
                 }
                 notifyAlertUpdate([{severity: 'success', message: 'The file is uploaded successfully'}])
                 handleNext({ipfs: metadata?.data?.image})
-            }, notifyAlertUpdate)
+            }, notifyAlertUpdate, undefined, () => {setState({...state, isloading: false})})
         }
     }
 
