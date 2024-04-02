@@ -10,7 +10,7 @@ import {GetCurrentWalletProvider} from '../../utils/Wallet'
 import { getABI } from '../../utils/Chain'
 import { ethers } from 'ethers'
 
-const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, notifyWalletNetworkChange, notifyWalletNetworkChangeDone, notifyMintDone}) => {
+const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, notifyWalletNetworkChange}) => {
     logger.debug('[ConnectWallet] rendering ')
     logger.debug('[ConnectWallet] wallet=',wallet)
     const theme = useTheme()
@@ -39,9 +39,9 @@ const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAler
     
     useEffect(() => {
         if (walletProvider) {
-            logger.debug('[ConnectWallet] add networkCheckAndBuy and handleMintCall to eventsBus')
-            eventsBus.networkCheckAndBuy = networkCheckAndBuy
-            eventsBus.handleMintCall = handleMintCall
+            logger.debug('[ConnectWallet] add handleNetworkChangeCheck and handleMintCall to eventsBus in center')
+            center.eventsBus.handleNetworkChangeCheck = handleNetworkChangeCheck
+            center.eventsBus.handleMintCall = handleMintCall
         }
     }, [walletProvider])
 
@@ -60,7 +60,7 @@ const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAler
         logger.debug(`[ConnectWallet] handleBuy. chainId=${chainId}, nftIds=${nftIds}, prices=${prices}`)
     }
 
-    const networkCheckAndBuy = async (chainId, nftIds, prices) => {
+    const handleNetworkChangeCheck = async (chainId, nftIds, prices) => {
         if (walletProvider) {
             try {
                 const _chainId = await walletProvider.send('eth_chainId')
@@ -69,7 +69,7 @@ const ConnectWallet = ({onClose, open, wallet, eventsBus, openSignup, notifyAler
                 if (chainId !== currentChainId) {
                     notifyWalletNetworkChange(chainId)
                 } else {
-                    notifyWalletNetworkChangeDone()
+                    center.call('notifyWalletNetworkChangeDone')
                     // if (nftIds && prices && nftIds.length > 0 && prices.length > 0) {
                     //     handleBuy(chainId, nftIds, prices)
                     // }

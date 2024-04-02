@@ -5,7 +5,7 @@ import {GetCurrentWalletProvider} from '../../utils/Wallet'
 import logger from '../../common/Logger'
 import {getChain} from '../../utils/Chain'
 
-export default function ChangeWalletNetwork({newNetwork, onClose, open, notifyAlertUpdate, notifyWalletNetworkChangeDone}) {
+export default function ChangeWalletNetwork({center, newNetwork, onClose, open, notifyAlertUpdate}) {
     const [add, setAdd] = useState(false)
 
     const handleClose = () => {
@@ -23,7 +23,7 @@ export default function ChangeWalletNetwork({newNetwork, onClose, open, notifyAl
                 logger.debug(`[ChangeWalletNetwork] Switched network to chainId ${newNetwork} successfully.`)
                 notifyAlertUpdate([{severity: 'success', message: `Switched network to chainId ${newNetwork} successfully.`}])
                 onClose()
-                notifyWalletNetworkChangeDone()
+                center.call('notifyWalletNetworkChangeDone')
             } catch (e) {
                 logger.debug('[ChangeWalletNetwork] Failed to update network due to ', e)
                 if (e?.info?.error?.code === 4001) {

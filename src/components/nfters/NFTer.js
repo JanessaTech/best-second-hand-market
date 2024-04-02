@@ -84,7 +84,7 @@ EnhancedTableHead.propTypes = {
 
 export default function NFTer() {
   logger.debug('[NFTer] rendering...')
-  const {menuOpen, toggleMenu, eventsBus, notifyAlertUpdate, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {menuOpen, toggleMenu, center, notifyAlertUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const [searchParams, setSearchParams] = useSearchParams()
@@ -125,7 +125,7 @@ export default function NFTer() {
   useEffect(() => {
     (async () => {
       logger.debug('[NFTer] add handleFilterUpdate to eventsBus')
-      eventsBus.handleFilterUpdate = handleFilterUpdate
+      center.eventsBus.handleFilterUpdate = handleFilterUpdate
       if (id) {
         const toPage = pagination.page
         const pageSize = pagination.pageSize
@@ -181,7 +181,7 @@ export default function NFTer() {
   return (
       <Box component="main" sx={{width:1}}>
         <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
-        <ProfileFilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterUpdate={notifyFilterUpdate} handleSummary={handleSummary}/>
+        <ProfileFilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} handleSummary={handleSummary}/>
         <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
           <Paper sx={{ width: '100%', mb: 2 }}>
               <TableContainer>

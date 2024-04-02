@@ -77,7 +77,7 @@ function convertNFTs(nfts) {
 
 export default function MyNFTList() {
   logger.debug('[MyNFTList] rendering....')
-  const {wallet, menuOpen, eventsBus, toggleMenu, notifyAlertUpdate, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, center, toggleMenu, notifyAlertUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const headCells = [
@@ -177,8 +177,8 @@ export default function MyNFTList() {
   useEffect(() => {
     (async () => {
       if (wallet?.user) {
-        logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus')
-        eventsBus.handleFilterUpdate = handleFilterUpdate
+        logger.debug('[MyNFTList] add handleFilterUpdate to eventsBus in center')
+        center.eventsBus.handleFilterUpdate = handleFilterUpdate
         const toPage = pagination.page
         const pageSize = pagination.pageSize
         await fetchData(toPage, pageSize, orderBy, order)
@@ -344,7 +344,7 @@ export default function MyNFTList() {
   return (
     <Box component="main" sx={{width:1}}>
       <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
-      <ProfileFilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterUpdate={notifyFilterUpdate} handleSummary={handleSummary}/>
+      <ProfileFilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} handleSummary={handleSummary}/>
       <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
         
         <Paper sx={{ width: '100%', mb: 2 }}>

@@ -85,13 +85,6 @@ const MainLayout = (props) => {
         setNewNetwork(chainId)
     }, [])
 
-    const notifyWalletNetworkChangeDone = () => {
-        logger.debug('[MainLayout] notifyWalletNetworkChangeDone', eventsBus)
-        if (eventsBus?.handleNetworkChangeDone) {
-            eventsBus.handleNetworkChangeDone()
-        }
-    }
-
     const onCloseWalletNetworkChange = useCallback(() => {
         setWalletNetworkChange(false)
         setNewNetwork(undefined)
@@ -111,39 +104,6 @@ const MainLayout = (props) => {
         }
         setAlerts(newAlerts)
     }, [])
-
-    const notifyFilterUpdate = async () => {
-        logger.debug('[MainLayout] notifyFilterUpdate', eventsBus)
-        if (eventsBus?.handleFilterUpdate) {
-            try {
-                await eventsBus.handleFilterUpdate()
-            } catch (err) {
-                logger.error('Failed to handleFilterUpdate due to ', err)
-            }
-        }
-    }
-
-    const notityMintCall = async (mintData) => {
-        logger.debug('[MainLayout] notityMintCall', eventsBus)
-        if (eventsBus?.handleMintCall) {
-            try {
-                await eventsBus?.handleMintCall(mintData)
-                notifyMintDone({success: true})
-            } catch (err) {
-                const errMsg = err?.info?.error?.message || err?.message
-                notifyMintDone({success: false, reason: errMsg})
-                logger.error('[MainLayout] Failed to call mint due to ', err)
-            }
-        }
-    }
-
-    
-    const notifyMintDone = (props) => {
-        logger.debug('[MainLayout] notifyMintDone', eventsBus)
-        if (eventsBus?.handleMintDone) {
-            eventsBus?.handleMintDone(props)
-        } 
-    }
 
     /**
      * We only conduct checking when nftIds and prices are empty or undefined
@@ -229,18 +189,15 @@ const MainLayout = (props) => {
                 value={{
                     wallet: wallet,
                     menuOpen: menu.open,
-                    eventsBus: eventsBus,
                     toggleMenu: toggleMenu,
                     openCart: openCart,
                     center: center,
-                    notifyFilterUpdate: notifyFilterUpdate,
                     notifyAlertUpdate: notifyAlertUpdate,
                     notifyWalletUpdate: notifyWalletUpdate, 
                     notifyWalletOpen: notifyWalletOpen,
                     notifyShowMenu: notifyShowMenu,
                     notifyHideMenu: notifyHideMenu,
-                    notifyNetworkCheckAndBuy: notifyNetworkCheckAndBuy,
-                    notityMintCall: notityMintCall
+                    notifyNetworkCheckAndBuy: notifyNetworkCheckAndBuy
                     }}>
                 <Box sx={{display: 'flex'}}>
                     {
@@ -272,14 +229,12 @@ const MainLayout = (props) => {
                 onClose={onCloseWallet} 
                 open={walletOpen} 
                 wallet={wallet}
-                eventsBus={eventsBus} 
+                center={center}
                 openSignup={openSignup} 
                 notifyAlertUpdate={notifyAlertUpdate}
                 notifyWalletUpdate={notifyWalletUpdate}
                 notifyWalletAddressChange={notifyWalletAddressChange}
                 notifyWalletNetworkChange={notifyWalletNetworkChange}
-                notifyWalletNetworkChangeDone={notifyWalletNetworkChangeDone}
-                notifyMintDone={notifyMintDone}
             />  
             <DisconnectWallet 
                 onClose={onCloseWalletChange}
@@ -287,11 +242,11 @@ const MainLayout = (props) => {
                 notifyWalletUpdate={notifyWalletUpdate}
             />
             <ChangeWalletNetwork
+                center={center}
                 newNetwork={newNetwork}
                 onClose={onCloseWalletNetworkChange}
                 open={walletNetworkChange}
                 notifyAlertUpdate={notifyAlertUpdate}
-                notifyWalletNetworkChangeDone={notifyWalletNetworkChangeDone}
             />
            
             <Signup

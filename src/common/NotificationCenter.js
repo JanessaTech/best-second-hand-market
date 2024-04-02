@@ -46,7 +46,50 @@ class NotificationCenter {
                     fn(userId, nftIds, isInCart)
                 }
             }
-        })  
+        })
+
+        this.#notifyMap.set('notifyWalletNetworkChangeDone', () => {
+            logger.debug('[NotificationCenter] notifyWalletNetworkChangeDone', this.eventsBus)
+            if (this.eventsBus?.handleNetworkChangeDone) {
+                this.eventsBus.handleNetworkChangeDone()
+            }
+        })
+
+        this.#notifyMap.set('notityMintCall', async (mintData) => {
+            logger.debug('[NotificationCenter] notityMintCall', this.eventsBus)
+            if (this.eventsBus?.handleMintCall) {
+                try {
+                    await this.eventsBus?.handleMintCall(mintData)
+                    this.call('notifyMintDone', {success: true})
+                } catch (err) {
+                    const errMsg = err?.info?.error?.message || err?.message
+                    this.call('notifyMintDone', {success: false, reason: errMsg})
+                    logger.error('[NotificationCenter] Failed to call mint due to ', err)
+                }
+            }
+        })
+
+        this.#notifyMap.set('notifyMintDone', (props) => {
+            logger.debug('[NotificationCenter] notifyMintDone', this.eventsBus)
+            if (this.eventsBus?.handleMintDone) {
+                this.eventsBus?.handleMintDone(props)
+            } 
+        })
+
+        this.#notifyMap.set('notifyNetworkChangeCheck', async (chainId, nftIds, prices) => {
+            logger.debug('[NotificationCenter] notifyNetworkChangeCheck', this.eventsBus)
+            if (this.eventsBus.handleNetworkChangeCheck) {
+                this.eventsBus.handleNetworkChangeCheck(chainId, nftIds, prices)
+            }
+        })
+
+        /*
+        const notifyNetworkCheckAndBuy = async (chainId, nftIds, prices) => {
+            logger.debug('[MainLayout] notifyNetworkCheckAndBuy', eventsBus)
+            if (eventsBus.networkCheckAndBuy) {
+                eventsBus.networkCheckAndBuy(chainId, nftIds, prices)
+            }
+        }*/
     }
 
     call(name, ...params) {
@@ -56,6 +99,17 @@ class NotificationCenter {
                 fn(...params)
             } else {
                 fn()
+            }
+        }
+    }
+
+    async asyncCall(name, ...params) {
+        if (this.#notifyMap.get(name)) {
+            const fn = this.#notifyMap.get(name)
+            if (params && params.length > 0) {
+                await fn(...params)
+            } else {
+                await fn()
             }
         }
     }

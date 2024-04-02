@@ -9,7 +9,7 @@ import { getChainName, networks } from '../../../utils/Chain'
 import { useEffect, useState } from 'react'
 
 
-export default function CreateNFT({ipfsURL, eventsBus, handleNext, notifyAlertUpdate, notifyNetworkCheckAndBuy, notityMintCall}) {
+export default function CreateNFT({ipfsURL, center, handleNext, notifyAlertUpdate}) {
     logger.debug('[Mint-CreateNFT] rendering...')
     const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(MintCreateNFTSchema)})
 
@@ -24,8 +24,8 @@ export default function CreateNFT({ipfsURL, eventsBus, handleNext, notifyAlertUp
     const [mintData, setMintData] = useState(undefined)
 
     useEffect(() => {
-      eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
-      eventsBus.handleMintDone = handleMintDone
+      center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
+      center.eventsBus.handleMintDone = handleMintDone
     }, [mintData])
 
     useEffect(() => {
@@ -63,7 +63,8 @@ export default function CreateNFT({ipfsURL, eventsBus, handleNext, notifyAlertUp
       logger.debug('[Mint-CreateNFT] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
       logger.debug('mintData:', mintData)
       setState({...state, isloading: true})
-      notityMintCall(mintData)
+      center.call('notityMintCall', mintData)
+      //notityMintCall(mintData)
     }
 
     const handleAddressChange = (value) => {
@@ -83,7 +84,8 @@ export default function CreateNFT({ipfsURL, eventsBus, handleNext, notifyAlertUp
 
     const handleCreate = async (data) => {
         logger.info('[Mint-CreateNFT] handleCreate data =', data)
-        await notifyNetworkCheckAndBuy(state.chainId)
+        //await notifyNetworkCheckAndBuy(state.chainId)
+        await center.asyncCall('notifyNetworkChangeCheck', state.chainId)
         const mintData = {
           chainId: data?.chainId,
           address: data?.address,

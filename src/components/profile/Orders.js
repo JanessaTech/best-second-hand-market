@@ -124,7 +124,7 @@ EnhancedTableHead.propTypes = {
 
 export default function Orders() {
   logger.debug('[Orders] rendering...')
-  const {wallet, menuOpen, eventsBus, toggleMenu, trigger, notifyAlertUpdate, notifyFilterUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
+  const {wallet, menuOpen, center, toggleMenu, trigger, notifyAlertUpdate, notifyShowMenu} = React.useContext(GlobalVariables)
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
@@ -162,8 +162,8 @@ export default function Orders() {
   useEffect(() => {
     (async () => {
       if (wallet?.user) {
-        logger.debug('[Orders] add handleFilterUpdate to eventsBus')
-        eventsBus.handleFilterUpdate = handleFilterUpdate
+        logger.debug('[Orders] add handleFilterUpdate to eventsBus in center')
+        center.eventsBus.handleFilterUpdate = handleFilterUpdate
         const toPage = pagination.page
         const pageSize = pagination.pageSize
         await fetchData(toPage, pageSize, orderBy, order)
@@ -235,7 +235,7 @@ export default function Orders() {
   return (
     <Box component="main" sx={{width:1}}>
       <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
-      <ProfileFilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} notifyFilterUpdate={notifyFilterUpdate} handleSummary={handleSummary}/>
+      <ProfileFilterBar menuOpen={menuOpen} toggleMenu={toggleMenu} handleSummary={handleSummary}/>
       <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
         <Paper sx={{ width: '100%', mb: 2 }}>
             <TableContainer>

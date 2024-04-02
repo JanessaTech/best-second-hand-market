@@ -28,7 +28,7 @@ const ShowBuyOrCart = ({handleBuy, handleCart, inCart}) => {
     </Box>
   )
 }
-const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[BuyOrCart] rendering...')
   logger.debug('[BuyOrCart] wallet...', wallet)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -36,8 +36,8 @@ const BuyOrCart = ({nft, wallet, openCart, eventsBus, notifyAlertUpdate, notifyW
   const [inCart, setInCart] = useState(!!nft?.inCart)
 
   useEffect(() => {
-    logger.debug('[BuyOrCart] add handleNFTCartStatus to eventsBus')
-    eventsBus.handleNFTCartStatus = handleNFTCartStatus
+    logger.debug('[BuyOrCart] add handleNFTCartStatus to eventsBus in center')
+    center.eventsBus.handleNFTCartStatus = handleNFTCartStatus
   }, [])
 
   useEffect(() => {

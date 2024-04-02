@@ -11,7 +11,7 @@ import {nft as nftClient} from '../../utils/serverClient/'
 import catchAsync from '../../utils/CatchAsync'
 import { NFTDetailsSkeleton } from './NFTDetailsSkeleton'
 
-const NFTHome = ({wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const NFTHome = ({wallet, openCart, center, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
     logger.debug("[NFTHome] rendering...")
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -45,8 +45,8 @@ const NFTHome = ({wallet, openCart, eventsBus, notifyAlertUpdate, notifyWalletOp
                     <BuyOrCart 
                       nft={nft} 
                       wallet={wallet} 
-                      openCart={openCart} 
-                      eventsBus={eventsBus}
+                      openCart={openCart}
+                      center={center}
                       notifyAlertUpdate={notifyAlertUpdate}
                       notifyWalletOpen={notifyWalletOpen} 
                       notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
