@@ -207,7 +207,6 @@ export default function Upload({handleNext, notifyAlertUpdate}) {
                         </Box>
                     </Box>
             </Box>
-            <Button variant='contained' onClick={handleNext}>click</Button>
         </Box>
     )
 }

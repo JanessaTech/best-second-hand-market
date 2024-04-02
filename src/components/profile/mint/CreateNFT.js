@@ -162,7 +162,6 @@ export default function CreateNFT({ipfsURL, eventsBus, handleNext, notifyAlertUp
                         </Box>
                 </Box>
             </Box>
-            <Button variant='contained' onClick={handleNext}>click</Button>
         </Box>
     )
 }

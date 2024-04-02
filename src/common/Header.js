@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import logger from './Logger'
 import config from '../config'
 
-const Header = ({openCart, wallet, notifyFilterUpdate, notifyWalletOpen, notifyFilterMenuReset, notifyWalletUpdate, notifyAlertUpdate}) => {
+const Header = ({openCart, wallet, center, notifyWalletOpen, notifyWalletUpdate, notifyAlertUpdate}) => {
     logger.debug('[Header] rendering...')
     logger.debug('[Header] wallet:', wallet)
     const theme = useTheme()
@@ -41,7 +41,7 @@ const Header = ({openCart, wallet, notifyFilterUpdate, notifyWalletOpen, notifyF
         logger.debug('[Header] search=', search)
         if (search && search.length > 0) {
             localStorage.removeItem('filter')
-            notifyFilterMenuReset()
+            center.call('notifyFilterMenuReset')
             navigate(`/results?search=${search}`)
         }
     }
@@ -77,9 +77,9 @@ const Header = ({openCart, wallet, notifyFilterUpdate, notifyWalletOpen, notifyF
 
     const goHome = () => {
         localStorage.removeItem('filter')
-        notifyFilterMenuReset()
+        center.call('notifyFilterMenuReset')
         navigate('/')
-        notifyFilterUpdate()
+        center.call('notifyFilterUpdate')
     }
 
    return (
@@ -173,8 +173,8 @@ const Header = ({openCart, wallet, notifyFilterUpdate, notifyWalletOpen, notifyF
                             wallet={wallet} 
                             anchorEl={anchorEl} 
                             open={Boolean(anchorEl)} 
+                            center={center}
                             handleProfileMenuClose={handleProfileMenuClose}
-                            notifyFilterMenuReset={notifyFilterMenuReset}
                             notifyWalletUpdate={notifyWalletUpdate}
                             notifyAlertUpdate={notifyAlertUpdate}
                             />

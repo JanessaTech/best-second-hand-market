@@ -103,7 +103,7 @@ const getFilteredNfts = (nfts, chainId, status) => {
   return nfts.filter((nft) => nft.chainId === chainId).filter((nft) => status ? nft.status === status : true)
 }
 
-const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNFTCartStatusUpdate, notifyNetworkCheckAndBuy}) => {
+const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate, notifyNetworkCheckAndBuy}) => {
   logger.debug('[Cart] rendering...')
   const [nfts, setNfts] = useState([])
   const [chainId, setChainId] = useState(networks()[0].chainId)
@@ -131,7 +131,7 @@ const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNFTCartStatusU
       const nftIds = nfts.filter((nft) => nft.chainId === chainId).map((nft) => nft.id)
       await cartClient.remove(wallet?.user.id, nftIds)
       setNfts(nfts.filter((nft) => nft.chainId !== chainId))
-      notifyNFTCartStatusUpdate(wallet?.user.id, nftIds, false)
+      center.call('notifyNFTCartStatusUpdate', wallet?.user.id, nftIds, false)
     }, notifyAlertUpdate)
   }
 
@@ -142,7 +142,7 @@ const Cart = ({wallet, toggleCart, open, notifyAlertUpdate, notifyNFTCartStatusU
       await cartClient.remove(userId, [nftId])
       const newNfts = nfts.filter((nft) => nft.id !== nftId)
       setNfts(newNfts)
-      notifyNFTCartStatusUpdate(userId, [nftId], false)
+      center.call('notifyNFTCartStatusUpdate', userId, [nftId], false)
     }, notifyAlertUpdate)
   }
 

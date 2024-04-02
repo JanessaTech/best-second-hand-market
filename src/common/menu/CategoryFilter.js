@@ -15,14 +15,14 @@ function getCategoriesFromLocalStorage() {
     return []
   }
 
-const CategoryFilter = ({notifyFilterUpdate, eventsBus}) => {
+const CategoryFilter = ({center}) => {
     logger.debug('[CategoryFilter] rendering...')
     const [checked, setChecked] = useState(getCategoriesFromLocalStorage())
     const [expand, setExpand] = useState(true)
     
     useEffect(() => {
-        logger.debug('[CategoryFilter] add handleCategoryFilterReset to eventsBus')
-        eventsBus.handleCategoryFilterReset = handleCategoryFilterReset
+        logger.debug('[CategoryFilter] add handleCategoryFilterReset to eventsBus in center')
+        center.eventsBus.handleCategoryFilterReset = handleCategoryFilterReset
     }, [])
 
     const handleCategoryFilterReset = () => {
@@ -49,7 +49,7 @@ const CategoryFilter = ({notifyFilterUpdate, eventsBus}) => {
         }
         localStorage.setItem('filter', JSON.stringify(filter))
         logger.info('[NetworkFilter] store filter:', filter)
-        notifyFilterUpdate()
+        center.call('notifyFilterUpdate')
     }
 
     const toggleCategory = () => {

@@ -37,7 +37,7 @@ const BuyOrPutCart = ({handleBuyNow, toggleCart, inCart}) => {
   )
 }
 
-const Overview = ({wallet, nft, eventsBus, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[Overview] rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -46,11 +46,11 @@ const Overview = ({wallet, nft, eventsBus, notifyAlertUpdate, notifyWalletOpen, 
 
   useEffect(() => {
     if (wallet) {
-      logger.debug('[Overview] add handleNFTCartStatus to eventsBus')
-      if (!eventsBus.overview) {
-        eventsBus.overview = new Map([])
+      logger.debug('[Overview] add handleNFTCartStatus to eventsBus in center')
+      if (!center.eventsBus.overview) {
+        center.eventsBus.overview = new Map([])
       }
-      eventsBus.overview.set(nft.id, handleNFTCartStatus)
+      center.eventsBus.overview.set(nft.id, handleNFTCartStatus)
     }
     
   }, [wallet])
@@ -60,9 +60,6 @@ const Overview = ({wallet, nft, eventsBus, notifyAlertUpdate, notifyWalletOpen, 
   }, [nft?.inCart])
 
   const handleNFTCartStatus = (userId, nftIds, inCart)  => {
-    //logger.debug('[Overview] handleNFTCartStatus. userId =', userId, 'nftIds =', nftIds, 'inCart =', inCart)
-    //logger.debug('[Overview] wallet =', wallet) // 
-    //logger.debug('[Overview] nft.id =', nft?.id) //
     if (nftIds.includes(nft?.id)) {
       if (inCart) {
         logger.debug('[Overview] nft ', nft?.id, ' is added from cart')

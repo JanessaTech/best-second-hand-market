@@ -13,7 +13,7 @@ import catchAsync from '../../utils/CatchAsync'
 import {nft as nftClient} from '../../utils/serverClient'
 import config from '../../config'
 
-const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const NFTGallery = ({wallet, menuOpen, toggleMenu, center, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
   logger.debug('[NFTGallery] rendering ...')
 
   const theme = useTheme()
@@ -33,8 +33,8 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
   
   useEffect(() => {
     (async () => {
-      logger.debug('[NFTGallery] add handleFilterUpdate to eventsBus')
-      eventsBus.handleFilterUpdate = handleFilterUpdate
+      logger.debug('[NFTGallery] add handleFilterUpdate to eventsBus in center')
+      center.eventsBus.handleFilterUpdate = handleFilterUpdate
       const toPage = 1
       await fetchData(toPage)
     })()
@@ -113,9 +113,8 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
         <Box sx={{width:1, height: HeaderHeight + FilterBarHeight}}></Box>
         <FilterBar
            menuOpen={menuOpen} 
-           toggleMenu={toggleMenu} 
-           eventsBus={eventsBus}
-           notifyFilterUpdate={notifyFilterUpdate} 
+           toggleMenu={toggleMenu}
+           center={center}
            handleSummary={handleSummary} 
            handleUpdate={handleUpdate}/>
         <Box sx={{mt:1, mb:8, mx: isSmallScreen ? 1: 3}}>
@@ -129,7 +128,7 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, eventsBus, notifyFilterUpdate
               !isLoading ?  
                 nfts.map( (nft) => (
                   <Grid key={nft.id} item xs={6} sm={4} md={3} lg={2} xl={2}>
-                      <Overview wallet={wallet} nft={nft} eventsBus={eventsBus} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen} notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
+                      <Overview wallet={wallet} nft={nft} center={center} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen} notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
                   </Grid>
                 ))
                : Array.from(new Array(20)).map((dummy, index) => (

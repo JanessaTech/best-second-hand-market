@@ -14,6 +14,7 @@ import logger from '../common/Logger'
 import DisconnectWallet from './wallet/DisconnectWallet'
 import {GetCurrentWallet} from '../utils/Wallet'
 import ChangeWalletNetwork from './wallet/ChangeWalletNetwork'
+import notificationCenter from '../common/NotificationCenter'
 
 const GlobalVariables = React.createContext({})
 export {GlobalVariables}
@@ -48,6 +49,7 @@ const MainLayout = (props) => {
     })
     const [showMenu, setShowMenu] = useState(isShowMenu(location))
     const [eventsBus, setEventsBus] = useState({})
+    const [center, setCenter] = useState(notificationCenter)
    
     useEffect(() => {
         if(!isMediumScreen) {
@@ -110,10 +112,14 @@ const MainLayout = (props) => {
         setAlerts(newAlerts)
     }, [])
 
-    const notifyFilterUpdate = () => {
+    const notifyFilterUpdate = async () => {
         logger.debug('[MainLayout] notifyFilterUpdate', eventsBus)
         if (eventsBus?.handleFilterUpdate) {
-            eventsBus.handleFilterUpdate()
+            try {
+                await eventsBus.handleFilterUpdate()
+            } catch (err) {
+                logger.error('Failed to handleFilterUpdate due to ', err)
+            }
         }
     }
 
@@ -124,10 +130,10 @@ const MainLayout = (props) => {
                 await eventsBus?.handleMintCall(mintData)
                 notifyMintDone({success: true})
             } catch (err) {
-                notifyMintDone({success: false, reason: err?.message})
+                const errMsg = err?.info?.error?.message || err?.message
+                notifyMintDone({success: false, reason: errMsg})
                 logger.error('[MainLayout] Failed to call mint due to ', err)
             }
-            
         }
     }
 
@@ -137,22 +143,6 @@ const MainLayout = (props) => {
         if (eventsBus?.handleMintDone) {
             eventsBus?.handleMintDone(props)
         } 
-    }
-
-    const notifyFilterMenuReset = () => {
-        logger.debug('[MainLayout] notifyFilterMenuReset', eventsBus)
-        if (eventsBus?.handleNetworkFilterReset){
-            eventsBus.handleNetworkFilterReset()
-        }
-        if (eventsBus?.handleCategoryFilterReset){
-            eventsBus.handleCategoryFilterReset()
-        }
-        if (eventsBus?.handlePriceFilterReset) {
-            eventsBus.handlePriceFilterReset()
-        }
-        if (eventsBus?.handleSortByReset) {
-            eventsBus.handleSortByReset()
-        }
     }
 
     /**
@@ -168,18 +158,6 @@ const MainLayout = (props) => {
         logger.debug('[MainLayout] notifyNetworkCheckAndBuy', eventsBus)
         if (eventsBus.networkCheckAndBuy) {
             eventsBus.networkCheckAndBuy(chainId, nftIds, prices)
-        }
-    }
-
-    const notifyNFTCartStatusUpdate = (userId, nftIds, isInCart) => {
-        logger.debug('[MainLayout] notifyNFTCartStatusUpdate =', eventsBus)
-        if (eventsBus.handleNFTCartStatus) {
-            eventsBus.handleNFTCartStatus(userId, nftIds, isInCart)
-        }
-        if (eventsBus.overview) {
-            for (const [, fn] of eventsBus.overview ) {
-                fn(userId, nftIds, isInCart)
-            }
         }
     }
 
@@ -242,9 +220,8 @@ const MainLayout = (props) => {
             <Header 
                  openCart={openCart} 
                  wallet={wallet}
-                 notifyFilterUpdate={notifyFilterUpdate}
+                 center={center}
                  notifyWalletOpen={notifyWalletOpen}
-                 notifyFilterMenuReset={notifyFilterMenuReset}
                  notifyWalletUpdate={notifyWalletUpdate}
                  notifyAlertUpdate={notifyAlertUpdate}
                 />
@@ -255,6 +232,7 @@ const MainLayout = (props) => {
                     eventsBus: eventsBus,
                     toggleMenu: toggleMenu,
                     openCart: openCart,
+                    center: center,
                     notifyFilterUpdate: notifyFilterUpdate,
                     notifyAlertUpdate: notifyAlertUpdate,
                     notifyWalletUpdate: notifyWalletUpdate, 
@@ -271,8 +249,7 @@ const MainLayout = (props) => {
                             width={menu.width} 
                             menuOpen={menu.open} 
                             closeMenu={closeMenu}
-                            eventsBus={eventsBus}
-                            notifyFilterUpdate={notifyFilterUpdate} 
+                            center={center}
                             notifyAlertUpdate={notifyAlertUpdate}
                             />
                     }
@@ -283,9 +260,9 @@ const MainLayout = (props) => {
            <Cart 
                 wallet={wallet} 
                 toggleCart={toggleCart} 
-                open={cartOpen} 
+                open={cartOpen}
+                center={center}
                 notifyAlertUpdate={notifyAlertUpdate}
-                notifyNFTCartStatusUpdate={notifyNFTCartStatusUpdate}
                 notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
             {
                     alerts && alerts.length > 0 && 

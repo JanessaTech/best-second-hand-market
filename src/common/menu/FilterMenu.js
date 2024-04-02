@@ -8,7 +8,7 @@ import NetworkFilter from './NetworkFilter'
 import PriceFilter from './PriceFilter'
 import logger from '../Logger'
 
-const FilterMenu = ({width, menuOpen, closeMenu, eventsBus, notifyFilterUpdate, notifyAlertUpdate}) => {
+const FilterMenu = ({width, menuOpen, closeMenu, center, notifyAlertUpdate}) => {
   logger.debug('[FilterMenu] rendering')
   const theme = useTheme()
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
@@ -42,11 +42,11 @@ const FilterMenu = ({width, menuOpen, closeMenu, eventsBus, notifyFilterUpdate, 
               </Tooltip>             
             </Box>
             <Box sx={{mx:3}}>
-                <NetworkFilter notifyFilterUpdate={notifyFilterUpdate} eventsBus={eventsBus}/>
+                <NetworkFilter center={center}/>
                 <Divider />
-                <CategoryFilter notifyFilterUpdate={notifyFilterUpdate} eventsBus={eventsBus}/>
+                <CategoryFilter center={center}/>
                 <Divider />
-                <PriceFilter notifyFilterUpdate={notifyFilterUpdate} notifyAlertUpdate={notifyAlertUpdate} eventsBus={eventsBus}/>
+                <PriceFilter notifyAlertUpdate={notifyAlertUpdate} center={center}/>
             </Box>    
     </Drawer>
   )

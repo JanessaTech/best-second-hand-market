@@ -43,14 +43,14 @@ function getNetworkFromLocalStorage() {
   return filter.chainId
 }
 // to do: codes below should be refactored into CustomSelect.js
-const NetworkFilter = ({notifyFilterUpdate, eventsBus}) => {
+const NetworkFilter = ({center}) => {
     logger.debug('[NetworkFilter] rendering...')
     const theme = useTheme()
     const [network, setNetwork] = useState(getNetworkFromLocalStorage())
 
     useEffect(() => {
-      logger.debug('[NetworkFilter] add handleNetworkFilterReset to eventsBus')
-      eventsBus.handleNetworkFilterReset = handleNetworkFilterReset
+      logger.debug('[NetworkFilter] add handleNetworkFilterReset to eventsBus in center')
+      center.eventsBus.handleNetworkFilterReset = handleNetworkFilterReset
     }, [])
 
     const handleNetworkFilterReset = () => {
@@ -70,7 +70,7 @@ const NetworkFilter = ({notifyFilterUpdate, eventsBus}) => {
       }
       localStorage.setItem('filter', JSON.stringify(filter))
       logger.info('[NetworkFilter] handleNetworkChange. store filter:', filter)
-      notifyFilterUpdate()
+      center.call('notifyFilterUpdate')
     }
 
     console.log('[NetworkFilter] chainId = ', network)

@@ -26,7 +26,7 @@ function getSortByLabel(key) {
     return sortByLabels.get(key)
 }
 
-const FilterBar = ({menuOpen, toggleMenu, eventsBus, notifyFilterUpdate, handleSummary, handleUpdate}) => {
+const FilterBar = ({menuOpen, toggleMenu, center, handleSummary, handleUpdate}) => {
     logger.debug('[FilterBar] rendering ...')
     const theme = useTheme()
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -37,8 +37,8 @@ const FilterBar = ({menuOpen, toggleMenu, eventsBus, notifyFilterUpdate, handleS
     const [sortBy, setSortBy] = useState(getSortByFromLocalStorage())
 
     useEffect(() => {
-        logger.debug('[FilterBar] add handleSortByReset to eventsBus')
-        eventsBus.handleSortByReset = handleSortByReset
+        logger.debug('[FilterBar] add handleSortByReset to eventsBus in center')
+        center.eventsBus.handleSortByReset = handleSortByReset
     }, [])
 
     const handleSortChange = (sort) => {
@@ -52,7 +52,7 @@ const FilterBar = ({menuOpen, toggleMenu, eventsBus, notifyFilterUpdate, handleS
         }
         localStorage.setItem('filter', JSON.stringify(filter))
         logger.info('[FilterBar] store filter:', filter)
-        notifyFilterUpdate()
+        center.call('notifyFilterUpdate')
     }
 
     const handleSortByReset = () => {
