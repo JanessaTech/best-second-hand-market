@@ -28,7 +28,7 @@ const ShowBuyOrCart = ({handleBuy, handleCart, inCart}) => {
     </Box>
   )
 }
-const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWalletOpen}) => {
   logger.debug('[BuyOrCart] rendering...')
   logger.debug('[BuyOrCart] wallet...', wallet)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -77,7 +77,8 @@ const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWall
     if (wallet) {
       logger.debug('[BuyOrCart] call wallet to by the nft by address and token id')
       logger.debug('[BuyOrCart] once the buying is done successffuly, we should call restful to log an order as the history')
-      notifyNetworkCheckAndBuy(nft?.chainId, [nft.id], [nft.price])
+      //notifyNetworkCheckAndBuy(nft?.chainId, [nft.id], [nft.price])
+      await center.asyncCall('notifyNetworkChangeCheck', nft.chainId)
     } else {
       notifyWalletOpen()
     }

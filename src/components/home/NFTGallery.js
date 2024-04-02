@@ -13,7 +13,7 @@ import catchAsync from '../../utils/CatchAsync'
 import {nft as nftClient} from '../../utils/serverClient'
 import config from '../../config'
 
-const NFTGallery = ({wallet, menuOpen, toggleMenu, center, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const NFTGallery = ({wallet, menuOpen, toggleMenu, center, notifyAlertUpdate, notifyWalletOpen}) => {
   logger.debug('[NFTGallery] rendering ...')
 
   const theme = useTheme()
@@ -128,7 +128,7 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, center, notifyAlertUpdate, no
               !isLoading ?  
                 nfts.map( (nft) => (
                   <Grid key={nft.id} item xs={6} sm={4} md={3} lg={2} xl={2}>
-                      <Overview wallet={wallet} nft={nft} center={center} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen} notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
+                      <Overview wallet={wallet} nft={nft} center={center} notifyAlertUpdate={notifyAlertUpdate} notifyWalletOpen={notifyWalletOpen}/>
                   </Grid>
                 ))
                : Array.from(new Array(20)).map((dummy, index) => (

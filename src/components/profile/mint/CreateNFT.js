@@ -84,7 +84,6 @@ export default function CreateNFT({ipfsURL, center, handleNext, notifyAlertUpdat
 
     const handleCreate = async (data) => {
         logger.info('[Mint-CreateNFT] handleCreate data =', data)
-        //await notifyNetworkCheckAndBuy(state.chainId)
         await center.asyncCall('notifyNetworkChangeCheck', state.chainId)
         const mintData = {
           chainId: data?.chainId,

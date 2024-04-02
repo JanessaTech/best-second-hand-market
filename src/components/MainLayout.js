@@ -105,21 +105,12 @@ const MainLayout = (props) => {
         setAlerts(newAlerts)
     }, [])
 
-    /**
-     * We only conduct checking when nftIds and prices are empty or undefined
-     * When nftIds and prices are not empty, we first check if the network is consistent,
-     * it not, we switch the network first when you click the first buy button.
-     * Once the switching is done, we trigger the buying process when you click the buy button again
-     * @param {*} chainId - The chainId the list of nfts belong to
-     * @param {*} nftIds  - The list of nfts we will buy
-     * @param {*} prices - The list of prices of each nft above
-     */
-    const notifyNetworkCheckAndBuy = async (chainId, nftIds, prices) => {
-        logger.debug('[MainLayout] notifyNetworkCheckAndBuy', eventsBus)
-        if (eventsBus.networkCheckAndBuy) {
-            eventsBus.networkCheckAndBuy(chainId, nftIds, prices)
-        }
-    }
+    // const notifyNetworkCheckAndBuy = async (chainId, nftIds, prices) => {
+    //     logger.debug('[MainLayout] notifyNetworkCheckAndBuy', eventsBus)
+    //     if (eventsBus.networkCheckAndBuy) {
+    //         eventsBus.networkCheckAndBuy(chainId, nftIds, prices)
+    //     }
+    // }
 
     const notifyShowMenu = useCallback(() => {
         setShowMenu(true)
@@ -196,8 +187,7 @@ const MainLayout = (props) => {
                     notifyWalletUpdate: notifyWalletUpdate, 
                     notifyWalletOpen: notifyWalletOpen,
                     notifyShowMenu: notifyShowMenu,
-                    notifyHideMenu: notifyHideMenu,
-                    notifyNetworkCheckAndBuy: notifyNetworkCheckAndBuy
+                    notifyHideMenu: notifyHideMenu
                     }}>
                 <Box sx={{display: 'flex'}}>
                     {
@@ -219,8 +209,7 @@ const MainLayout = (props) => {
                 toggleCart={toggleCart} 
                 open={cartOpen}
                 center={center}
-                notifyAlertUpdate={notifyAlertUpdate}
-                notifyNetworkCheckAndBuy={notifyNetworkCheckAndBuy}/>
+                notifyAlertUpdate={notifyAlertUpdate}/>
             {
                     alerts && alerts.length > 0 && 
                         <CustomSnackBar duration={6000} timeout={1000} alerts={alerts} clearAlerts={clearAlerts}/>       

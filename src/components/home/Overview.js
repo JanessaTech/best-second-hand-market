@@ -37,7 +37,7 @@ const BuyOrPutCart = ({handleBuyNow, toggleCart, inCart}) => {
   )
 }
 
-const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen, notifyNetworkCheckAndBuy}) => {
+const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) => {
   logger.debug('[Overview] rendering')
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
@@ -92,12 +92,13 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen, not
     } 
   }
 
-  const handleBuyNow = (e) => {
+  const handleBuyNow = async (e) => {
     e.preventDefault()
     if (!wallet) {
       notifyWalletOpen()
     } else {
-      notifyNetworkCheckAndBuy(nft?.chainId, [nft.id], [nft.price])
+      await center.asyncCall('notifyNetworkChangeCheck', nft.chainId)
+      //notifyNetworkCheckAndBuy(nft?.chainId, [nft.id], [nft.price])
     }
   }
 

@@ -75,7 +75,7 @@ const ProfileMenu = ({wallet, anchorEl, open, center, handleProfileMenuClose, no
           </ListItemIcon>
           <ListItemText>My favorites</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => handleClick("/profile/mint")}>
+        <MenuItem onClick={() => handleClick("/profile/mint2")}>
           <ListItemIcon>
               <CheapIcon name={'mint-nft'} size={25}/>
           </ListItemIcon>
