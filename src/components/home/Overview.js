@@ -130,7 +130,7 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
     <Link component={RouterLink} to={`/nft?id=${nft?.id}`}>
             <Box sx={{border:'1px solid #f5f5f5', 
                       borderRadius:4, 
-                      '&:hover':{border:'2px solid #f5f5f5', cursor:'pointer'}, 
+                      '&:hover':{border:'0 solid #f5f5f5', cursor:'pointer'}, 
                       '&:hover div:last-child':{visibility:'visible'},
                       position: 'relative'}}>
                 <Box sx={{width:1, backgroundColor:'white', borderRadius:4}}>

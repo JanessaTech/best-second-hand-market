@@ -96,7 +96,6 @@ const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWall
     if (wallet) {
       logger.debug('[BuyOrCart] call wallet to by the nft by address and token id')
       logger.debug('[BuyOrCart] once the buying is done successffuly, we should call restful to log an order as the history')
-      //notifyNetworkCheckAndBuy(nft?.chainId, [nft.id], [nft.price])
       await center.asyncCall('notifyNetworkChangeCheck', nft.chainId)
       const buyData = {
         from: nft?.owner?.address,
