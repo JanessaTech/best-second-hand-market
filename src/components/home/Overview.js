@@ -43,6 +43,7 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
   const [inCart, setInCart] = useState(!!nft?.inCart)
+  const [buyData, setBuyData] = useState(undefined)
 
   useEffect(() => {
     if (wallet) {
@@ -56,8 +57,25 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
   }, [wallet])
 
   useEffect(() => {
+    if (buyData) {
+      logger.debug('[Overview] add handleNetworkChangeDone and handleBuyDone to eventsBus in center')
+      center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
+      center.eventsBus.handleBuyDone = handleBuyDone
+    }
+  }, [buyData])
+
+  useEffect(() => {
     setInCart(nft?.inCart)
   }, [nft?.inCart])
+
+  const handleNetworkChangeDone = () => {
+    logger.debug('[Overview] handleNetworkChangeDone')
+    logger.debug('[Overview] buyData =', buyData)
+  }
+
+  const handleBuyDone = () => {
+    logger.debug('[Overview] handleBuyDone')
+  }
 
   const handleNFTCartStatus = (userId, nftIds, inCart)  => {
     if (nftIds.includes(nft?.id)) {
@@ -98,7 +116,13 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
       notifyWalletOpen()
     } else {
       await center.asyncCall('notifyNetworkChangeCheck', nft.chainId)
-      //notifyNetworkCheckAndBuy(nft?.chainId, [nft.id], [nft.price])
+      const buyData = {
+        from: nft?.owner?.address,
+        to: wallet?.address,
+        ids: [nft.tokenId],
+        totalPrice: nft.price
+      }
+      setBuyData(buyData)
     }
   }
 
@@ -112,7 +136,7 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
                 <Box sx={{width:1, backgroundColor:'white', borderRadius:4}}>
                     <Box
                       component='img'
-                      sx={{width: 1, borderRadius:'16px 16px 0 0'}}
+                      sx={{width: 1, borderRadius:'16px 16px 0 0',height:150}}
                       alt={nft?.title}
                       src={nft?.url}
                     />

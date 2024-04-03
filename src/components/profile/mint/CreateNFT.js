@@ -24,8 +24,11 @@ export default function CreateNFT({ipfsURL, center, handleNext, notifyAlertUpdat
     const [mintData, setMintData] = useState(undefined)
 
     useEffect(() => {
-      center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
-      center.eventsBus.handleMintDone = handleMintDone
+      if (mintData) {
+        logger.debug('[Mint-CreateNFT] add handleNetworkChangeDone and handleMintDone to eventsBus in center')
+        center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
+        center.eventsBus.handleMintDone = handleMintDone
+      }
     }, [mintData])
 
     useEffect(() => {
@@ -64,7 +67,6 @@ export default function CreateNFT({ipfsURL, center, handleNext, notifyAlertUpdat
       logger.debug('mintData:', mintData)
       setState({...state, isloading: true})
       center.call('notityMintCall', mintData)
-      //notityMintCall(mintData)
     }
 
     const handleAddressChange = (value) => {

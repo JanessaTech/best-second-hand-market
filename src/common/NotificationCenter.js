@@ -82,14 +82,6 @@ class NotificationCenter {
                 this.eventsBus.handleNetworkChangeCheck(chainId, nftIds, prices)
             }
         })
-
-        /*
-        const notifyNetworkCheckAndBuy = async (chainId, nftIds, prices) => {
-            logger.debug('[MainLayout] notifyNetworkCheckAndBuy', eventsBus)
-            if (eventsBus.networkCheckAndBuy) {
-                eventsBus.networkCheckAndBuy(chainId, nftIds, prices)
-            }
-        }*/
     }
 
     call(name, ...params) {

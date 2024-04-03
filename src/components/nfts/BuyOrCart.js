@@ -34,6 +34,7 @@ const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWall
   const [searchParams, setSearchParams] = useSearchParams()
   const id = Number(searchParams.get('id'))
   const [inCart, setInCart] = useState(!!nft?.inCart)
+  const [buyData, setBuyData] = useState(undefined)
 
   useEffect(() => {
     logger.debug('[BuyOrCart] add handleNFTCartStatus to eventsBus in center')
@@ -43,6 +44,24 @@ const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWall
   useEffect(() => {
     setInCart(nft?.inCart)
   }, [nft?.inCart])
+
+  useEffect(() => {
+    if (buyData) {
+      logger.debug('[BuyOrCart] add handleNetworkChangeDone and handleBuyDone to eventsBus in center')
+      center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
+      center.eventsBus.handleBuyDone = handleBuyDone
+    }
+  }, [buyData])
+
+  const handleNetworkChangeDone = () => {
+    logger.debug('[BuyOrCart] handleNetworkChangeDone')
+    logger.debug('[BuyOrCart] buyData =', buyData)
+  }
+
+  const handleBuyDone = () => {
+    logger.debug('[BuyOrCart] handleBuyDone')
+
+  }
 
   const handleNFTCartStatus = (userId, nftIds, inCart)  => {
     logger.debug('[BuyOrCart] handleNFTCartStatus. userId =', userId, 'nftIds =', nftIds, 'inCart =', inCart)
@@ -79,6 +98,13 @@ const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWall
       logger.debug('[BuyOrCart] once the buying is done successffuly, we should call restful to log an order as the history')
       //notifyNetworkCheckAndBuy(nft?.chainId, [nft.id], [nft.price])
       await center.asyncCall('notifyNetworkChangeCheck', nft.chainId)
+      const buyData = {
+        from: nft?.owner?.address,
+        to: wallet?.address,
+        ids: [nft.tokenId],
+        totalPrice: nft.price
+      }
+      setBuyData(buyData)
     } else {
       notifyWalletOpen()
     }

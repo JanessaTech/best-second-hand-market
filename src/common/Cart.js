@@ -107,6 +107,7 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
   logger.debug('[Cart] rendering...')
   const [nfts, setNfts] = useState([])
   const [chainId, setChainId] = useState(networks()[0].chainId)
+  const [buyData, setBuyData] = useState(undefined)
   
   useEffect(() => {
     (async () => {
@@ -119,6 +120,24 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
       }, notifyAlertUpdate)
     })()
   }, [wallet, open])
+
+  useEffect(() => {
+    if (buyData) {
+      logger.debug('[Cart] add handleNetworkChangeDone and handleBuyDone to eventsBus in center')
+      center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
+      center.eventsBus.handleBuyDone = handleBuyDone
+    }
+  }, [buyData])
+
+  const handleNetworkChangeDone = () => {
+    logger.debug('[Cart] handleNetworkChangeDone')
+    logger.debug('[Cart] buyData =', buyData)
+  }
+
+  const handleBuyDone = () => {
+    logger.debug('[Cart] handleBuyDone')
+
+  }
 
   const closeCart = () => {
     toggleCart()
@@ -160,6 +179,13 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
   const handleBuy = async () => {
     const filteredNFTs = getFilteredNfts(nfts, chainId, config.NFTSTATUS.On.description)
     await center.asyncCall('notifyNetworkChangeCheck', chainId)
+    const buyData = {
+      froms: '',
+      to: wallet?.address,
+      idss: '',
+      totalPrice: 11
+    }
+    setBuyData(buyData)
     //notifyNetworkCheckAndBuy(chainId, filteredNFTs.map(nft => nft.id), filteredNFTs.map(nft => nft.price))
   }
 

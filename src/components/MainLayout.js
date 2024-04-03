@@ -48,7 +48,6 @@ const MainLayout = (props) => {
         width: isMediumScreen ? 0 : DrawerWidth
     })
     const [showMenu, setShowMenu] = useState(isShowMenu(location))
-    const [eventsBus, setEventsBus] = useState({})
     const [center, setCenter] = useState(notificationCenter)
    
     useEffect(() => {
@@ -104,13 +103,6 @@ const MainLayout = (props) => {
         }
         setAlerts(newAlerts)
     }, [])
-
-    // const notifyNetworkCheckAndBuy = async (chainId, nftIds, prices) => {
-    //     logger.debug('[MainLayout] notifyNetworkCheckAndBuy', eventsBus)
-    //     if (eventsBus.networkCheckAndBuy) {
-    //         eventsBus.networkCheckAndBuy(chainId, nftIds, prices)
-    //     }
-    // }
 
     const notifyShowMenu = useCallback(() => {
         setShowMenu(true)
