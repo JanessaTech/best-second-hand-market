@@ -176,17 +176,42 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
     setChainId(chainId)
   }
 
+  const calculateBuyData = (nfts) => {
+    const nftMap = new Map()
+    for (const nft of nfts) {
+        if (!nftMap.get(nft.owner.address)) {
+            nftMap.set(nft.owner.address, [])
+        }
+        nftMap.get(nft.owner.address).push({price: nft.price, tokenId: nft.tokenId})
+    }
+    const froms = []
+    let idss = []
+    let totalPrice = 0
+    for (const [from, value] of nftMap) {
+        froms.push(from)
+        value.sort((a, b) => {
+            return a.tokenId - b.tokenId
+        })
+        const ids = value.map( (v) => v.tokenId)
+        idss.push(ids)
+        totalPrice += value.reduce((a, b) => a + b.price, 0)
+    }
+
+    const buyData = {
+        froms : froms,
+        to: wallet?.address,
+        idss: idss,
+        totalPrice: totalPrice
+    }
+
+    return buyData
+  }
+
   const handleBuy = async () => {
     const filteredNFTs = getFilteredNfts(nfts, chainId, config.NFTSTATUS.On.description)
     await center.asyncCall('notifyNetworkChangeCheck', chainId)
-    const buyData = {
-      froms: '',
-      to: wallet?.address,
-      idss: '',
-      totalPrice: 11
-    }
+    const buyData = calculateBuyData(filteredNFTs)
     setBuyData(buyData)
-    //notifyNetworkCheckAndBuy(chainId, filteredNFTs.map(nft => nft.id), filteredNFTs.map(nft => nft.price))
   }
 
   logger.debug('[Cart] chainId=', chainId)

@@ -76,10 +76,31 @@ class NotificationCenter {
             } 
         })
 
-        this.#notifyMap.set('notifyNetworkChangeCheck', async (chainId, nftIds, prices) => {
+        this.#notifyMap.set('notityBuyCall', async (buyData) => {
+            logger.debug('[NotificationCenter] notityBuyCall', this.eventsBus)
+            if (this.eventsBus?.handleBuyCall) {
+                try {
+                    await this.eventsBus?.handleBuyCall(buyData)
+                    this.call('notifyBuyDone', {success: true})
+                } catch (err) {
+                    const errMsg = err?.info?.error?.message || err?.message
+                    this.call('notifyMintDone', {success: false, reason: errMsg})
+                    logger.error('[NotificationCenter] Failed to call buy due to ', err)
+                }
+            }
+        })
+
+        this.#notifyMap.set('notifyBuyDone', (props) => {
+            logger.debug('[NotificationCenter] notifyBuyDone', this.eventsBus)
+            if (this.eventsBus?.handleBuyDone) {
+                this.eventsBus?.handleBuyDone(props)
+            } 
+        })
+
+        this.#notifyMap.set('notifyNetworkChangeCheck', async (chainId) => {
             logger.debug('[NotificationCenter] notifyNetworkChangeCheck', this.eventsBus)
             if (this.eventsBus.handleNetworkChangeCheck) {
-                this.eventsBus.handleNetworkChangeCheck(chainId, nftIds, prices)
+                this.eventsBus.handleNetworkChangeCheck(chainId)
             }
         })
     }

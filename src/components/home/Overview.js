@@ -44,6 +44,7 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
 
   const [inCart, setInCart] = useState(!!nft?.inCart)
   const [buyData, setBuyData] = useState(undefined)
+  const [showBuyOrPutCart, setBuyOrPutCart] = useState(true)
 
   useEffect(() => {
     if (wallet) {
@@ -71,10 +72,18 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
   const handleNetworkChangeDone = () => {
     logger.debug('[Overview] handleNetworkChangeDone')
     logger.debug('[Overview] buyData =', buyData)
+    center.call('notityBuyCall', buyData)
   }
 
-  const handleBuyDone = () => {
+  const handleBuyDone = ({success, reason}) => {
     logger.debug('[Overview] handleBuyDone')
+    logger.debug('[Overview] success =', success)
+    if (success) {
+      notifyAlertUpdate([{severity: 'success', message: 'The NFT is bought successfully'}])
+      setBuyOrPutCart(false)
+    } else {
+      notifyAlertUpdate([{severity: 'error', message: reason}])
+    }
   }
 
   const handleNFTCartStatus = (userId, nftIds, inCart)  => {
@@ -117,6 +126,8 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
     } else {
       await center.asyncCall('notifyNetworkChangeCheck', nft.chainId)
       const buyData = {
+        chainId: nft?.chainId,
+        address: nft?.address,
         from: nft?.owner?.address,
         to: wallet?.address,
         ids: [nft.tokenId],
@@ -157,7 +168,7 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
                 </Box>
                 {
                 (!wallet || (nft?.status === config.NFTSTATUS.On.description 
-                  && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id)))) && 
+                  && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id)) && showBuyOrPutCart)) && 
                   <BuyOrPutCart handleBuyNow={handleBuyNow} toggleCart={toggleCart} inCart={inCart}/>
                 }
             </Box> 

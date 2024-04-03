@@ -39,9 +39,10 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
     
     useEffect(() => {
         if (walletProvider) {
-            logger.debug('[ConnectWallet] add handleNetworkChangeCheck and handleMintCall to eventsBus in center')
+            logger.debug('[ConnectWallet] add handleNetworkChangeCheck, handleMintCall, handleBuyCall to eventsBus in center')
             center.eventsBus.handleNetworkChangeCheck = handleNetworkChangeCheck
             center.eventsBus.handleMintCall = handleMintCall
+            center.eventsBus.handleBuyCall = handleBuyCall
         }
     }, [walletProvider])
 
@@ -60,7 +61,7 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
         logger.debug(`[ConnectWallet] handleBuy. chainId=${chainId}, nftIds=${nftIds}, prices=${prices}`)
     }
 
-    const handleNetworkChangeCheck = async (chainId, nftIds, prices) => {
+    const handleNetworkChangeCheck = async (chainId) => {
         if (walletProvider) {
             try {
                 const _chainId = await walletProvider.send('eth_chainId')
@@ -94,6 +95,25 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             logger.info('Tx after mint:', tx)
         } else {
             logger.error('[ConnectWallet] walletProvider is not found when we are about to handle mint call')
+            throw new Error('walletProvider is not found')
+        }
+    }
+
+    const handleBuyCall = async (buyData) => {
+        logger.debug('[ConnectWallet] handleBuyCall. buyData =', buyData)
+        const {chainId, address, from, ids, totalPrice} = buyData
+        logger.debug('[ConnectWallet] check if totalPrice is more than savings. totalPrice =', totalPrice)
+        if (walletProvider) {
+            const signer = await walletProvider.getSigner()
+            const to = await signer.getAddress()
+            logger.debug("MetaMask is connected at ", ethers.getAddress(to))
+            const abi = getABI(chainId, address)
+            const contract = new ethers.Contract(address, abi, signer)
+            const tx = await contract.buy(from, to, ids)
+            await tx.wait() //waiting for receipt 
+            logger.info('Tx after buy:', tx)
+        } else {
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle buy call')
             throw new Error('walletProvider is not found')
         }
     }
