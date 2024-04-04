@@ -28,7 +28,7 @@ const ShowBuyOrCart = ({handleBuy, handleCart, inCart}) => {
     </Box>
   )
 }
-const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWalletOpen}) => {
+const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, notifyWalletOpen}) => {
   logger.debug('[BuyOrCart] rendering...')
   logger.debug('[BuyOrCart] wallet...', wallet)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -56,11 +56,18 @@ const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWall
   const handleNetworkChangeDone = () => {
     logger.debug('[BuyOrCart] handleNetworkChangeDone')
     logger.debug('[BuyOrCart] buyData =', buyData)
+    center.call('notityBuyCall', buyData)
   }
 
-  const handleBuyDone = () => {
+  const handleBuyDone = ({success, reason}) => {
     logger.debug('[BuyOrCart] handleBuyDone')
-
+    logger.debug('[BuyOrCart] success =', success)
+    if (success) {
+      refresh()
+      notifyAlertUpdate([{severity: 'success', message: 'The NFT is bought successfully'}])
+    } else {
+      notifyAlertUpdate([{severity: 'error', message: reason}])
+    }
   }
 
   const handleNFTCartStatus = (userId, nftIds, inCart)  => {
@@ -98,6 +105,8 @@ const BuyOrCart = ({nft, wallet, openCart, center, notifyAlertUpdate, notifyWall
       logger.debug('[BuyOrCart] once the buying is done successffuly, we should call restful to log an order as the history')
       await center.asyncCall('notifyNetworkChangeCheck', nft.chainId)
       const buyData = {
+        chainId: nft?.chainId,
+        address: nft?.address,
         from: nft?.owner?.address,
         to: wallet?.address,
         ids: [nft.tokenId],

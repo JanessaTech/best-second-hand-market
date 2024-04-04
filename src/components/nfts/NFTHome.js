@@ -30,6 +30,16 @@ const NFTHome = ({wallet, openCart, center, notifyAlertUpdate, notifyWalletOpen}
       })()
     }, [wallet])
 
+    const refresh = async () => {
+      await catchAsync(async () => {
+        const id = searchParams.get('id')
+        logger.debug('[NFTHome] refresh to call restful api to get nft details by id = ', id)
+        const NFT = await nftClient.findNFTById(id, wallet?.user?.id)
+        logger.debug('[NFTHome] NFT = ', NFT)
+        setNft(NFT)
+      }, notifyAlertUpdate)
+    }
+
   return (
     <Box sx={{mb: 8, mx: isSmallScreen ? 0 : 2, width:1}}>
         <Box sx={{width:1, height: HeaderHeight}}></Box>
@@ -47,6 +57,7 @@ const NFTHome = ({wallet, openCart, center, notifyAlertUpdate, notifyWalletOpen}
                       wallet={wallet} 
                       openCart={openCart}
                       center={center}
+                      refresh={refresh}
                       notifyAlertUpdate={notifyAlertUpdate}
                       notifyWalletOpen={notifyWalletOpen}/>
                 </Grid>

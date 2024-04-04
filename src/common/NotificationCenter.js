@@ -84,7 +84,7 @@ class NotificationCenter {
                     this.call('notifyBuyDone', {success: true})
                 } catch (err) {
                     const errMsg = err?.info?.error?.message || err?.message
-                    this.call('notifyMintDone', {success: false, reason: errMsg})
+                    this.call('notifyBuyDone', {success: false, reason: errMsg})
                     logger.error('[NotificationCenter] Failed to call buy due to ', err)
                 }
             }
