@@ -1,10 +1,11 @@
 import { Box, Button, Dialog, IconButton, Tooltip, Typography } from '@mui/material'
 import React, { memo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { CheapIcon } from '../../utils/Svgs'
 import logger from '../../common/Logger'
 
 const DisconnectWallet = ({onClose, open, notifyWalletUpdate}) => {
-
+    const navigate = useNavigate()
     const handleClose = () => {
         /**
          * There are 4 places wen remove login from localStorage
@@ -16,6 +17,7 @@ const DisconnectWallet = ({onClose, open, notifyWalletUpdate}) => {
         localStorage.removeItem('login')
         logger.debug('[DisconnectWallet] deleted login in localStorage')
         notifyWalletUpdate(undefined)
+        navigate('/')
         onClose()
     }
 

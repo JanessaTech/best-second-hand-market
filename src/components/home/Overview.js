@@ -45,6 +45,7 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
   const [inCart, setInCart] = useState(!!nft?.inCart)
   const [buyData, setBuyData] = useState(undefined)
   const [showBuyOrPutCart, setBuyOrPutCart] = useState(true)
+  const [owner, setOwner] = useState(nft?.owner?.name)
 
   useEffect(() => {
     if (wallet) {
@@ -80,7 +81,8 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
     logger.debug('[Overview] success =', success)
     if (success) {
       notifyAlertUpdate([{severity: 'success', message: 'The NFT is bought successfully'}])
-      setBuyOrPutCart(false)
+      setBuyOrPutCart(false)  // disable the buttons for buy and cart
+      setOwner(wallet?.user?.name) // set the name of current logined user as the owner of the nft
     } else {
       notifyAlertUpdate([{severity: 'error', message: reason}])
     }
@@ -137,6 +139,11 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
     }
   }
 
+  // const flag = !wallet || (nft?.status === config.NFTSTATUS.On.description 
+  //   && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id)) && showBuyOrPutCart)
+
+  // logger.debug('flag = ', flag, ' for nft ', nft.id)
+
   return (
     <Link component={RouterLink} to={`/nft?id=${nft?.id}`}>
             <Box sx={{border:'1px solid #f5f5f5', 
@@ -153,7 +160,7 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
                     />
                     <Box sx={{mx: isSmallScreen ? 1 : 2, mb:1, }}>
                         <Typography variant='h6'>{nft?.title}</Typography>
-                        <Typography color='text.secondary' variant='subtitle2'>{nft?.owner?.name}</Typography>
+                        <Typography color='text.secondary' variant='subtitle2'>{owner}</Typography>
                         <Box sx={{display: 'flex', mt:1}}>
                           <Tooltip title={`${capitalize(nft?.chainName)}`}>
                             <Box component='img' sx={{width:15, mr:1}} src={`/imgs/networks/${nft?.chainName}.svg`}/>

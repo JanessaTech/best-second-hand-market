@@ -61,7 +61,7 @@ const NFTGallery = ({wallet, menuOpen, toggleMenu, center, notifyAlertUpdate, no
       const status = config.NFTSTATUS.On.description
       const title = search
       const userId = wallet?.user?.id
-      const res = await nftClient.queryNFTs({userId, toPage, limit: pagination.pageSize, sortBy, chainId, category, prices, title, status})
+      const res = await nftClient.queryNFTs({userId, page:toPage, limit: pagination.pageSize, sortBy, chainId, category, prices, title, status})
       const {nfts, totalPages, totalResults} = res
       setBufferedNfts(nfts)
       setNfts(nfts.slice(0, BatchSizeInGallery))
