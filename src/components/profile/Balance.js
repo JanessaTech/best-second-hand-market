@@ -11,16 +11,18 @@ import {getChainName, networks, getChainCurrency} from '../../utils/Chain'
 
 export default function Balance() {
   logger.debug('[Balance] rendering...')
-  const {wallet, notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
+  const {wallet, center, notifyAlertUpdate, notifyHideMenu} = React.useContext(GlobalVariables)
   const {register, handleSubmit, formState: { errors }, reset } = useForm({resolver: yupResolver(DepoistSchema)})
   const [state, setState] = useState({
-    balanceInChain: 0,
+    balanceInChain: -1,
     chainSymbol: '',
     balanceInCheap: 0,
     cheapSymbol: SYSSYMBOL,
     deposit: 0,
     chainId: ''
   })
+
+  const [chainData, setChainData] = useState(undefined)
 
   useEffect(() => {
     if (wallet?.user) {
@@ -33,9 +35,19 @@ export default function Balance() {
   }, [wallet])
 
   useEffect(() => {
+    if (chainData) {
+      logger.debug('[Balance] add handleNetworkChangeDone to eventsBus in center')
+      center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
+    }
+  }, [chainData])
+
+  useEffect(() => {
     let alerts = []
     if (errors?.chainId) {
       alerts.push({severity: 'error', message: errors?.chainId?.message})
+    }
+    if (errors?.balanceInChain) {
+      alerts.push({severity: 'error', message: errors?.balanceInChain?.message})
     }
     if (errors?.deposit) {
       alerts.push({severity: 'error', message: errors?.deposit?.message})
@@ -45,6 +57,17 @@ export default function Balance() {
       notifyAlertUpdate(alerts)
     }  
   }, [errors])
+
+  const handleNetworkChangeDone = (props) => {
+    logger.debug('[Balance] handleNetworkChangeDone. props =', props)
+    if (props && props?.balance) {
+      logger.debug('[Balance]. chainData after handleNetworkChangeDone = ', chainData)
+      reset()
+      setState({...state, balanceInChain: Number(props?.balance), ...chainData})
+    } else {
+      notifyAlertUpdate([{severity: 'error', message: 'Failed to get balance from wallet. Please refesh page and try again'}])
+    }
+  }
 
   const handleDeposit = (data) => {
     logger.debug('[Balance] handleDeposit data=', data)
@@ -60,12 +83,21 @@ export default function Balance() {
     reset()
   }
 
-  const handleChainChange = (chainId) => {
+  const handleChainChange = async (chainId) => {
     logger.debug('[Balance] handleChainChange. chainId=', chainId)
     logger.debug('[Balance] call wallet to get balance by chainId = ', chainId)
+    await center.asyncCall('notifyNetworkChangeCheck', chainId)
     const balanceInChain = 100
     const chainSymbol = getChainCurrency(chainId)
-    setState({...state, chainSymbol: chainSymbol, chainId: chainId, balanceInChain: balanceInChain})
+    const chainData = {
+      chainId: chainId,
+      chainSymbol: chainSymbol
+    }
+    logger.debug('[Balance] set chainData =', chainData)
+    setChainData(chainData)
+    // reset()
+    // logger.debug('reset()')
+    // setState({...state, chainSymbol: chainSymbol, chainId: chainId, balanceInChain: balanceInChain})
   }
 
   return (
@@ -104,6 +136,8 @@ export default function Balance() {
                 name='balanceInChain'
                 label={`Balance in ${state.chainId ? getChainName(state.chainId) : ''}`}
                 value={state.balanceInChain}
+                {...register('balanceInChain')}
+                error={errors?.balanceInChain? true: false}
                 variant='outlined'
                 size="small"
                 InputProps={{

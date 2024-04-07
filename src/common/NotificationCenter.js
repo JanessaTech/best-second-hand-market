@@ -48,10 +48,10 @@ class NotificationCenter {
             }
         })
 
-        this.#notifyMap.set('notifyWalletNetworkChangeDone', () => {
+        this.#notifyMap.set('notifyWalletNetworkChangeDone', (props) => {
             logger.debug('[NotificationCenter] notifyWalletNetworkChangeDone', this.eventsBus)
             if (this.eventsBus?.handleNetworkChangeDone) {
-                this.eventsBus.handleNetworkChangeDone()
+                this.eventsBus.handleNetworkChangeDone(props)
             }
         })
 

@@ -57,10 +57,6 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
         onClose()
     }
 
-    const handleBuy = (chainId, nftIds, prices) => {
-        logger.debug(`[ConnectWallet] handleBuy. chainId=${chainId}, nftIds=${nftIds}, prices=${prices}`)
-    }
-
     const handleNetworkChangeCheck = async (chainId) => {
         if (walletProvider) {
             try {
@@ -70,10 +66,12 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
                 if (chainId !== currentChainId) {
                     notifyWalletNetworkChange(chainId)
                 } else {
-                    center.call('notifyWalletNetworkChangeDone')
-                    // if (nftIds && prices && nftIds.length > 0 && prices.length > 0) {
-                    //     handleBuy(chainId, nftIds, prices)
-                    // }
+                    const signer = await walletProvider.getSigner()
+                    const address = await signer.getAddress()
+                    const balance = await walletProvider.getBalance(address)
+                    const balanceInEth = ethers.formatEther(balance)
+                    logger.debug('[ConnectWallet] Get balance for address ', address, ': ', balanceInEth)
+                    center.call('notifyWalletNetworkChangeDone', {balance: balanceInEth})
                 }
             } catch(e) {
                 logger.debug('[ConnectWallet] failed to send eth_chainId due to', e)
