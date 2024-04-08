@@ -7,7 +7,7 @@ import logger from '../../common/Logger'
 import WalletItem from './WalletItem'
 import MetaMaskWallet from './MetaMaskWallet'
 import {GetCurrentWalletProvider} from '../../utils/Wallet'
-import { getABI } from '../../utils/Chain'
+import { getABI, getERC20Contract } from '../../utils/Chain'
 import { ethers } from 'ethers'
 
 const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUpdate, notifyWalletUpdate, notifyWalletAddressChange, notifyWalletNetworkChange}) => {
@@ -43,6 +43,7 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             center.eventsBus.handleNetworkChangeCheck = handleNetworkChangeCheck
             center.eventsBus.handleMintCall = handleMintCall
             center.eventsBus.handleBuyCall = handleBuyCall
+            center.eventsBus.handle_erc20_balanceOf = handle_erc20_balanceOf
         }
     }, [walletProvider])
 
@@ -110,6 +111,27 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             const tx = await contract.buy(from, to, ids)
             await tx.wait() //waiting for receipt 
             logger.info('Tx after buy:', tx)
+        } else {
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle buy call')
+            throw new Error('walletProvider is not found')
+        }
+    }
+
+    const handle_erc20_balanceOf = async () => {
+        if (walletProvider) {
+            logger.debug('[ConnectWallet] handle_erc20_balanceOf')
+            const signer = await walletProvider.getSigner()
+            const _chainId = await walletProvider.send('eth_chainId')
+            const currentChainId = parseInt(_chainId.substring(2), 16)
+            logger.debug('[ConnectWallet] handle_erc20_balanceOf. currentChainId =', currentChainId)
+            const me = ethers.getAddress(await signer.getAddress())
+            const erc20Contract = getERC20Contract(currentChainId)
+            const address = erc20Contract.address
+            const abi  = erc20Contract.abi
+            const erc20 = new ethers.Contract(address, abi, signer)
+            logger.debug('[ConnectWallet] get balance of me =',me)
+            const balance  = await erc20.balanceOf(me)
+            return balance
         } else {
             logger.error('[ConnectWallet] walletProvider is not found when we are about to handle buy call')
             throw new Error('walletProvider is not found')

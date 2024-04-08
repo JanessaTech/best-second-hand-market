@@ -1,5 +1,4 @@
-// This file is shared by both frontend and backend
-
+// This file will be shared by frontend
 const config = {}
 config.limits = {
   cartlimit: 20
@@ -33,6 +32,7 @@ config.chains = {
       chainName: 'hardhat',
       currency: 'HardHatETH',
       rpcUrl:'http://127.0.0.1:8545/',
+      exchange: 100,
       contracts: [  // configure at least one
           {
             address: '0x5FbDB2315678afecb367f032d93F642f64180aa3', 
@@ -56,7 +56,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: '1155'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', 
@@ -80,7 +80,18 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: '1155'
+            tokenStandard: 'ERC1155'
+          },
+          {
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            abi: [
+                'function mint(address to, uint256 amount) public',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public returns(bool)',
+                'function balanceOf(address account) public view returns (uint256)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
           }
         ]
       }
@@ -92,6 +103,7 @@ config.chains = {
         chainName: 'sepolia',
         currency: 'SepoliaETH',
         rpcUrl:'https://rpc.sepolia.org',
+        exchange: 200,
         contracts:[
           {
             address: '0x5FbDB2315678afecb367f032d93F642f64180aa3', 
@@ -115,7 +127,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: 'aaaa'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', 
@@ -139,7 +151,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: 'bbbb'
+            tokenStandard: 'ERC1155'
           },
         ]
       },
@@ -149,16 +161,17 @@ config.chains = {
         chainName: 'mumbai',
         currency: 'MATIC',
         rpcUrl:'https://rpc-mumbai.maticvigil.com',
+        exchange: 300,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf4', 
             abi: [],
-            tokenStandard: 'cccc'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf5', 
             abi: [],
-            tokenStandard: 'dddd'
+            tokenStandard: 'ERC1155'
           }
         ]
       },
@@ -168,16 +181,17 @@ config.chains = {
         chainName: 'fuji',
         currency: 'AVAX',
         rpcUrl:'https://api.avax-test.network/ext/bc/C/rpc',
+        exchange: 400,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf6', 
             abi: [],
-            tokenStandard: 'eeee'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf7', 
             abi: [],
-            tokenStandard: 'ffff'
+            tokenStandard: 'ERC1155'
           }
         ]
       },
@@ -187,16 +201,17 @@ config.chains = {
         chainName: 'chiado',
         currency: 'XDAI',
         rpcUrl:'https://rpc.chiadochain.net',
+        exchange: 500,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf8', 
             abi: [],
-            tokenStandard: 'gggg'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf9', 
             abi: [],
-            tokenStandard: 'hhhh'
+            tokenStandard: 'ERC1155'
           }
         ]
       }
@@ -208,6 +223,7 @@ config.chains = {
         chainName: 'ethereum',
         currency: 'ETH',
         rpcUrl:'https://mainnet.infura.io/v3/',
+        exchange: 600,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb18', 
@@ -231,7 +247,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: 'iiii'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb28', 
@@ -255,7 +271,7 @@ config.chains = {
                 'event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss)',
                 'event doSafeBuyBatch_tracer(address indexed to, address[] froms,uint[][] idss)'
             ],
-            tokenStandard: 'jjjj'
+            tokenStandard: 'ERC1155'
           },
         ]
       },
@@ -265,16 +281,17 @@ config.chains = {
         chainName: 'polygon',
         currency: 'MATIC',
         rpcUrl:'https://polygon-rpc.com',
+        exchange: 700,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb38', 
             abi: [],
-            tokenStandard: 'kkkk'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb48', 
             abi: [],
-            tokenStandard: '1llll'
+            tokenStandard: 'ERC1155'
           },
         ]
       },
@@ -284,16 +301,17 @@ config.chains = {
         chainName: 'avalanche',
         currency: 'AVAX',
         rpcUrl:'https://avalanche-mainnet.infura.io',
+        exchange: 200,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb58', 
             abi: [],
-            tokenStandard: 'mmmm'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb68',
             abi: [], 
-            tokenStandard: 'nnnn'
+            tokenStandard: 'ERC1155'
           },
         ]
       },
@@ -303,16 +321,17 @@ config.chains = {
         chainName: 'gnosis',
         currency: 'XDAI',
         rpcUrl:'https://rpc.gnosischain.com',
+        exchange: 800,
         contracts:[
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb78', 
             abi: [],
-            tokenStandard: 'oooo'
+            tokenStandard: 'ERC1155'
           },
           {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bb88', 
             abi: [],
-            tokenStandard: 'pppp'
+            tokenStandard: 'ERC1155'
           },
         ]
       }

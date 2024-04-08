@@ -18,19 +18,6 @@ export function networks() {
     return nets
 }
 
-export function getDefaultChain() {
-  const nks = networks()
-  logger.debug('[Utils - Chain] getDefaultChain. nks=', nks)
-  var env = getEnv()
-  if (!nks || nks.length === 0) {
-    logger.error('[Utils - Chain] you should set at least one chain in chains in global.js under ', env)
-    return 1
-  } else {
-    logger.debug('[Utils - Chain] default chain =', nks[0].chainId)
-    return nks[0].chainId
-  }
-}
-
 export function getChainName(chainId) {
   const nks = networks()
   const chain = nks.find( n => n.chainId === chainId)
@@ -79,26 +66,19 @@ export function getABI(chainId, address) {
   }
 }
 
-export function getStandard(chainId, address) {
+export function getERC20Contract(chainId) {
   const nks = networks()
   var chain = nks.find( n => n.chainId === chainId)
   if (!chain) {
-    logger.error('[Utils - Chain] getStandard. cannot find chain by chainId=', chainId)
-    chain = nks[0]
-    var contract = chain.contracts.find((contract) => contract.address === address)
-    if (!contract) {
-      logger.error('[Utils - Chain] getStandard. cannot find standard by chainId=', chainId , ' and address=', address)
-      return chain.contracts[0].tokenStandard
-    } else {
-      return contract.tokenStandard
-    }
+    throw new Error(messageHelper.getMessage('chain_not_found', chainId))
   } else {
-    var contract = chain.contracts.find(addr => addr === address)
+    const contract = chain.contracts.find((contract) => contract.tokenStandard === 'ERC20')
     if (!contract) {
-      logger.error('[Utils - Chain] getStandard. cannot find standard by chainId=', chainId , ' and address=', address)
-      return chain.contracts[0].tokenStandard
-    } else {
-      return contract.tokenStandard
+      throw new Error(messageHelper.getMessage('contract_erc20_not_found', chainId))
     }
+    if (!contract?.address || !contract?.abi) {
+      throw new Error(messageHelper.getMessage('contract_erc20_invalid_config', chainId))
+    }
+    return contract
   }
 }

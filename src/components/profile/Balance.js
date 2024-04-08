@@ -25,11 +25,6 @@ export default function Balance() {
   const [chainData, setChainData] = useState(undefined)
 
   useEffect(() => {
-    if (wallet?.user) {
-      logger.debug('[Balance] call restful api to get cheap balance by user id = ', wallet?.user?.id)
-      const balanceInCheap = 234
-      setState({...state, balanceInCheap: balanceInCheap})
-    }
     logger.debug('[Balance] call notifyHideMenu in useEffect')
     notifyHideMenu()
   }, [wallet])
@@ -62,8 +57,14 @@ export default function Balance() {
     logger.debug('[Balance] handleNetworkChangeDone. props =', props)
     if (props && props?.balance) {
       logger.debug('[Balance]. chainData after handleNetworkChangeDone = ', chainData)
-      reset()
-      setState({...state, balanceInChain: Number(props?.balance), ...chainData})
+      center.asyncCall('notify_erc20_balanceOf').then((balance) => {
+        logger.debug('[Balance] balance from erc20 =', balance)
+        reset()
+        setState({...state, balanceInChain: Number(props?.balance), ...chainData, balanceInCheap: Number(balance)})
+      }).catch((err) => {
+        logger.debug('[Balance] Failed to get balance from erc20 due to', err)
+        notifyAlertUpdate([{severity: 'error', message: err?.message}])
+      })
     } else {
       notifyAlertUpdate([{severity: 'error', message: 'Failed to get balance from wallet. Please refesh page and try again'}])
     }
@@ -79,7 +80,13 @@ export default function Balance() {
   }
 
   const handleReset = () => {
-    setState({...state, deposit:0})
+    setState({...state, 
+      balanceInChain: -1,
+      chainSymbol: '',
+      balanceInCheap: 0,
+      deposit: 0,
+      chainId: ''
+    })
     reset()
   }
 
@@ -87,7 +94,6 @@ export default function Balance() {
     logger.debug('[Balance] handleChainChange. chainId=', chainId)
     logger.debug('[Balance] call wallet to get balance by chainId = ', chainId)
     await center.asyncCall('notifyNetworkChangeCheck', chainId)
-    const balanceInChain = 100
     const chainSymbol = getChainCurrency(chainId)
     const chainData = {
       chainId: chainId,
@@ -95,9 +101,6 @@ export default function Balance() {
     }
     logger.debug('[Balance] set chainData =', chainData)
     setChainData(chainData)
-    // reset()
-    // logger.debug('reset()')
-    // setState({...state, chainSymbol: chainSymbol, chainId: chainId, balanceInChain: balanceInChain})
   }
 
   return (

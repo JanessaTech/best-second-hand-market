@@ -103,6 +103,30 @@ class NotificationCenter {
                 this.eventsBus.handleNetworkChangeCheck(chainId)
             }
         })
+
+        this.#notifyMap.set('notify_erc20_balanceOf', async () => {
+            logger.debug('[NotificationCenter] notify_erc20_balanceOf', this.eventsBus)
+            if (this.eventsBus?.handle_erc20_balanceOf) {
+                const balance = await this.eventsBus?.handle_erc20_balanceOf()
+                return balance
+                /*
+                try {
+                    const balance = await this.eventsBus?.handle_ERC20_BalanceOf()
+                    this.call('notify_erc20_balanceOf_done', {success: true, balance: balance})
+                } catch (err) {
+                    const errMsg = err?.message
+                    this.call('notify_erc20_balanceOf_done', {success: false, reason: errMsg})
+                    logger.error('[NotificationCenter] Failed to call erc20 balanceOf due to ', err)
+                }*/
+            }
+        })
+
+        this.#notifyMap.set('notify_erc20_balanceOf_done',  (props) => {
+            logger.debug('[NotificationCenter] notify_erc20_balanceOf_done', this.eventsBus)
+            if (this.eventsBus?.handle_erc20_balanceOf_Done) {
+                this.eventsBus?.handle_erc20_balanceOf_Done(props)
+            } 
+        })
     }
 
     call(name, ...params) {
@@ -120,9 +144,9 @@ class NotificationCenter {
         if (this.#notifyMap.get(name)) {
             const fn = this.#notifyMap.get(name)
             if (params && params.length > 0) {
-                await fn(...params)
+                return await fn(...params)
             } else {
-                await fn()
+                return await fn()
             }
         }
     }
