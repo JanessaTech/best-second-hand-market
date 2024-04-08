@@ -8,6 +8,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import CustomSelect from '../../common/CustomSelect'
 import logger from '../../common/Logger'
 import {getChainName, networks, getChainCurrency} from '../../utils/Chain'
+import { getExchange } from '../../utils/Chain'
+import { ExchangeRateTip } from '../../common/TipHelpers'
 
 export default function Balance() {
   logger.debug('[Balance] rendering...')
@@ -60,7 +62,7 @@ export default function Balance() {
       center.asyncCall('notify_erc20_balanceOf').then((balance) => {
         logger.debug('[Balance] balance from erc20 =', balance)
         reset()
-        setState({...state, balanceInChain: Number(props?.balance), ...chainData, balanceInCheap: Number(balance)})
+        setState({...state, balanceInChain: props?.balance, ...chainData, balanceInCheap: BigInt(balance).toLocaleString()})
       }).catch((err) => {
         logger.debug('[Balance] Failed to get balance from erc20 due to', err)
         notifyAlertUpdate([{severity: 'error', message: err?.message}])
@@ -70,10 +72,30 @@ export default function Balance() {
     }
   }
 
-  const handleDeposit = (data) => {
+  const handleDeposit = async (data) => {
     logger.debug('[Balance] handleDeposit data=', data)
-
+    try {
+      await center.asyncCall('notify_erc20_mint', data.deposit)
+      const newWalletBalance = await center.asyncCall('notifyWalletBalance')
+      const newERC20Balance = await center.asyncCall('notify_erc20_balanceOf')
+      logger.debug('[Balance] handleDeposit. state =', state)
+      logger.debug('[Balance] newWalletBalance =', newWalletBalance, ' newERC20Balance =', newERC20Balance)
+      setState({
+        deposit: 0, 
+        chainSymbol: state.chainSymbol,
+        chainId: data.chainId, 
+        cheapSymbol: SYSSYMBOL, 
+        balanceInChain: newWalletBalance, 
+        balanceInCheap: BigInt(newERC20Balance).toLocaleString()
+      })
+      notifyAlertUpdate([{severity: 'success', message: 'Be deposited successfully'}])
+    } catch (err) {
+      logger.error('[Balance] Failed to deposit due to ', err)
+      const errMsg = err?.info?.error?.message || err?.message
+      notifyAlertUpdate([{severity: 'error', message: errMsg}])
+    }
   }
+
   const handleInputChanges = (e) => {
     e.preventDefault()
     setState({...state, [e.target.name]: e.target.value})
@@ -166,26 +188,32 @@ export default function Balance() {
                                   </InputAdornment>,
                 }}
                 />
-              <TextField
-                sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width: 1}}
-                id='deposit' 
-                aria-label='deposit'
-                name='deposit'
-                label='Deposit'
-                value={state.deposit}
-                error={errors?.deposit? true: false}
-                placeholder='Deposit' 
-                type='number'
-                {...register('deposit')}
-                inputProps={{min: 0}}
-                variant='outlined'
-                size="small"
-                onChange={handleInputChanges}
-                onKeyPress={(event) => {
-                  if (event?.key === '-' || event?.key === '+') {
-                    event.preventDefault();
-                  }
-              }}/>
+                <Box sx={{display: 'flex', flexDirection:'row', width:1, alignItems:'center'}}>
+                  <TextField
+                  sx={{'& .MuiOutlinedInput-notchedOutline':{borderRadius:1}, width: 0.5, mr:2}}
+                  id='deposit' 
+                  aria-label='deposit'
+                  name='deposit'
+                  label='Deposit'
+                  value={state.deposit}
+                  error={errors?.deposit? true: false}
+                  placeholder='Deposit' 
+                  type='number'
+                  {...register('deposit')}
+                  inputProps={{min: 0}}
+                  variant='outlined'
+                  size="small"
+                  onChange={handleInputChanges}
+                  onKeyPress={(event) => {
+                    if (event?.key === '-' || event?.key === '+') {
+                      event.preventDefault();
+                    }
+                  }}/>
+                  <Box>
+                    <ExchangeRateTip text={`Rate: ${state.chainId ? getExchange(state.chainId) : 'N/A'}`}/>
+                  </Box>
+                </Box>
+              
               <Box sx={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
                   <Button variant='outlined' color='customBlack' sx={{textTransform:'none'}} onClick={handleReset}>Reset</Button>
                   <Button variant='contained' color='customBlack' type="submit" sx={{textTransform:'none', ml:2}}>Deposit</Button>

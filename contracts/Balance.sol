@@ -7,7 +7,7 @@ contract Balance is ERC20 {
     constructor(string memory name, string memory symbol) ERC20(name, symbol) {}
     event transferInBatch_tracer(address[] tos, uint256[] values);
 
-    function mint(address to, uint256 amount) public {
+    function mint(address to, uint256 amount) public payable {
         _mint(to, amount);
     }
 

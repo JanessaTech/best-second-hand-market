@@ -104,29 +104,30 @@ class NotificationCenter {
             }
         })
 
+        this.#notifyMap.set('notifyWalletBalance', async () => {
+            logger.debug('[NotificationCenter] notifyWalletBalance', this.eventsBus)
+            if (this.eventsBus.handleWalletBalance) {
+                const walletBalance = this.eventsBus.handleWalletBalance()
+                return walletBalance
+            }
+        })
+
         this.#notifyMap.set('notify_erc20_balanceOf', async () => {
             logger.debug('[NotificationCenter] notify_erc20_balanceOf', this.eventsBus)
             if (this.eventsBus?.handle_erc20_balanceOf) {
                 const balance = await this.eventsBus?.handle_erc20_balanceOf()
                 return balance
-                /*
-                try {
-                    const balance = await this.eventsBus?.handle_ERC20_BalanceOf()
-                    this.call('notify_erc20_balanceOf_done', {success: true, balance: balance})
-                } catch (err) {
-                    const errMsg = err?.message
-                    this.call('notify_erc20_balanceOf_done', {success: false, reason: errMsg})
-                    logger.error('[NotificationCenter] Failed to call erc20 balanceOf due to ', err)
-                }*/
+                
             }
         })
 
-        this.#notifyMap.set('notify_erc20_balanceOf_done',  (props) => {
-            logger.debug('[NotificationCenter] notify_erc20_balanceOf_done', this.eventsBus)
-            if (this.eventsBus?.handle_erc20_balanceOf_Done) {
-                this.eventsBus?.handle_erc20_balanceOf_Done(props)
-            } 
+        this.#notifyMap.set('notify_erc20_mint', async (value) => {
+            logger.debug('[NotificationCenter] notify_erc20_mint', this.eventsBus)
+            if (this.eventsBus?.handle_erc20_mint) {
+                await this.eventsBus?.handle_erc20_mint(value)
+            }
         })
+
     }
 
     call(name, ...params) {

@@ -82,3 +82,16 @@ export function getERC20Contract(chainId) {
     return contract
   }
 }
+
+export function getExchange(chainId) {
+  const nks = networks()
+  var chain = nks.find( n => n.chainId === chainId)
+  if (!chain) {
+    throw new Error(messageHelper.getMessage('chain_not_found', chainId))
+  } else {
+    if (!chain?.exchange) {
+      throw new Error(messageHelper.getMessage('chain_exchange_not_found', chainId))
+    }
+    return chain?.exchange
+  }
+}

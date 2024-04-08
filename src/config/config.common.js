@@ -85,7 +85,7 @@ config.chains = {
           {
             address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
             abi: [
-                'function mint(address to, uint256 amount) public',
+                'function mint(address to, uint256 amount) public payable',
                 'function transferInBatch(address[] tos, uint256[] values) public',
                 'function transfer(address to, uint256 value) public returns(bool)',
                 'function balanceOf(address account) public view returns (uint256)',

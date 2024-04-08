@@ -38,5 +38,6 @@ export default {
     contract_not_found: 'The contract by chainId {0} and address {1} is not found. Please check the correctness of config.common.js',
     abi_not_found: 'The abi by chainId {0} and address {1} is not found. Please check the correctness of config.common.js',
     contract_erc20_not_found: 'The erc20 contract cannot be found for chainId {0}. Please check the correctness of config.common.js',
-    contract_erc20_invalid_config: 'The erc20 contract must contain address and abi for chainId {0}. Please check the correctness of config.common.js'
+    contract_erc20_invalid_config: 'The erc20 contract must contain address and abi for chainId {0}. Please check the correctness of config.common.js',
+    chain_exchange_not_found: 'The exchange is not defined for chainId {0}. Please check the correctness of config.common.js',
 }
