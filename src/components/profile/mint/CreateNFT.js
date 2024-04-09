@@ -25,9 +25,8 @@ export default function CreateNFT({ipfsURL, center, handleNext, notifyAlertUpdat
 
     useEffect(() => {
       if (mintData) {
-        logger.debug('[Mint-CreateNFT] add handleNetworkChangeDone and handleMintDone to eventsBus in center')
+        logger.debug('[Mint-CreateNFT] add handleNetworkChangeDone to eventsBus in center')
         center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
-        center.eventsBus.handleMintDone = handleMintDone
       }
     }, [mintData])
 
@@ -53,9 +52,9 @@ export default function CreateNFT({ipfsURL, center, handleNext, notifyAlertUpdat
         reset()
         const chain = networks().find(n => n.chainId === value)
         if (!chain) {
-            logger.debug('[Mint-CreateNFT] Cannot find chain by chainId. Please check the correction of config.chains in config.common.js')
+            logger.error('[Mint-CreateNFT] Cannot find chain by chainId. Please check the correction of config.chains in config.common.js')
         } else {
-            const addresses = chain?.contracts?.map(contract => contract.address)
+            const addresses = chain?.contracts?.filter((contract) => contract.tokenStandard === 'ERC1155').map(contract => contract.address)
             logger.debug('[Mint-CreateNFT] addresses available by chainId', value, addresses )
             setState({...state, chainId: value, addressOptions: addresses, address: ''})
         }
@@ -66,22 +65,18 @@ export default function CreateNFT({ipfsURL, center, handleNext, notifyAlertUpdat
       logger.debug('[Mint-CreateNFT] call wallet to mint a nft... Once it is done successfull, call restful api to log a nft record')
       logger.debug('mintData:', mintData)
       setState({...state, isloading: true})
-      center.call('notityMintCall', mintData)
+      center.asyncCall('notity_erc1115_mint', mintData).then(() => {
+        notifyAlertUpdate([{severity: 'success', message: 'A new NFT is minted'}])
+        handleNext()
+      }).catch((err) => {
+        logger.error('[Mint-CreateNFT] Failed to call mint due to ', err)
+        const errMsg = err?.info?.error?.message || err?.message
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+      })
     }
 
     const handleAddressChange = (value) => {
         setState({...state, address: value})
-    }
-
-    const handleMintDone = ({success, reason}) => {
-      logger.debug('[Mint-CreateNFT] handleMintDone')
-      setState({...state, isloading: false})
-      if (success) {
-        notifyAlertUpdate([{severity: 'success', message: 'A new NFT is minted successfully'}])
-        handleNext()
-      } else {
-        notifyAlertUpdate([{severity: 'error', message: reason}])
-      }
     }
 
     const handleCreate = async (data) => {

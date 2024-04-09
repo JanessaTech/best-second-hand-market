@@ -60,9 +60,8 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
 
   useEffect(() => {
     if (buyData) {
-      logger.debug('[Overview] add handleNetworkChangeDone and handleBuyDone to eventsBus in center')
+      logger.debug('[Overview] add handleNetworkChangeDone to eventsBus in center')
       center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
-      center.eventsBus.handleBuyDone = handleBuyDone
     }
   }, [buyData])
 
@@ -73,20 +72,42 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
   const handleNetworkChangeDone = () => {
     logger.debug('[Overview] handleNetworkChangeDone')
     logger.debug('[Overview] buyData =', buyData)
-    center.call('notityBuyCall', buyData)
+    center.asyncCall('notify_erc20_balanceOf').then((balance) => {
+      logger.debug('[Overview] balance = ', balance)
+      const enough = Number(balance) >= buyData.totalPrice
+      logger.debug('[Overview] check if balance is enough: ', enough)
+      if (!enough) {
+        throw new Error('Your balance is not enough. Please deposit it first.')
+      }
+    }).then(() => {
+      center.asyncCall('notity_erc1115_buy', buyData).then(() => {
+        setBuyOrPutCart(false)  // disable the buttons for buy and cart
+        setOwner(wallet?.user?.name) // set the name of current logined user as the owner of the nft
+        const transferData = {
+          tos: [buyData?.from],
+          values: [buyData?.totalPrice]
+        }
+        logger.debug('[Overview] transferData =', transferData)
+        center.asyncCall('notity_erc20_transferInBatch', transferData).then(() => {
+          logger.debug('[Overview] transfer is done')
+          notifyAlertUpdate([{severity: 'success', message: 'The NFT is bought successfully'}])
+        }).catch((err) => {
+          const errMsg = err?.info?.error?.message || err?.message
+          logger.error('[Overview] Failed to transfer token due to ', err)
+          notifyAlertUpdate([{severity: 'error', message: errMsg}])
+        })
+      }).catch((err) => {
+        const errMsg = err?.info?.error?.message || err?.message
+        logger.error('[Overview] Failed to call buy due to ', err)
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+      })
+    }).catch((err) => {
+      logger.error('[Overview] Failed to buy due to ', err)
+      const errMsg = err?.info?.error?.message || err?.message
+      notifyAlertUpdate([{severity: 'error', message: errMsg}])
+    })
   }
 
-  const handleBuyDone = ({success, reason}) => {
-    logger.debug('[Overview] handleBuyDone')
-    logger.debug('[Overview] success =', success)
-    if (success) {
-      notifyAlertUpdate([{severity: 'success', message: 'The NFT is bought successfully'}])
-      setBuyOrPutCart(false)  // disable the buttons for buy and cart
-      setOwner(wallet?.user?.name) // set the name of current logined user as the owner of the nft
-    } else {
-      notifyAlertUpdate([{severity: 'error', message: reason}])
-    }
-  }
 
   const handleNFTCartStatus = (userId, nftIds, inCart)  => {
     if (nftIds.includes(nft?.id)) {

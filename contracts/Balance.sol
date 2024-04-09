@@ -20,8 +20,4 @@ contract Balance is ERC20 {
         }
         emit transferInBatch_tracer(tos, values);
     }
-
-    function getMyBalanceByAddress(address me) public view returns (uint256) {
-        return balanceOf(me);
-    }
 }

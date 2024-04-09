@@ -55,46 +55,27 @@ class NotificationCenter {
             }
         })
 
-        this.#notifyMap.set('notityMintCall', async (mintData) => {
-            logger.debug('[NotificationCenter] notityMintCall', this.eventsBus)
-            if (this.eventsBus?.handleMintCall) {
-                try {
-                    await this.eventsBus?.handleMintCall(mintData)
-                    this.call('notifyMintDone', {success: true})
-                } catch (err) {
-                    const errMsg = err?.info?.error?.message || err?.message
-                    this.call('notifyMintDone', {success: false, reason: errMsg})
-                    logger.error('[NotificationCenter] Failed to call mint due to ', err)
-                }
+        this.#notifyMap.set('notity_erc1115_mint', async (mintData) => {
+            logger.debug('[NotificationCenter] notity_erc1115_mint', this.eventsBus)
+            if (this.eventsBus?.handle_erc1115_mint) {
+                await this.eventsBus?.handle_erc1115_mint(mintData)
             }
         })
 
-        this.#notifyMap.set('notifyMintDone', (props) => {
-            logger.debug('[NotificationCenter] notifyMintDone', this.eventsBus)
-            if (this.eventsBus?.handleMintDone) {
-                this.eventsBus?.handleMintDone(props)
-            } 
-        })
-
-        this.#notifyMap.set('notityBuyCall', async (buyData) => {
-            logger.debug('[NotificationCenter] notityBuyCall', this.eventsBus)
-            if (this.eventsBus?.handleBuyCall) {
+        this.#notifyMap.set('notity_erc1115_buy', async (buyData) => {
+            logger.debug('[NotificationCenter] notity_erc1115_buy', this.eventsBus)
+            if (this.eventsBus?.handle_erc1115_buy) {
+                await this.eventsBus?.handle_erc1115_buy(buyData)
+                /*
                 try {
-                    await this.eventsBus?.handleBuyCall(buyData)
+                    await this.eventsBus?.handle_erc1115_buy(buyData)
                     this.call('notifyBuyDone', {success: true})
                 } catch (err) {
                     const errMsg = err?.info?.error?.message || err?.message
                     this.call('notifyBuyDone', {success: false, reason: errMsg})
                     logger.error('[NotificationCenter] Failed to call buy due to ', err)
-                }
+                }*/
             }
-        })
-
-        this.#notifyMap.set('notifyBuyDone', (props) => {
-            logger.debug('[NotificationCenter] notifyBuyDone', this.eventsBus)
-            if (this.eventsBus?.handleBuyDone) {
-                this.eventsBus?.handleBuyDone(props)
-            } 
         })
 
         this.#notifyMap.set('notifyNetworkChangeCheck', async (chainId) => {
@@ -128,15 +109,22 @@ class NotificationCenter {
             }
         })
 
+        this.#notifyMap.set('notity_erc20_transferInBatch', async (transferData) => {
+            logger.debug('[NotificationCenter] notity_erc20_transferInBatch', this.eventsBus)
+            if (this.eventsBus?.handle_erc20_transferInBatch) {
+                await this.eventsBus?.handle_erc20_transferInBatch(transferData)
+            }
+        })
+
     }
 
     call(name, ...params) {
         if (this.#notifyMap.get(name)) {
             const fn = this.#notifyMap.get(name)
             if (params && params.length > 0) {
-                fn(...params)
+                return fn(...params)
             } else {
-                fn()
+                return fn()
             }
         }
     }

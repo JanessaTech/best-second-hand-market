@@ -16,8 +16,8 @@ const CheapBottomNavigation = ({ wallet, openCart, toggleMenu, isShowMenu, notif
     const handleMintBut = () => {
       logger.debug('[CheapBottomNavigation] handleMintBut')
       if (wallet) {
-        logger.info('[CheapBottomNavigation] go to to /profile/mint')
-        navigate('/profile/mint')
+        logger.info('[CheapBottomNavigation] go to to /profile/mint2')
+        navigate('/profile/mint2')
       } else {
         notifyWalletOpen()
       }

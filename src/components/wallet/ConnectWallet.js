@@ -39,13 +39,14 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
     
     useEffect(() => {
         if (walletProvider) {
-            logger.debug('[ConnectWallet] add handleNetworkChangeCheck, handleMintCall, handleBuyCall to eventsBus in center')
+            logger.debug('[ConnectWallet] add handleNetworkChangeCheck, handleWalletBalance, handle_erc1115_mint, handle_erc1115_buy, handle_erc20_balanceOf, handle_erc20_mint, handle_erc20_transferInBatch to eventsBus in center')
             center.eventsBus.handleNetworkChangeCheck = handleNetworkChangeCheck
             center.eventsBus.handleWalletBalance = handleWalletBalance
-            center.eventsBus.handleMintCall = handleMintCall
-            center.eventsBus.handleBuyCall = handleBuyCall
+            center.eventsBus.handle_erc1115_mint = handle_erc1115_mint
+            center.eventsBus.handle_erc1115_buy = handle_erc1115_buy
             center.eventsBus.handle_erc20_balanceOf = handle_erc20_balanceOf
             center.eventsBus.handle_erc20_mint = handle_erc20_mint
+            center.eventsBus.handle_erc20_transferInBatch = handle_erc20_transferInBatch
         }
     }, [walletProvider])
 
@@ -92,13 +93,13 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             logger.debug('[ConnectWallet] Get balance for address ', address, ': ', balanceInEth)
             return balanceInEth
         } else {
-            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle mint call')
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to get balance from wallet')
             throw new Error('walletProvider is not found')
         }
     }
 
-    const handleMintCall = async (mintData) => {
-        logger.debug('[ConnectWallet] handleMintCall. mintData =', mintData)
+    const handle_erc1115_mint = async (mintData) => {
+        logger.debug('[ConnectWallet] handle_erc1115_mint. mintData =', mintData)
         const {chainId, address, ipfsURL} = mintData
         if (walletProvider) {
             const signer = await walletProvider.getSigner()
@@ -108,15 +109,15 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             const contract = new ethers.Contract(address, abi, signer)
             const tx = await contract.mint(ethers.getAddress(from), ipfsURL)
             await tx.wait() //waiting for receipt 
-            logger.info('Tx after mint:', tx)
+            logger.info('Tx after mint on erc1115:', tx)
         } else {
-            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle mint call')
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle mint call on erc1115')
             throw new Error('walletProvider is not found')
         }
     }
 
-    const handleBuyCall = async (buyData) => {
-        logger.debug('[ConnectWallet] handleBuyCall. buyData =', buyData)
+    const handle_erc1115_buy = async (buyData) => {
+        logger.debug('[ConnectWallet] handle_erc1115_buy. buyData =', buyData)
         const {chainId, address, from, ids, totalPrice} = buyData
         logger.debug('[ConnectWallet] check if totalPrice is more than savings. totalPrice =', totalPrice)
         if (walletProvider) {
@@ -127,9 +128,9 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             const contract = new ethers.Contract(address, abi, signer)
             const tx = await contract.buy(from, to, ids)
             await tx.wait() //waiting for receipt 
-            logger.info('Tx after buy:', tx)
+            logger.info('Tx after buy on erc1115:', tx)
         } else {
-            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle buy call')
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle buy call on erc1115')
             throw new Error('walletProvider is not found')
         }
     }
@@ -150,7 +151,7 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             const balance  = await erc20.balanceOf(me)
             return balance
         } else {
-            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle erc20 balanceOf')
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle balanceOf on erc20 ')
             throw new Error('walletProvider is not found')
         }
     }
@@ -176,6 +177,27 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             const tx = await erc20.mint(me, tokens, options)
             await tx.wait() //waiting for receipt 
             logger.info('Tx after mint on erc20 :', tx)
+        } else {
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle erc20 mint')
+            throw new Error('walletProvider is not found')
+        }
+    }
+
+    const handle_erc20_transferInBatch = async (transferData) => {
+        logger.debug('[ConnectWallet] handle_erc20_transferInBatch. transferData =', transferData)
+        if (walletProvider) {
+            const {tos, values} = transferData
+            const signer = await walletProvider.getSigner()
+            const _chainId = await walletProvider.send('eth_chainId')
+            const currentChainId = parseInt(_chainId.substring(2), 16)
+            logger.debug('[ConnectWallet] handle_erc20_transferInBatch. currentChainId =', currentChainId)
+            const erc20Contract = getERC20Contract(currentChainId)
+            const address = erc20Contract.address
+            const abi  = erc20Contract.abi
+            const erc20 = new ethers.Contract(address, abi, signer)
+            const tx = await erc20.transferInBatch(tos, values)
+            await tx.wait() //waiting for receipt 
+            logger.info('Tx after transferInBatch on erc20 :', tx)
         } else {
             logger.error('[ConnectWallet] walletProvider is not found when we are about to handle erc20 mint')
             throw new Error('walletProvider is not found')
