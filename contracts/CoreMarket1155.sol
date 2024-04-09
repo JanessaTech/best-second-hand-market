@@ -19,8 +19,6 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
     event mintBatch_tracer(address indexed to, uint[] tokenIds, string[] uris);
     event buy_tracer(address indexed from, address indexed to, uint[] ids);
     event doSafeBuy_tracer(address indexed from, address indexed to, uint[] ids);
-    event buyBatch_tracer(address indexed to, address[] froms,uint[][] idss);
-    event doSafeBuyBatch_tracer(address indexed to, address[] froms, uint[][] idss);
 
     constructor(address initialOwner, string memory symbol_) ERC1155("") Ownable(initialOwner) {
         _symbol = symbol_;
@@ -171,7 +169,6 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
             doIdsCheck(from, ids);
             buy(from, to, ids);
         }
-        emit buyBatch_tracer(to, froms, idss);
     }
 
     function doSafeBuyBatch(address[] memory froms, address to, uint[][] memory idss) public {
@@ -181,7 +178,6 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
             uint[] memory ids = idss[i];
             doIdsCheck(from, ids);
             doSafeBuy(from, to, ids);
-        } 
-        emit doSafeBuyBatch_tracer(to, froms, idss);
+        }
     }
 }
