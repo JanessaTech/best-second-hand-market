@@ -72,6 +72,7 @@ const Overview = ({wallet, nft, center, notifyAlertUpdate, notifyWalletOpen}) =>
   const handleNetworkChangeDone = () => {
     logger.debug('[Overview] handleNetworkChangeDone')
     logger.debug('[Overview] buyData =', buyData)
+    
     center.asyncCall('notify_erc20_balanceOf').then((balance) => {
       logger.debug('[Overview] balance = ', balance)
       const enough = Number(balance) >= buyData.totalPrice

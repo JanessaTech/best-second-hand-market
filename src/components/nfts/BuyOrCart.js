@@ -47,7 +47,7 @@ const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, n
 
   useEffect(() => {
     if (buyData) {
-      logger.debug('[BuyOrCart] add handleNetworkChangeDone and handleBuyDone to eventsBus in center')
+      logger.debug('[BuyOrCart] add handleNetworkChangeDone to eventsBus in center')
       center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
       center.eventsBus.handleBuyDone = handleBuyDone
     }
@@ -56,7 +56,40 @@ const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, n
   const handleNetworkChangeDone = () => {
     logger.debug('[BuyOrCart] handleNetworkChangeDone')
     logger.debug('[BuyOrCart] buyData =', buyData)
-    center.call('notityBuyCall', buyData)
+
+    center.asyncCall('notify_erc20_balanceOf').then((balance) => {
+      logger.debug('[BuyOrCart] balance = ', balance)
+      const enough = Number(balance) >= buyData.totalPrice
+      logger.debug('[BuyOrCart] check if balance is enough: ', enough)
+      if (!enough) {
+        throw new Error('Your balance is not enough. Please deposit it first.')
+      }
+    }).then(() => {
+      center.asyncCall('notity_erc1115_buy', buyData).then(() => {
+        const transferData = {
+          tos: [buyData?.from],
+          values: [buyData?.totalPrice]
+        }
+        logger.debug('[BuyOrCart] transferData =', transferData)
+        center.asyncCall('notity_erc20_transferInBatch', transferData).then(() => {
+          logger.debug('[BuyOrCart] transfer is done')
+          refresh()
+          notifyAlertUpdate([{severity: 'success', message: 'The NFT is bought successfully'}])
+        }).catch((err) => {
+          const errMsg = err?.info?.error?.message || err?.message
+          logger.error('[BuyOrCart] Failed to transfer token due to ', err)
+          notifyAlertUpdate([{severity: 'error', message: errMsg}])
+        })
+      }).catch((err) => {
+        const errMsg = err?.info?.error?.message || err?.message
+        logger.error('[BuyOrCart] Failed to call buy due to ', err)
+        notifyAlertUpdate([{severity: 'error', message: errMsg}])
+      })
+    }).catch((err) => {
+      logger.error('[BuyOrCart] Failed to buy due to ', err)
+      const errMsg = err?.info?.error?.message || err?.message
+      notifyAlertUpdate([{severity: 'error', message: errMsg}])
+    })
   }
 
   const handleBuyDone = ({success, reason}) => {
