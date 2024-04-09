@@ -123,20 +123,50 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
 
   useEffect(() => {
     if (buyData) {
-      logger.debug('[Cart] add handleNetworkChangeDone and handleBuyDone to eventsBus in center')
+      logger.debug('[Cart] add handleNetworkChangeDone to eventsBus in center')
       center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
-      center.eventsBus.handleBuyDone = handleBuyDone
     }
   }, [buyData])
 
   const handleNetworkChangeDone = () => {
     logger.debug('[Cart] handleNetworkChangeDone')
     logger.debug('[Cart] buyData =', buyData)
-  }
-
-  const handleBuyDone = () => {
-    logger.debug('[Cart] handleBuyDone')
-
+    center.asyncCall('notify_erc20_balanceOf').then((balance) => {
+      logger.debug('[Cart] balance = ', balance)
+      const totalPrice = buyData.reduce((a, b) => a + b.totalPrice, 0)
+      logger.debug('[Cart] totalPrice =', totalPrice)
+      const enough = Number(balance) >= totalPrice
+      logger.debug('[Cart] check if balance is enough: ', enough)
+      if (!enough) {
+        throw new Error('Your balance is not enough. Please deposit it first.')
+      }
+    }).then(() => {
+      for (const buy of buyData) {
+        center.asyncCall('notity_erc1115_buyBatch', buy).then(() => {
+          const address = buy.address
+          const transferData = {
+            tos: buy?.froms,
+            values: buy?.prices
+          }
+          logger.debug('[Cart] transferData =', transferData)
+          center.asyncCall('notity_erc20_transferInBatch', transferData).then(() => {
+            logger.debug('[Cart] transfer is done for address ', address)
+          }).catch((err) => {
+            const errMsg = err?.info?.error?.message || err?.message
+            logger.error('[Cart] Failed to transfer token due to ', err)
+            notifyAlertUpdate([{severity: 'error', message: errMsg}])
+          })
+        }).catch((err) => {
+          const errMsg = err?.info?.error?.message || err?.message
+          logger.error('[Cart] Failed to transfer token due to ', err)
+          notifyAlertUpdate([{severity: 'error', message: errMsg}])
+        })
+      }
+    }).catch((err) => {
+      logger.error('[Cart] Failed to buy due to ', err)
+      const errMsg = err?.info?.error?.message || err?.message
+      notifyAlertUpdate([{severity: 'error', message: errMsg}])
+    })
   }
 
   const closeCart = () => {
@@ -176,32 +206,43 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
     setChainId(chainId)
   }
 
-  const calculateBuyData = (nfts) => {
+  const calculateBuyData = (nfts, chainId) => {
     const nftMap = new Map()
     for (const nft of nfts) {
-        if (!nftMap.get(nft.owner.address)) {
-            nftMap.set(nft.owner.address, [])
+        if (!nftMap.get(nft.address)) {
+            nftMap.set(nft.address, new Map())
         }
-        nftMap.get(nft.owner.address).push({price: nft.price, tokenId: nft.tokenId})
-    }
-    const froms = []
-    let idss = []
-    let totalPrice = 0
-    for (const [from, value] of nftMap) {
-        froms.push(from)
-        value.sort((a, b) => {
-            return a.tokenId - b.tokenId
-        })
-        const ids = value.map( (v) => v.tokenId)
-        idss.push(ids)
-        totalPrice += value.reduce((a, b) => a + b.price, 0)
+        if (!nftMap.get(nft.address).get(nft.owner.address)) {
+            nftMap.get(nft.address).set(nft.owner.address, [])
+        }
+        nftMap.get(nft.address).get(nft.owner.address).push({price: nft.price, tokenId: nft.tokenId})
     }
 
-    const buyData = {
-        froms : froms,
-        to: wallet?.address,
-        idss: idss,
-        totalPrice: totalPrice
+    const buyData = []
+
+    for(const [address, subMap] of nftMap) {
+        const froms = []
+        let idss = []
+        let prices = []
+        for (const [owner, value] of subMap) {
+            let price = 0
+            froms.push(owner)
+            value.sort((a, b) => {
+                return a.tokenId - b.tokenId
+            })
+            const ids = value.map( (v) => v.tokenId)
+            idss.push(ids)
+            price = value.reduce((a, b) => a + b.price, 0)
+            prices.push(price)
+        }
+        buyData.push({
+            chainId: chainId,
+            address: address,
+            froms: froms,
+            idss: idss,
+            prices: prices,
+            totalPrice: prices.reduce((a, b) => a + b, 0)
+        })
     }
 
     return buyData
@@ -210,7 +251,7 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
   const handleBuy = async () => {
     const filteredNFTs = getFilteredNfts(nfts, chainId, config.NFTSTATUS.On.description)
     await center.asyncCall('notifyNetworkChangeCheck', chainId)
-    const buyData = calculateBuyData(filteredNFTs)
+    const buyData = calculateBuyData(filteredNFTs, chainId)
     setBuyData(buyData)
   }
 

@@ -49,7 +49,6 @@ const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, n
     if (buyData) {
       logger.debug('[BuyOrCart] add handleNetworkChangeDone to eventsBus in center')
       center.eventsBus.handleNetworkChangeDone = handleNetworkChangeDone
-      center.eventsBus.handleBuyDone = handleBuyDone
     }
   }, [buyData])
 
@@ -73,7 +72,7 @@ const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, n
         logger.debug('[BuyOrCart] transferData =', transferData)
         center.asyncCall('notity_erc20_transferInBatch', transferData).then(() => {
           logger.debug('[BuyOrCart] transfer is done')
-          refresh()
+          refresh()  // refresh nft page
           notifyAlertUpdate([{severity: 'success', message: 'The NFT is bought successfully'}])
         }).catch((err) => {
           const errMsg = err?.info?.error?.message || err?.message
@@ -90,17 +89,6 @@ const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, n
       const errMsg = err?.info?.error?.message || err?.message
       notifyAlertUpdate([{severity: 'error', message: errMsg}])
     })
-  }
-
-  const handleBuyDone = ({success, reason}) => {
-    logger.debug('[BuyOrCart] handleBuyDone')
-    logger.debug('[BuyOrCart] success =', success)
-    if (success) {
-      refresh()
-      notifyAlertUpdate([{severity: 'success', message: 'The NFT is bought successfully'}])
-    } else {
-      notifyAlertUpdate([{severity: 'error', message: reason}])
-    }
   }
 
   const handleNFTCartStatus = (userId, nftIds, inCart)  => {

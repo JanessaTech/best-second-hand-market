@@ -44,9 +44,11 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             center.eventsBus.handleWalletBalance = handleWalletBalance
             center.eventsBus.handle_erc1115_mint = handle_erc1115_mint
             center.eventsBus.handle_erc1115_buy = handle_erc1115_buy
-            center.eventsBus.handle_erc20_balanceOf = handle_erc20_balanceOf
+            center.eventsBus.handle_erc1115_buyBatch = handle_erc1115_buyBatch
             center.eventsBus.handle_erc20_mint = handle_erc20_mint
+            center.eventsBus.handle_erc20_balanceOf = handle_erc20_balanceOf
             center.eventsBus.handle_erc20_transferInBatch = handle_erc20_transferInBatch
+            
         }
     }, [walletProvider])
 
@@ -118,8 +120,7 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
 
     const handle_erc1115_buy = async (buyData) => {
         logger.debug('[ConnectWallet] handle_erc1115_buy. buyData =', buyData)
-        const {chainId, address, from, ids, totalPrice} = buyData
-        logger.debug('[ConnectWallet] check if totalPrice is more than savings. totalPrice =', totalPrice)
+        const {chainId, address, from, ids} = buyData
         if (walletProvider) {
             const signer = await walletProvider.getSigner()
             const to = await signer.getAddress()
@@ -135,23 +136,20 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
         }
     }
 
-    const handle_erc20_balanceOf = async () => {
+    const handle_erc1115_buyBatch = async (buyData) => {
+        logger.debug('[ConnectWallet] handle_erc1115_buyBatch. buyData =', buyData)
+        const {chainId, address, froms, idss} = buyData
         if (walletProvider) {
-            logger.debug('[ConnectWallet] handle_erc20_balanceOf')
             const signer = await walletProvider.getSigner()
-            const _chainId = await walletProvider.send('eth_chainId')
-            const currentChainId = parseInt(_chainId.substring(2), 16)
-            logger.debug('[ConnectWallet] handle_erc20_balanceOf. currentChainId =', currentChainId)
-            const me = ethers.getAddress(await signer.getAddress())
-            const erc20Contract = getERC20Contract(currentChainId)
-            const address = erc20Contract.address
-            const abi  = erc20Contract.abi
-            const erc20 = new ethers.Contract(address, abi, signer)
-            logger.debug('[ConnectWallet] get balance of me =',me)
-            const balance  = await erc20.balanceOf(me)
-            return balance
+            const to = await signer.getAddress()
+            logger.debug("MetaMask is connected at ", ethers.getAddress(to))
+            const abi = getABI(chainId, address)
+            const contract = new ethers.Contract(address, abi, signer)
+            const tx = await contract.buyBatch(froms, to, idss)
+            await tx.wait() //waiting for receipt 
+            logger.info('Tx after buyBatch on erc1115:', tx)
         } else {
-            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle balanceOf on erc20 ')
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle buy call on erc1115')
             throw new Error('walletProvider is not found')
         }
     }
@@ -179,6 +177,27 @@ const ConnectWallet = ({onClose, open, wallet, center, openSignup, notifyAlertUp
             logger.info('Tx after mint on erc20 :', tx)
         } else {
             logger.error('[ConnectWallet] walletProvider is not found when we are about to handle erc20 mint')
+            throw new Error('walletProvider is not found')
+        }
+    }
+
+    const handle_erc20_balanceOf = async () => {
+        if (walletProvider) {
+            logger.debug('[ConnectWallet] handle_erc20_balanceOf')
+            const signer = await walletProvider.getSigner()
+            const _chainId = await walletProvider.send('eth_chainId')
+            const currentChainId = parseInt(_chainId.substring(2), 16)
+            logger.debug('[ConnectWallet] handle_erc20_balanceOf. currentChainId =', currentChainId)
+            const me = ethers.getAddress(await signer.getAddress())
+            const erc20Contract = getERC20Contract(currentChainId)
+            const address = erc20Contract.address
+            const abi  = erc20Contract.abi
+            const erc20 = new ethers.Contract(address, abi, signer)
+            logger.debug('[ConnectWallet] get balance of me =',me)
+            const balance  = await erc20.balanceOf(me)
+            return balance
+        } else {
+            logger.error('[ConnectWallet] walletProvider is not found when we are about to handle balanceOf on erc20 ')
             throw new Error('walletProvider is not found')
         }
     }

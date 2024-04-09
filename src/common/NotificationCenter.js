@@ -66,15 +66,13 @@ class NotificationCenter {
             logger.debug('[NotificationCenter] notity_erc1115_buy', this.eventsBus)
             if (this.eventsBus?.handle_erc1115_buy) {
                 await this.eventsBus?.handle_erc1115_buy(buyData)
-                /*
-                try {
-                    await this.eventsBus?.handle_erc1115_buy(buyData)
-                    this.call('notifyBuyDone', {success: true})
-                } catch (err) {
-                    const errMsg = err?.info?.error?.message || err?.message
-                    this.call('notifyBuyDone', {success: false, reason: errMsg})
-                    logger.error('[NotificationCenter] Failed to call buy due to ', err)
-                }*/
+            }
+        })
+
+        this.#notifyMap.set('notity_erc1115_buyBatch', async (buyData) => {
+            logger.debug('[NotificationCenter] notity_erc1115_buyBatch', this.eventsBus)
+            if (this.eventsBus?.handle_erc1115_buyBatch) {
+                await this.eventsBus?.handle_erc1115_buyBatch(buyData)
             }
         })
 
