@@ -151,6 +151,7 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
           logger.debug('[Cart] transferData =', transferData)
           center.asyncCall('notity_erc20_transferInBatch', transferData).then(() => {
             logger.debug('[Cart] transfer is done for address ', address)
+            closeCart()
           }).catch((err) => {
             const errMsg = err?.info?.error?.message || err?.message
             logger.error('[Cart] Failed to transfer token due to ', err)
@@ -162,6 +163,7 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
           notifyAlertUpdate([{severity: 'error', message: errMsg}])
         })
       }
+      
     }).catch((err) => {
       logger.error('[Cart] Failed to buy due to ', err)
       const errMsg = err?.info?.error?.message || err?.message
