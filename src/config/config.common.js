@@ -146,6 +146,17 @@ config.chains = {
             ],
             tokenStandard: 'ERC1155'
           },
+          {
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            abi: [
+                'function mint(address to, uint256 amount) public payable',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public returns(bool)',
+                'function balanceOf(address account) public view returns (uint256)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
+          }
         ]
       },
       {
@@ -165,6 +176,17 @@ config.chains = {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf5', 
             abi: [],
             tokenStandard: 'ERC1155'
+          },
+          {
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            abi: [
+                'function mint(address to, uint256 amount) public payable',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public returns(bool)',
+                'function balanceOf(address account) public view returns (uint256)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
           }
         ]
       },
@@ -185,6 +207,17 @@ config.chains = {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf7', 
             abi: [],
             tokenStandard: 'ERC1155'
+          },
+          {
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            abi: [
+                'function mint(address to, uint256 amount) public payable',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public returns(bool)',
+                'function balanceOf(address account) public view returns (uint256)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
           }
         ]
       },
@@ -205,6 +238,17 @@ config.chains = {
             address: '0xcdcbb4f79e3770252ee32d89b6673eb68f27bbf9', 
             abi: [],
             tokenStandard: 'ERC1155'
+          },
+          {
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            abi: [
+                'function mint(address to, uint256 amount) public payable',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public returns(bool)',
+                'function balanceOf(address account) public view returns (uint256)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
           }
         ]
       }
@@ -262,6 +306,17 @@ config.chains = {
             ],
             tokenStandard: 'ERC1155'
           },
+          {
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            abi: [
+                'function mint(address to, uint256 amount) public payable',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public returns(bool)',
+                'function balanceOf(address account) public view returns (uint256)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
+          }
         ]
       },
       {
@@ -282,6 +337,17 @@ config.chains = {
             abi: [],
             tokenStandard: 'ERC1155'
           },
+          {
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            abi: [
+                'function mint(address to, uint256 amount) public payable',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public returns(bool)',
+                'function balanceOf(address account) public view returns (uint256)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
+          }
         ]
       },
       {
@@ -302,6 +368,17 @@ config.chains = {
             abi: [], 
             tokenStandard: 'ERC1155'
           },
+          {
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            abi: [
+                'function mint(address to, uint256 amount) public payable',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public returns(bool)',
+                'function balanceOf(address account) public view returns (uint256)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
+          }
         ]
       },
       {
@@ -322,6 +399,17 @@ config.chains = {
             abi: [],
             tokenStandard: 'ERC1155'
           },
+          {
+            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            abi: [
+                'function mint(address to, uint256 amount) public payable',
+                'function transferInBatch(address[] tos, uint256[] values) public',
+                'function transfer(address to, uint256 value) public returns(bool)',
+                'function balanceOf(address account) public view returns (uint256)',
+                'event transferInBatch_tracer(address[] tos, uint256[] values)'
+            ],
+            tokenStandard: 'ERC20'
+          }
         ]
       }
     ]

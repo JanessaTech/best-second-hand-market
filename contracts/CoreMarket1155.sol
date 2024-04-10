@@ -24,6 +24,18 @@ contract CoreMarket1155 is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         _symbol = symbol_;
     }
 
+    function reset() public {
+        for (uint i = 0; i < allTokenIds.length; i++) {
+            address owner =  _owners[allTokenIds[i]];
+            _burn(owner, allTokenIds[i], 1); //burn balance
+            delete uris[allTokenIds[i]];
+            delete tokenIdsOfAddress[owner];
+            delete _owners[allTokenIds[i]];
+        }
+        tokenId = 0;  
+        delete allTokenIds;
+    }
+
     function symbol() public view returns (string memory) {
         return _symbol;
     }
