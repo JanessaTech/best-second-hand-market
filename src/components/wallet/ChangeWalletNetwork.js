@@ -55,7 +55,7 @@ export default function ChangeWalletNetwork({center, newNetwork, onClose, open, 
                 "chainId": hexChanid,
                 "chainName": chain.chainName,
                 "rpcUrls": [
-                    chain.rpcUrls
+                    chain.rpcUrl
                 ],
                 "nativeCurrency": {
                     "name": chain.currency,
@@ -65,11 +65,12 @@ export default function ChangeWalletNetwork({center, newNetwork, onClose, open, 
                 }
             ]
             logger.debug('[ChangeWalletNetwork] handleAddNetwork. params =', params)
-            onClose()
             try {
                 await provider.send('wallet_addEthereumChain', params)
                 logger.debug(`[ChangeWalletNetwork] handleAddNetwork. Added new network with chainid ${newNetwork} successfully`)
                 notifyAlertUpdate([{severity: 'success', message: `Added new network with chainid ${newNetwork} successfully`}])
+                onClose()
+                center.call('notifyWalletNetworkChangeDone')
             } catch(e) {
                 logger.debug('[ChangeWalletNetwork] Failed to add network. Please add it mannually')
                 notifyAlertUpdate([{severity: 'error', message: `Failed to add the new network with chaninId ${newNetwork}. Please add it manually in your wallet`}])
