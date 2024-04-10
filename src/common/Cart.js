@@ -142,16 +142,19 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
       }
     }).then(() => {
       for (const buy of buyData) {
-        center.asyncCall('notity_erc1115_buyBatch', buy).then(() => {
-          const address = buy.address
-          const transferData = {
-            tos: buy?.froms,
-            values: buy?.prices
-          }
-          logger.debug('[Cart] transferData =', transferData)
-          center.asyncCall('notity_erc20_transferInBatch', transferData).then(() => {
-            logger.debug('[Cart] transfer is done for address ', address)
+        const address = buy.address
+        const nftIds = buy.nftIds
+        const transferData = {
+          tos: buy?.froms,
+          values: buy?.prices
+        }
+        logger.debug('[Cart] transferData =', transferData)
+        center.asyncCall('notity_erc20_transferInBatch', transferData).then(() => {
+          logger.debug('[Cart] transfer is done for address ', address)
+          center.asyncCall('notity_erc1115_buyBatch', buy).then(() => {
             closeCart()
+            notifyAlertUpdate([{severity: 'success', message: 'The NFTs were bought successfully'}])
+            center.call('notifyDisableBuyCart', nftIds)
           }).catch((err) => {
             const errMsg = err?.info?.error?.message || err?.message
             logger.error('[Cart] Failed to transfer token due to ', err)
@@ -163,7 +166,6 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
           notifyAlertUpdate([{severity: 'error', message: errMsg}])
         })
       }
-      
     }).catch((err) => {
       logger.error('[Cart] Failed to buy due to ', err)
       const errMsg = err?.info?.error?.message || err?.message
@@ -217,7 +219,7 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
         if (!nftMap.get(nft.address).get(nft.owner.address)) {
             nftMap.get(nft.address).set(nft.owner.address, [])
         }
-        nftMap.get(nft.address).get(nft.owner.address).push({price: nft.price, tokenId: nft.tokenId})
+        nftMap.get(nft.address).get(nft.owner.address).push({price: nft.price, tokenId: nft.tokenId, nftId: nft.id})
     }
 
     const buyData = []
@@ -226,14 +228,17 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
         const froms = []
         let idss = []
         let prices = []
+        let nftIds = []
         for (const [owner, value] of subMap) {
             let price = 0
+            
             froms.push(owner)
             value.sort((a, b) => {
                 return a.tokenId - b.tokenId
             })
             const ids = value.map( (v) => v.tokenId)
             idss.push(ids)
+            value.forEach((v,) => nftIds.push(v.nftId))
             price = value.reduce((a, b) => a + b.price, 0)
             prices.push(price)
         }
@@ -242,6 +247,7 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
             address: address,
             froms: froms,
             idss: idss,
+            nftIds: nftIds,
             prices: prices,
             totalPrice: prices.reduce((a, b) => a + b, 0)
         })

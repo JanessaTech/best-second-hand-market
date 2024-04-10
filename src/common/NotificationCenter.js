@@ -42,11 +42,28 @@ class NotificationCenter {
                 this.eventsBus.handleNFTCartStatus(userId, nftIds, isInCart)
             }
             if (this.eventsBus.overview) {
-                for (const [, fn] of this.eventsBus.overview ) {
-                    fn(userId, nftIds, isInCart)
+                for (const [, value] of this.eventsBus.overview ) {
+                    if (value?.handleNFTCartStatus) {
+                        value?.handleNFTCartStatus(userId, nftIds, isInCart)
+                    }
                 }
             }
         })
+
+        this.#notifyMap.set('notifyDisableBuyCart', (nftIds) => {
+            logger.debug('[NotificationCenter] notifyDisableBuyCart =',  this.eventsBus)
+            if (this.eventsBus.handleDisableBuyCart) {
+                this.eventsBus.handleDisableBuyCart(nftIds)
+            }
+            if (this.eventsBus.overview) {
+                for (const [, value] of this.eventsBus.overview ) {
+                    if (value?.handleDisableBuyCart) {
+                        value?.handleDisableBuyCart(nftIds)
+                    }
+                }
+            }
+        })
+
 
         this.#notifyMap.set('notifyWalletNetworkChangeDone', (props) => {
             logger.debug('[NotificationCenter] notifyWalletNetworkChangeDone', this.eventsBus)

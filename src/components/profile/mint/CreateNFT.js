@@ -72,6 +72,7 @@ export default function CreateNFT({ipfsURL, center, handleNext, notifyAlertUpdat
         logger.error('[Mint-CreateNFT] Failed to call mint due to ', err)
         const errMsg = err?.info?.error?.message || err?.message
         notifyAlertUpdate([{severity: 'error', message: errMsg}])
+        setState({...state, isloading: false})
       })
     }
 

@@ -34,11 +34,13 @@ const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, n
   const [searchParams, setSearchParams] = useSearchParams()
   const id = Number(searchParams.get('id'))
   const [inCart, setInCart] = useState(!!nft?.inCart)
+  const [showBuyOrPutCart, setBuyOrPutCart] = useState(true)
   const [buyData, setBuyData] = useState(undefined)
 
   useEffect(() => {
-    logger.debug('[BuyOrCart] add handleNFTCartStatus to eventsBus in center')
+    logger.debug('[BuyOrCart] add handleNFTCartStatus and handleDisableBuyCart to eventsBus in center')
     center.eventsBus.handleNFTCartStatus = handleNFTCartStatus
+    center.eventsBus.handleDisableBuyCart = handleDisableBuyCart
   }, [])
 
   useEffect(() => {
@@ -64,24 +66,25 @@ const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, n
         throw new Error('Your balance is not enough. Please deposit it first.')
       }
     }).then(() => {
-      center.asyncCall('notity_erc1115_buy', buyData).then(() => {
-        const transferData = {
-          tos: [buyData?.from],
-          values: [buyData?.totalPrice]
-        }
-        logger.debug('[BuyOrCart] transferData =', transferData)
-        center.asyncCall('notity_erc20_transferInBatch', transferData).then(() => {
-          logger.debug('[BuyOrCart] transfer is done')
-          refresh()  // refresh nft page
+      const transferData = {
+        tos: [buyData?.from],
+        values: [buyData?.totalPrice]
+      }
+      logger.debug('[BuyOrCart] transferData =', transferData)
+      center.asyncCall('notity_erc20_transferInBatch', transferData).then(() => {
+        logger.debug('[BuyOrCart] transfer is done')
+        center.asyncCall('notity_erc1115_buy', buyData).then(() => {
+          setBuyOrPutCart(false)
+          //refresh()  // it doesn't work// refresh nft page
           notifyAlertUpdate([{severity: 'success', message: 'The NFT is bought successfully'}])
         }).catch((err) => {
           const errMsg = err?.info?.error?.message || err?.message
-          logger.error('[BuyOrCart] Failed to transfer token due to ', err)
+          logger.error('[BuyOrCart] Failed to call buy due to ', err)
           notifyAlertUpdate([{severity: 'error', message: errMsg}])
         })
       }).catch((err) => {
         const errMsg = err?.info?.error?.message || err?.message
-        logger.error('[BuyOrCart] Failed to call buy due to ', err)
+        logger.error('[BuyOrCart] Failed to transfer token due to ', err)
         notifyAlertUpdate([{severity: 'error', message: errMsg}])
       })
     }).catch((err) => {
@@ -98,6 +101,14 @@ const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, n
     logger.debug('[BuyOrCart] id =', id)
     if (nftIds.includes(id)) {
       setInCart(inCart)
+    }
+  }
+
+  const handleDisableBuyCart = (nftIds) => {
+    logger.debug('[BuyOrCart] handleDisableBuyCart')
+    if (nftIds.includes(id)) {
+      logger.debug('[BuyOrCart] Disable buy/cart button for nft ',  id)
+      setBuyOrPutCart(false)
     }
   }
 
@@ -152,7 +163,7 @@ const BuyOrCart = ({nft, wallet, openCart, center, refresh, notifyAlertUpdate, n
         <Box>
             {
               (!wallet || (nft?.status === config.NFTSTATUS.On.description 
-              && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id)))) ? 
+              && (nft?.owner && wallet?.user && (nft?.owner?.id !== wallet?.user?.id)) && showBuyOrPutCart)) ? 
               <ShowBuyOrCart handleBuy={handleBuy} handleCart={handleCart} inCart={inCart}/>: <UnavailableHelpTip/>
             }
         </Box>
