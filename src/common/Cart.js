@@ -141,6 +141,7 @@ const Cart = ({wallet, toggleCart, open, center, notifyAlertUpdate}) => {
         throw new Error('Your balance is not enough. Please deposit it first.')
       }
     }).then(() => {
+      //to-do: we need make it parallel and robust
       for (const buy of buyData) {
         const address = buy.address
         const nftIds = buy.nftIds
