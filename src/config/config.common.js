@@ -99,7 +99,7 @@ config.chains = {
         enabled: true,
         chainName: 'sepolia',
         currency: 'SepoliaETH',
-        rpcUrl:'https://ethereum-sepolia.blockpi.network/v1/rpc/public',
+        rpcUrl:'wss://ethereum-sepolia-rpc.publicnode.com',
         exchange: 900000000,
         contracts:[
           {
