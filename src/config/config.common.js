@@ -99,11 +99,11 @@ config.chains = {
         enabled: true,
         chainName: 'sepolia',
         currency: 'SepoliaETH',
-        rpcUrl:'https://rpc.sepolia.org',
-        exchange: 200,
+        rpcUrl:'https://ethereum-sepolia.blockpi.network/v1/rpc/public',
+        exchange: 900000000,
         contracts:[
           {
-            address: '0x5FbDB2315678afecb367f032d93F642f64180aa3', 
+            address: '0xc4eC16B260aD902407AC3082AA75BB86281f8618', 
             abi: [
                 'function symbol() public view returns (string)',
                 'function ownerOfToken(uint _tokenId) public view returns (address)',
@@ -125,29 +125,7 @@ config.chains = {
             tokenStandard: 'ERC1155'
           },
           {
-            address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', 
-            abi: [
-                'function symbol() public view returns (string)',
-                'function ownerOfToken(uint _tokenId) public view returns (address)',
-                'function tokensOfAddress(address _address) public view returns(uint[])',
-                'function mint(address to, string _uri) public returns(uint)',
-                'function mintBatch(address to, string[] _uris) public returns(uint[])',
-                'function getAllTokenIds() public view returns(uint[])',
-                'function getNextToken() public view returns(uint)',
-                'function getUri(uint _id) public view returns(string)',
-                'function buy(address from, address to, uint[] ids) public',
-                'function doSafeBuy(address from, address to, uint[] ids) public',
-                'function buyBatch(address[] froms, address to, uint[][] idss) public',
-                'function doSafeBuyBatch(address[] froms, address to, uint[][] idss) public',
-                'event mint_tracer(address indexed to, uint indexed tokenId, string uri)',
-                'event mintBatch_tracer(address indexed to, uint[] tokenIds, string[] uris)',
-                'event buy_tracer(address indexed from, address indexed to, uint[] ids)',
-                'event doSafeBuy_tracer(address indexed from, address indexed to, uint[] ids)'
-            ],
-            tokenStandard: 'ERC1155'
-          },
-          {
-            address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0', 
+            address: '0xcbe5F1893b598F5f571288087833435DD1319DF8', 
             abi: [
                 'function mint(address to, uint256 amount) public payable',
                 'function transferInBatch(address[] tos, uint256[] values) public',
