@@ -6,6 +6,6 @@ export const MenuUrls = ['/', '/results', '/nfters', '/profile/nfts', '/profile/
 export const PageSizeInGallery=9
 export const BatchSizeInGallery=30
 export const PageSizeInComments=3
-export const MaxValueInFilter = 100
+export const MaxValueInFilter = 1000
 export const MinValueInFilter = 0
 export const SYSSYMBOL = 'CH'
