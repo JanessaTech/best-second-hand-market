@@ -87,15 +87,15 @@ npx hardhat node
   On remix, we connect to localhost first and choose harthat as provider. Then we start to deploy contracts one by one
 
 - Deploy CoreMarket1155.sol
+
   For CoreMarket1155.sol, deploy it using:
 
 ```
 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266,"CH"
 0x70997970C51812dc3A010C7d01b50e0d17dc79C8,"CH"
-
-0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 and 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 are the addresses as being owner for each deployment.
-You could choose whatever address as owner
 ```
+
+Notes: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 and 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 are the addresses as being owner for each deployment. You could choose whatever address as owner
 
 Make notes of the address for each deployment, we will use them later on
 
