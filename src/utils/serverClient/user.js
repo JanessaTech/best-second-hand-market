@@ -50,7 +50,7 @@ export const loginByAddress = async (address) => {
 export const logoutByAddress = async (address) => {
     logger.debug('[serverClient.user] logoutByAddress. address =', address)
     try {
-        const response = await axios.post(`${config.BACKEND_ADDR}/apis/v1/users/login`,{
+        const response = await axios.post(`${config.BACKEND_ADDR}/apis/v1/users/logout`,{
             address: address
         })
         logger.debug('response =', response)
